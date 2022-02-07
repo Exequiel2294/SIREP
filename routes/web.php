@@ -22,3 +22,14 @@ Auth::routes();
 Route::get('/home', function() {
     return view('home');
 })->name('home')->middleware('auth');
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('variable', 'VariableController@index')->name('variable');
+    Route::post('variable/load', 'VariableController@load')->name('variable.load');
+    Route::get('variable/{id}/edit','VariableController@edit')->name('variable.edit');
+    Route::delete('variable/{id}','VariableController@delete')->name('variable.delete');
+
+    
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('dashboard/apilamientotable', 'DashboardController@apilamientotable')->name('dashboard.apilamientotable');
+});
