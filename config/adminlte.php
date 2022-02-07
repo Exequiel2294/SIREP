@@ -226,7 +226,7 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
+        /*[
             'type'         => 'navbar-search',
             'text'         => 'search',
             'topnav_right' => true,
@@ -317,7 +317,18 @@ return [
             'text'       => 'information',
             'icon_color' => 'cyan',
             'url'        => '#',
+        ],*/
+        ['header' => 'Menu'],
+        [
+            'text' => 'dashboard',
+            'url'  => 'dashboard',
+            'icon' => 'nav-icon fas fa-tachometer-alt',
         ],
+        [
+            'text' => 'variable',
+            'url'  => 'variable',
+            'icon' => 'nav-icon fa fas fa-toolbox',
+        ]
     ],
 
     /*
@@ -503,6 +514,11 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'assets/DataTables/SearchPanes-1.1.1/js/searchPanes.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'assets/DataTables/RowGroup-1.1.4/js/dataTables.rowGroup.min.js',
                 ],
                 [
                     'type' => 'css',
