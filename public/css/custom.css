@@ -1,0 +1,46 @@
+.btn-action-table {
+    cursor: pointer;
+    border: none;
+    background: 0;
+    padding: 0 0 0 5px;
+    font-size: 14px !important;
+    line-height: 1.5;
+}
+
+.btn-action-table .fa-map-marker {
+    color: #F34725;
+}
+
+.btn-action-table .fa-edit {
+    color: black;
+}
+
+label.requerido:after {
+    content: " *";
+    color: #e73d4a
+}
+
+.menu-logo {
+    max-width: 3.8rem;
+    max-height: 2.2rem;
+    margin: -.2rem .5rem 0 0;
+}
+
+.user-menu a span {
+    font-size: 1.3rem;
+}
+
+.nav-link .fa-bars{
+    font-size: 1.3rem;
+    margin-top: .35rem;
+}
+@media(min-width:860px) {
+    .user-menu a span {
+        font-size: 1.1rem;
+    }
+    
+    .nav-link .fa-bars{
+        font-size: 1.1rem;
+        margin-top: .2rem;
+    }
+}
