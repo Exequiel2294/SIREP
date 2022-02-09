@@ -1,4 +1,4 @@
-var AlliotecCattle = function() {
+var MansfieldRep = function() {
     return {
         notification: function(message, title, type) {
             toastr.options = {
