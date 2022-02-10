@@ -5,7 +5,18 @@
 
 @section('content_header')
     <div class="section-header">
-        
+        <div>
+            <h1>Tablero</h1>            
+            <div class="row">
+                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
+                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+                    
+        </div> 
     </div>  
 @stop
 
@@ -23,7 +34,7 @@
             flex-direction: column;
             justify-content: center;
             flex: 0 0 100%;
-            max-width: 69rem;
+            max-width: 83rem;
         }
         @media(min-width:300px) {
             .section-header > div{
@@ -227,20 +238,84 @@
                 margin: .5rem 2rem 0 0;
             }
         }
+        .dtrg-level-0 > td{
+            background-color: cadetblue;
+        }
+        .dtrg-level-1 > td{
+            background-color: lightblue;
+        }
+        .datetimepicker-input{
+            font-size: 1.8rem;
+        }
     </style> 
 @stop
 
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
+        var date_selected = moment().subtract(1, "days");
+        $(function () {
+            $('#datetimepicker4').datetimepicker({
+                format: 'L',
+                maxDate: moment().subtract(1, "days"),
+                defaultDate: date_selected
+            });
+            $("#datetimepicker4").on("change.datetimepicker", function (e) {
+                date_selected = e.date;
+                console.log(moment(e.date).format('YYYY-MM-DD'));
+                $('#procesos-table').DataTable().ajax.reload(null, false);
+            });
+        })
+        
 
         /* DATATABLES */
         $(document).ready(function(){    
-            $("#trituracion-table").DataTable({
-                dom:                        "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
+            function getExportFilename()
+            {
+                return 'Reporte'+moment(date_selected).format('YYYY-MM-DD');
+            }
+            function getExportTitle()
+            {
+                return 'Reporte '+moment(date_selected).format('YYYY-MM-DD');
+            }
+
+            $("#procesos-table").DataTable({
+                dom:    "<'datatables-p'<'datatables-button'B>>" + 
+                        "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
                          "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
+                buttons: [
+                    {
+                        extend: 'copyHtml5', 
+                        text: 'Copiar'
+                    }, 
+                    {
+                        extend: 'csvHtml5',
+                        title: function () { return getExportTitle();},
+                        filename: function () { return getExportFilename();} 
+                    }, 
+                    {
+                        extend: 'excelHtml5',
+                        title: function () { return getExportTitle();},
+                        filename: function () { return getExportFilename();}          
+                    }, 
+                    {
+                        extend: 'pdfHtml5',
+                        title: function () { return getExportTitle();},
+                        filename: function () { return getExportFilename();},
+                        customize: function ( doc ) {
+                            doc.styles.title.fontSize = 10;
+                        },
+                        orientation: 'landscape'
+                    },
+                    {
+                        extend: 'print', 
+                        text: 'Imprimir',
+                        title: function () { return getExportTitle();}
+                    }
+                ],
                 lengthChange: false,
+                paging: false,
                 processing: true,
                 bInfo: true,
                 bInfo: false,
@@ -248,8 +323,12 @@
                 responsive: true,
                 scrollX : true,
                 ajax:{                
-                    url: "{{route('dashboard.apilamientotable')}}",
+                    url: "{{route('dashboard.procesostable')}}",
                     type: 'GET',
+                    data: function(d){
+                        d.fecha = moment(date_selected).format('YYYY-MM-DD');
+                        d._token = $('input[name="_token"]').val();
+                    }
                 },
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ registros",
@@ -266,10 +345,12 @@
                     },
                     "sProcessing":"Procesando...",
                 },
-                columns: [                    
-                    {data:'nivel2', name:'nivel2'}, 
+                columns: [                      
+                    {data:'categoria', name:'categoria', visible:false},  
+                    {data:'subcategoria', name:'subcategoria', visible:false},       
+                    {data:'fecha', name:'fecha'},         
                     {data:'variable', name:'variable'}, 
-                    {data:'unidad', name:'unidad', orderable: false,searchable: false},
+                    {data:'unidad', name:'unidad', searchable: false},
                     {data:'dia_real', name:'dia_real', orderable: false,searchable: false},
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data:'dia_porcentaje', name:'dia_porcentaje', orderable: false,searchable: false},
@@ -283,30 +364,35 @@
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
                     {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false}
                 ],  
-                order: [[0, 'asc']],   
                 rowGroup: {
-                    dataSrc: 'nivel1'
-                }   
+                    dataSrc: ['categoria','subcategoria']
+                },
+                orderFixed: [
+                    [0, 'asc'],
+                    [1, 'asc']
+                ],
             });
         });
         /* DATATABLES */
 
+
     </script>
 @stop
 
-@section('content')
-    <h2 class="datatables-p">APILAMIENTO</h2> 
+@section('content') 
     <div class="row" style="justify-content: center; overflow:auto;">
         <div class="generic-card">
             <div class="card">
                 <div class="generic-body">        
-                    <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="trituracion-table">
+                    <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="procesos-table">
                     <thead>
                         <tr>
-                            <th rowspan="2">nivel2</th>
+                            <th rowspan="2">CATEGORIA</th>
+                            <th rowspan="2">SUBCATEGORIA</th>
+                            <th rowspan="2">FECHA</th>
                             <th rowspan="2">NOMBRE</th>
                             <th rowspan="2">UNIDAD</th>
-                            <th colspan="3">DÍA</th>
+                            <th colspan="3">DIA</th>
                             <th colspan="3">MES</th>
                             <th colspan="3">TRIMESTRE</th>
                             <th colspan="3">AÑO</th>

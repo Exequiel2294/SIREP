@@ -2,5 +2,9 @@
 
 return [
     'dashboard'                   => 'Tablero',
-    'variable'                    => 'Variable'
+    'variable'                    => 'Variable',
+    'area'                        => 'Area',
+    'categoria'                   => 'Categoria',
+    'subcategoria'                => 'Subcategoria'
+
 ];

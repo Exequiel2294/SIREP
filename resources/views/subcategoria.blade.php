@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Variable')
+@section('title', 'Subcategoria')
 @section('post_title', config('app.name'))
 
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Variable</h1>
+            <h1>Subcategoria</h1>
             <a href="javascript:void(0)" class="btn btn-success" id="add">Añadir</a> 
         </div> 
     </div>  
@@ -230,16 +230,6 @@
                 margin: .5rem 2rem 0 0;
             }
         }
-
-        /*DATATABLES LARGE TABLES*/
-        td.details-control {
-            background: url('../assets/DataTables/details_open.png') no-repeat center center;
-            cursor: pointer;
-        }
-        tr.details td.details-control {
-            background: url('../assets/DataTables/details_close.png') no-repeat center center;
-        }
-         /*DATATABLES LARGE TABLES*/
     </style> 
 @stop
 
@@ -249,8 +239,8 @@
 
         /* DATATABLES */
         $(document).ready(function(){     
-            var dt =  $("#data-table").DataTable({
-                dom:     "<'datatables-p'<'datatables-button'B>>" +
+            $("#data-table").DataTable({
+                dom: "<'datatables-p'<'datatables-button'B>>" +
                          "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
                          "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
@@ -261,18 +251,18 @@
                     }, 
                     {
                         extend: 'csvHtml5',
-                        title: 'Listado Variable '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoVariable'+moment().local().format('DD/MM/YYYY')
+                        title: 'Listado Subcategoria '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoSubcategoria'+moment().local().format('DD/MM/YYYY')
                     }, 
                     {
                         extend: 'excelHtml5',
-                        title: 'Listado Variable '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoVariable'+moment().local().format('DD/MM/YYYY')            
+                        title: 'Listado Subcategoria '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoSubcategoria'+moment().local().format('DD/MM/YYYY')            
                     }, 
                     {
                         extend: 'pdfHtml5',
                         title: moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoVariable'+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoSubcategoria'+moment().local().format('DD/MM/YYYY'),
                         customize: function ( doc ) {
                             doc.styles.title.alignment = 'right';
                             doc.styles.title.fontSize = 12;
@@ -281,7 +271,7 @@
                     {
                         extend: 'print', 
                         text: 'Imprimir',
-                        title: 'Listado Variable '+moment().local().format('DD/MM/YYYY'),
+                        title: 'Listado Subcategoria '+moment().local().format('DD/MM/YYYY'),
                     }
                 ],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -291,7 +281,7 @@
                 responsive: true,
                 scrollX : true,
                 ajax:{                
-                    url: "{{route('variable')}}",
+                    url: "{{route('subcategoria')}}",
                     type: 'GET',
                 },
                 "language": {
@@ -309,19 +299,11 @@
                     },
                     "sProcessing":"Procesando...",
                 },
-                columns: [
-                    {
-                        class:          "details-control",
-                        orderable:      false,
-                        data:           null,
-                        defaultContent: "",
-                        width: '20px'
-                    },
+                columns: [                    
                     {data:'area', name:'area'},
                     {data:'categoria', name:'categoria'},
-                    {data:'subcategoria', name:'subcategoria'},
                     {data:'nombre', name:'nombre'},
-                    {data:'unidad', name:'unidad', orderable: false,searchable: false},
+                    {data:'descripcion', name:'descripcion', orderable: false,searchable: 'false'},
                     {data:'estado',name:'estado',
                         render: function(data){
                             if(data == 1){
@@ -334,90 +316,46 @@
                             
                         } 
                     },
+                    {data:'created_at', name:'created_at'},
+                    {data:'updated_at',name:'updated_at'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
-                order: [[0, 'asc'],[1, 'asc'],[2, 'asc']]            
-            });
-            function format ( d ) {
-                return '<table class="table table-info table-sm text-left" style="width:100%" border="0">'+
-                            '<tr>'+
-                                '<td style="width: 33%">Descripcion: '+ d.descripcion + '</td>' +
-                                '<td style="width: 33%">Creacion: ' + d.created_at + '</td>' +
-                                '<td style="width: 33%">Actualizacion: ' + d.updated_at + '</td>' +
-                            '</tr>'+  
-                        '</table>';
-            }
-            // Array to track the ids of the details displayed rows
-            var detailRows = [];
-            
-            $('#data-table tbody').on( 'click', 'tr td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = dt.row( tr );
-                var idx = $.inArray( tr.attr('id'), detailRows );
-
-                if ( row.child.isShown() ) {
-                    tr.removeClass( 'details' );
-                    row.child.hide();
-
-                    // Remove from the 'open' array
-                    detailRows.splice( idx, 1 );
-                }
-                else {
-                    tr.addClass( 'details' );
-                    row.child( format( row.data() ) ).show();
-
-                    // Add to the 'open' array
-                    if ( idx === -1 ) {
-                        detailRows.push( tr.attr('id') );
-                    }
-                }
-            });
-
-            // On each draw, loop over the `detailRows` array and show any child rows
-            dt.on( 'draw', function () {
-                $.each( detailRows, function ( i, id ) {
-                    $('#'+id+' td.details-control').trigger( 'click' );
-                });
+                order: [[0, 'asc']]            
             });
         });
-
         /* DATATABLES */
 
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar Variable'); 
+            $('#modal-title').html('Cargar Subcategoria'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
             $("#area_id" ).prop( "disabled", false );
             $('#categoria_id').html('');
-            $("#categoria_id").prop( "disabled", true );   
-            $('#subcategoria_id').html('');
-            $("#subcategoria_id").prop( "disabled", true ); 
+            $("#categoria_id").prop( "disabled", true ); 
         });
         /* ADD BUTTON*/
 
          /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
-            $.get('variable/'+id+'/edit', function(data){
+            $.get('subcategoria/'+id+'/edit', function(data){
                 var _token = $('input[name="_token"]').val();
                 var area_id  =   data.area_id;
-                var categoria_id  =   data.categoria_id;
                 $('#form-button').val(0); 
-                $('#modal-title').html('Editar Variable'); 
+                $('#modal-title').html('Editar Subcategoria'); 
                 $('#modal-form').trigger("reset"); 
                 $('#modal').modal('show');
-                $('#id').val(data.id);                    
-                $("#area_id").val(data.area_id).attr("selected", "selected");                  
+                $('#id').val(data.id);      
+                $("#area_id").val(data.area_id).attr("selected", "selected");                    
                 $('#nombre').val(data.nombre);                   
                 $('#descripcion').val(data.descripcion);                   
-                $('#unidad').val(data.unidad);                   
                 $("#estado").val(data.estado).attr("selected", "selected");
                 $("#area_id" ).prop( "disabled", true );
                 $.ajax({
-                    url:"{{route('variable.getcategoria') }}",
+                    url:"{{route('subcategoria.getcategoria') }}",
                     type:"POST",
                     dataType: "json",
                     data:{_token:_token,area_id:area_id},
@@ -430,21 +368,6 @@
 
                     }
                 });
-                $.ajax({
-                    url:"{{route('variable.getsubcategoria') }}",
-                    type:"POST",
-                    dataType: "json",
-                    data:{_token:_token,categoria_id:categoria_id},
-                    success:function(dato){
-                        $('#subcategoria_id').html('');
-                        $('#subcategoria_id').append(dato.result);
-                        $("#subcategoria_id").val(data.subcategoria_id).attr("selected", "selected");
-                    },
-                    error:function(){
-
-                    }
-                });
-                $("#categoria_id").prop( "disabled", true );
             })
         });      
         /* EDIT BUTTON */
@@ -471,7 +394,7 @@
             }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "variable/" + id,
+                    url: "subcategoria/" + id,
                     type: 'delete',
                     data:{_token: $('input[name="_token"]').val()},
                     success: function (data) { 
@@ -518,23 +441,15 @@
                 categoria_id: {
                     required: true
                 },
-                subcategoria_id: {
-                    required: true
-                },
                 nombre: {
                     required: true,
                     minlength: 2,
                     maxlength: 100
                 },
                 descripcion: {
-                    required: true,
+                    required: false,
                     minlength: 2,
                     maxlength: 250
-                },
-                unidad: {
-                    required: true,
-                    minlength: 1,
-                    maxlength: 50
                 },
                 estado: {
                     required: true,
@@ -584,14 +499,13 @@
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
                 $.ajax({
-                    url:"{{route('variable.load') }}",
+                    url:"{{route('subcategoria.load') }}",
                     method:"POST",
                     data:{
                         id: $("#id").val(),
-                        subcategoria_id:$('#subcategoria_id').val(),
+                        categoria_id:$('#categoria_id').val(),
                         nombre:$('#nombre').val(),
                         descripcion:$('#descripcion').val(),
-                        unidad:$('#unidad').val(),
                         estado:$('#estado').val(),
                         _token: $('input[name="_token"]').val()
                     },
@@ -607,10 +521,10 @@
                             var oTable = $('#data-table').dataTable();
                             oTable.fnDraw(false);
                             if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Variable cargada con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Subcategoria cargada con exito', 'MansfieldRep', 'success');
                             }   
                             else{
-                                MansfieldRep.notification('Variable actualizada con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Subcategoria actualizada con exito', 'MansfieldRep', 'success');
                             } 
                         }else{
                             $('#form-button').html('Guardar Cambios');
@@ -649,7 +563,7 @@
             var area_id=$(this).val();
             var div=$(this).parent();
             $.ajax({
-                url:"{{route('variable.getcategoria') }}",
+                url:"{{route('subcategoria.getcategoria') }}",
                 type:"POST",
                 dataType: "json",
                 data:{_token:_token,area_id:area_id},
@@ -664,28 +578,6 @@
             });
         });
 
-        $(document).on('change','.categoria',function(){
-            console.log('change');
-            var _token = $('input[name="_token"]').val();
-            var categoria_id=$(this).val();
-            var div=$(this).parent();
-            $.ajax({
-                url:"{{route('variable.getsubcategoria') }}",
-                type:"POST",
-                dataType: "json",
-                data:{_token:_token,categoria_id:categoria_id},
-                success:function(data){
-                    $("#subcategoria_id").prop( "disabled", false );  
-                    $('#subcategoria_id').html('');
-                    $('#subcategoria_id').append(data.result);
-                },
-                error:function(){
-
-                }
-            });
-        });
-
-
     </script>
 @stop
 
@@ -696,14 +588,14 @@
                 <div class="generic-body">        
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
-                            <tr>    
-                                <th></th>
+                            <tr>     
                                 <th>Area</th>
                                 <th>Categoria</th>
-                                <th>Subcategoria</th>
                                 <th>Nombre</th>
-                                <th>Unidad</th>
+                                <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>Alta</th>
+                                <th>Actualización</th>
                                 <th style="min-width:50px!important;"></th>            
                             </tr>
                         </thead>      
@@ -746,18 +638,10 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="categoria_id" class="col-sm-2 col-form-label">Categoria</label>
+                            <label for="categoria_id" class="col-sm-2 col-form-label">Subarea</label>
                             <div class="col-sm-10">
-                                <select class="form-control categoria" name="categoria_id" id="categoria_id">
-                                    <option value="" selected disabled>Seleccione Categoria</option>
-                                </select> 
-                            </div>
-                        </div>                        
-                        <div class="form-group row">
-                            <label for="subcategoria_id" class="col-sm-2 col-form-label">Subcategoria</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" name="subcategoria_id" id="subcategoria_id">
-                                    <option value="" selected disabled>Seleccione Categoria</option>
+                                <select class="form-control" name="categoria_id" id="categoria_id">
+                                    <option value="" selected disabled>Seleccione categoria</option>
                                 </select> 
                             </div>
                         </div>
@@ -768,17 +652,11 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="descripcion" class="col-sm-2 col-form-label">Descripcion</label>
+                            <label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion">
+                              <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción">
                             </div>
-                        </div>   
-                        <div class="form-group row">
-                            <label for="unidad" class="col-sm-2 col-form-label">Unidad</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="unidad" name="unidad" placeholder="Unidad">
-                            </div>
-                        </div>    
+                        </div>     
                         <div class="form-group row">
                             <label for="estado" class="col-sm-2 col-form-label">Estado</label>
                             <div class="col-sm-10">

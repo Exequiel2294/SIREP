@@ -13,13 +13,13 @@ class CreateDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('data', function (Blueprint $table) {
+        Schema::create('data', function (Blueprint $table) {            
             $table->bigIncrements('id');
             $table->unsignedBigInteger('variable_id');
-            $table->foreign('variable_id')->references('id')->on('variables');
-            $table->timestamp('fecha', 0);
+            $table->foreign('variable_id')->references('id')->on('variable');
+            $table->date('fecha');
             $table->decimal('valor', 12, 2);       
-            $table->tinyInteger('estado')->default(1);  
+            $table->tinyInteger('estado')->default(1);              
         });
     }
 

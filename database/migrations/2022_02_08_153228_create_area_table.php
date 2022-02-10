@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariablesTable extends Migration
+class CreateAreaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateVariablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('variables', function (Blueprint $table) {
+        Schema::create('area', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nivel1'); 
-            $table->string('nivel2'); 
             $table->string('nombre')->unique();            
-            $table->string('descripcion')->unique();           
-            $table->string('unidad');           
+            $table->string('descripcion')->nullable();    
             $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
@@ -32,6 +29,6 @@ class CreateVariablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variables');
+        Schema::dropIfExists('area');
     }
 }

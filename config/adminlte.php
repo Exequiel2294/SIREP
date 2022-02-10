@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'Mansfield',
+    'title' => 'MansfieldRep',
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => '| MansfieldRep',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'logo' => '<b>Mansfield</b>Min',
+    'logo' => '<b>Mansfield</b>Rep',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -192,8 +192,8 @@ return [
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'password_reset_url' => false, //'password/reset',
+    'password_email_url' => false, //'password/email',
     'profile_url' => false,
 
     /*
@@ -325,9 +325,24 @@ return [
             'icon' => 'nav-icon fas fa-tachometer-alt',
         ],
         [
+            'text' => 'area',
+            'url'  => 'area',
+            'icon' => 'nav-icon far fa-circle',
+        ],
+        [
+            'text' => 'categoria',
+            'url'  => 'categoria',
+            'icon' => 'nav-icon far fa-circle',
+        ],
+        [
+            'text' => 'subcategoria',
+            'url'  => 'subcategoria',
+            'icon' => 'nav-icon far fa-circle',
+        ],
+        [
             'text' => 'variable',
             'url'  => 'variable',
-            'icon' => 'nav-icon fa fas fa-toolbox',
+            'icon' => 'nav-icon far fa-circle',
         ]
     ],
 
@@ -634,6 +649,31 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'vendor/pace-progress/pace.min.js',
+                ],
+            ],
+        ],
+        'Moment' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/moment-with-locales.min.js',
+                ],
+            ],
+        ],
+        'TempusDominus' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js',
                 ],
             ],
         ],
