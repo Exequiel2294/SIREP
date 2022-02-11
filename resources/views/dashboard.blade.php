@@ -14,8 +14,7 @@
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
                 </div>
-            </div>
-                    
+            </div>                    
         </div> 
     </div>  
 @stop
@@ -247,6 +246,7 @@
         .datetimepicker-input{
             font-size: 1.8rem;
         }
+
     </style> 
 @stop
 
@@ -256,7 +256,7 @@
         var date_selected = moment().subtract(1, "days");
         $(function () {
             $('#datetimepicker4').datetimepicker({
-                format: 'L',
+                format: 'DD/MM/YYYY',
                 maxDate: moment().subtract(1, "days"),
                 defaultDate: date_selected
             });
@@ -345,9 +345,11 @@
                     },
                     "sProcessing":"Procesando...",
                 },
-                columns: [                      
+                columns: [           
+                               
                     {data:'categoria', name:'categoria', visible:false},  
-                    {data:'subcategoria', name:'subcategoria', visible:false},       
+                    {data:'subcategoria', name:'subcategoria', visible:false},                        
+                    {data:'action', name:'action', orderable: false,searchable: false, width:'25px'} ,   
                     {data:'fecha', name:'fecha'},         
                     {data:'variable', name:'variable'}, 
                     {data:'unidad', name:'unidad', searchable: false},
@@ -365,7 +367,20 @@
                     {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false}
                 ],  
                 rowGroup: {
-                    dataSrc: ['categoria','subcategoria']
+                    dataSrc: ['categoria','subcategoria'],
+                    /*startRender: function ( rows, group, level ) {
+                        
+                        if(level == 0)
+                        {
+                            return group;
+                        }
+                        if(level == 1)
+                        {
+                            console.log($('#procesos-table').DataTable().rows().data());
+                            return group +' '+ '<a href="javascript:void(0)" name="edit" class="btn-action-table edit" title="Editar registros"><i class="fa fa-edit"></i></a>';
+                        }
+                    }
+                    */
                 },
                 orderFixed: [
                     [0, 'asc'],
@@ -376,6 +391,127 @@
         /* DATATABLES */
 
 
+        /* EDIT BUTTON */
+        $(document).on('click', '.edit', function(){ 
+            var id=$(this).data('id');
+            $.get('dashboard/'+id+'/edit', function(data){
+                $('#form-button').val(0); 
+                $('#modal-title').html('Editar Registro'); 
+                $('#modal-form').trigger("reset"); 
+                $('#modal').modal('show');
+                $('#id').val(data.id);
+                $('#area').val(data.area);
+                $('#categoria').val(data.categoria);
+                $('#subcategoria').val(data.subcategoria);
+                $('#variable').val(data.variable);
+                $('#fecha').val(data.fecha);
+                $('#valor').val(data.valor);
+            })
+        });      
+        /* EDIT BUTTON */
+
+        /* FORM BUTTON */        
+        $("#modal-form").validate({
+            rules: {
+                valor: {
+                    required: true
+                }
+            },
+            messages: {  
+         
+            },
+            errorElement: 'span', 
+            errorClass: 'help-block help-block-error', 
+            focusInvalid: false, 
+            ignore: "", 
+            highlight: function (element, errorClass, validClass) { 
+                $(element).closest('.form-group').addClass('text-danger'); 
+                $(element).closest('.form-control').addClass('is-invalid');
+            },
+            unhighlight: function (element) { 
+                $(element).closest('.form-group').removeClass('text-danger'); 
+                $(element).closest('.form-control').removeClass('is-invalid');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('text-danger');
+            },
+            errorPlacement: function (error, element) {
+                if ($(element).is('select') && element.hasClass('bs-select')) {
+                    error.insertAfter(element);
+                } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
+                    element.next().after(error);
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); 
+                }
+            },
+            invalidHandler: function (event, validator) {                 
+            },
+            submitHandler: function (form) {
+                return true; 
+            }
+        });
+
+        $("#form-button").click(function(){
+            if($("#modal-form").valid()){
+                $('#form-button').html('Guardando..');
+                $.ajax({
+                    url:"{{route('dashboard.load') }}",
+                    method:"POST",
+                    data:{
+                        id: $("#id").val(),
+                        valor:$('#valor').val(),
+                        _token: $('input[name="_token"]').val()
+                    },
+                    success:function(data)
+                    {  
+                        $('#modal').scrollTop(0);
+                        if($.isEmptyObject(data.error)){
+                            $('#modal').modal('hide');
+                            $(".alert-error").css('display','none');
+                            $('#modal-form').trigger("reset");
+                            $('#form-button').html('Guardar Cambios');
+                            var oTable = $('#procesos-table').dataTable();
+                            oTable.fnDraw(false);
+                            if($('#form-button').val() == 1){
+                                MansfieldRep.notification('Registro cargado con exito', 'MansfieldRep', 'success');
+                            }   
+                            else{
+                                MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                            } 
+                        }else{
+                            $('#form-button').html('Guardar Cambios');
+                            printErrorMsg(data.error);
+                        } 
+                    }
+                });
+            }            
+        });
+
+        function printErrorMsg(msg) {
+            $(".alert-error").css('display','flex');
+            $(".print-error-msg").find("ul").html('');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+        /* FORM BUTTON */
+
+        /* CLOSE ALERT */
+        $(document).on('click', '#close-alert', function(){       
+            $(".alert-error").css('display','none');
+        });        
+        /* CLOSE ALERT */
+
+        /* ACTION TO CLOSE MODAL */
+        $('#modal').on('hidden.bs.modal', function () {
+            $("#modal-form").validate().resetForm();
+            $(".alert-error").css('display','none');
+        });
+        /* ACTION TO CLOSE MODAL */
+
+
     </script>
 @stop
 
@@ -384,14 +520,15 @@
         <div class="generic-card">
             <div class="card">
                 <div class="generic-body">        
-                    <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="procesos-table">
+                    <table style="width:100%" class="table table-striped table-sm table-bordered table-hover datatable" id="procesos-table">
                     <thead>
                         <tr>
                             <th rowspan="2">CATEGORIA</th>
                             <th rowspan="2">SUBCATEGORIA</th>
+                            <th rowspan="2" style="min-width:25px!important;"></th> 
                             <th rowspan="2">FECHA</th>
                             <th rowspan="2">NOMBRE</th>
-                            <th rowspan="2">UNIDAD</th>
+                            <th rowspan="2">U.</th>
                             <th colspan="3">DIA</th>
                             <th colspan="3">MES</th>
                             <th colspan="3">TRIMESTRE</th>
@@ -440,32 +577,41 @@
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group row">
-                            <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                            <label for="area" class="col-sm-2 col-form-label">Area</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre">
+                              <input type="text" class="form-control" id="area" name="area" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="descripcion" class="col-sm-2 col-form-label">Descripcion</label>
+                            <label for="categoria" class="col-sm-2 col-form-label">Categoria</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Superficie">
+                              <input type="text" class="form-control" id="categoria" name="categoria" disabled>
                             </div>
                         </div>   
                         <div class="form-group row">
-                            <label for="unidad" class="col-sm-2 col-form-label">Unidad</label>
+                            <label for="subcategoria" class="col-sm-2 col-form-label">Subcategoria</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="unidad" name="unidad" placeholder="Superficie">
+                              <input type="text" class="form-control" id="subcategoria" name="subcategoria" disabled>
                             </div>
                         </div>    
                         <div class="form-group row">
-                            <label for="estado" class="col-sm-2 col-form-label">Estado</label>
+                            <label for="variable" class="col-sm-2 col-form-label">Variable</label>
                             <div class="col-sm-10">
-                                <select class="form-control company" name="estado" id="estado">
-                                    <option value=0 selected>Desactivo</option>
-                                    <option value=1>Activo</option>
-                                </select> 
+                              <input type="text" class="form-control" id="variable" name="variable" disabled>
                             </div>
-                        </div>              
+                        </div>   
+                        <div class="form-group row">
+                            <label for="fecha" class="col-sm-2 col-form-label">Fecha</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="fecha" name="fecha" disabled>
+                            </div>
+                        </div>   
+                        <div class="form-group row">
+                            <label for="valor" class="col-sm-2 col-form-label">Valor</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="valor" name="valor">
+                            </div>
+                        </div>                
                         @csrf
                     </form>
                 </div>
