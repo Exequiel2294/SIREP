@@ -55,5 +55,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable');    
+    Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
+    Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
+    Route::get('dashboard/{id}/edit','DashboardController@edit')->name('dashboard.edit');   
 });
