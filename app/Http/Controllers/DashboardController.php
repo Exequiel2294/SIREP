@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Data;
+use App\Models\Historial;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -20,8 +22,8 @@ class DashboardController extends Controller
     public function procesostable(Request $request)
     {
         if(request()->ajax()) {
-            $date = $request->get('fecha');
-            $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $date];
+            $this->date = $request->get('fecha');
+            $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];
             $apilamiento = DB::table('data')
                             ->join('variable','data.variable_id','=','variable.id')
                             ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
@@ -29,6 +31,7 @@ class DashboardController extends Controller
                             ->where($where)
                             ->select(
                                 'data.id as id',
+                                'data.variable_id as variable_id',
                                 'data.fecha as fecha',
                                 'categoria.nombre as categoria',
                                 'subcategoria.nombre as subcategoria',
@@ -36,91 +39,71 @@ class DashboardController extends Controller
                                 'variable.unidad as unidad',
                                 'data.valor as dia_real',
                                 'data.valor as dia_budget',
-                                'data.valor as mes_real',
                                 'data.valor as mes_budget',
-                                'data.valor as trimestre_real',
                                 'data.valor as trimestre_budget',
-                                'data.valor as anio_real',
-                                'data.valor as anio_budget',
+                                'data.valor as anio_budget'
                                 )
                             ->get();
                             
-            return datatables()->of($apilamiento)
-                    ->addColumn('dia_porcentaje', function($data)
-                    {
-                        $dia_porcentaje = ($data->dia_real/$data->dia_budget)*100;
-                        if ($dia_porcentaje <= 90)
-                        {
-                            return '<div class="percentage_red">'.$dia_porcentaje.'%</div>';
-                        }
-                        if ($dia_porcentaje > 90 && $dia_porcentaje<=95)
-                        {
-                            return '<div class="percentage_yellow">'.$dia_porcentaje.'%</div>';
-                        }
-                        if ($dia_porcentaje > 95)
-                        {
-                            return '<div class="percentage_green">'.$dia_porcentaje.'%</div>';
-                        }
-                        return $dia_porcentaje;
+            return datatables()->of($apilamiento)   
+                    ->addColumn('mes_real', function($data)
+                    {                        
+                        $mes_real= DB::select(
+                            'SELECT MONTH(fecha) as month, SUM(valor) as mes_real
+                            FROM [mansfield].[dbo].[data]
+                            WHERE variable_id = ?
+                            AND  MONTH(fecha) = ?
+                            GROUP BY MONTH(fecha)', 
+                            [$data->variable_id, date('m', strtotime($this->date))]
+                        );
+                        return $mes_real[0]->mes_real;
                     })
                     ->addColumn('mes_porcentaje', function($data)
                     {
-                        $mes_porcentaje = ($data->mes_real/$data->mes_budget)*100;
-                        if ($mes_porcentaje <= 90)
-                        {
-                            return '<div class="percentage_red">'.$mes_porcentaje.'%</div>';
-                        }
-                        if ($mes_porcentaje > 90 && $mes_porcentaje<=95)
-                        {
-                            return '<div class="percentage_yellow">'.$mes_porcentaje.'%</div>';
-                        }
-                        if ($mes_porcentaje > 95)
-                        {
-                            return '<div class="percentage_green">'.$mes_porcentaje.'%</div>';
-                        }
+                        $mes_porcentaje = 'asd';
+                        
                         return $mes_porcentaje;
+                    })
+                    ->addColumn('trimestre_real', function($data)
+                    {                        
+                        $trimestre_real= DB::select(
+                            'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
+                            FROM [mansfield].[dbo].[data]
+                            WHERE variable_id = ?
+                            AND  DATEPART(QUARTER, fecha) = ?
+                            GROUP BY DATEPART(QUARTER, fecha)', 
+                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3)]
+                        );
+                        return $trimestre_real[0]->trimestre_real;
                     })
                     ->addColumn('trimestre_porcentaje', function($data)
                     {   
-                        $trimestre_porcentaje = ($data->mes_real/$data->mes_budget)*100;
-                        if ($trimestre_porcentaje <= 90)
-                        {
-                            return '<div class="percentage_red">'.$trimestre_porcentaje.'%</div>';
-                        }
-                        if ($trimestre_porcentaje > 90 && $trimestre_porcentaje<=95)
-                        {
-                            return '<div class="percentage_yellow">'.$trimestre_porcentaje.'%</div>';
-                        }
-                        if ($trimestre_porcentaje > 95)
-                        {
-                            return '<div class="percentage_green">'.$trimestre_porcentaje.'%</div>';
-                        }
+                        $trimestre_porcentaje = "100%";
                         return $trimestre_porcentaje;
+                    })
+                    ->addColumn('anio_real', function($data)
+                    {                        
+                        $anio_real= DB::select(
+                            'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
+                            FROM [mansfield].[dbo].[data]
+                            WHERE variable_id = ?
+                            AND  YEAR(fecha) = ?
+                            GROUP BY YEAR(fecha)', 
+                            [$data->variable_id, date('Y', strtotime($this->date))]
+                        );
+                        return $anio_real[0]->anio_real;
                     })
                     ->addColumn('anio_porcentaje', function($data)
                     {
-                        $anio_porcentaje = ($data->anio_real/$data->anio_budget)*100;
-                        if ($anio_porcentaje <= 90)
-                        {
-                            return '<div class="percentage_red">'.$anio_porcentaje.'%</div>';
-                        }
-                        if ($anio_porcentaje > 90 && $anio_porcentaje<=95)
-                        {
-                            return '<div class="percentage_yellow">'.$anio_porcentaje.'%</div>';
-                        }
-                        if ($anio_porcentaje > 95)
-                        {
-                            return '<div class="percentage_green">'.$anio_porcentaje.'%</div>';
-                        }
-                        return $anio_porcentaje;
+                        return '100';
                     })
                     ->addColumn('action', function($data)
                     {
                         $button = ''; 
-                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i class="fa fa-edit"></i></a>';  
+                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i class="fa-lg fa fa-edit"></i></a>';  
                         return $button;
                     })
-                    ->rawColumns(['dia_porcentaje','mes_porcentaje','trimestre_porcentaje','anio_porcentaje','action'])
+                    ->rawColumns(['dia_porcentaje','mes_real','mes_porcentaje','trimestre_real','trimestre_porcentaje','anio_real','anio_porcentaje','action'])
                     ->addIndexColumn()
                     ->make(true);
         } 
@@ -163,11 +146,21 @@ class DashboardController extends Controller
             }
             else
             {
-                Data::where('id',$id)
-                    ->update(
-                    [
-                        'valor' => $request->get('valor')
-                    ]);
+                $data = Data::findOrFail($id);
+                $oldvalue = $data->valor;
+                $newvalue = $request->get('valor');
+                $data->update(
+                [
+                    'valor' =>$newvalue
+                ]);
+                Historial::create([
+                    'data_id' => $id,
+                    'fecha' => Carbon::now(),
+                    'transaccion' => 'EDIT',
+                    'valorviejo' => $oldvalue,
+                    'valornuevo' => $newvalue,
+                    'usuario' => auth()->user()->name
+                ]);
                 return;                
             }
         }        

@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 
 Auth::routes([
-    //'register' => false, // Registration Routes...
+    'register' => false, // Registration Routes...
     'reset' => false, // Password Reset Routes...
     'verify' => false, // Email Verification Routes...
 ]);
@@ -57,5 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
-    Route::get('dashboard/{id}/edit','DashboardController@edit')->name('dashboard.edit');   
+    Route::get('dashboard/{id}/edit','DashboardController@edit')->name('dashboard.edit');
+    
+    Route::get('historial', 'HistorialController@index')->name('historial');
 });

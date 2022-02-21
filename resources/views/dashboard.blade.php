@@ -237,14 +237,32 @@
                 margin: .5rem 2rem 0 0;
             }
         }
+
+        /* PROPIOS VISTA */
+
         .dtrg-level-0 > td{
-            background-color: cadetblue;
+            background-color: #525C66;     
+            color: white;
+            font-size: larger;
         }
         .dtrg-level-1 > td{
-            background-color: lightblue;
+            background-color: #D6D6D6;
         }
         .datetimepicker-input{
             font-size: 1.8rem;
+        }
+
+        .thcenter{
+            text-align:center;
+            vertical-align: inherit!important;
+        }
+
+        /*.bluewhite{            
+           color: white;
+            background-color: #4682B4;
+        }*/
+        .buttonclass{
+            background-color:#525C66
         }
 
     </style> 
@@ -262,7 +280,6 @@
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 date_selected = e.date;
-                console.log(moment(e.date).format('YYYY-MM-DD'));
                 $('#procesos-table').DataTable().ajax.reload(null, false);
             });
         })
@@ -287,20 +304,24 @@
                 buttons: [
                     {
                         extend: 'copyHtml5', 
-                        text: 'Copiar'
+                        text: 'Copiar',
+                        className: 'buttonclass'
                     }, 
                     {
                         extend: 'csvHtml5',
+                        className: 'buttonclass',
                         title: function () { return getExportTitle();},
                         filename: function () { return getExportFilename();} 
                     }, 
                     {
                         extend: 'excelHtml5',
+                        className: 'buttonclass',
                         title: function () { return getExportTitle();},
                         filename: function () { return getExportFilename();}          
                     }, 
                     {
                         extend: 'pdfHtml5',
+                        className: 'buttonclass',
                         title: function () { return getExportTitle();},
                         filename: function () { return getExportFilename();},
                         customize: function ( doc ) {
@@ -309,7 +330,8 @@
                         orientation: 'landscape'
                     },
                     {
-                        extend: 'print', 
+                        extend: 'print',
+                        className: 'buttonclass',
                         text: 'Imprimir',
                         title: function () { return getExportTitle();}
                     }
@@ -350,21 +372,60 @@
                     {data:'categoria', name:'categoria', visible:false},  
                     {data:'subcategoria', name:'subcategoria', visible:false},                        
                     {data:'action', name:'action', orderable: false,searchable: false, width:'25px'} ,   
-                    {data:'fecha', name:'fecha'},         
-                    {data:'variable', name:'variable'}, 
-                    {data:'unidad', name:'unidad', searchable: false},
+                    //{data:'fecha', name:'fecha'},         
+                    {data:'variable', name:'variable', orderable: false}, 
+                    {data:'unidad', name:'unidad', orderable: false, searchable: false},
                     {data:'dia_real', name:'dia_real', orderable: false,searchable: false},
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
-                    {data:'dia_porcentaje', name:'dia_porcentaje', orderable: false,searchable: false},
+                    {data: null, orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $dia_porcentaje = (Math.floor(row['dia_real'] / row['dia_budget']))*100;
+                            return $dia_porcentaje+'%';
+                            /*switch(true)
+                            {
+                                case $dia_porcentaje < 90:
+                                    return '<div class="red_percentage">'+$dia_porcentaje+'</div>';
+                                break;
+                                case $dia_porcentaje > 89 && $dia_porcentaje <100 :
+                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'</div>';
+                                break;
+                                case  $dia_porcentaje > 99 :
+                                    return '<div class="green_percentage">'+$dia_porcentaje+'</div>';
+                                break;
+                                default:
+                                    return $dia_porcentaje+'%';
+                                break;
+                                    
+                            }    */                      
+                        }
+                    },
                     {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
                     {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
-                    {data:'mes_porcentaje', name:'mes_porcentaje', orderable: false,searchable: false},
+                    {data:'mes_porcentaje', name:'mes_porcentaje', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $mes_porcentaje = (Math.floor(row['mes_real'] / row['mes_budget']))*100 + '%';
+                            //return $mes_porcentaje;
+                            return '85%';
+                        }
+                    },
                     {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false},
                     {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
-                    {data:'trimestre_porcentaje', name:'trimestre_porcentaje', orderable: false,searchable: false},
+                    {data:'trimestre_porcentaje', name:'trimestre_porcentaje', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $trimestre_porcentaje=(Math.floor(row['trimestre_real'] / row['trimestre_budget']))*100 + '%';
+                            //return $trimestre_porcentaje;
+                            return '70%';
+                        }
+                    },
                     {data:'anio_real', name:'anio_real', orderable: false,searchable: false},
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
-                    {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false}
+                    {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $anio_porcentaje = (Math.floor(row['anio_real'] / row['anio_budget']))*100 + '%';
+                            //return $anio_porcentaje;
+                            return '110%';
+                        }
+                    }
                 ],  
                 rowGroup: {
                     dataSrc: ['categoria','subcategoria'],
@@ -385,7 +446,7 @@
                 orderFixed: [
                     [0, 'asc'],
                     [1, 'asc']
-                ],
+                ]
             });
         });
         /* DATATABLES */
@@ -520,35 +581,36 @@
         <div class="generic-card">
             <div class="card">
                 <div class="generic-body">        
-                    <table style="width:100%" class="table table-striped table-sm table-bordered table-hover datatable" id="procesos-table">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">CATEGORIA</th>
-                            <th rowspan="2">SUBCATEGORIA</th>
-                            <th rowspan="2" style="min-width:25px!important;"></th> 
-                            <th rowspan="2">FECHA</th>
-                            <th rowspan="2">NOMBRE</th>
-                            <th rowspan="2">U.</th>
-                            <th colspan="3">DIA</th>
-                            <th colspan="3">MES</th>
-                            <th colspan="3">TRIMESTRE</th>
-                            <th colspan="3">AÑO</th>
-                        </tr>
-                        <tr>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>    
+                    <!-- <table style="width:100%;" class="table table-striped table-sm table-bordered table-hover datatable" id="procesos-table"> -->
+                    <table style="width:100%;" class="table-sm table-bordered table-hover thead-light" id="procesos-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">CATEGORIA</th>
+                                <th rowspan="2">SUBCATEGORIA</th>
+                                <th rowspan="2" style="min-width:25px!important;" class="thcenter bluewhite"></th> 
+                                <!-- <th rowspan="2">FECHA</th> -->
+                                <th rowspan="2" class="thcenter bluewhite">NOMBRE</th>
+                                <th rowspan="2" class="thcenter bluewhite">U.</th>
+                                <th colspan="3" class="thcenter bluewhite">DIA</th>
+                                <th colspan="3" class="thcenter bluewhite">MES</th>
+                                <th colspan="3" class="thcenter bluewhite">TRIMESTRE</th>
+                                <th colspan="3" class="thcenter bluewhite">AÑO</th>
+                            </tr>
+                            <tr>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                            </tr>
+                        </thead>  
                     </table>                
                 </div>
             </div>
