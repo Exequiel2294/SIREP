@@ -73,6 +73,10 @@
                 margin-top: 2rem;
             }
         }
+        .dt-buttons .btn-secondary {
+            background-color: #0f62ac;
+            border-color: #0f62ac;
+        }
         @media(min-width:750px) {
             .dt-buttons .btn-secondary {
                 font-size: 1.15rem;
@@ -169,7 +173,20 @@
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
+        
 
+        /*PRESS NAV-LINK BUTTON*/
+        $('.nav-link').click(function (){ 
+            setTimeout(
+                function() {
+                    var oTable = $('#data-table').dataTable();
+                    oTable.fnAdjustColumnSizing();
+                }, 
+            350);
+        });
+        /*PRESS NAV-LINK BUTTON*/
+
+        
         /* DATATABLES */
         $(document).ready(function(){     
             $("#data-table").DataTable({

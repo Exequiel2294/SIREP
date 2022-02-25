@@ -44,7 +44,7 @@
         .modal-head {
             display: flex;
             padding: 1rem;
-            background-color: #343A40;
+            background-color: #0F62AC;
             /* border-bottom: 1px solid #e9ecef; */
             border-top-left-radius: calc(.3rem - 1px);
             border-top-right-radius: calc(.3rem - 1px);
@@ -139,6 +139,10 @@
             .datatables-p {
                 margin-top: 2rem;
             }
+        }
+        .dt-buttons .btn-secondary {
+            background-color: #0f62ac;
+            border-color: #0f62ac;
         }
         @media(min-width:750px) {
             .dt-buttons .btn-secondary {
@@ -237,8 +241,19 @@
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
 
+        /*PRESS NAV-LINK BUTTON*/
+        $('.nav-link').click(function (){ 
+            setTimeout(
+                function() {
+                    var oTable = $('#data-table').dataTable();
+                    oTable.fnAdjustColumnSizing();
+                }, 
+            350);
+        });
+        /*PRESS NAV-LINK BUTTON*/
+
         /* DATATABLES */
-        $(document).ready(function(){     
+        $(document).ready(function(){  
             $("#data-table").DataTable({
                 dom: "<'datatables-p'<'datatables-button'B>>" +
                          "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
