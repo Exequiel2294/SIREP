@@ -18,7 +18,7 @@ class CreateHistorialTable extends Migration
             $table->unsignedBigInteger('data_id');
             $table->foreign('data_id')->references('id')->on('data');
             $table->timestamp('fecha', 0);
-            $table->string('transcaccion');  
+            $table->string('transaccion');  
             $table->decimal('valorviejo', 12, 2);   
             $table->decimal('valornuevo', 12, 2); 
             $table->string('usuario'); 

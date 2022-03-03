@@ -23,7 +23,9 @@
 @section('auth_body')
     <form action="{{ $login_url }}" method="post">
         @csrf
-
+        <h3 class="card-title float-none text-center" style="padding-bottom:1rem;">
+            @yield('auth_header')
+        </h3>
         {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="username" name="username" class="form-control @error('username') is-invalid @enderror"
