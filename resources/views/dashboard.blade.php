@@ -315,6 +315,14 @@
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 date_selected = e.date;
                 $('#procesos-table').DataTable().ajax.reload(null, false);
+                if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 19)
+                {
+                $(".alert-light").css('display','flex');
+                }
+                else
+                {
+                    $(".alert-light").css('display','none');
+                }
             });
         })
         
@@ -322,10 +330,13 @@
         /* DATATABLES */
         $(document).ready(function(){    
             
-            var hour = new Date().getUTCHours();
-            if (hour < 19)
-            {                
-                $(".alert-light").css('display','flex');
+            if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 19)
+            {
+               $(".alert-light").css('display','flex');
+            }
+            else
+            {
+                $(".alert-light").css('display','none');
             }
             function getExportFilename()
             {
