@@ -19,22 +19,25 @@
     <div class="{{ $auth_type ?? 'login' }}-box">
 
         {{-- Logo --}}
-        <div class="{{ $auth_type ?? 'login' }}-logo">
+        <!-- <div class="{{ $auth_type ?? 'login' }}-logo">
             <a href="{{ $dashboard_url }}">
                 <img src="{{ asset(config('adminlte.logo_img')) }}" height="50">
                 {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
             </a>
-        </div>
+        </div> -->
 
         {{-- Card Box --}}
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
 
             {{-- Card Header --}}
             @hasSection('auth_header')
+                <div class="login-logo" style="padding-top:2rem;">
+                    <a href="http://mansfield.test/home">
+                        <img src="http://mansfield.test/images/logo.png" height="80">
+                    </a>
+                </div>
                 <div class="card-header {{ config('adminlte.classes_auth_header', '') }}">
-                    <h3 class="card-title float-none text-center">
-                        @yield('auth_header')
-                    </h3>
+                    
                 </div>
             @endif
 

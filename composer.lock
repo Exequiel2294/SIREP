@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ColorlibHQ/AdminLTE.git",
-                "reference": "c641d7f5716ed47e76f70ab16e05ae41420120b8"
+                "reference": "bd4d9c72931f1dd28601b6bfb387554a381ad540"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/c641d7f5716ed47e76f70ab16e05ae41420120b8",
-                "reference": "c641d7f5716ed47e76f70ab16e05ae41420120b8",
+                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/bd4d9c72931f1dd28601b6bfb387554a381ad540",
+                "reference": "bd4d9c72931f1dd28601b6bfb387554a381ad540",
                 "shasum": ""
             },
             "type": "library",
@@ -45,9 +45,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ColorlibHQ/AdminLTE/issues",
-                "source": "https://github.com/ColorlibHQ/AdminLTE/tree/v3.1.0"
+                "source": "https://github.com/ColorlibHQ/AdminLTE/tree/v3.2.0"
             },
-            "time": "2021-03-22T07:30:50+00:00"
+            "time": "2022-02-07T20:33:09+00:00"
         },
         {
             "name": "asm89/stack-cors",
@@ -167,31 +167,31 @@
         },
         {
             "name": "directorytree/ldaprecord",
-            "version": "v2.9.3",
+            "version": "v2.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DirectoryTree/LdapRecord.git",
-                "reference": "0b5109f9966d107e4413e7abe60d61a37aa3059b"
+                "reference": "c0213d983e09be13974a47539a22f520272f6ede"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DirectoryTree/LdapRecord/zipball/0b5109f9966d107e4413e7abe60d61a37aa3059b",
-                "reference": "0b5109f9966d107e4413e7abe60d61a37aa3059b",
+                "url": "https://api.github.com/repos/DirectoryTree/LdapRecord/zipball/c0213d983e09be13974a47539a22f520272f6ede",
+                "reference": "c0213d983e09be13974a47539a22f520272f6ede",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-ldap": "*",
-                "illuminate/contracts": "^5.0|^6.0|^7.0|^8.0",
+                "illuminate/contracts": "^5.0|^6.0|^7.0|^8.0|^9.0",
                 "nesbot/carbon": "^1.0|^2.0",
                 "php": ">=7.3",
                 "psr/log": "*",
-                "psr/simple-cache": "^1.0",
+                "psr/simple-cache": "^1.0|^2.0",
                 "tightenco/collect": "^5.6|^6.0|^7.0|^8.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
-                "phpunit/phpunit": "^8.0",
+                "phpunit/phpunit": "^9.0",
                 "spatie/ray": "^1.24"
             },
             "type": "library",
@@ -236,33 +236,33 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-27T22:18:05+00:00"
+            "time": "2022-02-09T14:13:12+00:00"
         },
         {
             "name": "directorytree/ldaprecord-laravel",
-            "version": "v2.5.3",
+            "version": "v2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DirectoryTree/LdapRecord-Laravel.git",
-                "reference": "482611465ea3a7c31a0fb24341fe9e06754c2063"
+                "reference": "6283cac3ee5df4817eafdd1f145f72c6861b3a76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DirectoryTree/LdapRecord-Laravel/zipball/482611465ea3a7c31a0fb24341fe9e06754c2063",
-                "reference": "482611465ea3a7c31a0fb24341fe9e06754c2063",
+                "url": "https://api.github.com/repos/DirectoryTree/LdapRecord-Laravel/zipball/6283cac3ee5df4817eafdd1f145f72c6861b3a76",
+                "reference": "6283cac3ee5df4817eafdd1f145f72c6861b3a76",
                 "shasum": ""
             },
             "require": {
                 "directorytree/ldaprecord": "^2.4.4",
                 "ext-ldap": "*",
-                "illuminate/support": "^5.6|^6.0|^7.0|^8.0",
+                "illuminate/support": "^5.6|^6.0|^7.0|^8.0|^9.0",
                 "php": ">=7.3",
                 "ramsey/uuid": "*"
             },
             "require-dev": {
-                "mockery/mockery": "~1.0",
-                "orchestra/testbench": "~3.7|~4.0|~5.0|~6.0",
-                "phpunit/phpunit": "~7.0|~8.0|~9.0",
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^3.7|^4.0|^5.0|^6.0|^7.0",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0",
                 "spatie/ray": "^1.28"
             },
             "type": "project",
@@ -292,7 +292,7 @@
             ],
             "support": {
                 "issues": "https://github.com/DirectoryTree/LdapRecord-Laravel/issues",
-                "source": "https://github.com/DirectoryTree/LdapRecord-Laravel/tree/v2.5.3"
+                "source": "https://github.com/DirectoryTree/LdapRecord-Laravel/tree/v2.5.4"
             },
             "funding": [
                 {
@@ -300,7 +300,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-24T20:22:37+00:00"
+            "time": "2022-02-09T14:41:23+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1004,20 +1004,20 @@
         },
         {
             "name": "jeroennoten/laravel-adminlte",
-            "version": "v3.7.2",
+            "version": "v3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeroennoten/Laravel-AdminLTE.git",
-                "reference": "d86acf000578470709b4a146b05eb9a7fd0cdc8c"
+                "reference": "5ba9fcebbdd889e4d05fdcfba927ffe1335f91ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/d86acf000578470709b4a146b05eb9a7fd0cdc8c",
-                "reference": "d86acf000578470709b4a146b05eb9a7fd0cdc8c",
+                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/5ba9fcebbdd889e4d05fdcfba927ffe1335f91ee",
+                "reference": "5ba9fcebbdd889e4d05fdcfba927ffe1335f91ee",
                 "shasum": ""
             },
             "require": {
-                "almasaeed2010/adminlte": "3.1.*",
+                "almasaeed2010/adminlte": "3.2.*",
                 "laravel/framework": ">=6.0",
                 "php": ">=7.2.0"
             },
@@ -1057,9 +1057,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jeroennoten/Laravel-AdminLTE/issues",
-                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.7.2"
+                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.8.0"
             },
-            "time": "2021-11-17T06:57:49+00:00"
+            "time": "2022-02-10T17:50:18+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4806,16 +4806,16 @@
         },
         {
             "name": "tightenco/collect",
-            "version": "v8.81.0",
+            "version": "v8.83.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tighten/collect.git",
-                "reference": "2b629c5095c89f3e96488f4bde8ac11642465200"
+                "reference": "f8053a9e26ffe0db24db02ef346c40bca920f8f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tighten/collect/zipball/2b629c5095c89f3e96488f4bde8ac11642465200",
-                "reference": "2b629c5095c89f3e96488f4bde8ac11642465200",
+                "url": "https://api.github.com/repos/tighten/collect/zipball/f8053a9e26ffe0db24db02ef346c40bca920f8f8",
+                "reference": "f8053a9e26ffe0db24db02ef346c40bca920f8f8",
                 "shasum": ""
             },
             "require": {
@@ -4854,9 +4854,9 @@
             ],
             "support": {
                 "issues": "https://github.com/tighten/collect/issues",
-                "source": "https://github.com/tighten/collect/tree/v8.81.0"
+                "source": "https://github.com/tighten/collect/tree/v8.83.0"
             },
-            "time": "2022-01-25T22:55:34+00:00"
+            "time": "2022-02-10T23:00:41+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -5335,12 +5335,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Facade\\Ignition\\": "src"
-                },
                 "files": [
                     "src/helpers.php"
-                ]
+                ],
+                "psr-4": {
+                    "Facade\\Ignition\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5872,16 +5872,16 @@
         },
         {
             "name": "phar-io/version",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "bae7c545bef187884426f042434e561ab1ddb182"
+                "reference": "15a90844ad40f127afd244c0cad228de2a80052a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/bae7c545bef187884426f042434e561ab1ddb182",
-                "reference": "bae7c545bef187884426f042434e561ab1ddb182",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/15a90844ad40f127afd244c0cad228de2a80052a",
+                "reference": "15a90844ad40f127afd244c0cad228de2a80052a",
                 "shasum": ""
             },
             "require": {
@@ -5917,9 +5917,9 @@
             "description": "Library for handling version information and constraints",
             "support": {
                 "issues": "https://github.com/phar-io/version/issues",
-                "source": "https://github.com/phar-io/version/tree/3.1.0"
+                "source": "https://github.com/phar-io/version/tree/3.1.1"
             },
-            "time": "2021-02-23T14:00:09+00:00"
+            "time": "2022-02-07T21:56:48+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6879,16 +6879,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "474fb9edb7ab891665d3bfc6317f42a0a150454b"
+                "reference": "de036ec91d55d2a9e0db2ba975b512cdb1c23921"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/474fb9edb7ab891665d3bfc6317f42a0a150454b",
-                "reference": "474fb9edb7ab891665d3bfc6317f42a0a150454b",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/de036ec91d55d2a9e0db2ba975b512cdb1c23921",
+                "reference": "de036ec91d55d2a9e0db2ba975b512cdb1c23921",
                 "shasum": ""
             },
             "require": {
@@ -6931,7 +6931,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/global-state/issues",
-                "source": "https://github.com/sebastianbergmann/global-state/tree/3.0.1"
+                "source": "https://github.com/sebastianbergmann/global-state/tree/3.0.2"
             },
             "funding": [
                 {
@@ -6939,7 +6939,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-30T07:43:24+00:00"
+            "time": "2022-02-10T06:55:38+00:00"
         },
         {
             "name": "sebastian/object-enumerator",

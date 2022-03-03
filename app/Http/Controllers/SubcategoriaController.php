@@ -27,7 +27,7 @@ class SubcategoriaController extends Controller
                     ->addColumn('action', function($data)
                     {
                         $button = ''; 
-                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i class="fa fa-edit"></i></a>';  
+                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
                         $button .= '&nbsp;';
                         $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
                         return $button;

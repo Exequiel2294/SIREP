@@ -51,7 +51,7 @@
         .modal-head {
             display: flex;
             padding: 1rem;
-            background-color: #343A40;
+            background-color: #0F62AC;
             /* border-bottom: 1px solid #e9ecef; */
             border-top-left-radius: calc(.3rem - 1px);
             border-top-right-radius: calc(.3rem - 1px);
@@ -147,6 +147,10 @@
                 margin-top: 2rem;
             }
         }
+        .dt-buttons .btn-secondary {
+            background-color: #0f62ac;
+            border-color: #0f62ac;
+        }
         @media(min-width:750px) {
             .dt-buttons .btn-secondary {
                 font-size: 1.15rem;
@@ -237,14 +241,49 @@
                 margin: .5rem 2rem 0 0;
             }
         }
+
+        /* PROPIOS VISTA */
+
         .dtrg-level-0 > td{
-            background-color: cadetblue;
+            background-color: #525C66;     
+            color: white;
+            font-size: 1.1rem;
         }
         .dtrg-level-1 > td{
-            background-color: lightblue;
+            background-color: #D6D6D6;
         }
         .datetimepicker-input{
             font-size: 1.8rem;
+        }
+
+        .thcenter{
+            text-align:center;
+            vertical-align: inherit!important;
+        }
+
+        /*.bluewhite{            
+           color: white;
+            background-color: #4682B4;
+        }*/
+        .buttonclass{
+            background-color:#525C66
+        }
+
+        .table-bord td, .table-bord th {
+            border: 0.5px solid #dee2e6;
+        }
+
+        .red_percentage{
+            color: red;
+            font-weight: bold;
+        }
+        .yellow_percentage{
+            color: darkorange;
+            font-weight: bold;
+        }
+        .green_percentage{
+            color: green;
+            font-weight: bold;
         }
 
     </style> 
@@ -253,6 +292,19 @@
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
+        
+
+        /*PRESS NAV-LINK BUTTON*/
+        $('.nav-link').click(function (){ 
+            setTimeout(
+                function() {
+                    var oTable = $('#procesos-table').dataTable();
+                    oTable.fnAdjustColumnSizing();
+                }, 
+            350);
+        });
+        /*PRESS NAV-LINK BUTTON*/
+
         var date_selected = moment().subtract(1, "days");
         $(function () {
             $('#datetimepicker4').datetimepicker({
@@ -262,7 +314,6 @@
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 date_selected = e.date;
-                console.log(moment(e.date).format('YYYY-MM-DD'));
                 $('#procesos-table').DataTable().ajax.reload(null, false);
             });
         })
@@ -270,6 +321,12 @@
 
         /* DATATABLES */
         $(document).ready(function(){    
+            
+            var hour = new Date().getUTCHours();
+            if (hour < 19)
+            {                
+                $(".alert-light").css('display','flex');
+            }
             function getExportFilename()
             {
                 return 'Reporte'+moment(date_selected).format('YYYY-MM-DD');
@@ -287,20 +344,24 @@
                 buttons: [
                     {
                         extend: 'copyHtml5', 
-                        text: 'Copiar'
+                        text: 'Copiar',
+                        className: 'buttonclass'
                     }, 
                     {
                         extend: 'csvHtml5',
+                        className: 'buttonclass',
                         title: function () { return getExportTitle();},
                         filename: function () { return getExportFilename();} 
                     }, 
                     {
                         extend: 'excelHtml5',
+                        className: 'buttonclass',
                         title: function () { return getExportTitle();},
                         filename: function () { return getExportFilename();}          
                     }, 
                     {
                         extend: 'pdfHtml5',
+                        className: 'buttonclass',
                         title: function () { return getExportTitle();},
                         filename: function () { return getExportFilename();},
                         customize: function ( doc ) {
@@ -309,7 +370,8 @@
                         orientation: 'landscape'
                     },
                     {
-                        extend: 'print', 
+                        extend: 'print',
+                        className: 'buttonclass',
                         text: 'Imprimir',
                         title: function () { return getExportTitle();}
                     }
@@ -350,21 +412,101 @@
                     {data:'categoria', name:'categoria', visible:false},  
                     {data:'subcategoria', name:'subcategoria', visible:false},                        
                     {data:'action', name:'action', orderable: false,searchable: false, width:'25px'} ,   
-                    {data:'fecha', name:'fecha'},         
-                    {data:'variable', name:'variable'}, 
-                    {data:'unidad', name:'unidad', searchable: false},
+                    //{data:'fecha', name:'fecha'},         
+                    {data:'variable', name:'variable', orderable: false}, 
+                    {data:'unidad', name:'unidad', orderable: false, searchable: false},
                     {data:'dia_real', name:'dia_real', orderable: false,searchable: false},
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
-                    {data:'dia_porcentaje', name:'dia_porcentaje', orderable: false,searchable: false},
+                    {data: null, orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $dia_porcentaje = (Math.floor(row['dia_real'] / row['dia_budget']))*100;
+                            switch(true)
+                            {
+                                case $dia_porcentaje < 90:
+                                    return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                break;
+                                case $dia_porcentaje > 89 && $dia_porcentaje <100 :
+                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                break;
+                                case  $dia_porcentaje > 99 :
+                                    return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                break;
+                                default:
+                                    return $dia_porcentaje+'%';
+                                break;
+                                    
+                            }                     
+                        }
+                    },
                     {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
                     {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
-                    {data:'mes_porcentaje', name:'mes_porcentaje', orderable: false,searchable: false},
+                    {data:'mes_porcentaje', name:'mes_porcentaje', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $mes_porcentaje = (Math.floor(row['mes_real'] / row['mes_budget']))*100;
+                            switch(true)
+                            {
+                                case $mes_porcentaje < 90:
+                                    return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                break;
+                                case $mes_porcentaje > 89 && $mes_porcentaje <100 :
+                                    return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                break;
+                                case  $mes_porcentaje > 99 :
+                                    return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                break;
+                                default:
+                                    return $mes_porcentaje+'%';
+                                break;
+                                    
+                            }  
+                        }
+                    },
                     {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false},
                     {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
-                    {data:'trimestre_porcentaje', name:'trimestre_porcentaje', orderable: false,searchable: false},
+                    {data:'trimestre_porcentaje', name:'trimestre_porcentaje', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $trimestre_porcentaje=(Math.floor(row['trimestre_real'] / row['trimestre_budget']))*100;
+                            switch(true)
+                            {
+                                case $trimestre_porcentaje < 90:
+                                    return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                break;
+                                case $trimestre_porcentaje > 89 && $trimestre_porcentaje <100 :
+                                    return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                break;
+                                case  $trimestre_porcentaje > 99 :
+                                    return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                break;
+                                default:
+                                    return $trimestre_porcentaje+'%';
+                                break;
+                                    
+                            }  
+                        }
+                    },
                     {data:'anio_real', name:'anio_real', orderable: false,searchable: false},
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
-                    {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false}
+                    {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            $anio_porcentaje = (Math.floor(row['anio_real'] / row['anio_budget']))*100;
+                            switch(true)
+                            {
+                                case $anio_porcentaje < 90:
+                                    return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                break;
+                                case $anio_porcentaje > 89 && $anio_porcentaje <100 :
+                                    return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                break;
+                                case  $anio_porcentaje > 99 :
+                                    return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                break;
+                                default:
+                                    return $anio_porcentaje+'%';
+                                break;
+                                    
+                            }  
+                        }
+                    }
                 ],  
                 rowGroup: {
                     dataSrc: ['categoria','subcategoria'],
@@ -385,7 +527,7 @@
                 orderFixed: [
                     [0, 'asc'],
                     [1, 'asc']
-                ],
+                ]
             });
         });
         /* DATATABLES */
@@ -519,36 +661,43 @@
     <div class="row" style="justify-content: center; overflow:auto;">
         <div class="generic-card">
             <div class="card">
-                <div class="generic-body">        
-                    <table style="width:100%" class="table table-striped table-sm table-bordered table-hover datatable" id="procesos-table">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">CATEGORIA</th>
-                            <th rowspan="2">SUBCATEGORIA</th>
-                            <th rowspan="2" style="min-width:25px!important;"></th> 
-                            <th rowspan="2">FECHA</th>
-                            <th rowspan="2">NOMBRE</th>
-                            <th rowspan="2">U.</th>
-                            <th colspan="3">DIA</th>
-                            <th colspan="3">MES</th>
-                            <th colspan="3">TRIMESTRE</th>
-                            <th colspan="3">AÑO</th>
-                        </tr>
-                        <tr>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                            <th>Real</th>
-                            <th>Budget</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>    
+                <div class="generic-body">   
+                    <div class="alert alert-light alert-dismissible fade show" style="display:none;" role="alert">
+                        <strong>Advertencia!</strong>&nbsp;Es posible que algunos datos aún no se encuentren cargados.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- <table style="width:100%;" class="table table-striped table-sm table-bordered table-hover datatable" id="procesos-table"> -->
+                    <table style="width:100%; border-collapse: collapse !important;" class="table-sm table-bord table-hover" id="procesos-table">
+                        <thead style=" border-collapse: collapse !important;">
+                            <tr>
+                                <th rowspan="2">CATEGORIA</th>
+                                <th rowspan="2">SUBCATEGORIA</th>
+                                <th rowspan="2" style="min-width:25px!important;" class="thcenter bluewhite"></th> 
+                                <!-- <th rowspan="2">FECHA</th> -->
+                                <th rowspan="2" class="thcenter bluewhite">NOMBRE</th>
+                                <th rowspan="2" class="thcenter bluewhite">U.</th>
+                                <th colspan="3" class="thcenter bluewhite">DIA</th>
+                                <th colspan="3" class="thcenter bluewhite">MES</th>
+                                <th colspan="3" class="thcenter bluewhite">TRIMESTRE</th>
+                                <th colspan="3" class="thcenter bluewhite">AÑO</th>
+                            </tr>
+                            <tr>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                                <th class="thcenter">Real</th>
+                                <th class="thcenter">Budget</th>
+                                <th class="thcenter">%</th>
+                            </tr>
+                        </thead>  
                     </table>                
                 </div>
             </div>

@@ -5,6 +5,7 @@ return [
     'variable'                    => 'Variable',
     'area'                        => 'Area',
     'categoria'                   => 'Categoria',
-    'subcategoria'                => 'Subcategoria'
+    'subcategoria'                => 'Subcategoria',
+    'historial'                   => 'Historial'
 
 ];
