@@ -16,7 +16,9 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        
         return view('dashboard');
+
     }
 
     public function procesostable(Request $request)
@@ -24,10 +26,14 @@ class DashboardController extends Controller
         if(request()->ajax()) {
             $this->date = $request->get('fecha');
             $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];
-            $apilamiento = DB::table('data')
+            $table = DB::table('data')
                             ->join('variable','data.variable_id','=','variable.id')
                             ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                             ->join('categoria','subcategoria.categoria_id','=','categoria.id')
+                            ->leftJoin('budget', function($join){
+                                $join->on('data.variable_id', '=', 'budget.variable_id');
+                                $join->on('data.fecha', '=', 'budget.fecha');
+                            })
                             ->where($where)
                             ->select(
                                 'data.id as id',
@@ -38,14 +44,20 @@ class DashboardController extends Controller
                                 'variable.nombre as variable', 
                                 'variable.unidad as unidad',
                                 'data.valor as dia_real',
-                                'data.valor as dia_budget',
-                                'data.valor as mes_budget',
-                                'data.valor as trimestre_budget',
+                                'budget.valor as dia_budget',
                                 'data.valor as anio_budget'
                                 )
                             ->get();
                             
-            return datatables()->of($apilamiento)   
+            return datatables()->of($table)  
+                    ->addColumn('dia_real', function($data)
+                    {  
+                        return number_format($data->dia_real, 2, ',', '.');
+                    })
+                    ->addColumn('dia_budget', function($data)
+                    {          
+                        return number_format($data->dia_budget, 2, ',', '.');
+                    }) 
                     ->addColumn('mes_real', function($data)
                     {                        
                         $mes_real= DB::select(
@@ -56,13 +68,26 @@ class DashboardController extends Controller
                             GROUP BY MONTH(fecha)', 
                             [$data->variable_id, date('m', strtotime($this->date))]
                         );
-                        return $mes_real[0]->mes_real;
+                        return number_format($mes_real[0]->mes_real, 2, ',', '.');
                     })
-                    ->addColumn('mes_porcentaje', function($data)
-                    {
-                        $mes_porcentaje = 'asd';
-                        
-                        return $mes_porcentaje;
+                    ->addColumn('mes_budget', function($data)
+                    {                        
+                        $mes_budget= DB::select(
+                            'SELECT MONTH(fecha) as month, SUM(valor) as mes_budget
+                            FROM [mansfield].[dbo].[budget]
+                            WHERE variable_id = ?
+                            AND  MONTH(fecha) = ?
+                            GROUP BY MONTH(fecha)', 
+                            [$data->variable_id, date('m', strtotime($this->date))]
+                        );
+                        if(isset($mes_budget[0]->mes_budget))
+                        {
+                            return number_format($mes_budget[0]->mes_budget, 2, ',', '.');
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
                     ->addColumn('trimestre_real', function($data)
                     {                        
@@ -74,12 +99,26 @@ class DashboardController extends Controller
                             GROUP BY DATEPART(QUARTER, fecha)', 
                             [$data->variable_id, ceil(date('m', strtotime($this->date))/3)]
                         );
-                        return $trimestre_real[0]->trimestre_real;
+                        return number_format($trimestre_real[0]->trimestre_real, 2, ',', '.');
                     })
-                    ->addColumn('trimestre_porcentaje', function($data)
-                    {   
-                        $trimestre_porcentaje = "100%";
-                        return $trimestre_porcentaje;
+                    ->addColumn('trimestre_budget', function($data)
+                    {                        
+                        $trimestre_budget= DB::select(
+                            'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
+                            FROM [mansfield].[dbo].[budget]
+                            WHERE variable_id = ?
+                            AND  DATEPART(QUARTER, fecha) = ?
+                            GROUP BY DATEPART(QUARTER, fecha)', 
+                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3)]
+                        );
+                        if(isset($trimestre_budget[0]->trimestre_budget))
+                        {
+                            return number_format($trimestre_budget[0]->trimestre_budget, 2, ',', '.');
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
                     ->addColumn('anio_real', function($data)
                     {                        
@@ -91,11 +130,26 @@ class DashboardController extends Controller
                             GROUP BY YEAR(fecha)', 
                             [$data->variable_id, date('Y', strtotime($this->date))]
                         );
-                        return $anio_real[0]->anio_real;
+                        return number_format($anio_real[0]->anio_real, 2, ',', '.');
                     })
-                    ->addColumn('anio_porcentaje', function($data)
-                    {
-                        return '100';
+                    ->addColumn('anio_budget', function($data)
+                    {                        
+                        $anio_budget= DB::select(
+                            'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
+                            FROM [mansfield].[dbo].[budget]
+                            WHERE variable_id = ?
+                            AND  YEAR(fecha) = ?
+                            GROUP BY YEAR(fecha)', 
+                            [$data->variable_id, date('Y', strtotime($this->date))]
+                        );
+                        if(isset($anio_budget[0]->anio_budget))
+                        {
+                            return number_format($anio_budget[0]->anio_budget, 2, ',', '.');
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
                     ->addColumn('action', function($data)
                     {
@@ -103,7 +157,7 @@ class DashboardController extends Controller
                         $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';  
                         return $button;
                     })
-                    ->rawColumns(['dia_porcentaje','mes_real','mes_porcentaje','trimestre_real','trimestre_porcentaje','anio_real','anio_porcentaje','action'])
+                    ->rawColumns(['dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
                     ->addIndexColumn()
                     ->make(true);
         } 
