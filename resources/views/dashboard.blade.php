@@ -349,7 +349,12 @@
                 return 'Reporte '+moment(date_selected).format('YYYY-MM-DD');
             }
 
-            $("#procesos-table").DataTable({
+            $('#procesos-table tbody').on( 'click', 'tr', function () {
+                $(this).toggleClass('selected');
+            } );
+
+
+            var table = $("#procesos-table").DataTable({
                 dom:    "<'datatables-p'<'datatables-button'B>>" + 
                         "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
@@ -432,27 +437,37 @@
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            $d_budget = parseFloat(row['dia_budget'].replaceAll('.','').replace(',','.'));
-                            $d_real = parseFloat(row['dia_real'].replaceAll('.','').replace(',','.'));
-                            if($d_budget != 0.00)
+                            if(row['dia_budget'] != '-' && row['dia_real'] != '-')
                             {
-                                $dia_porcentaje = Math.floor(($d_real / $d_budget)*100);
-                                switch(true)
+                                $d_budget = parseFloat(row['dia_budget'].replaceAll('.','').replace(',','.'));
+                                $d_real = parseFloat(row['dia_real'].replaceAll('.','').replace(',','.'));
+                                if($d_budget != 0.00 )
                                 {
-                                    case $dia_porcentaje < 90:
-                                        return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
-                                    break;
-                                    case $dia_porcentaje > 89 && $dia_porcentaje <100 :
-                                        return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
-                                    break;
-                                    case  $dia_porcentaje > 99 :
-                                        return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
-                                    break;
-                                    default:
-                                        return $dia_porcentaje+'%';
-                                    break;
-                                        
-                                }    
+                                    $dia_porcentaje = Math.floor(($d_real / $d_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $dia_porcentaje < 90:
+                                            //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        case $dia_porcentaje > 89 && $dia_porcentaje <100 :
+                                            //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        case  $dia_porcentaje > 99 :
+                                            //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $dia_porcentaje+'%';
+                                        break;
+                                            
+                                    }    
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
                             }
                             else
                             {
@@ -465,7 +480,7 @@
                     {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            if(row['mes_budget'] != '-')
+                            if(row['mes_budget'] != '-' && row['mes_real'] != '-')
                             {
                                 $m_budget = parseFloat(row['mes_budget'].replaceAll('.','').replace(',','.'));
                                 $m_real = parseFloat(row['mes_real'].replaceAll('.','').replace(',','.'));
@@ -505,7 +520,7 @@
                     {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
                     {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            if(row['trimestre_budget'] != '-')
+                            if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
                             {                                
                                 $t_budget = parseFloat(row['trimestre_budget'].replaceAll('.','').replace(',','.'));
                                 $t_real = parseFloat(row['trimestre_real'].replaceAll('.','').replace(',','.'));
@@ -545,7 +560,7 @@
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
                     {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            if(row['anio_budget'] != '-')
+                            if(row['anio_budget'] != '-' && row['anio_real'] != '-')
                             {                               
                                 $a_budget = parseFloat(row['anio_budget'].replaceAll('.','').replace(',','.'));
                                 $a_real = parseFloat(row['anio_real'].replaceAll('.','').replace(',','.'));
@@ -596,6 +611,8 @@
                     [1, 'asc']
                 ]
             });
+
+            table.row(':eq(0)', { page: 'current' }).select();
         });
         /* DATATABLES */
 
@@ -825,7 +842,7 @@
                         <div class="form-group row">
                             <label for="valor" class="col-sm-2 col-form-label">Valor</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="valor" name="valor">
+                              <input type="number" class="form-control" id="valor" name="valor" lang="es" step="0.0001">
                             </div>
                         </div>                
                         @csrf
