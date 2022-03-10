@@ -248,9 +248,11 @@
             background-color: #525C66;     
             color: white;
             font-size: 1.1rem;
+            padding-left: 1rem;
         }
         .dtrg-level-1 > td{
             background-color: #D6D6D6;
+            padding-left: 1rem;
         }
         .datetimepicker-input{
             font-size: 1.8rem;
@@ -270,7 +272,7 @@
         }
 
         .table-bord td, .table-bord th {
-            border: 0.5px solid #dee2e6;
+            border: 1.2px solid #dee2e6;
         }
 
         .red_percentage{
@@ -347,7 +349,12 @@
                 return 'Reporte '+moment(date_selected).format('YYYY-MM-DD');
             }
 
-            $("#procesos-table").DataTable({
+            $('#procesos-table tbody').on( 'click', 'tr', function () {
+                $(this).toggleClass('selected');
+            } );
+
+
+            var table = $("#procesos-table").DataTable({
                 dom:    "<'datatables-p'<'datatables-button'B>>" + 
                         "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
@@ -430,116 +437,182 @@
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            $dia_porcentaje = (Math.floor(row['dia_real'] / row['dia_budget']))*100;
-                            switch(true)
+                            if(row['dia_budget'] != '-' && row['dia_real'] != '-')
                             {
-                                case $dia_porcentaje < 90:
-                                    return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
-                                break;
-                                case $dia_porcentaje > 89 && $dia_porcentaje <100 :
-                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
-                                break;
-                                case  $dia_porcentaje > 99 :
-                                    return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
-                                break;
-                                default:
-                                    return $dia_porcentaje+'%';
-                                break;
-                                    
-                            }                     
+                                $d_budget = parseFloat(row['dia_budget'].replaceAll('.','').replace(',','.'));
+                                $d_real = parseFloat(row['dia_real'].replaceAll('.','').replace(',','.'));
+                                if($d_budget != 0.00 )
+                                {
+                                    $dia_porcentaje = Math.floor(($d_real / $d_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $dia_porcentaje < 90:
+                                            //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        case $dia_porcentaje > 89 && $dia_porcentaje <100 :
+                                            //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        case  $dia_porcentaje > 99 :
+                                            //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $dia_porcentaje+'%';
+                                        break;
+                                            
+                                    }    
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                                         
                         }
                     },
                     {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
                     {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
-                    {data:'mes_porcentaje', name:'mes_porcentaje', orderable: false,searchable: false,
+                    {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            $mes_porcentaje = (Math.floor(row['mes_real'] / row['mes_budget']))*100;
-                            switch(true)
+                            if(row['mes_budget'] != '-' && row['mes_real'] != '-')
                             {
-                                case $mes_porcentaje < 90:
-                                    return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
-                                break;
-                                case $mes_porcentaje > 89 && $mes_porcentaje <100 :
-                                    return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
-                                break;
-                                case  $mes_porcentaje > 99 :
-                                    return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
-                                break;
-                                default:
-                                    return $mes_porcentaje+'%';
-                                break;
-                                    
-                            }  
+                                $m_budget = parseFloat(row['mes_budget'].replaceAll('.','').replace(',','.'));
+                                $m_real = parseFloat(row['mes_real'].replaceAll('.','').replace(',','.'));
+                                if($m_budget != 0.00)
+                                {
+                                    $mes_porcentaje = Math.floor(($m_real / $m_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $mes_porcentaje < 90:
+                                            return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                        break;
+                                        case $mes_porcentaje > 89 && $mes_porcentaje <100 :
+                                            return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                        break;
+                                        case  $mes_porcentaje > 99 :
+                                            return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $mes_porcentaje+'%';
+                                        break;
+                                            
+                                    }    
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+
+                            }
+                            else
+                            {
+                                return '-';
+                            }                                         
                         }
                     },
                     {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false},
                     {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
-                    {data:'trimestre_porcentaje', name:'trimestre_porcentaje', orderable: false,searchable: false,
+                    {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            $trimestre_porcentaje=(Math.floor(row['trimestre_real'] / row['trimestre_budget']))*100;
-                            switch(true)
+                            if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
+                            {                                
+                                $t_budget = parseFloat(row['trimestre_budget'].replaceAll('.','').replace(',','.'));
+                                $t_real = parseFloat(row['trimestre_real'].replaceAll('.','').replace(',','.'));
+                                if($t_budget != 0.00)
+                                {
+                                    $trimestre_porcentaje = Math.floor(($t_real/ $t_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $trimestre_porcentaje < 90:
+                                            return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                        break;
+                                        case $trimestre_porcentaje > 89 && $trimestre_porcentaje <100 :
+                                            return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                        break;
+                                        case  $trimestre_porcentaje > 99 :
+                                            return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $trimestre_porcentaje+'%';
+                                        break;
+                                            
+                                    }   
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+
+                            }
+                            else
                             {
-                                case $trimestre_porcentaje < 90:
-                                    return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
-                                break;
-                                case $trimestre_porcentaje > 89 && $trimestre_porcentaje <100 :
-                                    return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
-                                break;
-                                case  $trimestre_porcentaje > 99 :
-                                    return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
-                                break;
-                                default:
-                                    return $trimestre_porcentaje+'%';
-                                break;
-                                    
-                            }  
+                                return '-';
+                            }     
                         }
                     },
                     {data:'anio_real', name:'anio_real', orderable: false,searchable: false},
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
-                    {data:'anio_porcentaje', name:'anio_porcentaje', orderable: false,searchable: false,
+                    {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
-                            $anio_porcentaje = (Math.floor(row['anio_real'] / row['anio_budget']))*100;
-                            switch(true)
+                            if(row['anio_budget'] != '-' && row['anio_real'] != '-')
+                            {                               
+                                $a_budget = parseFloat(row['anio_budget'].replaceAll('.','').replace(',','.'));
+                                $a_real = parseFloat(row['anio_real'].replaceAll('.','').replace(',','.'));
+                                if($a_budget != 0.00)
+                                {
+                                    $anio_porcentaje=Math.floor(($a_real / $a_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $anio_porcentaje < 90:
+                                            return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                        break;
+                                        case $anio_porcentaje > 89 && $anio_porcentaje <100 :
+                                            return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                        break;
+                                        case  $anio_porcentaje > 99 :
+                                            return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $anio_porcentaje+'%';
+                                        break;
+                                            
+                                    }   
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+
+                            }
+                            else
                             {
-                                case $anio_porcentaje < 90:
-                                    return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
-                                break;
-                                case $anio_porcentaje > 89 && $anio_porcentaje <100 :
-                                    return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
-                                break;
-                                case  $anio_porcentaje > 99 :
-                                    return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
-                                break;
-                                default:
-                                    return $anio_porcentaje+'%';
-                                break;
-                                    
-                            }  
+                                return '-';
+                            }     
                         }
-                    }
+                    },
                 ],  
                 rowGroup: {
                     dataSrc: ['categoria','subcategoria'],
-                    /*startRender: function ( rows, group, level ) {
-                        
-                        if(level == 0)
-                        {
-                            return group;
-                        }
-                        if(level == 1)
-                        {
-                            console.log($('#procesos-table').DataTable().rows().data());
-                            return group +' '+ '<a href="javascript:void(0)" name="edit" class="btn-action-table edit" title="Editar registros"><i class="fa fa-edit"></i></a>';
-                        }
-                    }
-                    */
                 },
+                columnDefs: [
+                    {
+                        targets: [4,5,6,7,8,9,10,11,12,13,14,15,16],
+                        className: "dt-center"
+                    }
+                ],
                 orderFixed: [
                     [0, 'asc'],
                     [1, 'asc']
                 ]
             });
+
+            table.row(':eq(0)', { page: 'current' }).select();
         });
         /* DATATABLES */
 
@@ -769,7 +842,7 @@
                         <div class="form-group row">
                             <label for="valor" class="col-sm-2 col-form-label">Valor</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="valor" name="valor">
+                              <input type="number" class="form-control" id="valor" name="valor" lang="es" step="0.0001">
                             </div>
                         </div>                
                         @csrf

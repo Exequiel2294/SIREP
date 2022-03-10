@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\Validator;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-    {
+    { 
         return view('dashboard');
+
     }
 
     public function procesostable(Request $request)
@@ -24,10 +25,14 @@ class DashboardController extends Controller
         if(request()->ajax()) {
             $this->date = $request->get('fecha');
             $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];
-            $apilamiento = DB::table('data')
+            $table = DB::table('data')
                             ->join('variable','data.variable_id','=','variable.id')
                             ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                             ->join('categoria','subcategoria.categoria_id','=','categoria.id')
+                            ->leftJoin('budget', function($join){
+                                $join->on('data.variable_id', '=', 'budget.variable_id');
+                                $join->on('data.fecha', '=', 'budget.fecha');
+                            })
                             ->where($where)
                             ->select(
                                 'data.id as id',
@@ -38,14 +43,50 @@ class DashboardController extends Controller
                                 'variable.nombre as variable', 
                                 'variable.unidad as unidad',
                                 'data.valor as dia_real',
-                                'data.valor as dia_budget',
-                                'data.valor as mes_budget',
-                                'data.valor as trimestre_budget',
+                                'budget.valor as dia_budget',
                                 'data.valor as anio_budget'
                                 )
                             ->get();
                             
-            return datatables()->of($apilamiento)   
+            return datatables()->of($table)  
+                    ->addColumn('dia_real', function($data)
+                    {         
+                        if(isset($data->dia_real)) 
+                        {            
+                            $d_real = $data->dia_real;
+                            if($d_real > 100)
+                            {
+                                return number_format(round($d_real), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($d_real, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    })
+                    ->addColumn('dia_budget', function($data)
+                    {           
+                        if(isset($data->dia_budget))
+                        {
+                            $d_budget = $data->dia_budget;
+                            if($d_budget > 100)
+                            {
+                                return number_format(round($d_budget), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($d_budget, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
+                    }) 
                     ->addColumn('mes_real', function($data)
                     {                        
                         $mes_real= DB::select(
@@ -53,16 +94,54 @@ class DashboardController extends Controller
                             FROM [mansfield].[dbo].[data]
                             WHERE variable_id = ?
                             AND  MONTH(fecha) = ?
+                            AND  DATEPART(y, fecha) <= ?
                             GROUP BY MONTH(fecha)', 
-                            [$data->variable_id, date('m', strtotime($this->date))]
+                            [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                         );
-                        return $mes_real[0]->mes_real;
+                        if(isset($mes_real[0]->mes_real))
+                        {
+                            $m_real = $mes_real[0]->mes_real;
+                            if($m_real > 100)
+                            {
+                                return number_format(round($m_real), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($m_real, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
                     })
-                    ->addColumn('mes_porcentaje', function($data)
-                    {
-                        $mes_porcentaje = 'asd';
-                        
-                        return $mes_porcentaje;
+                    ->addColumn('mes_budget', function($data)
+                    {                        
+                        $mes_budget= DB::select(
+                            'SELECT MONTH(fecha) as month, SUM(valor) as mes_budget
+                            FROM [mansfield].[dbo].[budget]
+                            WHERE variable_id = ?
+                            AND  MONTH(fecha) = ?
+                            AND  DATEPART(y, fecha) <= ?
+                            GROUP BY MONTH(fecha)', 
+                            [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                        );
+                        if(isset($mes_budget[0]->mes_budget))
+                        {
+                            $m_budget = $mes_budget[0]->mes_budget;
+                            if($m_budget > 100)
+                            {
+                                return number_format(round($m_budget), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($m_budget, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
                     ->addColumn('trimestre_real', function($data)
                     {                        
@@ -71,15 +150,54 @@ class DashboardController extends Controller
                             FROM [mansfield].[dbo].[data]
                             WHERE variable_id = ?
                             AND  DATEPART(QUARTER, fecha) = ?
+                            AND  DATEPART(y, fecha) <= ?
                             GROUP BY DATEPART(QUARTER, fecha)', 
-                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3)]
+                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                         );
-                        return $trimestre_real[0]->trimestre_real;
+                        if(isset($trimestre_real[0]->trimestre_real))
+                        {
+                            $t_real = $trimestre_real[0]->trimestre_real;
+                            if($t_real > 100)
+                            {
+                                return number_format(round($t_real), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($t_real, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-' ;                            
+                        }
                     })
-                    ->addColumn('trimestre_porcentaje', function($data)
-                    {   
-                        $trimestre_porcentaje = "100%";
-                        return $trimestre_porcentaje;
+                    ->addColumn('trimestre_budget', function($data)
+                    {                        
+                        $trimestre_budget= DB::select(
+                            'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
+                            FROM [mansfield].[dbo].[budget]
+                            WHERE variable_id = ?
+                            AND  DATEPART(QUARTER, fecha) = ?
+                            AND  DATEPART(y, fecha) <= ?
+                            GROUP BY DATEPART(QUARTER, fecha)', 
+                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                        );
+                        if(isset($trimestre_budget[0]->trimestre_budget))
+                        {
+                            $t_budget = $trimestre_budget[0]->trimestre_budget;
+                            if($t_budget > 100)
+                            {
+                                return number_format(round($t_budget), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($t_budget, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
                     ->addColumn('anio_real', function($data)
                     {                        
@@ -88,14 +206,54 @@ class DashboardController extends Controller
                             FROM [mansfield].[dbo].[data]
                             WHERE variable_id = ?
                             AND  YEAR(fecha) = ?
+                            AND  DATEPART(y, fecha) <= ?
                             GROUP BY YEAR(fecha)', 
-                            [$data->variable_id, date('Y', strtotime($this->date))]
+                            [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                         );
-                        return $anio_real[0]->anio_real;
+                        if(isset($anio_real[0]->anio_real))
+                        {
+                            $a_real = $anio_real[0]->anio_real;
+                            if($a_real > 100)
+                            {
+                                return number_format(round($a_real), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($a_real, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
-                    ->addColumn('anio_porcentaje', function($data)
-                    {
-                        return '100';
+                    ->addColumn('anio_budget', function($data)
+                    {                        
+                        $anio_budget= DB::select(
+                            'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
+                            FROM [mansfield].[dbo].[budget]
+                            WHERE variable_id = ?
+                            AND  YEAR(fecha) = ?
+                            AND  DATEPART(y, fecha) <= ?
+                            GROUP BY YEAR(fecha)', 
+                            [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                        );
+                        if(isset($anio_budget[0]->anio_budget))
+                        {
+                            $a_budget = $anio_budget[0]->anio_budget;
+                            if($a_budget > 100)
+                            {
+                                return number_format(round($a_budget), 0, ',', '.');
+                            }
+                            else
+                            {
+                                return number_format($a_budget, 2, ',', '.');
+                            }
+                        }
+                        else
+                        {
+                            return '-' ;
+                        }
                     })
                     ->addColumn('action', function($data)
                     {
@@ -103,7 +261,7 @@ class DashboardController extends Controller
                         $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';  
                         return $button;
                     })
-                    ->rawColumns(['dia_porcentaje','mes_real','mes_porcentaje','trimestre_real','trimestre_porcentaje','anio_real','anio_porcentaje','action'])
+                    ->rawColumns(['dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
                     ->addIndexColumn()
                     ->make(true);
         } 
