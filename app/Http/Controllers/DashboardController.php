@@ -88,16 +88,34 @@ class DashboardController extends Controller
                         }
                     }) 
                     ->addColumn('mes_real', function($data)
-                    {                        
-                        $mes_real= DB::select(
-                            'SELECT MONTH(fecha) as month, SUM(valor) as mes_real
-                            FROM [mansfield].[dbo].[data]
-                            WHERE variable_id = ?
-                            AND  MONTH(fecha) = ?
-                            AND  DATEPART(y, fecha) <= ?
-                            GROUP BY MONTH(fecha)', 
-                            [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                        );
+                    {     
+                        if($data->unidad == '%')
+                        {
+                            /* Promedio para unidades de medida  % */           
+                            $mes_real= DB::select(
+                                'SELECT MONTH(fecha) as month, AVG(valor) as mes_real
+                                FROM [mansfield].[dbo].[data]
+                                WHERE variable_id = ?
+                                AND  MONTH(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                AND valor <> 0 /* Es correcto? O pueden tener valores 0? */
+                                GROUP BY MONTH(fecha)', 
+                                [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );        
+                        }
+                        else
+                        {
+                            /* Acumulación para unidades de medida distinta % */           
+                            $mes_real= DB::select(
+                                'SELECT MONTH(fecha) as month, SUM(valor) as mes_real
+                                FROM [mansfield].[dbo].[data]
+                                WHERE variable_id = ?
+                                AND  MONTH(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                GROUP BY MONTH(fecha)', 
+                                [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                        }
                         if(isset($mes_real[0]->mes_real))
                         {
                             $m_real = $mes_real[0]->mes_real;
@@ -116,16 +134,34 @@ class DashboardController extends Controller
                         }
                     })
                     ->addColumn('mes_budget', function($data)
-                    {                        
-                        $mes_budget= DB::select(
-                            'SELECT MONTH(fecha) as month, SUM(valor) as mes_budget
-                            FROM [mansfield].[dbo].[budget]
-                            WHERE variable_id = ?
-                            AND  MONTH(fecha) = ?
-                            AND  DATEPART(y, fecha) <= ?
-                            GROUP BY MONTH(fecha)', 
-                            [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                        );
+                    {          
+                        if($data->unidad == '%')
+                        {
+                            /* Promedio para unidades de medida  % */           
+                            $mes_budget= DB::select(
+                                'SELECT MONTH(fecha) as month, AVG(valor) as mes_budget
+                                FROM [mansfield].[dbo].[budget]
+                                WHERE variable_id = ?
+                                AND  MONTH(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                AND valor <> 0 /* Es correcto? O pueden tener valores 0? */
+                                GROUP BY MONTH(fecha)', 
+                                [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );        
+                        }
+                        else
+                        {           
+                            /* Acumulacio para unidades de medida distintas de % */    
+                            $mes_budget= DB::select(
+                                'SELECT MONTH(fecha) as month, SUM(valor) as mes_budget
+                                FROM [mansfield].[dbo].[budget]
+                                WHERE variable_id = ?
+                                AND  MONTH(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                GROUP BY MONTH(fecha)', 
+                                [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                        }
                         if(isset($mes_budget[0]->mes_budget))
                         {
                             $m_budget = $mes_budget[0]->mes_budget;
@@ -144,16 +180,35 @@ class DashboardController extends Controller
                         }
                     })
                     ->addColumn('trimestre_real', function($data)
-                    {                        
-                        $trimestre_real= DB::select(
-                            'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
-                            FROM [mansfield].[dbo].[data]
-                            WHERE variable_id = ?
-                            AND  DATEPART(QUARTER, fecha) = ?
-                            AND  DATEPART(y, fecha) <= ?
-                            GROUP BY DATEPART(QUARTER, fecha)', 
-                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                        );
+                    {              
+                        if($data->unidad == '%')
+                        {         
+                            /* Promedio para unidades de medida  % */                    
+                            $trimestre_real= DB::select(
+                                'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_real
+                                FROM [mansfield].[dbo].[data]
+                                WHERE variable_id = ?
+                                AND  DATEPART(QUARTER, fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                AND valor <> 0
+                                GROUP BY DATEPART(QUARTER, fecha)', 
+                                [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                        }
+                        else
+                        {        
+                            /* Acumulacion para unidades de medida distintas  % */                    
+                            $trimestre_real= DB::select(
+                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
+                                FROM [mansfield].[dbo].[data]
+                                WHERE variable_id = ?
+                                AND  DATEPART(QUARTER, fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                GROUP BY DATEPART(QUARTER, fecha)', 
+                                [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                            
+                        }
                         if(isset($trimestre_real[0]->trimestre_real))
                         {
                             $t_real = $trimestre_real[0]->trimestre_real;
@@ -172,16 +227,34 @@ class DashboardController extends Controller
                         }
                     })
                     ->addColumn('trimestre_budget', function($data)
-                    {                        
-                        $trimestre_budget= DB::select(
-                            'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
-                            FROM [mansfield].[dbo].[budget]
-                            WHERE variable_id = ?
-                            AND  DATEPART(QUARTER, fecha) = ?
-                            AND  DATEPART(y, fecha) <= ?
-                            GROUP BY DATEPART(QUARTER, fecha)', 
-                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                        );
+                    {           
+                        if($data->unidad == '%')
+                        {
+                            /*Promedio para unidad de medida  % */            
+                            $trimestre_budget= DB::select(
+                                'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
+                                FROM [mansfield].[dbo].[budget]
+                                WHERE variable_id = ?
+                                AND  DATEPART(QUARTER, fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                AND valor <> 0
+                                GROUP BY DATEPART(QUARTER, fecha)', 
+                                [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                        } 
+                        else
+                        {
+                            /* Acumulacion para unidades de medida distintas  % */            
+                            $trimestre_budget= DB::select(
+                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
+                                FROM [mansfield].[dbo].[budget]
+                                WHERE variable_id = ?
+                                AND  DATEPART(QUARTER, fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                GROUP BY DATEPART(QUARTER, fecha)', 
+                                [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                        }
                         if(isset($trimestre_budget[0]->trimestre_budget))
                         {
                             $t_budget = $trimestre_budget[0]->trimestre_budget;
@@ -200,16 +273,35 @@ class DashboardController extends Controller
                         }
                     })
                     ->addColumn('anio_real', function($data)
-                    {                        
-                        $anio_real= DB::select(
-                            'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
-                            FROM [mansfield].[dbo].[data]
-                            WHERE variable_id = ?
-                            AND  YEAR(fecha) = ?
-                            AND  DATEPART(y, fecha) <= ?
-                            GROUP BY YEAR(fecha)', 
-                            [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                        );
+                    {         
+                        if($data->unidad == '%')
+                        {     
+                            /* Promedio para unidad de medida  % */       
+                            $anio_real= DB::select(
+                                'SELECT YEAR(fecha) as year, AVG(valor) as anio_real
+                                FROM [mansfield].[dbo].[data]
+                                WHERE variable_id = ?
+                                AND  YEAR(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                AND valor <> 0
+                                GROUP BY YEAR(fecha)', 
+                                [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );
+                        }   
+                        else
+                        {       
+                            /* Acumulacion para unidades de medida distintas  % */      
+                            $anio_real= DB::select(
+                                'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
+                                FROM [mansfield].[dbo].[data]
+                                WHERE variable_id = ?
+                                AND  YEAR(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                GROUP BY YEAR(fecha)', 
+                                [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );
+
+                        } 
                         if(isset($anio_real[0]->anio_real))
                         {
                             $a_real = $anio_real[0]->anio_real;
@@ -228,16 +320,34 @@ class DashboardController extends Controller
                         }
                     })
                     ->addColumn('anio_budget', function($data)
-                    {                        
-                        $anio_budget= DB::select(
-                            'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
-                            FROM [mansfield].[dbo].[budget]
-                            WHERE variable_id = ?
-                            AND  YEAR(fecha) = ?
-                            AND  DATEPART(y, fecha) <= ?
-                            GROUP BY YEAR(fecha)', 
-                            [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                        );
+                    {          
+                        if($data->unidad == '%')
+                        {      
+                            /* Promedio para unidad de medida % */           
+                            $anio_budget= DB::select(
+                                'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
+                                FROM [mansfield].[dbo].[budget]
+                                WHERE variable_id = ?
+                                AND  YEAR(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                AND valor <> 0
+                                GROUP BY YEAR(fecha)', 
+                                [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );                         
+                        }
+                        else
+                        {         
+                            /* Acumulacion para unidades de medida distintas  % */     
+                            $anio_budget= DB::select(
+                                'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
+                                FROM [mansfield].[dbo].[budget]
+                                WHERE variable_id = ?
+                                AND  YEAR(fecha) = ?
+                                AND  DATEPART(y, fecha) <= ?
+                                GROUP BY YEAR(fecha)', 
+                                [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );                            
+                        } 
                         if(isset($anio_budget[0]->anio_budget))
                         {
                             $a_budget = $anio_budget[0]->anio_budget;
