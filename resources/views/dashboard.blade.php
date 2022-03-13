@@ -20,6 +20,9 @@
 @stop
 
 @section('css')
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/sl-1.3.4/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{asset("assets/DataTables/Select-1.3.4/css/select.dataTables.min.css")}}"/>
     <style>
 
         /* Section content-header */
@@ -292,7 +295,8 @@
 @stop
 
 @section('js')
-    <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
+    <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script> 
+    <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
         
 
@@ -349,12 +353,9 @@
                 return 'Reporte '+moment(date_selected).format('YYYY-MM-DD');
             }
 
-            $('#procesos-table tbody').on( 'click', 'tr', function () {
-                $(this).toggleClass('selected');
-            } );
 
 
-            var table = $("#procesos-table").DataTable({
+            $("#procesos-table").DataTable({
                 dom:    "<'datatables-p'<'datatables-button'B>>" + 
                         "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
@@ -402,6 +403,7 @@
                 serverSide: true,
                 responsive: true,
                 scrollX : true,
+                select: true,
                 ajax:{                
                     url: "{{route('dashboard.procesostable')}}",
                     type: 'GET',
@@ -432,7 +434,7 @@
                     {data:'action', name:'action', orderable: false,searchable: false, width:'25px'} ,   
                     //{data:'fecha', name:'fecha'},         
                     {data:'variable', name:'variable', orderable: false}, 
-                    {data:'unidad', name:'unidad', orderable: false, searchable: false},
+                    {data:'unidad', name:'unidad', orderable: false, searchable: false, width:'25px'} , 
                     {data:'dia_real', name:'dia_real', orderable: false,searchable: false},
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
@@ -443,7 +445,7 @@
                                 $d_real = parseFloat(row['dia_real'].replaceAll('.','').replace(',','.'));
                                 if($d_budget != 0.00 )
                                 {
-                                    $dia_porcentaje = Math.floor(($d_real / $d_budget)*100);
+                                    $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
                                     switch(true)
                                     {
                                         case $dia_porcentaje < 90:
@@ -486,7 +488,7 @@
                                 $m_real = parseFloat(row['mes_real'].replaceAll('.','').replace(',','.'));
                                 if($m_budget != 0.00)
                                 {
-                                    $mes_porcentaje = Math.floor(($m_real / $m_budget)*100);
+                                    $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
                                     switch(true)
                                     {
                                         case $mes_porcentaje < 90:
@@ -526,7 +528,7 @@
                                 $t_real = parseFloat(row['trimestre_real'].replaceAll('.','').replace(',','.'));
                                 if($t_budget != 0.00)
                                 {
-                                    $trimestre_porcentaje = Math.floor(($t_real/ $t_budget)*100);
+                                    $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
                                     switch(true)
                                     {
                                         case $trimestre_porcentaje < 90:
@@ -566,7 +568,7 @@
                                 $a_real = parseFloat(row['anio_real'].replaceAll('.','').replace(',','.'));
                                 if($a_budget != 0.00)
                                 {
-                                    $anio_porcentaje=Math.floor(($a_real / $a_budget)*100);
+                                    $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
                                     switch(true)
                                     {
                                         case $anio_porcentaje < 90:
@@ -612,10 +614,10 @@
                 ]
             });
 
-            table.row(':eq(0)', { page: 'current' }).select();
+            
+
         });
         /* DATATABLES */
-
 
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
@@ -761,7 +763,7 @@
                                 <th rowspan="2" style="min-width:25px!important;" class="thcenter bluewhite"></th> 
                                 <!-- <th rowspan="2">FECHA</th> -->
                                 <th rowspan="2" class="thcenter bluewhite">NOMBRE</th>
-                                <th rowspan="2" class="thcenter bluewhite">U.</th>
+                                <th rowspan="2" class="thcenter bluewhite" style="min-width:25px!important;">U.</th>
                                 <th colspan="3" class="thcenter bluewhite">DIA</th>
                                 <th colspan="3" class="thcenter bluewhite">MES</th>
                                 <th colspan="3" class="thcenter bluewhite">TRIMESTRE</th>
