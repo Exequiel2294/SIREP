@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Variable extends Model
 {
+    public $timestamps = false;
     protected $table = 'variable';
 
     protected $guarded = [

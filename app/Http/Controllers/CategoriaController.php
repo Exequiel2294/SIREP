@@ -19,7 +19,7 @@ class CategoriaController extends Controller
         if(request()->ajax()) {
             $list = DB::table('categoria')
                         ->join('area', 'categoria.area_id', '=', 'area.id')
-                        ->select('categoria.id','area.nombre as area','categoria.nombre','categoria.descripcion','categoria.estado','categoria.created_at','categoria.updated_at')
+                        ->select('categoria.orden','categoria.id','area.nombre as area','categoria.nombre','categoria.descripcion','categoria.estado','categoria.created_at','categoria.updated_at')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -52,7 +52,8 @@ class CategoriaController extends Controller
                     'area_id' => 'required|exists:area,id',
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'nullable|string|min:3|max:250',
-                    'estado' => 'required|numeric|between:0,1'
+                    'estado' => 'required|numeric|between:0,1',
+                    'orden' => 'required|between:0,100'
                 ]             
             );
             if ($validator->fails()) 
@@ -66,7 +67,8 @@ class CategoriaController extends Controller
                         'area_id' => $request->get('area_id'),
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
-                        'estado' => $request->get('estado')
+                        'estado' => $request->get('estado'),
+                        'orden' => $request->get('orden')
                     ]);
                 return;                
             }
@@ -80,7 +82,8 @@ class CategoriaController extends Controller
                     'area_id' => 'required|exists:area,id',
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'nullable|string|min:3|max:250',
-                    'estado' => 'required|numeric|between:0,1'
+                    'estado' => 'required|numeric|between:0,1',
+                    'orden' => 'required|between:0,100'
                 ]            
             );
             if ($validator->fails()) 
@@ -95,7 +98,8 @@ class CategoriaController extends Controller
                         'area_id' => $request->get('area_id'),
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
-                        'estado' => $request->get('estado')
+                        'estado' => $request->get('estado'),
+                        'orden' => $request->get('orden')
                     ]);
                 return;                
             }

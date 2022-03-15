@@ -21,7 +21,7 @@ class SubcategoriaController extends Controller
             $list = DB::table('subcategoria')
                         ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                         ->join('area', 'categoria.area_id', '=', 'area.id')                        
-                        ->select('area.nombre as area','subcategoria.id','categoria.nombre as categoria','subcategoria.nombre','subcategoria.descripcion','subcategoria.estado','subcategoria.created_at','subcategoria.updated_at')
+                        ->select('area.nombre as area','subcategoria.id','categoria.nombre as categoria','subcategoria.nombre','subcategoria.descripcion','subcategoria.estado','subcategoria.created_at','subcategoria.updated_at','subcategoria.orden as orden')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -54,7 +54,8 @@ class SubcategoriaController extends Controller
                     'categoria_id' => 'required|exists:categoria,id',
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'nullable|string|min:3|max:250',
-                    'estado' => 'required|numeric|between:0,1'
+                    'estado' => 'required|numeric|between:0,1',
+                    'orden' => 'required|numeric|between:0,100'
                 ]             
             );
             if ($validator->fails()) 
@@ -68,7 +69,8 @@ class SubcategoriaController extends Controller
                         'categoria_id' => $request->get('categoria_id'),
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
-                        'estado' => $request->get('estado')
+                        'estado' => $request->get('estado'),
+                        'orden' => $request->get('orden')
                     ]);
                 return;                
             }
@@ -82,7 +84,8 @@ class SubcategoriaController extends Controller
                     'categoria_id' => 'required|exists:categoria,id',
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'nullable|string|min:3|max:250',
-                    'estado' => 'required|numeric|between:0,1'
+                    'estado' => 'required|numeric|between:0,1',
+                    'orden' => 'required|numeric|between:0,100'
                 ]            
             );
             if ($validator->fails()) 
@@ -97,7 +100,8 @@ class SubcategoriaController extends Controller
                         'categoria_id' => $request->get('categoria_id'),
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
-                        'estado' => $request->get('estado')
+                        'estado' => $request->get('estado'),
+                        'orden' => $request->get('orden')
                     ]);
                 return;                
             }
@@ -112,7 +116,7 @@ class SubcategoriaController extends Controller
         $generic =  DB::table('subcategoria')
         ->join('categoria','subcategoria.categoria_id','=','categoria.id')
         ->where($where)
-        ->select('categoria.area_id as area_id','categoria.id as categoria_id','subcategoria.id','subcategoria.nombre','subcategoria.descripcion','subcategoria.estado')
+        ->select('categoria.area_id as area_id','categoria.id as categoria_id','subcategoria.id','subcategoria.nombre','subcategoria.descripcion','subcategoria.estado','subcategoria.orden')
         ->first();
         return response()->json($generic);
     }

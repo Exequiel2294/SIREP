@@ -38,9 +38,12 @@ class DashboardController extends Controller
                                 'data.id as id',
                                 'data.variable_id as variable_id',
                                 'data.fecha as fecha',
-                                'categoria.nombre as categoria',
-                                'subcategoria.nombre as subcategoria',
+                                'categoria.orden as cat_orden',
+                                'categoria.nombre as cat',
+                                'subcategoria.orden as subcat_orden',
+                                'subcategoria.nombre as subcat',
                                 'variable.nombre as variable', 
+                                'variable.orden as var_orden',
                                 'variable.unidad as unidad',
                                 'data.valor as dia_real',
                                 'budget.valor as dia_budget',
@@ -49,6 +52,14 @@ class DashboardController extends Controller
                             ->get();
                             
             return datatables()->of($table)  
+                    ->addColumn('categoria', function($data)
+                    {         
+                        return '<span style="visibility: hidden">'.$data->cat_orden.'</span>'.$data->cat;
+                    })
+                    ->addColumn('subcategoria', function($data)
+                    {         
+                        return '<span style="visibility: hidden">'.$data->subcat_orden.'</span>'.$data->subcat;
+                    })
                     ->addColumn('dia_real', function($data)
                     {         
                         if(isset($data->dia_real)) 
@@ -371,7 +382,7 @@ class DashboardController extends Controller
                         $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';  
                         return $button;
                     })
-                    ->rawColumns(['dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
+                    ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
                     ->addIndexColumn()
                     ->make(true);
         } 
@@ -423,7 +434,7 @@ class DashboardController extends Controller
                 ]);
                 Historial::create([
                     'data_id' => $id,
-                    'fecha' => Carbon::now(),
+                    'fecha' => date('y-m-d h:i:s'),
                     'transaccion' => 'EDIT',
                     'valorviejo' => $oldvalue,
                     'valornuevo' => $newvalue,

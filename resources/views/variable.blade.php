@@ -357,9 +357,10 @@
             function format ( d ) {
                 return '<table class="table table-info table-sm text-left" style="width:100%" border="0">'+
                             '<tr>'+
-                                '<td style="width: 33%">Descripcion: '+ d.descripcion + '</td>' +
-                                '<td style="width: 33%">Creacion: ' + d.created_at + '</td>' +
-                                '<td style="width: 33%">Actualizacion: ' + d.updated_at + '</td>' +
+                                '<td style="width: 25%">Descripcion: '+ d.descripcion + '</td>' +
+                                '<td style="width: 25%">Creacion: ' + d.created_at + '</td>' +
+                                '<td style="width: 25%">Actualizacion: ' + d.updated_at + '</td>' +
+                                '<td style="width: 25%">Orden: ' + d.orden + '</td>' +
                             '</tr>'+  
                         '</table>';
             }
@@ -428,7 +429,8 @@
                 $('#id').val(data.id);                    
                 $("#area_id").val(data.area_id).attr("selected", "selected");                  
                 $('#nombre').val(data.nombre);                   
-                $('#descripcion').val(data.descripcion);                   
+                $('#descripcion').val(data.descripcion);            
+                $('#orden').val(data.orden);                  
                 $('#unidad').val(data.unidad);                   
                 $("#estado").val(data.estado).attr("selected", "selected");
                 $("#area_id" ).prop( "disabled", true );
@@ -557,6 +559,12 @@
                     number: true,
                     min: 0,
                     max: 1
+                },
+                orden: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 100
                 }
                 
             },
@@ -607,6 +615,7 @@
                         subcategoria_id:$('#subcategoria_id').val(),
                         nombre:$('#nombre').val(),
                         descripcion:$('#descripcion').val(),
+                        orden:$('#orden').val(),
                         unidad:$('#unidad').val(),
                         estado:$('#estado').val(),
                         _token: $('input[name="_token"]').val()
@@ -788,13 +797,19 @@
                             <div class="col-sm-10">
                               <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion">
                             </div>
-                        </div>   
+                        </div>    
                         <div class="form-group row">
                             <label for="unidad" class="col-sm-2 col-form-label">Unidad</label>
                             <div class="col-sm-10">
                               <input type="text" class="form-control" id="unidad" name="unidad" placeholder="Unidad">
                             </div>
                         </div>    
+                        <div class="form-group row">
+                            <label for="orden" class="col-sm-2 col-form-label">Orden</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="orden" name="orden" placeholder="orden">
+                            </div>
+                        </div>  
                         <div class="form-group row">
                             <label for="estado" class="col-sm-2 col-form-label">Estado</label>
                             <div class="col-sm-10">
