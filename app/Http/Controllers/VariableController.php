@@ -24,7 +24,7 @@ class VariableController extends Controller
                         ->join('subcategoria', 'variable.subcategoria_id', '=', 'subcategoria.id')
                         ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                         ->join('area', 'categoria.area_id', '=', 'area.id')
-                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado', 'variable.created_at', 'variable.updated_at')
+                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado', 'variable.created_at', 'variable.updated_at', 'variable.orden as orden')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -57,7 +57,8 @@ class VariableController extends Controller
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'required|string|min:3|max:250|unique:variable,descripcion',
                     'unidad' => 'required|string|min:1|max:50',
-                    'estado' => 'required|numeric|between:0,1'
+                    'estado' => 'required|numeric|between:0,1',
+                    'orden' => 'required|numeric|between:0,100'
                 ]             
             );
             if ($validator->fails()) 
@@ -72,7 +73,8 @@ class VariableController extends Controller
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
                         'unidad' => $request->get('unidad'),
-                        'estado' => $request->get('estado')
+                        'estado' => $request->get('estado'),
+                        'orden' => $request->get('orden')
                     ]);
                 return;                
             }
@@ -87,7 +89,8 @@ class VariableController extends Controller
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'required|string|min:3|max:250|unique:variable,descripcion,'.$request->get('id'),
                     'unidad' => 'required|string|min:1|max:50',
-                    'estado' => 'required|numeric|between:0,1'
+                    'estado' => 'required|numeric|between:0,1',
+                    'orden' => 'required|numeric|between:0,100'
                 ]            
             );
             if ($validator->fails()) 
@@ -103,7 +106,8 @@ class VariableController extends Controller
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
                         'unidad' => $request->get('unidad'),
-                        'estado' => $request->get('estado')
+                        'estado' => $request->get('estado'),
+                        'orden' => $request->get('orden')
                     ]);
                 return;                
             }
@@ -119,7 +123,7 @@ class VariableController extends Controller
         ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')        
         ->join('categoria','subcategoria.categoria_id','=','categoria.id')
         ->where($where)
-        ->select('categoria.area_id as area_id','categoria.id as categoria_id','subcategoria.id as subcategoria_id','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado')
+        ->select('categoria.area_id as area_id','categoria.id as categoria_id','subcategoria.id as subcategoria_id','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado','variable.orden')
         ->first();
         return response()->json($generic);
     }

@@ -330,11 +330,12 @@
                             
                         } 
                     },
+                    {data:'orden', name:'orden'},
                     {data:'created_at', name:'created_at'},
                     {data:'updated_at',name:'updated_at'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
-                order: [[0, 'asc']]            
+                order: [[4, 'asc']]            
             });
         });
         /* DATATABLES */
@@ -361,6 +362,7 @@
                 $("#area_id").val(data.area_id).attr("selected", "selected");                    
                 $('#nombre').val(data.nombre);                   
                 $('#descripcion').val(data.descripcion);                   
+                $('#orden').val(data.orden);                     
                 $("#estado").val(data.estado).attr("selected", "selected");
             })
         });      
@@ -447,6 +449,12 @@
                     number: true,
                     min: 0,
                     max: 1
+                },
+                orden: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 100
                 }
                 
             },
@@ -497,6 +505,7 @@
                         area_id:$('#area_id').val(),
                         nombre:$('#nombre').val(),
                         descripcion:$('#descripcion').val(),
+                        orden:$('#orden').val(),
                         estado:$('#estado').val(),
                         _token: $('input[name="_token"]').val()
                     },
@@ -564,6 +573,7 @@
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>Orden</th>
                                 <th>Alta</th>
                                 <th>Actualización</th>
                                 <th style="min-width:50px!important;"></th>            
@@ -619,6 +629,12 @@
                               <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción">
                             </div>
                         </div>     
+                        <div class="form-group row">
+                            <label for="orden" class="col-sm-2 col-form-label">Orden</label>
+                            <div class="col-sm-10">
+                              <input type="number" class="form-control" id="orden" name="orden" placeholder="orden">
+                            </div>
+                        </div> 
                         <div class="form-group row">
                             <label for="estado" class="col-sm-2 col-form-label">Estado</label>
                             <div class="col-sm-10">

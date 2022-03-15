@@ -251,11 +251,9 @@
             background-color: #525C66;     
             color: white;
             font-size: 1.1rem;
-            padding-left: 1rem;
         }
         .dtrg-level-1 > td{
             background-color: #D6D6D6;
-            padding-left: 1rem;
         }
         .datetimepicker-input{
             font-size: 1.8rem;
@@ -334,8 +332,12 @@
         
 
         /* DATATABLES */
-        $(document).ready(function(){    
+        $(document).ready(function(){  
             
+            /** */
+            var collapsedGroups = {};
+            /** */
+
             if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 19)
             {
                $(".alert-light").css('display','flex');
@@ -355,7 +357,7 @@
 
 
 
-            $("#procesos-table").DataTable({
+            var tabledata = $("#procesos-table").DataTable({
                 dom:    "<'datatables-p'<'datatables-button'B>>" + 
                         "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
@@ -429,8 +431,9 @@
                 },
                 columns: [           
                                
-                    {data:'categoria', name:'categoria', visible:false},  
-                    {data:'subcategoria', name:'subcategoria', visible:false},                        
+                    {data:'categoria', name:'categoria', visible:false},
+                    {data:'subcategoria', name:'subcategoria', visible:false},  
+                    {data:'var_orden', name:'var_orden', visible:false},                      
                     {data:'action', name:'action', orderable: false,searchable: false, width:'25px'} ,   
                     //{data:'fecha', name:'fecha'},         
                     {data:'variable', name:'variable', orderable: false}, 
@@ -600,19 +603,44 @@
                     },
                 ],  
                 rowGroup: {
-                    dataSrc: ['categoria','subcategoria'],
+                    dataSrc: ['categoria', 'subcategoria'],   
+                    /** */
+                    startRender: function (rows, group) {
+                        console.log(group);
+                        var collapsed = !!collapsedGroups[group];
+
+                        rows.nodes().each(function (r) {
+                            r.style.display = collapsed ? 'none' : '';
+                        });    
+
+                        // Add category name to the <tr>. NOTE: Hardcoded colspan
+                        return $('<tr/>')
+                            .append('<td colspan="15">' + group + '</td>')
+                            .attr('data-name', group)
+                            .toggleClass('collapsed', collapsed);
+                    }                 
+                    /** */
                 },
                 columnDefs: [
                     {
-                        targets: [4,5,6,7,8,9,10,11,12,13,14,15,16],
+                        targets: [5,6,7,8,9,10,11,12,13,14,15,16],
                         className: "dt-center"
                     }
                 ],
                 orderFixed: [
                     [0, 'asc'],
-                    [1, 'asc']
+                    [1, 'asc'],
+                    [2, 'asc']
                 ]
+            });         
+         
+            /** */
+            $('#procesos-table tbody').on('click', 'tr.dtrg-level-1', function () {
+                var name = $(this).data('name');
+                collapsedGroups[name] = !collapsedGroups[name];
+                tabledata.draw();
             });
+            /** */
 
             
 
@@ -760,6 +788,7 @@
                             <tr>
                                 <th rowspan="2">CATEGORIA</th>
                                 <th rowspan="2">SUBCATEGORIA</th>
+                                <th rowspan="2">orden</th>
                                 <th rowspan="2" style="min-width:25px!important;" class="thcenter bluewhite"></th> 
                                 <!-- <th rowspan="2">FECHA</th> -->
                                 <th rowspan="2" class="thcenter bluewhite">NOMBRE</th>
@@ -844,7 +873,7 @@
                         <div class="form-group row">
                             <label for="valor" class="col-sm-2 col-form-label">Valor</label>
                             <div class="col-sm-10">
-                              <input type="number" class="form-control" id="valor" name="valor" lang="es" step="0.0001">
+                              <input type="number" class="form-control" id="valor" name="valor" lang="es" step="0.00000001">
                             </div>
                         </div>                
                         @csrf
