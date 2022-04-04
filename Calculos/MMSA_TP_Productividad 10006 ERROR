@@ -1,0 +1,34 @@
+/*10006	MMSA_TP_Productividad t/h
+
+TODAS LAS UNIDADES DE PRODUCTIVIDAD ESTAN FALTANTES DEBIDO A QUE NO CONTAMOS CON EL DATO TIEMPO OPERATIVO
+
+Formulas Roque: 
+sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)
+/
+(0.0024 x DIAREAL(10003 MMSA_TP_Disponibilidad %) x DIAREAL(10007 MMSA_TP_Utilización %) )
+Ejemplo Dia 14-03-2022:  189.613/(0.0024*99*93) = 8583 <> 768
+
+Formula Daily: 
+sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/ sumatoria.mesual(Tiempo operativo) **No tenemos tiempo operativo
+*/
+
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10005
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
+
+SELECT valor as dia_real
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10003
+AND fecha = '2022-02-14';
+
+SELECT valor as dia_real
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10007
+AND fecha = '2022-02-14';
+
+
+
+
