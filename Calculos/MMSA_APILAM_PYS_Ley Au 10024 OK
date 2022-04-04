@@ -1,0 +1,28 @@
+/* 
+10024 MMSA_APILAM_PYS_Ley Au g/t
+**NO SE ENCUENTRAN DATOS CARGADOS**
+Promedio Ponderado Mensual
+(10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t, 10024 MMSA_APILAM_PYS_Ley Au g/t)
+*/
+
+SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield].[dbo].[data]
+where variable_id = 10024) as A
+INNER JOIN   
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield].[dbo].[data]
+where variable_id = 10025) as B
+ON A.fecha = B.fecha
+WHERE MONTH(A.fecha) =  MONTH('2022-02-14')
+AND  DATEPART(y, A.fecha) <=  DATEPART(y, '2022-02-14')
+GROUP BY MONTH(A.fecha);
+
+                                
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10025
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
+

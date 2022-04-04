@@ -1,0 +1,26 @@
+/* 
+10040 MMSA_SART_Eficiencia %
+Promedio Ponderado Mensual
+(10045 MMSA_SART_PLS a SART m3, 10040 MMSA_SART_Eficiencia %)
+*/
+
+SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield].[dbo].[data]
+where variable_id = 10040) as A
+INNER JOIN   
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield].[dbo].[data]
+where variable_id = 10045) as B
+ON A.fecha = B.fecha
+WHERE MONTH(A.fecha) =  MONTH('2022-02-14')
+AND  DATEPART(y, A.fecha) <=  DATEPART(y, '2022-02-14')
+GROUP BY MONTH(A.fecha);
+
+                                
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10045
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
