@@ -890,6 +890,10 @@ class DashboardController extends Controller
                                         return number_format($m_real, 2, ',', '.');
                                     }
                                 }
+                                else
+                                {
+                                    return '-';
+                                }
                             }
                             else
                             {
@@ -964,7 +968,7 @@ class DashboardController extends Controller
                                     return $data->variable_id;
                                 }
                             }
-                        }  
+                        } 
                     })
                     ->addColumn('mes_budget', function($data)
                     {     
@@ -1440,6 +1444,10 @@ class DashboardController extends Controller
                                     {
                                         return number_format($m_budget, 2, ',', '.');
                                     }
+                                }
+                                else
+                                {
+                                    return '-';
                                 }
                             }
                             else
@@ -1992,6 +2000,10 @@ class DashboardController extends Controller
                                         return number_format($t_real, 2, ',', '.');
                                     }
                                 }
+                                else
+                                {
+                                    return '-';
+                                }
                             }
                             else
                             {
@@ -2542,6 +2554,10 @@ class DashboardController extends Controller
                                     {
                                         return number_format($t_budget, 2, ',', '.');
                                     }
+                                }
+                                else
+                                {
+                                    return '-';
                                 }
                             }
                             else
@@ -3094,6 +3110,10 @@ class DashboardController extends Controller
                                         return number_format($a_real, 2, ',', '.');
                                     }
                                 }
+                                else
+                                {
+                                    return '-';
+                                }
                             }
                             else
                             {
@@ -3644,6 +3664,10 @@ class DashboardController extends Controller
                                     {
                                         return number_format($a_budget, 2, ',', '.');
                                     }
+                                }
+                                else
+                                {
+                                    return '-';
                                 }
                             }
                             else
