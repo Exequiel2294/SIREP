@@ -25,21 +25,43 @@ class DashboardController extends Controller
         if(request()->ajax()) {
             $this->date = $request->get('fecha');
             $this->pparray = 
-            [10004, 10010, 10012, 10018, 10024, 10030, 10033, 10035, 10036, 10040, 
-             10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 10056, 
-             10057, 10058 ];
+            [10004, 10010, 10012, 10015, 10016, 10018, 10024, 10030, 10033, 10035, 10036, 
+             10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
+             10056, 10057, 10058];
             $this->sumarray = 
             [10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 
              10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 
              10059, 10060, 10061];
-             $this->promarray = 
-             [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];
+            $this->promarray = 
+             [10003, 10007, 10009, 10014, 10017, 10021, 10026, 10029, 10034];
+            $this->divarray = 
+              [10006, 10013, 10020, 10032];
             //MES REAL
+            $this->summesreal10005 = 
+            DB::select(
+                'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                FROM [mansfield].[dbo].[data]
+                WHERE variable_id = 10005
+                AND  MONTH(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY MONTH(fecha)', 
+                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            );
             $this->summesreal10011 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
                 FROM [mansfield].[dbo].[data]
                 WHERE variable_id = 10011
+                AND  MONTH(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY MONTH(fecha)', 
+                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            ); 
+            $this->summesreal10019 = 
+            DB::select(
+                'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                FROM [mansfield].[dbo].[data]
+                WHERE variable_id = 10019
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
                 GROUP BY MONTH(fecha)', 
@@ -86,6 +108,16 @@ class DashboardController extends Controller
                 [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
             ); 
             //MES BUDGET
+            $this->summesbudget10005 = 
+            DB::select(
+                'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                FROM [mansfield].[dbo].[budget]
+                WHERE variable_id = 10005
+                AND  MONTH(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY MONTH(fecha)', 
+                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            ); 
             $this->summesbudget10011 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
@@ -96,6 +128,16 @@ class DashboardController extends Controller
                 GROUP BY MONTH(fecha)', 
                 [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
             ); 
+            $this->summesbudget10019 = 
+            DB::select(
+                'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                FROM [mansfield].[dbo].[budget]
+                WHERE variable_id = 10019
+                AND  MONTH(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY MONTH(fecha)', 
+                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            );
             $this->summesbudget10039 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
@@ -137,11 +179,31 @@ class DashboardController extends Controller
                 [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
             ); 
             //Trimestre Real
+            $this->sumtrireal10005 = 
+            DB::select(
+                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                FROM [mansfield].[dbo].[data]
+                WHERE variable_id = 10005
+                AND  DATEPART(QUARTER, fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY DATEPART(QUARTER, fecha)', 
+                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+            ); 
             $this->sumtrireal10011 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
                 FROM [mansfield].[dbo].[data]
                 WHERE variable_id = 10011
+                AND  DATEPART(QUARTER, fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY DATEPART(QUARTER, fecha)', 
+                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+            ); 
+            $this->sumtrireal10019 = 
+            DB::select(
+                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                FROM [mansfield].[dbo].[data]
+                WHERE variable_id = 10019
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
                 GROUP BY DATEPART(QUARTER, fecha)', 
@@ -188,11 +250,31 @@ class DashboardController extends Controller
                 [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
             );
             //Trimestre Budget
+            $this->sumtribudget10005 = 
+            DB::select(
+                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                FROM [mansfield].[dbo].[budget]
+                WHERE variable_id = 10005
+                AND  DATEPART(QUARTER, fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY DATEPART(QUARTER, fecha)', 
+                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+            ); 
             $this->sumtribudget10011 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
                 FROM [mansfield].[dbo].[budget]
                 WHERE variable_id = 10011
+                AND  DATEPART(QUARTER, fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY DATEPART(QUARTER, fecha)', 
+                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+            ); 
+            $this->sumtribudget10019 = 
+            DB::select(
+                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                FROM [mansfield].[dbo].[budget]
+                WHERE variable_id = 10019
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
                 GROUP BY DATEPART(QUARTER, fecha)', 
@@ -239,11 +321,31 @@ class DashboardController extends Controller
                 [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
             );
             //Anio Real
+            $this->sumanioreal10005 = 
+            DB::select(
+                'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                FROM [mansfield].[dbo].[data]
+                WHERE variable_id = 10005
+                AND  YEAR(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY YEAR(fecha)',
+                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            ); 
             $this->sumanioreal10011 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
                 FROM [mansfield].[dbo].[data]
                 WHERE variable_id = 10011
+                AND  YEAR(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY YEAR(fecha)',
+                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            ); 
+            $this->sumanioreal10019 = 
+            DB::select(
+                'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                FROM [mansfield].[dbo].[data]
+                WHERE variable_id = 10019
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
                 GROUP BY YEAR(fecha)',
@@ -290,6 +392,16 @@ class DashboardController extends Controller
                 [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
             );
             //Anio Budget
+            $this->sumaniobudget10005 = 
+            DB::select(
+                'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                FROM [mansfield].[dbo].[budget]
+                WHERE variable_id = 10005
+                AND  YEAR(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY YEAR(fecha)',
+                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            ); 
             $this->sumaniobudget10011 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
@@ -300,6 +412,16 @@ class DashboardController extends Controller
                 GROUP BY YEAR(fecha)',
                 [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
             ); 
+            $this->sumaniobudget10019 = 
+            DB::select(
+                'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                FROM [mansfield].[dbo].[budget]
+                WHERE variable_id = 10019
+                AND  YEAR(fecha) = ?
+                AND  DATEPART(y, fecha) <= ?
+                GROUP BY YEAR(fecha)',
+                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+            );
             $this->sumaniobudget10039 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
@@ -440,15 +562,7 @@ class DashboardController extends Controller
                                         GROUP BY MONTH(A.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma= DB::select(
-                                        'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
-                                        WHERE variable_id = 10005
-                                        AND  MONTH(fecha) = ?
-                                        AND  DATEPART(y, fecha) <= ?
-                                        GROUP BY MONTH(fecha)', 
-                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
+                                    $suma= $this->summesreal10005; 
                                 break;
                                 case 10010:
                                 case 10030:                                       
@@ -491,9 +605,57 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->summesreal10011;
                                 break;
+                                case 10015:                                         
+                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
+                                    //Promedio Ponderado Mensual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                      
+                                    $sumaproducto= DB::select(
+                                        'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10015) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10019) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma = $this->summesreal10019;
+                                break;
+                                case 10016:                                         
+                                    //10016 MMSA_AGLOM_Adición de CN ppm
+                                    //Promedio Ponderado Mensual(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)                      
+                                    $sumaproducto= DB::select(
+                                        'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10016) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10066) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma= DB::select(
+                                        'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                        FROM [mansfield].[dbo].[data]
+                                        WHERE variable_id = 10066
+                                        AND  MONTH(fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        GROUP BY MONTH(fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
-                                    //Promedio Ponderado Mensual(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)                        
+                                    //Promedio Ponderado Mensual(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
@@ -502,14 +664,14 @@ class DashboardController extends Controller
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10011) as B
+                                        where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
                                         AND  DATEPART(y, A.fecha) <=  ?
                                         GROUP BY MONTH(A.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->summesreal10011;
+                                    $suma = $this->summesreal10019;
                                 break;
                                 case 10024:                                       
                                     //10024 MMSA_APILAM_PYS_Ley Au g/t 
@@ -965,7 +1127,103 @@ class DashboardController extends Controller
                                 }
                                 else
                                 {
-                                    return $data->variable_id;
+                                    if (in_array($data->variable_id, $this->divarray))
+                                    {
+                                        switch($data->variable_id)
+                                        {
+                                            case 10006:                                       
+                                                //10006	MMSA_TP_Productividad t/h                    
+                                                //sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.mesual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                $suma= $this->summesreal10005;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10062
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10013:                                       
+                                                //10013 MMSA_HPGR_Productividad t/h                   
+                                                //sumatoria.mensual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.mesual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                $suma= $this->summesreal10011;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10063
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10020:                                       
+                                                //10020 MMSA_AGLOM_Productividad t/h                  
+                                                //sumatoria.mensual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.mensual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                $suma= $this->summesreal10019;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10064
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10032:                                       
+                                                //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                $suma= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10031
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                );                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10065
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                        }                            
+                                        if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                        {
+                                            if ($suma2[0]->suma > 0)
+                                            {
+                                                $m_real = $suma[0]->suma/$suma2[0]->suma;
+                                                if($m_real > 100)
+                                                {
+                                                    return number_format(round($m_real), 0, ',', '.');
+                                                }
+                                                else
+                                                {
+                                                    return number_format($m_real, 2, ',', '.');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return $data->variable_id;
+                                    }
                                 }
                             }
                         } 
@@ -1046,9 +1304,57 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->summesbudget10011;
                                 break;
+                                case 10015:                                         
+                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
+                                    //Promedio Ponderado Mensual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                    $sumaproducto= DB::select(
+                                        'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[budget]
+                                        where variable_id = 10015) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[budget]
+                                        where variable_id = 10019) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma = $this->summesbudget10019;
+                                break;
+                                case 10016:
+                                    $mes_budget= DB::select(
+                                        'SELECT MONTH(fecha) as month, AVG(valor) as mes_budget
+                                        FROM [mansfield].[dbo].[budget]
+                                        WHERE variable_id = ?
+                                        AND  MONTH(fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        AND valor <> 0 
+                                        GROUP BY MONTH(fecha)', 
+                                        [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );  
+                                    if(isset($mes_budget[0]->mes_budget))
+                                    {
+                                        $m_budget = $mes_budget[0]->mes_budget;
+                                        if($m_budget > 100)
+                                        {
+                                            return number_format(round($m_budget), 0, ',', '.');
+                                        }
+                                        else
+                                        {
+                                            return number_format($m_budget, 2, ',', '.');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return '-';
+                                    }
+                                break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
-                                    //Promedio Ponderado Mensual(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)                        
+                                    //Promedio Ponderado Mensual(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
@@ -1057,14 +1363,14 @@ class DashboardController extends Controller
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield].[dbo].[budget]
-                                        where variable_id = 10011) as B
+                                        where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
                                         AND  DATEPART(y, A.fecha) <=  ?
                                         GROUP BY MONTH(A.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->summesbudget10011;
+                                    $suma = $this->summesbudget10019;
                                 break;
                                 case 10024:                                       
                                     //10024 MMSA_APILAM_PYS_Ley Au g/t 
@@ -1520,7 +1826,103 @@ class DashboardController extends Controller
                                 }
                                 else
                                 {
-                                    return $data->variable_id;
+                                    if (in_array($data->variable_id, $this->divarray))
+                                    {
+                                        switch($data->variable_id)
+                                        {
+                                            case 10006:                                       
+                                                //10006	MMSA_TP_Productividad t/h                    
+                                                //sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.mesual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                $suma= $this->summesbudget10005;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10062
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10013:                                       
+                                                //10013 MMSA_HPGR_Productividad t/h                   
+                                                //sumatoria.mensual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.mesual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                $suma= $this->summesbudget10011;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10063
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10020:                                       
+                                                //10020 MMSA_AGLOM_Productividad t/h                  
+                                                //sumatoria.mensual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.mensual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                $suma= $this->summesbudget10019;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10064
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10032:                                       
+                                                //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                $suma= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10031
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                );                                     
+                                                $suma2= DB::select(
+                                                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10065
+                                                    AND  MONTH(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY MONTH(fecha)', 
+                                                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                        }                            
+                                        if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                        {
+                                            if ($suma2[0]->suma > 0)
+                                            {
+                                                $m_budget = $suma[0]->suma/$suma2[0]->suma;
+                                                if($m_budget > 100)
+                                                {
+                                                    return number_format(round($m_budget), 0, ',', '.');
+                                                }
+                                                else
+                                                {
+                                                    return number_format($m_budget, 2, ',', '.');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return $data->variable_id;
+                                    }
                                 }
                             }
                         }
@@ -1601,9 +2003,57 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->sumtrireal10011;
                                 break;
+                                case 10015:                                         
+                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
+                                    //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                    $sumaproducto= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10015) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10019) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma = $this->sumtrireal10019;
+                                break;
+                                case 10016:                                       
+                                    //10016 MMSA_AGLOM_Adición de CN ppm                    
+                                    //Promedio Ponderado Trimestral(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)                         
+                                    $sumaproducto= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10016) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10066) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma= DB::select(
+                                        'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                        FROM [mansfield].[dbo].[data]
+                                        WHERE variable_id = 10066
+                                        AND  DATEPART(QUARTER, fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        GROUP BY DATEPART(QUARTER, fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
-                                    //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)                        
+                                    //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
@@ -1612,14 +2062,14 @@ class DashboardController extends Controller
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10011) as B
+                                        where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
                                         AND  DATEPART(y, A.fecha) <=  ?
                                         GROUP BY DATEPART(QUARTER, A.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->sumtrireal10011;
+                                    $suma = $this->sumtrireal10019;
                                 break;
                                 case 10024:                                       
                                     //10024 MMSA_APILAM_PYS_Ley Au g/t 
@@ -2075,7 +2525,103 @@ class DashboardController extends Controller
                                 }
                                 else
                                 {
-                                    return $data->variable_id;
+                                    if (in_array($data->variable_id, $this->divarray))
+                                    {
+                                        switch($data->variable_id)
+                                        {
+                                            case 10006:                                       
+                                                //10006	MMSA_TP_Productividad t/h                    
+                                                //sumatoria.trimestral(10005 MMSA_TP_Mineral Triturado t)/sumatoria.trimestral(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                $suma= $this->sumtrireal10005;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10062
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10013:                                       
+                                                //10013 MMSA_HPGR_Productividad t/h                   
+                                                //sumatoria.trimestral(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.trimestral(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                $suma= $this->sumtrireal10011;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10063
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10020:                                       
+                                                //10020 MMSA_AGLOM_Productividad t/h                  
+                                                //sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.trimestral(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                $suma= $this->sumtrireal10019;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10064
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10032:                                       
+                                                //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                $suma= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10031
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                );                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10065
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                        }                            
+                                        if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                        {
+                                            if ($suma2[0]->suma > 0)
+                                            {
+                                                $t_real = $suma[0]->suma/$suma2[0]->suma;
+                                                if($t_real > 100)
+                                                {
+                                                    return number_format(round($t_real), 0, ',', '.');
+                                                }
+                                                else
+                                                {
+                                                    return number_format($t_real, 2, ',', '.');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return $data->variable_id;
+                                    }
                                 }
                             }
                         } 
@@ -2156,9 +2702,58 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->sumtribudget10011;
                                 break;
+                                case 10015:                                         
+                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
+                                    //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                    $sumaproducto= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[budget]
+                                        where variable_id = 10015) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[budget]
+                                        where variable_id = 10019) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma = $this->sumtribudget10019;
+                                break;
+                                case 10016:
+                                    //Promedio valores <>0
+                                    $trimestre_budget= DB::select(
+                                        'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
+                                        FROM [mansfield].[dbo].[budget]
+                                        WHERE variable_id = ?
+                                        AND  DATEPART(QUARTER, fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        AND valor <> 0
+                                        GROUP BY DATEPART(QUARTER, fecha)', 
+                                        [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );
+                                    if(isset($trimestre_budget[0]->trimestre_budget))
+                                    {
+                                        $t_budget = $trimestre_budget[0]->trimestre_budget;
+                                        if($t_budget > 100)
+                                        {
+                                            return number_format(round($t_budget), 0, ',', '.');
+                                        }
+                                        else
+                                        {
+                                            return number_format($t_budget, 2, ',', '.');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return '-';
+                                    }
+                                break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
-                                    //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)                        
+                                    //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
@@ -2167,14 +2762,14 @@ class DashboardController extends Controller
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield].[dbo].[budget]
-                                        where variable_id = 10011) as B
+                                        where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
                                         AND  DATEPART(y, A.fecha) <=  ?
                                         GROUP BY DATEPART(QUARTER, A.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->sumtribudget10011;
+                                    $suma = $this->sumtribudget10019;
                                 break;
                                 case 10024:                                       
                                     //10024 MMSA_APILAM_PYS_Ley Au g/t 
@@ -2630,7 +3225,103 @@ class DashboardController extends Controller
                                 }
                                 else
                                 {
-                                    return $data->variable_id;
+                                    if (in_array($data->variable_id, $this->divarray))
+                                    {
+                                        switch($data->variable_id)
+                                        {
+                                            case 10006:                                       
+                                                //10006	MMSA_TP_Productividad t/h                    
+                                                //sumatoria.trimestral(10005 MMSA_TP_Mineral Triturado t)/sumatoria.trimestral(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                $suma= $this->sumtribudget10005;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10062
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10013:                                       
+                                                //10013 MMSA_HPGR_Productividad t/h                   
+                                                //sumatoria.trimestral(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.trimestral(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                $suma= $this->sumtribudget10011;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10063
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10020:                                       
+                                                //10020 MMSA_AGLOM_Productividad t/h                  
+                                                //sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.trimestral(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                $suma= $this->sumtribudget10019;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10064
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10032:                                       
+                                                //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                $suma= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10031
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                );                                     
+                                                $suma2= DB::select(
+                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10065
+                                                    AND  DATEPART(QUARTER, fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY DATEPART(QUARTER, fecha)', 
+                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                        }                            
+                                        if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                        {
+                                            if ($suma2[0]->suma > 0)
+                                            {
+                                                $t_budget = $suma[0]->suma/$suma2[0]->suma;
+                                                if($t_budget > 100)
+                                                {
+                                                    return number_format(round($t_budget), 0, ',', '.');
+                                                }
+                                                else
+                                                {
+                                                    return number_format($t_budget, 2, ',', '.');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return $data->variable_id;
+                                    }
                                 }
                             }
                         } 
@@ -2711,9 +3402,57 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->sumanioreal10011;
                                 break;
+                                case 10015:                                         
+                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
+                                    //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                    $sumaproducto= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10015) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10019) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma = $this->sumanioreal10019;
+                                break;
+                                case 10016:                                       
+                                    //10016 MMSA_AGLOM_Adición de CN ppm 
+                                    //Promedio Ponderado Anual(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)                        
+                                    $sumaproducto= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10016) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[data]
+                                        where variable_id = 10066) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma= DB::select(
+                                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                        FROM [mansfield].[dbo].[data]
+                                        WHERE variable_id = 10066
+                                        AND  YEAR(fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        GROUP BY YEAR(fecha)', 
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
-                                    //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)                        
+                                    //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
@@ -2722,14 +3461,14 @@ class DashboardController extends Controller
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10011) as B
+                                        where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
                                         AND  DATEPART(y, A.fecha) <=  ?
                                         GROUP BY YEAR(A.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->sumanioreal10011;
+                                    $suma = $this->sumanioreal10019;
                                 break;
                                 case 10024:                                       
                                     //10024 MMSA_APILAM_PYS_Ley Au g/t 
@@ -3185,7 +3924,103 @@ class DashboardController extends Controller
                                 }
                                 else
                                 {
-                                    return $data->variable_id;
+                                    if (in_array($data->variable_id, $this->divarray))
+                                    {
+                                        switch($data->variable_id)
+                                        {
+                                            case 10006:                                       
+                                                //10006	MMSA_TP_Productividad t/h                    
+                                                //sumatoria.anual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.anual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                $suma= $this->sumanioreal10005;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10062
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10013:                                       
+                                                //10013 MMSA_HPGR_Productividad t/h                   
+                                                //sumatoria.anual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.anual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                $suma= $this->sumanioreal10011;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10063
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10020:                                       
+                                                //10020 MMSA_AGLOM_Productividad t/h                  
+                                                //sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.anual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                $suma= $this->sumanioreal10019;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10064
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10032:                                       
+                                                //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                $suma= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10031
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                );                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[data]
+                                                    WHERE variable_id = 10065
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                        }                            
+                                        if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                        {
+                                            if ($suma2[0]->suma > 0)
+                                            {
+                                                $a_real = $suma[0]->suma/$suma2[0]->suma;
+                                                if($a_real > 100)
+                                                {
+                                                    return number_format(round($a_real), 0, ',', '.');
+                                                }
+                                                else
+                                                {
+                                                    return number_format($a_real, 2, ',', '.');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return $data->variable_id;
+                                    }
                                 }
                             }
                         } 
@@ -3266,9 +4101,58 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->sumaniobudget10011;
                                 break;
+                                case 10015:                                         
+                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
+                                    //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                    $sumaproducto= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[budget]
+                                        where variable_id = 10015) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield].[dbo].[budget]
+                                        where variable_id = 10019) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );                                     
+                                    $suma = $this->sumaniobudget10019;
+                                break;
+                                case 10016:
+                                    //Promedio valores <>0
+                                    $anio_budget= DB::select(
+                                        'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
+                                        FROM [mansfield].[dbo].[budget]
+                                        WHERE variable_id = ?
+                                        AND  YEAR(fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        AND valor <> 0
+                                        GROUP BY YEAR(fecha)', 
+                                        [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    );
+                                    if(isset($anio_budget[0]->anio_budget))
+                                    {
+                                        $a_budget = $anio_budget[0]->anio_budget;
+                                        if($a_budget > 100)
+                                        {
+                                            return number_format(round($a_budget), 0, ',', '.');
+                                        }
+                                        else
+                                        {
+                                            return number_format($a_budget, 2, ',', '.');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return '-';
+                                    }
+                                break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
-                                    //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)                        
+                                    //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
@@ -3277,14 +4161,14 @@ class DashboardController extends Controller
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield].[dbo].[budget]
-                                        where variable_id = 10011) as B
+                                        where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
                                         AND  DATEPART(y, A.fecha) <=  ?
                                         GROUP BY YEAR(A.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->sumaniobudget10011;
+                                    $suma = $this->sumaniobudget10019;
                                 break;
                                 case 10024:                                       
                                     //10024 MMSA_APILAM_PYS_Ley Au g/t 
@@ -3740,7 +4624,103 @@ class DashboardController extends Controller
                                 }
                                 else
                                 {
-                                    return $data->variable_id;
+                                    if (in_array($data->variable_id, $this->divarray))
+                                    {
+                                        switch($data->variable_id)
+                                        {
+                                            case 10006:                                       
+                                                //10006	MMSA_TP_Productividad t/h                    
+                                                //sumatoria.anual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.anual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                $suma= $this->sumaniobudget10005;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10062
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10013:                                       
+                                                //10013 MMSA_HPGR_Productividad t/h                   
+                                                //sumatoria.anual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.anual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                $suma= $this->sumaniobudget10011;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10063
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10020:                                       
+                                                //10020 MMSA_AGLOM_Productividad t/h                  
+                                                //sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.anual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                $suma= $this->sumaniobudget10019;                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10064
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                            case 10032:                                       
+                                                //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                $suma= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10031
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                );                                     
+                                                $suma2= DB::select(
+                                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                                                    FROM [mansfield].[dbo].[budget]
+                                                    WHERE variable_id = 10065
+                                                    AND  YEAR(fecha) = ?
+                                                    AND  DATEPART(y, fecha) <= ?
+                                                    GROUP BY YEAR(fecha)', 
+                                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                                ); 
+                                            break;
+                                        }                            
+                                        if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                        {
+                                            if ($suma2[0]->suma > 0)
+                                            {
+                                                $a_budget = $suma[0]->suma/$suma2[0]->suma;
+                                                if($a_budget > 100)
+                                                {
+                                                    return number_format(round($a_budget), 0, ',', '.');
+                                                }
+                                                else
+                                                {
+                                                    return number_format($a_budget, 2, ',', '.');
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return $data->variable_id;
+                                    }
                                 }
                             }
                         } 
@@ -3801,14 +4781,17 @@ class DashboardController extends Controller
                 [
                     'valor' =>$newvalue
                 ]);
-                Historial::create([
-                    'data_id' => $id,
-                    'fecha' => date('y-m-d h:i:s'),
-                    'transaccion' => 'EDIT',
-                    'valorviejo' => $oldvalue,
-                    'valornuevo' => $newvalue,
-                    'usuario' => auth()->user()->name
-                ]);
+                if($oldvalue != $newvalue)
+                {
+                    Historial::create([
+                        'data_id' => $id,
+                        'fecha' => date('y-m-d h:i:s'),
+                        'transaccion' => 'EDIT',
+                        'valorviejo' => $oldvalue,
+                        'valornuevo' => $newvalue,
+                        'usuario' => auth()->user()->name
+                    ]);
+                }
                 return;                
             }
         }        

@@ -606,7 +606,6 @@
                     dataSrc: ['categoria', 'subcategoria'],   
                     /** */
                     startRender: function (rows, group) {
-                        console.log(group);
                         var collapsed = !!collapsedGroups[group];
 
                         rows.nodes().each(function (r) {
@@ -873,7 +872,7 @@
                         <div class="form-group row">
                             <label for="valor" class="col-sm-2 col-form-label">Valor</label>
                             <div class="col-sm-10">
-                              <input type="number" class="form-control" id="valor" name="valor" lang="es" step="0.00000001">
+                              <input type="number" class="form-control" id="valor" name="valor" lang="es">
                             </div>
                         </div>                
                         @csrf

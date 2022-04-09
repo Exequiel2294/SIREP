@@ -1,0 +1,43 @@
+/*10020 MMSA_AGLOM_Productividad t/h
+
+Formula PI: 
+sumatoria.mensual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.mensual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)
+*/
+
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10019
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
+
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10064
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
+
+
+----------------------------------------------------------------------------------
+
+SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10019
+AND  DATEPART(QUARTER, fecha) = DATEPART(QUARTER, '2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY DATEPART(QUARTER, fecha);
+
+SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10064
+AND  DATEPART(QUARTER, fecha) = DATEPART(QUARTER, '2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY DATEPART(QUARTER, fecha);
+
+
+
+
+
+
+

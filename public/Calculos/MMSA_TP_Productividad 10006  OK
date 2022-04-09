@@ -1,0 +1,44 @@
+/*10006	MMSA_TP_Productividad t/h
+
+Formula PI: 
+sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/ sumatoria.mesual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)
+*/
+
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10005
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
+
+SELECT MONTH(fecha) as month, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10062
+AND  MONTH(fecha) = MONTH('2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY MONTH(fecha);
+
+
+
+----------------------------------------------------------------------------------
+
+SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10005
+AND  DATEPART(QUARTER, fecha) = DATEPART(QUARTER, '2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY DATEPART(QUARTER, fecha);
+
+SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+FROM [mansfield].[dbo].[data]
+WHERE variable_id = 10062
+AND  DATEPART(QUARTER, fecha) = DATEPART(QUARTER, '2022-02-14')
+AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
+GROUP BY DATEPART(QUARTER, fecha);
+
+
+
+
+
+
+

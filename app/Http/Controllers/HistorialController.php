@@ -14,12 +14,11 @@ class HistorialController extends Controller
 {
     public function index(Request $request)
     {
-
         if(request()->ajax()) {
             $list = DB::table('historial')
                         ->join('data', 'historial.data_id', '=', 'data.id')
                         ->join('variable', 'data.variable_id', '=', 'variable.id')
-                        ->select('variable.nombre as variable','historial.*')
+                        ->select('variable.descripcion as variable','historial.*')
                         ->get();
             return datatables()->of($list)
                     ->addIndexColumn()

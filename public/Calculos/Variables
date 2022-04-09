@@ -1,0 +1,165 @@
+USE [mansfield]
+GO
+/****** Object:  Table [dbo].[variable]    Script Date: 9/4/2022 13:37:22 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[variable](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[subcategoria_id] [bigint] NOT NULL,
+	[nombre] [nvarchar](255) NOT NULL,
+	[descripcion] [nvarchar](255) NOT NULL,
+	[unidad] [nvarchar](255) NOT NULL,
+	[estado] [tinyint] NOT NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[orden] [tinyint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[variable] ON 
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10002, 1, N'Au Triturado', N'MMSA_TP_Au Triturado (oz)', N'oz', 1, CAST(N'2022-02-25T14:35:01.020' AS DateTime), CAST(N'2022-03-15T20:05:30.963' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10003, 1, N'Disponibilidad', N'MMSA_TP_Disponibilidad (%)', N'%', 1, CAST(N'2022-02-25T14:36:48.493' AS DateTime), CAST(N'2022-03-15T20:05:42.440' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10004, 1, N'Ley Au', N'MMSA_TP_Ley Au (g/t)', N'g/t', 1, CAST(N'2022-02-25T14:38:23.957' AS DateTime), CAST(N'2022-03-15T20:05:19.897' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10005, 1, N'Mineral Triturado', N'MMSA_TP_Mineral Triturado (t)', N't', 1, CAST(N'2022-02-25T14:38:56.150' AS DateTime), CAST(N'2022-03-15T20:05:06.810' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10006, 1, N'Productividad', N'MMSA_TP_Productividad (t/h)', N't/h', 1, CAST(N'2022-02-25T14:40:35.690' AS DateTime), CAST(N'2022-03-15T20:05:36.813' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10007, 1, N'Utilización', N'MMSA_TP_Utilización (%)', N'%', 1, CAST(N'2022-02-25T14:41:58.973' AS DateTime), CAST(N'2022-03-15T20:05:48.610' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10008, 2, N'Au Triturado', N'MMSA_HPGR_Au Triturado (oz)', N'oz', 1, CAST(N'2022-02-25T14:43:53.187' AS DateTime), CAST(N'2022-03-15T20:06:31.943' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10009, 2, N'Disponibilidad', N'MMSA_HPGR_Disponibilidad (%)', N'%', 1, CAST(N'2022-02-25T14:47:59.130' AS DateTime), CAST(N'2022-03-15T20:06:42.357' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10010, 2, N'Ley Au', N'MMSA_HPGR_Ley Au (g/t)', N'g/t', 1, CAST(N'2022-02-25T14:49:39.967' AS DateTime), CAST(N'2022-03-15T20:06:26.230' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10011, 2, N'Mineral Triturado', N'MMSA_HPGR_Mineral Triturado (t)', N't', 1, CAST(N'2022-02-25T14:50:09.507' AS DateTime), CAST(N'2022-03-15T20:06:19.367' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10012, 2, N'P80', N'MMSA_HPGR_P80 (mm)', N'mm', 1, CAST(N'2022-02-25T14:50:39.340' AS DateTime), CAST(N'2022-03-15T20:06:54.307' AS DateTime), 7)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10013, 2, N'Productividad', N'MMSA_HPGR_Productividad (t/h)', N't/h', 1, CAST(N'2022-02-25T14:51:05.497' AS DateTime), CAST(N'2022-03-15T20:06:36.447' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10014, 2, N'Utilización', N'MMSA_HPGR_Utilización (%)', N'%', 1, CAST(N'2022-02-25T14:51:28.593' AS DateTime), CAST(N'2022-03-15T20:06:48.090' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10015, 3, N'Adición de Cemento', N'MMSA_AGLOM_Adición de Cemento (kg/t)', N'kg/t', 1, CAST(N'2022-02-25T14:53:12.737' AS DateTime), CAST(N'2022-03-15T20:07:44.363' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10016, 3, N'Adición de CN', N'MMSA_AGLOM_Adición de CN (ppm)', N'ppm', 1, CAST(N'2022-02-25T14:54:15.467' AS DateTime), CAST(N'2022-03-15T20:07:51.283' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10017, 3, N'Disponibilidad', N'MMSA_AGLOM_Disponibilidad (%)', N'%', 1, CAST(N'2022-02-25T14:54:57.913' AS DateTime), CAST(N'2022-03-15T20:07:39.113' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10018, 3, N'Humedad', N'MMSA_AGLOM_Humedad (%)', N'%', 1, CAST(N'2022-02-25T15:25:54.980' AS DateTime), CAST(N'2022-03-15T20:07:58.437' AS DateTime), 7)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10019, 3, N'Mineral Aglomerado', N'MMSA_AGLOM_Mineral Aglomerado (t)', N't', 1, CAST(N'2022-02-25T15:26:17.090' AS DateTime), CAST(N'2022-03-15T20:07:24.537' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10020, 3, N'Productividad', N'MMSA_AGLOM_Productividad (t/h)', N't/h', 1, CAST(N'2022-02-25T15:26:46.857' AS DateTime), CAST(N'2022-03-15T20:07:29.360' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10021, 3, N'Utilización', N'MMSA_AGLOM_Utilización (%)', N'%', 1, CAST(N'2022-02-25T15:27:07.277' AS DateTime), CAST(N'2022-03-15T20:07:35.310' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10022, 5, N'Au Extraible Trituración Secundaria Apilado Camiones', N'MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)', N'%', 1, CAST(N'2022-02-25T15:29:29.877' AS DateTime), CAST(N'2022-03-15T20:13:14.560' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10023, 5, N'Au Trituración Secundaria Apilado Camiones', N'MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones (oz)', N't', 1, CAST(N'2022-02-25T15:30:59.567' AS DateTime), CAST(N'2022-03-15T20:12:45.937' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10024, 5, N'Ley Au', N'MMSA_APILAM_PYS_Ley Au (g/t)', N'g/t', 1, CAST(N'2022-02-25T15:31:36.627' AS DateTime), CAST(N'2022-03-15T20:12:28.603' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10025, 5, N'Mineral Trituración Secundaria Apilado Camiones', N'MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones (t)', N't', 1, CAST(N'2022-02-25T15:32:08.577' AS DateTime), CAST(N'2022-03-15T20:12:16.073' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10026, 5, N'Recuperación', N'MMSA_APILAM_PYS_Recuperación (%)', N'%', 1, CAST(N'2022-02-25T15:32:38.273' AS DateTime), CAST(N'2022-03-15T20:12:54.547' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10027, 4, N'Au Apilado Stacker', N'MMSA_APILAM_STACKER_Au Apilado Stacker (oz)', N'oz', 1, CAST(N'2022-02-25T15:33:29.387' AS DateTime), CAST(N'2022-03-15T20:08:34.180' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10028, 4, N'Au Extraible Apilado Stacker', N'MMSA_APILAM_STACKER_Au Extraible Apilado Stacker', N'oz', 1, CAST(N'2022-02-25T15:34:20.847' AS DateTime), CAST(N'2022-03-15T20:08:45.843' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10029, 4, N'Disponibilidad', N'MMSA_APILAM_STACKER_Disponibilidad (%)', N'%', 1, CAST(N'2022-02-25T15:35:32.763' AS DateTime), CAST(N'2022-03-15T20:08:56.933' AS DateTime), 7)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10030, 4, N'Ley Au', N'MMSA_APILAM_STACKER_Ley Au (g/t)', N'g/t', 1, CAST(N'2022-02-25T15:35:59.473' AS DateTime), CAST(N'2022-03-15T20:08:28.230' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10031, 4, N'Mineral Apilado Stacker', N'MMSA_APILAM_STACKER_Mineral Apilado Stacker (t)', N't', 1, CAST(N'2022-02-25T15:36:30.743' AS DateTime), CAST(N'2022-03-15T20:08:22.240' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10032, 4, N'Productividad', N'MMSA_APILAM_STACKER_Productividad (t/h)', N't/h', 1, CAST(N'2022-02-25T15:36:53.213' AS DateTime), CAST(N'2022-03-15T20:08:51.240' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10033, 4, N'Recuperación', N'MMSA_APILAM_STACKER_Recuperación (%)', N'%', 1, CAST(N'2022-02-25T15:37:18.407' AS DateTime), CAST(N'2022-03-15T20:08:39.097' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10034, 4, N'Utilización', N'MMSA_APILAM_STACKER_Utilización (%)', N'%', 1, CAST(N'2022-02-25T15:37:40.497' AS DateTime), CAST(N'2022-03-15T20:09:02.147' AS DateTime), 8)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10035, 6, N'Ley Au', N'MMSA_APILAM_TA_Ley Au (g/t)', N'g/t', 1, CAST(N'2022-02-25T15:39:03.907' AS DateTime), CAST(N'2022-03-15T20:09:25.930' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10036, 6, N'Recuperación', N'MMSA_APILAM_TA_Recuperación (%)', N'%', 1, CAST(N'2022-02-25T15:39:29.707' AS DateTime), CAST(N'2022-03-15T20:09:34.353' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10037, 6, N'Total Au Apilado', N'MMSA_APILAM_TA_Total Au Apilado (oz)', N'oz', 1, CAST(N'2022-02-25T15:40:03.087' AS DateTime), CAST(N'2022-03-15T20:09:30.327' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10038, 6, N'Total Au Extraible Apilado', N'MMSA_APILAM_TA_Total Au Extraible Apilado (oz)', N'oz', 1, CAST(N'2022-02-25T15:40:46.353' AS DateTime), CAST(N'2022-03-15T20:09:39.270' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10039, 6, N'Total Mineral Apilado', N'MMSA_APILAM_TA_Total Mineral Apilado (t)', N't', 1, CAST(N'2022-02-25T15:41:27.253' AS DateTime), CAST(N'2022-03-15T20:09:21.517' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10040, 10003, N'Eficiencia', N'MMSA_SART_Eficiencia (%)', N'%', 1, CAST(N'2022-02-25T15:42:56.790' AS DateTime), CAST(N'2022-03-15T20:18:09.930' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10041, 10003, N'Ley Au Alimentada', N'MMSA_SART_Ley Au Alimentada (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:43:40.057' AS DateTime), CAST(N'2022-03-15T20:17:58.867' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10042, 10003, N'Ley Au Salida', N'MMSA_SART_Ley Au Salida (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:44:08.663' AS DateTime), CAST(N'2022-03-15T20:18:04.470' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10043, 10003, N'Ley Cu Alimentada', N'MMSA_SART_Ley Cu Alimentada (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:44:35.633' AS DateTime), CAST(N'2022-03-15T20:17:45.290' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10044, 10003, N'Ley Cu Salida', N'MMSA_SART_Ley Cu Salida (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:45:02.650' AS DateTime), CAST(N'2022-03-15T20:17:52.470' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10045, 10003, N'PLS a SART', N'MMSA_SART_PLS a SART (m3)', N'm3', 1, CAST(N'2022-02-25T15:45:22.227' AS DateTime), CAST(N'2022-03-15T20:17:37.347' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10046, 10004, N'Au Adsorbido', N'MMSA_ADR_Au Adsorbido (oz)', N'oz', 1, CAST(N'2022-02-25T15:49:08.183' AS DateTime), CAST(N'2022-03-15T20:19:22.997' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10047, 10004, N'Au Desorbido Electrodepositado', N'MMSA_ADR_Au Desorbido Electrodepositado (oz)', N'oz', 1, CAST(N'2022-02-25T15:49:32.913' AS DateTime), CAST(N'2022-03-15T20:19:28.977' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10048, 10004, N'Au Doré', N'MMSA_ADR_Au Doré (oz)', N'oz', 1, CAST(N'2022-02-25T15:49:53.813' AS DateTime), CAST(N'2022-03-15T20:19:33.203' AS DateTime), 7)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10049, 10004, N'Eficiencia', N'MMSA_ADR_Eficiencia (%)', N'%', 1, CAST(N'2022-02-25T15:50:12.637' AS DateTime), CAST(N'2022-03-15T20:19:18.667' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10050, 10004, N'Ley de Au BLS', N'MMSA_ADR_Ley de Au BLS (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:50:36.943' AS DateTime), CAST(N'2022-03-15T20:19:13.900' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10051, 10004, N'Ley de Au PLS', N'MMSA_ADR_Ley de Au PLS (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:51:00.370' AS DateTime), CAST(N'2022-03-15T20:19:08.630' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10052, 10004, N'PLS a Carbones', N'MMSA_ADR_PLS a Carbones (m3)', N'm3', 1, CAST(N'2022-02-25T15:51:35.590' AS DateTime), CAST(N'2022-03-15T20:19:02.330' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10053, 10002, N'Au Lixiviado', N'MMSA_LIXI_Au Lixiviado (oz)', N'oz', 1, CAST(N'2022-02-25T15:54:41.447' AS DateTime), CAST(N'2022-02-25T15:54:41.447' AS DateTime), 7)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10054, 10002, N'CN Solución PLS', N'MMSA_LIXI_CN en solución PLS (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:55:07.613' AS DateTime), CAST(N'2022-02-25T15:55:07.613' AS DateTime), 8)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10055, 10002, N'CN Solución Barren', N'MMSA_LIXI_CN Solución Barren (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:55:26.503' AS DateTime), CAST(N'2022-02-25T15:55:26.503' AS DateTime), 2)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10056, 10002, N'CN Solución ILS', N'MMSA_LIXI_CN Solución ILS (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:55:49.260' AS DateTime), CAST(N'2022-02-25T15:55:49.260' AS DateTime), 4)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10057, 10002, N'Ley Au Solución PLS', N'MMSA_LIXI_Ley Au Solución PLS (ppm)', N'ppm', 1, CAST(N'2022-02-25T15:56:12.383' AS DateTime), CAST(N'2022-02-25T15:56:12.383' AS DateTime), 6)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10058, 10002, N'pH Solución PLS', N'MMSA_LIXI_pH en Solución PLS', N'.', 1, CAST(N'2022-02-25T15:57:09.330' AS DateTime), CAST(N'2022-02-25T15:57:09.330' AS DateTime), 9)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10059, 10002, N'Solución Barren', N'MMSA_LIXI_Solución Barren (m3)', N'm3', 1, CAST(N'2022-02-25T15:58:28.480' AS DateTime), CAST(N'2022-02-25T15:58:28.480' AS DateTime), 1)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10060, 10002, N'Solución ILS', N'MMSA_LIXI_Solución ILS (m3)', N'm3', 1, CAST(N'2022-02-25T15:58:58.867' AS DateTime), CAST(N'2022-02-25T15:58:58.867' AS DateTime), 3)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10061, 10002, N'Solución PLS', N'MMSA_LIXI_Solución PLS (m3)', N'm3', 1, CAST(N'2022-02-25T15:59:24.027' AS DateTime), CAST(N'2022-02-25T15:59:24.027' AS DateTime), 5)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10062, 1, N'Horas Operativas Trituración Primaria', N'MMSA_TP_Horas Operativas Trituración Primaria', N'h', 0, NULL, NULL, 7)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10063, 2, N'Horas Operativas Trituración Terciaria', N'MMSA_HPGR_Horas Operativas Trituración Terciaria', N'h', 0, NULL, NULL, 10)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10064, 3, N'Horas Operativas Aglomeración', N'MMSA_AGLOM_Horas Operativas Aglomeración', N'h', 0, NULL, NULL, 10)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10065, 4, N'Tiempo Operativo', N'MMSA_APILAM_STACKER_Tiempo Operativo', N'h', 0, NULL, NULL, 10)
+GO
+INSERT [dbo].[variable] ([id], [subcategoria_id], [nombre], [descripcion], [unidad], [estado], [created_at], [updated_at], [orden]) VALUES (10066, 3, N'Flujo', N'MMSA_AGLOM_Flujo', N'.', 0, NULL, NULL, 10)
+GO
+SET IDENTITY_INSERT [dbo].[variable] OFF
+GO
+ALTER TABLE [dbo].[variable] ADD  DEFAULT ('1') FOR [estado]
+GO
+ALTER TABLE [dbo].[variable]  WITH CHECK ADD  CONSTRAINT [variable_subcategoria_id_foreign] FOREIGN KEY([subcategoria_id])
+REFERENCES [dbo].[subcategoria] ([id])
+GO
+ALTER TABLE [dbo].[variable] CHECK CONSTRAINT [variable_subcategoria_id_foreign]
+GO
+
