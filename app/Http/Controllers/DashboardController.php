@@ -4735,7 +4735,7 @@ class DashboardController extends Controller
                         }     
                         else
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
                         }                   
                         return $button;
                     })
