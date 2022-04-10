@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Validator;
 
 class VariableController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Admin']);
+    }
+
     public function index(Request $request)
     {
 

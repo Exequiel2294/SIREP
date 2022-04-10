@@ -7,17 +7,21 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements LdapAuthenticatable
 {
     use Notifiable;
     use AuthenticatesWithLdap;
+    use HasRoles;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     public $timestamps = false;
+
+    protected $guard_name = 'web';
 
     protected $fillable = [
         'name', 'email', 'password',

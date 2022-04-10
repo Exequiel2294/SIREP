@@ -12,9 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AreaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Admin']);
+    }
+
     public function index(Request $request)
     {
-
         if(request()->ajax()) {
             $list = DB::table('area')
                         ->select('id','nombre','descripcion','estado','created_at','updated_at')

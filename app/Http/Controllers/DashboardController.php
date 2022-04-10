@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 
 class DashboardController extends Controller
@@ -4727,8 +4728,15 @@ class DashboardController extends Controller
                     })
                     ->addColumn('action', function($data)
                     {
-                        $button = ''; 
-                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';  
+                        $button = '';  
+                        if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                        {
+                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                        }     
+                        else
+                        {
+                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                        }                   
                         return $button;
                     })
                     ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])

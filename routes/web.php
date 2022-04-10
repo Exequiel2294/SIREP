@@ -30,6 +30,18 @@ Route::get('/home', function() {
 })->name('home')->middleware('auth');
 
 Route::group(['middleware' => ['auth']], function() {
+
+    
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
+    Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
+    Route::get('dashboard/{id}/edit','DashboardController@edit')->name('dashboard.edit');
+    
+    Route::get('historial', 'HistorialController@index')->name('historial');
+});
+
+Route::group(['middleware' => ['auth', 'role:Admin']], function() {
+
     Route::get('area', 'AreaController@index')->name('area');
     Route::post('area/load', 'AreaController@load')->name('area.load');
     Route::get('area/{id}/edit','AreaController@edit')->name('area.edit');
@@ -52,12 +64,4 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('variable/{id}','VariableController@delete')->name('variable.delete');
     Route::post('variable/getcategoria', 'VariableController@getcategoria')->name('variable.getcategoria');
     Route::post('variable/getsubcategoria', 'VariableController@getsubcategoria')->name('variable.getsubcategoria');
-
-    
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
-    Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
-    Route::get('dashboard/{id}/edit','DashboardController@edit')->name('dashboard.edit');
-    
-    Route::get('historial', 'HistorialController@index')->name('historial');
 });

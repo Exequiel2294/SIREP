@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use LdapRecord\Models\ActiveDirectory\Group;
+use LdapRecord\Models\ActiveDirectory\User;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -50,5 +54,27 @@ class LoginController extends Controller
             'samaccountname' => $request->username,
             'password' => $request->password
         ];
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if (!Auth::user()->hasAnyRole(['Reportes_L', 'Reportes_E', 'Admin'])){
+            $email = Auth::user()->email;
+            $user = User::findByOrFail('mail', $email);
+
+            $reportesE= Group::find('CN=Reportes_E,CN=Users,DC=argentina,DC=FSM,DC=CORP');
+            $reportesL = Group::find('CN=Reportes_L,CN=Users,DC=argentina,DC=FSM,DC=CORP');
+            $reportesA = Group::find('CN=Reportes_A,CN=Users,DC=argentina,DC=FSM,DC=CORP');
+
+            if ($user->groups()->exists($reportesE)) {
+                Auth::user()->assignRole('reportes_E');
+            }
+            if ($user->groups()->exists($reportesL)) {
+                Auth::user()->assignRole('reportes_L');
+            }
+            if ($user->groups()->exists($reportesA)) {
+                Auth::user()->assignRole('Admin');
+            }
+        }
     }
 }

@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Validator;
 
 class SubcategoriaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Admin']);
+    }
+
     public function index(Request $request)
     {
 
