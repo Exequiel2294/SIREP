@@ -1,17 +1,17 @@
 /* 
-10018 MMSA_AGLOM_Humedad %
+10016 MMSA_AGLOM_Adición de CN ppm
 Promedio Ponderado Mensual
-(10011 MMSA_HPGR_Mineral Triturado t,10018 MMSA_AGLOM_Humedad %)
+(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)
 */
 
 SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
 (SELECT fecha, variable_id, [valor]
 FROM [mansfield].[dbo].[data]
-where variable_id = 10018) as A
+where variable_id = 10016) as A
 INNER JOIN   
 (SELECT fecha, variable_id, [valor]
 FROM [mansfield].[dbo].[data]
-where variable_id = 10011) as B
+where variable_id = 10066) as B
 ON A.fecha = B.fecha
 WHERE MONTH(A.fecha) =  MONTH('2022-02-14')
 AND  DATEPART(y, A.fecha) <=  DATEPART(y, '2022-02-14')
@@ -20,8 +20,7 @@ GROUP BY MONTH(A.fecha);
                                 
 SELECT MONTH(fecha) as month, SUM(valor) as suma
 FROM [mansfield].[dbo].[data]
-WHERE variable_id = 10011
+WHERE variable_id = 10066
 AND  MONTH(fecha) = MONTH('2022-02-14')
 AND  DATEPART(y, fecha) <= DATEPART(y, '2022-02-14')
 GROUP BY MONTH(fecha);
-

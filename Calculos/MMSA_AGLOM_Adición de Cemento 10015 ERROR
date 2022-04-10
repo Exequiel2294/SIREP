@@ -1,9 +1,0 @@
-/* 
-10015 MMSA_AGLOM_Adición de Cemento kg/t
-Formulas Roque
-sumatoria.mensual(30,31)/sumatoria.mensual(11)
-**No se encuentra el numero 30 y 31**
-Formulas Daily
-SUMAPRODUCTO(MineralAglomerado;Ratio de Cemento)/SUMA(MineralAglomerado)
-**No se encuentra Ratio de Cemento (Columna 111 en Daily)**
-*/
