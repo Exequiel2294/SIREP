@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use LdapRecord\Models\ActiveDirectory\Group;
 
 
 class HistorialController extends Controller

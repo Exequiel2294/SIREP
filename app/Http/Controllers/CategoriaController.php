@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoriaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Admin']);
+    }
+
     public function index(Request $request)
     {
 
