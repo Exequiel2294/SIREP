@@ -296,7 +296,6 @@
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
-        
 
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
@@ -444,8 +443,8 @@
                         render: function (data,type,row){
                             if(row['dia_budget'] != '-' && row['dia_real'] != '-')
                             {
-                                $d_budget = parseFloat(row['dia_budget'].replaceAll('.','').replace(',','.'));
-                                $d_real = parseFloat(row['dia_real'].replaceAll('.','').replace(',','.'));
+                                $d_budget = parseFloat(row['dia_budget'].replaceAll(',',''));
+                                $d_real = parseFloat(row['dia_real'].replaceAll(',',''));
                                 if($d_budget != 0.00 )
                                 {
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
@@ -487,8 +486,8 @@
                         render: function (data,type,row){
                             if(row['mes_budget'] != '-' && row['mes_real'] != '-')
                             {
-                                $m_budget = parseFloat(row['mes_budget'].replaceAll('.','').replace(',','.'));
-                                $m_real = parseFloat(row['mes_real'].replaceAll('.','').replace(',','.'));
+                                $m_budget = parseFloat(row['mes_budget'].replaceAll(',',''));
+                                $m_real = parseFloat(row['mes_real'].replaceAll(',',''));
                                 if($m_budget != 0.00)
                                 {
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
@@ -527,8 +526,8 @@
                         render: function (data,type,row){
                             if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
                             {                                
-                                $t_budget = parseFloat(row['trimestre_budget'].replaceAll('.','').replace(',','.'));
-                                $t_real = parseFloat(row['trimestre_real'].replaceAll('.','').replace(',','.'));
+                                $t_budget = parseFloat(row['trimestre_budget'].replaceAll(',',''));
+                                $t_real = parseFloat(row['trimestre_real'].replaceAll(',',''));
                                 if($t_budget != 0.00)
                                 {
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
@@ -567,8 +566,8 @@
                         render: function (data,type,row){
                             if(row['anio_budget'] != '-' && row['anio_real'] != '-')
                             {                               
-                                $a_budget = parseFloat(row['anio_budget'].replaceAll('.','').replace(',','.'));
-                                $a_real = parseFloat(row['anio_real'].replaceAll('.','').replace(',','.'));
+                                $a_budget = parseFloat(row['anio_budget'].replaceAll(',',''));
+                                $a_real = parseFloat(row['anio_real'].replaceAll(',',''));
                                 if($a_budget != 0.00)
                                 {
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
@@ -881,7 +880,7 @@
                         <div class="form-group row">
                             <label for="valor" class="col-sm-2 col-form-label">Valor</label>
                             <div class="col-sm-10">
-                              <input type="number" class="form-control" id="valor" name="valor" lang="es">
+                              <input type="number" class="form-control" id="valor" name="valor">
                             </div>
                         </div>                
                         @csrf

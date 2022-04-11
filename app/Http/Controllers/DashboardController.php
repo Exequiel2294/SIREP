@@ -507,11 +507,11 @@ class DashboardController extends Controller
                             $d_real = $data->dia_real;
                             if($d_real > 100)
                             {
-                                return number_format(round($d_real), 0, ',', '.');
+                                return number_format(round($d_real), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($d_real, 2, ',', '.');
+                                return number_format($d_real, 2, '.', ',');
                             }
                         }
                         else
@@ -526,11 +526,11 @@ class DashboardController extends Controller
                             $d_budget = $data->dia_budget;
                             if($d_budget > 100)
                             {
-                                return number_format(round($d_budget), 0, ',', '.');
+                                return number_format(round($d_budget), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($d_budget, 2, ',', '.');
+                                return number_format($d_budget, 2, '.', ',');
                             }
                         }
                         else
@@ -1046,11 +1046,11 @@ class DashboardController extends Controller
                                     $m_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
                                     if($m_real > 100)
                                     {
-                                        return number_format(round($m_real), 0, ',', '.');
+                                        return number_format(round($m_real), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($m_real, 2, ',', '.');
+                                        return number_format($m_real, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -1081,11 +1081,11 @@ class DashboardController extends Controller
                                     $m_real = $mes_real[0]->mes_real;
                                     if($m_real > 100)
                                     {
-                                        return number_format(round($m_real), 0, ',', '.');
+                                        return number_format(round($m_real), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($m_real, 2, ',', '.');
+                                        return number_format($m_real, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -1113,11 +1113,11 @@ class DashboardController extends Controller
                                         $m_real = $mes_real[0]->mes_real;
                                         if($m_real > 100)
                                         {
-                                            return number_format(round($m_real), 0, ',', '.');
+                                            return number_format(round($m_real), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($m_real, 2, ',', '.');
+                                            return number_format($m_real, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -1204,11 +1204,11 @@ class DashboardController extends Controller
                                                 $m_real = $suma[0]->suma/$suma2[0]->suma;
                                                 if($m_real > 100)
                                                 {
-                                                    return number_format(round($m_real), 0, ',', '.');
+                                                    return number_format(round($m_real), 0, '.', ',');
                                                 }
                                                 else
                                                 {
-                                                    return number_format($m_real, 2, ',', '.');
+                                                    return number_format($m_real, 2, '.', ',');
                                                 }
                                             }
                                             else
@@ -1341,11 +1341,11 @@ class DashboardController extends Controller
                                         $m_budget = $mes_budget[0]->mes_budget;
                                         if($m_budget > 100)
                                         {
-                                            return number_format(round($m_budget), 0, ',', '.');
+                                            return number_format(round($m_budget), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($m_budget, 2, ',', '.');
+                                            return number_format($m_budget, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -1745,11 +1745,11 @@ class DashboardController extends Controller
                                     $m_budget = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
                                     if($m_budget > 100)
                                     {
-                                        return number_format(round($m_budget), 0, ',', '.');
+                                        return number_format(round($m_budget), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($m_budget, 2, ',', '.');
+                                        return number_format($m_budget, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -1780,11 +1780,11 @@ class DashboardController extends Controller
                                     $m_budget = $mes_budget[0]->mes_budget;
                                     if($m_budget > 100)
                                     {
-                                        return number_format(round($m_budget), 0, ',', '.');
+                                        return number_format(round($m_budget), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($m_budget, 2, ',', '.');
+                                        return number_format($m_budget, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -1812,11 +1812,11 @@ class DashboardController extends Controller
                                         $m_budget = $mes_budget[0]->mes_budget;
                                         if($m_budget > 100)
                                         {
-                                            return number_format(round($m_budget), 0, ',', '.');
+                                            return number_format(round($m_budget), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($m_budget, 2, ',', '.');
+                                            return number_format($m_budget, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -1903,11 +1903,11 @@ class DashboardController extends Controller
                                                 $m_budget = $suma[0]->suma/$suma2[0]->suma;
                                                 if($m_budget > 100)
                                                 {
-                                                    return number_format(round($m_budget), 0, ',', '.');
+                                                    return number_format(round($m_budget), 0, '.', ',');
                                                 }
                                                 else
                                                 {
-                                                    return number_format($m_budget, 2, ',', '.');
+                                                    return number_format($m_budget, 2, '.', ',');
                                                 }
                                             }
                                             else
@@ -2444,11 +2444,11 @@ class DashboardController extends Controller
                                     $t_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
                                     if($t_real > 100)
                                     {
-                                        return number_format(round($t_real), 0, ',', '.');
+                                        return number_format(round($t_real), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($t_real, 2, ',', '.');
+                                        return number_format($t_real, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -2479,11 +2479,11 @@ class DashboardController extends Controller
                                     $t_real = $trimestre_real[0]->trimestre_real;
                                     if($t_real > 100)
                                     {
-                                        return number_format(round($t_real), 0, ',', '.');
+                                        return number_format(round($t_real), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($t_real, 2, ',', '.');
+                                        return number_format($t_real, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -2511,11 +2511,11 @@ class DashboardController extends Controller
                                         $t_real = $trimestre_real[0]->trimestre_real;
                                         if($t_real > 100)
                                         {
-                                            return number_format(round($t_real), 0, ',', '.');
+                                            return number_format(round($t_real), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($t_real, 2, ',', '.');
+                                            return number_format($t_real, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -2602,11 +2602,11 @@ class DashboardController extends Controller
                                                 $t_real = $suma[0]->suma/$suma2[0]->suma;
                                                 if($t_real > 100)
                                                 {
-                                                    return number_format(round($t_real), 0, ',', '.');
+                                                    return number_format(round($t_real), 0, '.', ',');
                                                 }
                                                 else
                                                 {
-                                                    return number_format($t_real, 2, ',', '.');
+                                                    return number_format($t_real, 2, '.', ',');
                                                 }
                                             }
                                             else
@@ -2740,11 +2740,11 @@ class DashboardController extends Controller
                                         $t_budget = $trimestre_budget[0]->trimestre_budget;
                                         if($t_budget > 100)
                                         {
-                                            return number_format(round($t_budget), 0, ',', '.');
+                                            return number_format(round($t_budget), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($t_budget, 2, ',', '.');
+                                            return number_format($t_budget, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -3144,11 +3144,11 @@ class DashboardController extends Controller
                                     $t_budget = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
                                     if($t_budget > 100)
                                     {
-                                        return number_format(round($t_budget), 0, ',', '.');
+                                        return number_format(round($t_budget), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($t_budget, 2, ',', '.');
+                                        return number_format($t_budget, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -3179,11 +3179,11 @@ class DashboardController extends Controller
                                     $t_budget = $trimestre_budget[0]->trimestre_budget;
                                     if($t_budget > 100)
                                     {
-                                        return number_format(round($t_budget), 0, ',', '.');
+                                        return number_format(round($t_budget), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($t_budget, 2, ',', '.');
+                                        return number_format($t_budget, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -3211,11 +3211,11 @@ class DashboardController extends Controller
                                         $t_budget = $trimestre_budget[0]->trimestre_budget;
                                         if($t_budget > 100)
                                         {
-                                            return number_format(round($t_budget), 0, ',', '.');
+                                            return number_format(round($t_budget), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($t_budget, 2, ',', '.');
+                                            return number_format($t_budget, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -3302,11 +3302,11 @@ class DashboardController extends Controller
                                                 $t_budget = $suma[0]->suma/$suma2[0]->suma;
                                                 if($t_budget > 100)
                                                 {
-                                                    return number_format(round($t_budget), 0, ',', '.');
+                                                    return number_format(round($t_budget), 0, '.', ',');
                                                 }
                                                 else
                                                 {
-                                                    return number_format($t_budget, 2, ',', '.');
+                                                    return number_format($t_budget, 2, '.', ',');
                                                 }
                                             }
                                             else
@@ -3843,11 +3843,11 @@ class DashboardController extends Controller
                                     $a_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
                                     if($a_real > 100)
                                     {
-                                        return number_format(round($a_real), 0, ',', '.');
+                                        return number_format(round($a_real), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($a_real, 2, ',', '.');
+                                        return number_format($a_real, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -3878,11 +3878,11 @@ class DashboardController extends Controller
                                     $a_real = $anio_real[0]->anio_real;
                                     if($a_real > 100)
                                     {
-                                        return number_format(round($a_real), 0, ',', '.');
+                                        return number_format(round($a_real), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($a_real, 2, ',', '.');
+                                        return number_format($a_real, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -3910,11 +3910,11 @@ class DashboardController extends Controller
                                         $a_real = $anio_real[0]->anio_real;
                                         if($a_real > 100)
                                         {
-                                            return number_format(round($a_real), 0, ',', '.');
+                                            return number_format(round($a_real), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($a_real, 2, ',', '.');
+                                            return number_format($a_real, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -4001,11 +4001,11 @@ class DashboardController extends Controller
                                                 $a_real = $suma[0]->suma/$suma2[0]->suma;
                                                 if($a_real > 100)
                                                 {
-                                                    return number_format(round($a_real), 0, ',', '.');
+                                                    return number_format(round($a_real), 0, '.', ',');
                                                 }
                                                 else
                                                 {
-                                                    return number_format($a_real, 2, ',', '.');
+                                                    return number_format($a_real, 2, '.', ',');
                                                 }
                                             }
                                             else
@@ -4139,11 +4139,11 @@ class DashboardController extends Controller
                                         $a_budget = $anio_budget[0]->anio_budget;
                                         if($a_budget > 100)
                                         {
-                                            return number_format(round($a_budget), 0, ',', '.');
+                                            return number_format(round($a_budget), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($a_budget, 2, ',', '.');
+                                            return number_format($a_budget, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -4543,11 +4543,11 @@ class DashboardController extends Controller
                                     $a_budget = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
                                     if($a_budget > 100)
                                     {
-                                        return number_format(round($a_budget), 0, ',', '.');
+                                        return number_format(round($a_budget), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($a_budget, 2, ',', '.');
+                                        return number_format($a_budget, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -4578,11 +4578,11 @@ class DashboardController extends Controller
                                     $a_budget = $anio_budget[0]->anio_budget;
                                     if($a_budget > 100)
                                     {
-                                        return number_format(round($a_budget), 0, ',', '.');
+                                        return number_format(round($a_budget), 0, '.', ',');
                                     }
                                     else
                                     {
-                                        return number_format($a_budget, 2, ',', '.');
+                                        return number_format($a_budget, 2, '.', ',');
                                     }
                                 }
                                 else
@@ -4610,11 +4610,11 @@ class DashboardController extends Controller
                                         $a_budget = $anio_budget[0]->anio_budget;
                                         if($a_budget > 100)
                                         {
-                                            return number_format(round($a_budget), 0, ',', '.');
+                                            return number_format(round($a_budget), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return number_format($a_budget, 2, ',', '.');
+                                            return number_format($a_budget, 2, '.', ',');
                                         }
                                     }
                                     else
@@ -4701,11 +4701,11 @@ class DashboardController extends Controller
                                                 $a_budget = $suma[0]->suma/$suma2[0]->suma;
                                                 if($a_budget > 100)
                                                 {
-                                                    return number_format(round($a_budget), 0, ',', '.');
+                                                    return number_format(round($a_budget), 0, '.', ',');
                                                 }
                                                 else
                                                 {
-                                                    return number_format($a_budget, 2, ',', '.');
+                                                    return number_format($a_budget, 2, '.', ',');
                                                 }
                                             }
                                             else

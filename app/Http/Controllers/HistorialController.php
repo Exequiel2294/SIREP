@@ -23,6 +23,23 @@ class HistorialController extends Controller
                         ->select('variable.descripcion as variable','data.fecha as fecha_data','historial.*')
                         ->get();
             return datatables()->of($list)
+                    ->addColumn('valorviejo', function($data)
+                    {    
+                        if ($data->valorviejo != null)  
+                        {
+                            return number_format($data->valorviejo, 5, '.', ',');
+                        }   
+                        return '-';
+                    })
+                    ->addColumn('valornuevo', function($data)
+                    {         
+                        if ($data->valornuevo != null) 
+                        {
+                            return number_format($data->valornuevo, 5, '.', ',');
+                        }
+                        return '-';
+                    })
+                    ->rawColumns(['valorviejo','valornuevo'])
                     ->addIndexColumn()
                     ->make(true);
         } 
