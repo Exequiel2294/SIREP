@@ -4735,7 +4735,7 @@ class DashboardController extends Controller
                         }     
                         else
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
                         }                   
                         return $button;
                     })
@@ -4793,7 +4793,7 @@ class DashboardController extends Controller
                 {
                     Historial::create([
                         'data_id' => $id,
-                        'fecha' => date('y-m-d h:i:s'),
+                        'fecha' => date('Y-m-d h:i:s'),
                         'transaccion' => 'EDIT',
                         'valorviejo' => $oldvalue,
                         'valornuevo' => $newvalue,

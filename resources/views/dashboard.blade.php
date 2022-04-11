@@ -665,6 +665,15 @@
         });      
         /* EDIT BUTTON */
 
+        /* EDIT2 BUTTON */  
+        $(document).on('click', '.edit2', function() {
+            Swal.fire({
+                title: 'No tienes los permisos necesarios',
+                icon: 'warning',
+            })
+        });
+        /* EDIT2 BUTTON */
+
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
