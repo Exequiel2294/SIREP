@@ -267,7 +267,7 @@
                         render: function(data){
                             if(data != null)
                             {
-                                return moment.utc(data).local().format("DD/MM/Y");
+                                return moment(data).format("DD/MM/Y");
                             }
                             else
                             {
