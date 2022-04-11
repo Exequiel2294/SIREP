@@ -20,7 +20,7 @@ class HistorialController extends Controller
             $list = DB::table('historial')
                         ->join('data', 'historial.data_id', '=', 'data.id')
                         ->join('variable', 'data.variable_id', '=', 'variable.id')
-                        ->select('variable.descripcion as variable','historial.*')
+                        ->select('variable.descripcion as variable','data.fecha as fecha_data','historial.*')
                         ->get();
             return datatables()->of($list)
                     ->addIndexColumn()

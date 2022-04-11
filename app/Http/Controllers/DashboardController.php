@@ -4793,7 +4793,7 @@ class DashboardController extends Controller
                 {
                     Historial::create([
                         'data_id' => $id,
-                        'fecha' => date('y-m-d h:i:s'),
+                        'fecha' => date('Y-m-d h:i:s'),
                         'transaccion' => 'EDIT',
                         'valorviejo' => $oldvalue,
                         'valornuevo' => $newvalue,

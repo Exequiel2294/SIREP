@@ -250,14 +250,37 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
+                    {data:'fecha', name:'fecha',
+                        render: function(data){
+                            if(data != null)
+                            {
+                                return moment.utc(data).local().format("DD/MM/Y HH:mm");
+                            }
+                            else
+                            {
+                                return data;
+                            }
+                        }
+                    },
                     {data:'variable', name:'variable'},
-                    {data:'fecha', name:'fecha'},
+                    {data:'fecha_data', name:'fecha_data',
+                        render: function(data){
+                            if(data != null)
+                            {
+                                return moment.utc(data).local().format("DD/MM/Y");
+                            }
+                            else
+                            {
+                                return data;
+                            }
+                        }
+                    },
                     {data:'transaccion', name:'transaccion'},
                     {data:'valorviejo', name:'valorviejo'},
                     {data:'valornuevo', name:'valornuevo'},
                     {data:'usuario', name:'usuario'}
                 ],
-                order: [[0, 'asc']]            
+                order: [[1, 'asc']]            
             });
         });
         /* DATATABLES */
@@ -272,6 +295,7 @@
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
                             <tr>    
+                                <th>Fecha Mod.</th>
                                 <th>Variable</th>
                                 <th>Fecha</th>
                                 <th>Transaccion</th>
