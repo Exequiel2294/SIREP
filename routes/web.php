@@ -64,4 +64,10 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::delete('variable/{id}','VariableController@delete')->name('variable.delete');
     Route::post('variable/getcategoria', 'VariableController@getcategoria')->name('variable.getcategoria');
     Route::post('variable/getsubcategoria', 'VariableController@getsubcategoria')->name('variable.getsubcategoria');
+
+    Route::get('permisos', 'PermisosController@index')->name('permisos')->name('permisos');
+    Route::post('permisos/load', 'PermisosController@load')->name('permisos.load');
+    Route::post('permisos/getvariables', 'PermisosController@getVariables')->name('permisos.getvariables');
+    Route::post('permisos/insertar', 'PermisosController@insertar')->name('permisos.insertar');
+    //Route::get('permisos/{id}', 'PermisosController@load')->name('permisos.load');
 });
