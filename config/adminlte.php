@@ -268,6 +268,11 @@ return [
                     'url'  => 'variable',
                     'icon' => 'nav-icon fas fa-tag',
                 ],
+                [
+                    'text' => 'permisos',
+                    'url'  => 'permisos',
+                    'icon' => 'nav-icon fas fa-tag',
+                ],
             ],
         ],
     ],
