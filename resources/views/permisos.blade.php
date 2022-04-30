@@ -6,15 +6,13 @@
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Permisos</h1>
+            <h1>Asignación Variables</h1>
         </div> 
     </div>  
 @stop
 
 @section('css')
-
     <style>
-
         /* Section content-header */
         .section-header {
             display: flex; 
@@ -235,49 +233,63 @@
             }
         }
 
-        /*DATATABLES LARGE TABLES*/
-        td.details-control {
-            background: url('../assets/DataTables/details_open.png') no-repeat center center;
-            cursor: pointer;
+        /* PROPIOS VISTA */
+        #vble-table_wrapper
+        {
+            width: 95%;
         }
-        tr.details td.details-control {
-            background: url('../assets/DataTables/details_close.png') no-repeat center center;
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination
+        {
+            justify-content: center!important;
+            margin-top: 1.5rem!important;
         }
-         /*DATATABLES LARGE TABLES*/
+        .checkvble
+        {
+            width: 1rem;
+            height: 1rem;
+        }
+
     </style> 
 @stop
 
 @section('js')
-{{-- <script>
-    $(function () {
-      //Initialize Select2 Elements
-      $('.select2').select2() 
-    })
-</script> --}}
-<script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
-<script>
-    $(function () {
-        $("#select2").on("change", function (e) {
-            $('#permisos-table').DataTable().ajax.reload(null, false);
-            $('#vble-table').DataTable().ajax.reload(null, false);
+    <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
+    <script>
+        $('.nav-link').click(function (){ 
+            setTimeout(
+                function() {
+                    var oTable = $('#permisos-table').dataTable();
+                    oTable.fnAdjustColumnSizing();
+                }, 
+            350);
         });
 
-        $('#btn-asignar').click(function(e){
-            e.preventDefault();
-            //alert($( "#select2" ).val());
+        $(function () {
+            $("#select2").on("change", function (e) {            
+                $('#permisos-table').DataTable().ajax.reload(null, false);
+                $('#vble-table').DataTable().ajax.reload(null, false);            
+            });
+
+            $('#btn-asignar').click(function(e){
+                e.preventDefault();
+            });        
+
+            /* ACTION TO CLOSE MODAL */
+            $('#modal-vbles').on('hidden.bs.modal', function () {
+                $('#permisos-table').DataTable().ajax.reload(null, false);
+                $('#vble-table').DataTable().ajax.reload(null, false);
+            });
+            /* ACTION TO CLOSE MODAL */
         });
+
         
-        $("#close-modal").click( function (e) {
-            $('#vble-table').DataTable().ajax.reload(null, false);
-        });
-    });
-
-    /* DATATABLES PERMISOS DEL USUARIO*/
-    $(document).ready(
-        function (){     
-            
-            var dt =  $("#permisos-table").DataTable({
-                
+        $(document).ready(function (){     
+            $('#fieldset-permisos').hide(); 
+            /* DATATABLES PERMISOS DEL USUARIO*/          
+            var dt =  $("#permisos-table").DataTable({              
+                dom:    "<'row data-search'<'col-sm-6 toolbar'><'col-sm-6'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row data-buttons'<'col-sm-12'p>>",            
                 lengthMenu: [[10, 25], [10, 25]],
                 processing: true,
                 bInfo: true,
@@ -285,16 +297,12 @@
                 responsive: true,
                 scrollX : true,
                 ajax:{    
-                    //url: "permisos/"+id,
-                    url: "{{route('permisos.load') }}",
+                    url: "{{route('permisos.getuservbles') }}",
                     type: 'POST',
                     data: function(d){
                         d.id = $( "#select2" ).val(),
                         d._token = $('input[name="_token"]').val();
                     }
-                    // data:{
-                    //     id: $("#select2").val(),
-                    //     _token: $('input[name="_token"]').val()},
                 },
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ registros",
@@ -314,25 +322,19 @@
                 columns: [
                     {data:'id', name:'id'},
                     {data:'nombre', name:'nombre'},
-                    {data:'descripcion', name:'descripcion'},
-                    {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
+                    {data:'descripcion', name:'descripcion'}
                 ],
                 order: [[0, 'asc'],[1, 'asc'],[2, 'asc']]            
             });
-        }
-    );
-    /* DATATABLES disponibles para el usuario*/
-    $(document).ready(
-        function (){     
-            //$("#vble-table").DataTable();
-            
-            var t = $("#vble-table").DataTable({
-                
-                select: {
-                    style:'multi',
-                },
+            $("div.toolbar").html('Variables con permisos de edición para el usuario:');
+
+            /* DATATABLES disponibles para el usuario*/
+            var t = $("#vble-table").DataTable({    
+                dom:    "<'row data-search'<'col-sm-12'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row data-buttons'<'col-sm-12'p>>",  
                 lengthMenu: [[10, 25], [10, 25]],
-                //processing: true,
+                processing: true,
                 bInfo: true,
                 //serverSide: true,
                 responsive: true,
@@ -361,95 +363,185 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
-                    {data:'id', name:'id' , width:'10px'},
-                    {data:'nombre', name:'nombre',width:'10px'},
-                    {data:'descripcion', name:'descripcion',width:'10px'},
+                    {data:'id', name:'id' , visible: false, orderable: false,searchable: false},
+                    {data:'descripcion', name:'descripcion'},
+                    {data:'action', name: 'action', orderable: false,searchable: false, width:'50px'}
                 ],
-                // order: [[0, 'asc'],[1, 'asc'],[2, 'asc']]            
-            });
+                columnDefs: [
+                    {
+                        targets:2,
+                        className: 'dt-body-center',
+                        width: 50
+                    }
+                ],
+                order: [1, 'asc']           
+            }); 
+        });
 
-            $('#vble-table tbody').on( 'click', 'tr', function () {
-                $(this).toggleClass('selected');
-                $(this).toggleClass('bg-primary');
-            });
-            $('#button-table').click( function (e) {
-                //alert( t.rows('.selected').data().length +' row(s) selected' );
-                //console.log(t.rows('.selected').data());
-                e.preventDefault();
-                let v = [];
-                for (let i = 0; i < t.rows('.selected').data().length; i++) {
-                    v.push(t.rows('.selected').data()[i].id);
+        $('#btn-copiar').click(function () { 
+            console.log('click');
+            if ($('#fieldset-permisos').is(":visible"))
+            {
+                $('#fieldset-permisos').hide(); 
+                $("#modal-form").validate().resetForm();
+            }
+            else{
+                $('#fieldset-permisos').show();  
+            }
+        });
+
+        /*INICIO SELECCIONAR CHECKBOX*/
+        $(document).on('click', '.checkvble', function(){ 
+            if ($("#select2" ).val() !='')
+            { 
+                var data = {
+                    variable_id: $(this).data('vbleid'),
+                    user_id: $( "#select2" ).val(),
+                    _token: $('input[name=_token]').val()
+                };
+                if ($(this).is(':checked')) {
+                    data.estado = 1
+                } else {
+                    data.estado = 0
                 }
-                if (v.length !== 0) {
-                    console.log(v);
-                    $.ajax({
-                        url:"{{route('permisos.insertar') }}",
-                        method:"POST",
-                        data:{
-                            id: $( "#select2" ).val(),
-                            valor: v,
-                            tam: v.length,
-                            _token: $('input[name="_token"]').val()
-                        },
-                        success:function(data)
-                        {  
-                            $('#modal-vbles').scrollTop(0);
-                            $('#modal-vbles').modal('hide');
-                            MansfieldRep.notification('Registro cargado con exito', 'MansfieldRep', 'success');
-                            $('#permisos-table').DataTable().ajax.reload(null, false);
-                        }
-                    });
-                }else{
-                    console.log('no hay datos');
+                ajaxRequest('permisos/check', data);             
+            }     
+        });    
+        function ajaxRequest (url, data) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function (respuesta) {
+                    MansfieldRep.notification(respuesta.respuesta, 'MansfieldRep', 'success');
                 }
             });
-            
         }
-    );
-</script>
+        /*FIN SELECCIONAR CHECKBOX*/   
 
+        /* FORM BUTTON */        
+        $("#modal-form").validate({
+            rules: {
+                select2: {
+                    required: true
+                },
+                usercopy_id: {
+                    required: true,
+                    notEqualTo : "#select2"
+                }            
+            },
+            messages: {  
+                usercopy_id: {
+                    notEqualTo: "Los usuarios no pueden ser iguales"
+                }
+            },
+            errorElement: 'span', 
+            errorClass: 'help-block help-block-error', 
+            focusInvalid: false, 
+            ignore: "", 
+            highlight: function (element, errorClass, validClass) { 
+                $(element).closest('.form-group').addClass('text-danger'); 
+                $(element).closest('.form-control').addClass('is-invalid');
+            },
+            unhighlight: function (element) { 
+                $(element).closest('.form-group').removeClass('text-danger'); 
+                $(element).closest('.form-control').removeClass('is-invalid');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('text-danger');
+            },
+            errorPlacement: function (error, element) {
+                if ($(element).is('select') && element.hasClass('bs-select')) {
+                    error.insertAfter(element);
+                } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
+                    element.next().after(error);
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); 
+                }
+            },
+            invalidHandler: function (event, validator) {                 
+            },
+            submitHandler: function (form) {
+                return true; 
+            }
+        });
+
+        $("#form-button").click(function(){
+            if($("#modal-form").valid()){
+                $('#form-button').html('Guardando..');
+                $.ajax({
+                    url:"{{route('permisos.load') }}",
+                    method:"POST",
+                    data:{
+                        user_id: $("#select2").val(),
+                        usercopy_id:$('#usercopy_id').val(),
+                        _token: $('input[name="_token"]').val()
+                    },
+                    success:function(data)
+                    {  
+                        $("#modal-form").validate().resetForm();
+                        $('#form-button').html('Guardar');
+                        $('#fieldset-permisos').hide();
+                        $('#permisos-table').DataTable().ajax.reload(null, false);
+                        $('#usercopy_id').val('');
+                        MansfieldRep.notification('Permisos copiados con exito', 'MansfieldRep', 'success');
+                    }
+                });
+            }            
+        });
+        /* FORM BUTTON */
+    </script>
 @stop
 
 @section('content')
     <div class="row" style="justify-content: center; overflow:auto;">
         <div class="generic-card">
             <div class="card">
-                <div class="generic-body">  
-                    <div class="row m-3">
-                        <select name="select2" id="select2" class="form-control select2 mr-2" style="width: 50%;">
-                            {{-- <option value="0" selected="selected">Seleccione un usuario</option> --}}
-                            @foreach ($usuarios as $usuario)
-                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                            @endforeach
-                        </select>
-                        <button 
-                            type="button"
-                            class="btn btn-success" 
-                            id="btn-asignar"
-                            data-toggle="modal" 
-                            data-target="#modal-vbles"
-                        >Asignar Variables
-                        </button>
-                        <button 
-                            type="button"
-                            class="btn btn-primary ml-2" 
-                            id="btn-asignar"
-                            data-toggle="modal" 
-                            data-target="#modal-copiar"
-                        >Copiar Permisos
-                        </button>
-                    </div>
-
-                    <h6 class="m-3 mt-4">Variables con permisos de edición para el usuario:</h6>
-
+                <div class="generic-body"> 
+                    <form action="post" id="modal-form" name="modal-form" autocomplete="off">  
+                        <div class="form-row m-3">
+                            <div class="form-group col-md-6">
+                                <select name="select2" id="select2" class="form-control select2">
+                                    <option value="" selected="selected">Seleccione un usuario</option>
+                                    @foreach ($usuarios as $usuario)
+                                        <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2" style="text-align:center;">
+                                <button type="button" class="btn btn-success" id="btn-asignar" data-toggle="modal" data-target="#modal-vbles">Asignar Variables</button>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <a href="javascript:void(0)" name="btn-asignar" id="btn-copiar" title="Copiar permisos" class="btn btn-primary">Copiar Permisos</a>
+                            </div>
+                        </div>
+                        <fieldset id="fieldset-permisos" class="form-group border p-3" style="width:70%; margin:0 auto;">
+                            <legend class="w-auto px-2">Seleccionar Usuario para transferir permisos</legend>                         
+                            <div class="form-group row">
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="usercopy_id" id="usercopy_id">
+                                        <option value="" selected disabled>Seleccione Usuario</option>
+                                        @foreach ($usuarios as $usuario)
+                                            <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                        @endforeach
+                                    </select> 
+                                </div>
+                                <div class="col-sm-2" style= "text-align:center;">
+                                    <button type="button" class="btn btn-primary" id="form-button">Aceptar</button>
+                                </div>
+                            </div>
+                        </fieldset>               
+                        @csrf
+                    </form>
                     <div class="card-body">
                         <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="permisos-table">
                             <thead>
                                 <tr>    
                                     <th>Id</th>
                                     <th>Variable</th>
-                                    <th>Descripción</th>
-                                    <th style="min-width:50px!important;"></th>            
+                                    <th>Descripción</th>           
                                 </tr>
                             </thead>      
                         </table>  
@@ -467,28 +559,24 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-head">
-                    <h5 id="modal-title">Variables</h5>
+                    <h5 id="modal-title">Asignación de Variable</h5>
                     <button type="button" class="close" id="close-modal" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row" style="justify-content: center; overflow:auto;">
-                        <table style="width:100%" class="table table-sm table-striped table-bordered table-hover datatable m-4" id="vble-table">
+                        <table style="width:100%" class="table table-sm table-striped table-bordered table-hover datatable" id="vble-table">
                             <thead>
                                 <tr>  
                                     <th>Id</th>
-                                    <th>Variable</th>
-                                    <th>Descripción</th>            
+                                    <th>Descripción</th>   
+                                    <th style="width:50px!important;"></th>          
                                 </tr>
                             </thead>      
                         </table>             
                         @csrf
                     </div> 
-                </div>
-                
-                <div class="modal-foot">
-                    <button type="button" class="btn btn-primary" id="button-table" name="button-table">Guardar Cambios</button>
                 </div>
             </div>
         </div>

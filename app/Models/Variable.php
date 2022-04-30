@@ -12,4 +12,9 @@ class Variable extends Model
     protected $guarded = [
         'id'
     ];
+
+    public function usuarios()
+    {
+        return $this->belongsToMany(User::class, 'permisos_variables','user_id','variable_id');
+    }
 }

@@ -648,18 +648,30 @@
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
-            $.get('dashboard/'+id+'/edit', function(data){
-                $('#form-button').val(0); 
-                $('#modal-title').html('Editar Registro'); 
-                $('#modal-form').trigger("reset"); 
-                $('#modal').modal('show');
-                $('#id').val(data.id);
-                $('#area').val(data.area);
-                $('#categoria').val(data.categoria);
-                $('#subcategoria').val(data.subcategoria);
-                $('#variable').val(data.variable);
-                $('#fecha').val(data.fecha);
-                $('#valor').val(data.valor);
+            var variable_id=$(this).data('vbleid');
+            console.log(id,variable_id);
+            $.get('dashboard/'+id+'/edit/'+variable_id, function(data){
+                if (data != -1)
+                {
+                    $('#form-button').val(0); 
+                    $('#modal-title').html('Editar Registro'); 
+                    $('#modal-form').trigger("reset"); 
+                    $('#modal').modal('show');
+                    $('#id').val(data.id);
+                    $('#area').val(data.area);
+                    $('#categoria').val(data.categoria);
+                    $('#subcategoria').val(data.subcategoria);
+                    $('#variable').val(data.variable);
+                    $('#fecha').val(data.fecha);
+                    $('#valor').val(data.valor);
+                }
+                else
+                {
+                    Swal.fire({
+                        title: 'No tienes los permisos necesarios',
+                        icon: 'warning',
+                    })
+                }
             })
         });      
         /* EDIT BUTTON */

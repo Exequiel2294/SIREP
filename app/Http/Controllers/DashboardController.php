@@ -18,7 +18,6 @@ class DashboardController extends Controller
     public function index(Request $request)
     { 
         return view('dashboard');
-
     }
 
     public function procesostable(Request $request)
@@ -4731,7 +4730,7 @@ class DashboardController extends Controller
                         $button = '';  
                         if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
                         }     
                         else
                         {
@@ -4745,18 +4744,30 @@ class DashboardController extends Controller
         } 
     }
 
-    public function edit($id)
-    {        
-        $where = array('data.id' => $id);
-        $generic =  DB::table('area')
-                    ->join('categoria', 'categoria.area_id', '=','area.id')
-                    ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
-                    ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
-                    ->join('data', 'data.variable_id', '=','variable.id')
+    public function edit($id, $variable_id)
+    {   
+        $where = ['user_id' => Auth::user()->id, 'variable_id' => $variable_id];    
+        $uservbles = DB::table('permisos_variables')
                     ->where($where)
-                    ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
-                    ->first();
-        return response()->json($generic);
+                    ->get();
+       if ($uservbles->count() > 0)
+       {
+            $where = array('data.id' => $id);
+            $generic =  DB::table('area')
+                        ->join('categoria', 'categoria.area_id', '=','area.id')
+                        ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
+                        ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
+                        ->join('data', 'data.variable_id', '=','variable.id')
+                        ->where($where)
+                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                        ->first();
+            
+            return response()->json($generic);
+       }
+       else
+       {
+            return response()->json(-1);
+       }
     }
 
     public function load(Request $request)
