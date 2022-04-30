@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Variable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,4 +45,9 @@ class User extends Authenticatable implements LdapAuthenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function variables()
+    {
+        return $this->belongsToMany(Variable::class, 'permisos_variables','user_id','variable_id');
+    }
 }

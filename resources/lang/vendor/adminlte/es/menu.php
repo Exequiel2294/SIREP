@@ -6,6 +6,6 @@ return [
     'area'                        => 'Area',
     'categoria'                   => 'Categoria',
     'subcategoria'                => 'Subcategoria',
-    'historial'                   => 'Historial'
-
+    'historial'                   => 'Historial',
+    'permisos'                    => 'Permisos'
 ];

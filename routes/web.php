@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
-    Route::get('dashboard/{id}/edit','DashboardController@edit')->name('dashboard.edit');
+    Route::get('dashboard/{id}/edit/{variable_id}','DashboardController@edit')->name('dashboard.edit');
     
     Route::get('historial', 'HistorialController@index')->name('historial');
 });
@@ -66,8 +66,9 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::post('variable/getsubcategoria', 'VariableController@getsubcategoria')->name('variable.getsubcategoria');
 
     Route::get('permisos', 'PermisosController@index')->name('permisos')->name('permisos');
+    Route::post('permisos/getuservbles', 'PermisosController@getuservbles')->name('permisos.getuservbles');
+    Route::post('permisos/getvariables', 'PermisosController@getvariables')->name('permisos.getvariables');
+    Route::post('permisos/check', 'PermisosController@check')->name('permisos.check');
     Route::post('permisos/load', 'PermisosController@load')->name('permisos.load');
-    Route::post('permisos/getvariables', 'PermisosController@getVariables')->name('permisos.getvariables');
-    Route::post('permisos/insertar', 'PermisosController@insertar')->name('permisos.insertar');
     //Route::get('permisos/{id}', 'PermisosController@load')->name('permisos.load');
 });

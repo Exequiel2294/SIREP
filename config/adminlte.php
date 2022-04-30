@@ -271,7 +271,7 @@ return [
                 [
                     'text' => 'permisos',
                     'url'  => 'permisos',
-                    'icon' => 'nav-icon fas fa-tag',
+                    'icon' => 'nav-icon fas fa-users-cog',
                 ],
             ],
         ],

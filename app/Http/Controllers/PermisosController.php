@@ -8,6 +8,7 @@ use App\Models\Subcategoria;
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
 use App\Permiso;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -20,14 +21,14 @@ class PermisosController extends Controller
         $this->middleware(['role:Admin']);
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $usuarios = DB::table('users')
                     ->get();
         return view('permisos',['usuarios'=>$usuarios]);
     }
 
-    public function load(Request $request)
+    public function getuservbles(Request $request)
     {
         $id = $request->post('id');
         $variables = DB::table('permisos_variables')
@@ -35,55 +36,68 @@ class PermisosController extends Controller
                     ->select('permisos_variables.variable_id as id','variable.nombre as nombre','variable.descripcion as descripcion')
                     ->where('permisos_variables.user_id','=',$id)
                     ->get();
-        //echo $id;
+
         return datatables()->of($variables)
-            ->addColumn('action', function($data)
-            {
-                $button = ''; 
-                $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
-                return $button;
-            })
-            ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
     }
 
-    public function getVariables(Request $request)
+    public function getvariables(Request $request)
     {
         $id = $request->post('id');
-        // $variables = DB::table('permisos_variables')
-        //             ->join('variable', 'permisos_variables.variable_id', '=', 'variable.id')
-        //             ->select('permisos_variables.variable_id as id','variable.nombre as nombre','variable.descripcion as descripcion')
-        //             ->where('permisos_variables.user_id','=',$id)
-        //             ->get();
-        $vbles = DB::table('permisos_variables')
-                ->from('permisos_variables')
-                ->where('user_id','=',$id)
-                ->pluck('variable_id');
+        $this->user_vbles = DB::table('permisos_variables')
+                        ->where('user_id', $id)
+                        ->pluck('variable_id')
+                        ->toArray();
         $variables = DB::table('variable')
-                        ->select('id','nombre','descripcion')
-                        ->whereNotIn('id', $vbles)
+                        ->select('id','descripcion')
+                        ->where('estado',1)
                         ->get();
-        //echo $variables;
         return datatables()->of($variables)
-            ->make(true);
+        ->addColumn('action', function($data)
+        {
+            if(in_array($data->id, $this->user_vbles))
+            {
+                $check = '<input type="checkbox" class="checkvble" data-vbleid="'.$data->id.'" name="check_vble" value=1 checked>';
+            }
+            else
+            {
+                $check = '<input type="checkbox" class="checkvble" data-vbleid="'.$data->id.'" name="check_vble" value=1>';
+            }
+            return $check;
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()
+        ->make(true);
     }
 
-    public function insertar(Request $request){
-        $id = $request->post('id');
-        $valor = $request->post('valor');
-        $tam = $request->post('tam');
-        for ($i=0; $i < $tam ; $i++) { 
-            Permiso::create(
-                [
-                    'user_id' => $id,
-                    'variable_id' => $valor[$i],
-                    'created_at' => null,
-                    'updated_at' => null,
-                ]);
+    public function check(Request $request){
+        if ($request->ajax()) {
+            $user = new User();
+            if ($request->input('estado') == 1) {
+                $user->find($request->input('user_id'))->variables()->attach($request->input('variable_id'));
+                return response()->json(['respuesta' => 'Variable asignada correctamente']);
+            } else {
+                $user->find($request->input('user_id'))->variables()->detach($request->input('variable_id'));
+                return response()->json(['respuesta' => 'Variable desasignada correctamente']);
+            }
+        } else {
+            abort(404);
         }
-        return;
-        //echo var_dump($valor);
     }
+
+    public function load(Request $request)
+    {       
+        $user_id = $request->get('user_id'); 
+        $usercopy_id = $request->get('usercopy_id');  
+        $variables = DB::table('permisos_variables')
+                    ->join('variable', 'permisos_variables.variable_id', '=', 'variable.id')
+                    ->where('permisos_variables.user_id','=',$usercopy_id)
+                    ->pluck('variable_id')
+                    ->toArray();
+        $user = User::findOrFail($user_id);
+        $user->variables()->sync($variables);
+        return;
+    } 
     
 }
