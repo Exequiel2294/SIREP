@@ -249,6 +249,124 @@
             height: 1rem;
         }
 
+        @media(min-width:400px) {
+            .user-select{
+                display: flex;
+                flex-direction: column!important;
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 1rem;
+            }
+
+            .user-select > div{
+                display: grid;
+            }
+
+            .toolbar{
+                display: none!important;
+            }
+
+            #fieldset-permisos
+            {
+                width: 90%;
+                margin: 2rem auto;
+                max-width: 968px!important;
+            }
+
+            #fieldset-permisos > legend
+            {
+                font-size: 1rem!important;
+            }
+
+            .fieldset-div
+            {
+                display: flex;
+                flex-direction: column!important;
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 1rem;
+            }
+
+            .fieldset-div > div
+            {
+                display: grid;
+                margin: .5rem 0 1rem 0;
+            }
+        }
+
+        @media(min-width:768px) {
+            .user-select{
+                justify-content: space-around!important;
+                flex-direction: row!important;
+                margin-top: 2rem;
+            }
+            .user-select > div{
+                display: flow-root!important;
+            }    
+            
+            .user-select > div:first-child{
+                flex: 0 1 50%
+            }
+
+            .toolbar{
+                display: flex!important;
+            }
+
+            #fieldset-permisos
+            {
+                width: 80%;
+            }
+
+            #fieldset-permisos > legend
+            {
+                font-size: 1rem!important;
+            }
+
+            .fieldset-div
+            {
+                justify-content: space-around!important;
+                flex-direction: row!important;
+                padding-bottom: .75rem;
+            }
+
+            .fieldset-div > div{
+                display: flow-root!important;
+            }
+
+            .fieldset-div > div:first-child{
+                flex:0 1 80%;
+            }
+
+            .user-select{
+                margin-top: 2.5rem!important;
+                margin-bottom: 2rem!important;
+            }
+        }
+
+        @media(min-width:1100px) {
+            #fieldset-permisos > legend
+            {
+                font-size: 1.1rem!important;
+            }
+
+            .toolbar
+            {
+                font-size: 1.1rem!important;
+            }
+        }
+
+        @media(min-width:960px) {
+            .user-select{
+                justify-content: flex-start!important;
+                margin-bottom: 1rem;
+                width: 98%;
+            }
+            .user-select  div{
+                margin: 0 .5rem 0 .5rem;
+            }
+        }
+
+
     </style> 
 @stop
 
@@ -287,7 +405,7 @@
             $('#fieldset-permisos').hide(); 
             /* DATATABLES PERMISOS DEL USUARIO*/          
             var dt =  $("#permisos-table").DataTable({              
-                dom:    "<'row data-search'<'col-sm-6 toolbar'><'col-sm-6'f>>" +
+                dom:    "<'row data-search'<'col-md-6 toolbar'><'col-md-6'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row data-buttons'<'col-sm-12'p>>",            
                 lengthMenu: [[10, 25], [10, 25]],
@@ -373,8 +491,7 @@
                         className: 'dt-body-center',
                         width: 50
                     }
-                ],
-                order: [1, 'asc']           
+                ]          
             }); 
         });
 
@@ -485,6 +602,7 @@
                         $('#form-button').html('Guardar');
                         $('#fieldset-permisos').hide();
                         $('#permisos-table').DataTable().ajax.reload(null, false);
+                        $('#vble-table').DataTable().ajax.reload(null, false);
                         $('#usercopy_id').val('');
                         MansfieldRep.notification('Permisos copiados con exito', 'MansfieldRep', 'success');
                     }
@@ -501,8 +619,8 @@
             <div class="card">
                 <div class="generic-body"> 
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">  
-                        <div class="form-row m-3">
-                            <div class="form-group col-md-6">
+                        <div class="user-select">
+                            <div class="form-group">
                                 <select name="select2" id="select2" class="form-control select2">
                                     <option value="" selected="selected">Seleccione un usuario</option>
                                     @foreach ($usuarios as $usuario)
@@ -510,17 +628,17 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-2" style="text-align:center;">
+                            <div class="form-group">
                                 <button type="button" class="btn btn-success" id="btn-asignar" data-toggle="modal" data-target="#modal-vbles">Asignar Variables</button>
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group">
                                 <a href="javascript:void(0)" name="btn-asignar" id="btn-copiar" title="Copiar permisos" class="btn btn-primary">Copiar Permisos</a>
                             </div>
                         </div>
-                        <fieldset id="fieldset-permisos" class="form-group border p-3" style="width:70%; margin:0 auto;">
+                        <fieldset id="fieldset-permisos" class="form-group border">
                             <legend class="w-auto px-2">Seleccionar Usuario para transferir permisos</legend>                         
-                            <div class="form-group row">
-                                <div class="col-sm-10">
+                            <div class="form-group row fieldset-div">
+                                <div class="form-group">
                                     <select class="form-control" name="usercopy_id" id="usercopy_id">
                                         <option value="" selected disabled>Seleccione Usuario</option>
                                         @foreach ($usuarios as $usuario)
@@ -528,7 +646,7 @@
                                         @endforeach
                                     </select> 
                                 </div>
-                                <div class="col-sm-2" style= "text-align:center;">
+                                <div>
                                     <button type="button" class="btn btn-primary" id="form-button">Aceptar</button>
                                 </div>
                             </div>

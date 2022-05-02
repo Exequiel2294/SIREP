@@ -52,6 +52,7 @@ class PermisosController extends Controller
         $variables = DB::table('variable')
                         ->select('id','descripcion')
                         ->where('estado',1)
+                        ->orderBy('orden','asc')
                         ->get();
         return datatables()->of($variables)
         ->addColumn('action', function($data)
