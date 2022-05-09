@@ -21,13 +21,13 @@ class DashboardController extends Controller
     }
 
     public function procesostable(Request $request)
-    {
+    {        
         if(request()->ajax()) {
             $this->date = $request->get('fecha');
             $this->pparray = 
-            [10004, 10010, 10012, 10015, 10016, 10018, 10024, 10030, 10033, 10035, 10036, 
+            [10004, 10010, 10012, 10015,10016, 10018, 10024, 10030, 10033, 10035, 10036, 
              10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
-             10056, 10057, 10058];
+             10056, 10057, 10058];//se coloca 10015 en pparray por el budget
             $this->sumarray = 
             [10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 
              10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 
@@ -36,432 +36,436 @@ class DashboardController extends Controller
              [10003, 10007, 10009, 10014, 10017, 10021, 10026, 10029, 10034];
             $this->divarray = 
               [10006, 10013, 10020, 10032];
-            //MES REAL
-            $this->summesreal10005 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10005
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10011 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10011
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesreal10019 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10019
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesreal10039 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10039
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10045 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10045
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10052 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10052
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10061 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10061
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            //MES BUDGET
-            $this->summesbudget10005 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10005
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesbudget10011 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10011
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesbudget10019 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10019
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10039 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10039
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10045 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10045
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10052 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10052
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10061 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10061
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            //Trimestre Real
-            $this->sumtrireal10005 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10005
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtrireal10011 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10011
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtrireal10019 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10019
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtrireal10039 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10039
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtrireal10045 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10045
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtrireal10052 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10052
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtrireal10061 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10061
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            //Trimestre Budget
-            $this->sumtribudget10005 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10005
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtribudget10011 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10011
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtribudget10019 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10019
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtribudget10039 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10039
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtribudget10045 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10045
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtribudget10052 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10052
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtribudget10061 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10061
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            //Anio Real
-            $this->sumanioreal10005 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10005
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioreal10011 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10011
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioreal10019 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10019
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioreal10039 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10039
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumanioreal10045 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10045
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumanioreal10052 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10052
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumanioreal10061 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[data]
-                WHERE variable_id = 10061
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            //Anio Budget
-            $this->sumaniobudget10005 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10005
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumaniobudget10011 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10011
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumaniobudget10019 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10019
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10039 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10039
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10045 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10045
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10052 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10052
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10061 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield].[dbo].[budget]
-                WHERE variable_id = 10061
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
+
+            //INICIO CALCULOS REUTILIZABLES
+                //MES REAL
+                $this->summesreal10005 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10005
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10011 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10011
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesreal10019 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10019
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesreal10039 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10039
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10045 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10045
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10052 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10052
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10061 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10061
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                //MES BUDGET
+                $this->summesbudget10005 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10005
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesbudget10011 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10011
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesbudget10019 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10019
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10039 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10039
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10045 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10045
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10052 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10052
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10061 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10061
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                //Trimestre Real
+                $this->sumtrireal10005 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10005
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtrireal10011 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10011
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtrireal10019 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10019
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtrireal10039 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10039
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtrireal10045 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10045
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtrireal10052 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10052
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtrireal10061 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10061
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                //Trimestre Budget
+                $this->sumtribudget10005 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10005
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtribudget10011 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10011
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtribudget10019 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10019
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtribudget10039 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10039
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtribudget10045 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10045
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtribudget10052 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10052
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtribudget10061 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10061
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                //Anio Real
+                $this->sumanioreal10005 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10005
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumanioreal10011 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10011
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumanioreal10019 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10019
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumanioreal10039 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10039
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumanioreal10045 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10045
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumanioreal10052 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10052
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumanioreal10061 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[data]
+                    WHERE variable_id = 10061
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                //Anio Budget
+                $this->sumaniobudget10005 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10005
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumaniobudget10011 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10011
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumaniobudget10019 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10019
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10039 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10039
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10045 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10045
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10052 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10052
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10061 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [mansfield2].[dbo].[budget]
+                    WHERE variable_id = 10061
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+            //FIN CALCULOS REUTILIZABLES
+            
             $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];
             $table = DB::table('data')
                             ->join('variable','data.variable_id','=','variable.id')
@@ -500,10 +504,239 @@ class DashboardController extends Controller
                         return '<span style="visibility: hidden">'.$data->subcat_orden.'</span>'.$data->subcat;
                     })
                     ->addColumn('dia_real', function($data)
-                    {         
-                        if(isset($data->dia_real)) 
-                        {            
-                            $d_real = $data->dia_real;
+                    {        
+                        switch($data->variable_id)
+                        {                    
+                            case 10002:
+                                //MMSA_TP_Au Triturado oz                  
+                                //((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10005) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10004) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;
+                            case 10006:
+                                //MMSA_TP_Productividad t/h
+                                //(10005 MMSA_TP_Mineral Triturado t)/ (10062 MMSA_TP_Horas Operativas Trituración Primaria h)                                    
+                                $d_real = 
+                                DB::select(
+                                    'SELECT A.valor/B.valor as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10005) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10062) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                   
+                            case 10008:
+                                //MMSA_TP_Au Triturado oz                  
+                                //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10011) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10010) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;
+                            case 10013:
+                                //MMSA_TP_Productividad t/h
+                                //(10011 MMSA_TP_Mineral Triturado t)/ (10063 Horas Operativas Trituración Terciaria h)                                    
+                                $d_real = 
+                                DB::select(
+                                    'SELECT A.valor/B.valor as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10011) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10063) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;
+                            case 10015:
+                                //MMSA_AGLOM_Adición de Cemento kg/t
+                                //((10067 MMSA_AGLOM_Cemento) * 1000) / (10019 MMSA_AGLOM_Mineral Aglomerado)                              
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * 1000) / B.valor as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10067) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10019) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;
+                            case 10020:
+                                //10020 MMSA_AGLOM_Productividad t/h
+                                //(10019 MMSA_AGLOM_Mineral Aglomerado t)/ (10064 MMSA_AGLOM_Horas Operativas Aglomeración)                                    
+                                $d_real = 
+                                DB::select(
+                                    'SELECT A.valor/B.valor as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10019) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10064) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                   
+                            case 10022:
+                                //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
+                                //(((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10026) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10025) as B
+                                    ON A.fecha = B.fecha
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10024) as C
+                                    ON A.fecha = C.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                
+                            case 10023:
+                                //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
+                                //((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10025) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10024) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                  
+                            case 10027:
+                                //MMSA_APILAM_STACKER_Au Apilado Stacker (oz)                  
+                                //((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker (t))*(10030 MMSA_APILAM_STACKER_Ley Au (g/t)) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10031) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10030) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                   
+                            case 10028:
+                                //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10033) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10031) as B
+                                    ON A.fecha = B.fecha
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10030) as C
+                                    ON A.fecha = C.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;
+                            case 10032:
+                                //10032 MMSA_APILAM_STACKER_Productividad t/h
+                                //(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ (10065 MMSA_APILAM_STACKER_Tiempo Operativo)                                    
+                                $d_real = 
+                                DB::select(
+                                    'SELECT A.valor/B.valor as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10031) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10065) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break; 
+                            default:                        
+                                if(isset($data->dia_real)) 
+                                { 
+                                    $d_real = $data->dia_real;
+                                    if($d_real > 100)
+                                    {
+                                        return number_format(round($d_real), 0, '.', ',');
+                                    }
+                                    else
+                                    {
+                                        return number_format($d_real, 2, '.', ',');
+                                    }
+                                }        
+                                else
+                                {
+                                    return '-';
+                                }                                       
+                            break; 
+                        } 
+                        if(isset($d_real[0]->dia_real)) 
+                        { 
+                            $d_real = $d_real[0]->dia_real;
                             if($d_real > 100)
                             {
                                 return number_format(round($d_real), 0, '.', ',');
@@ -512,11 +745,12 @@ class DashboardController extends Controller
                             {
                                 return number_format($d_real, 2, '.', ',');
                             }
-                        }
+                        }        
                         else
                         {
                             return '-';
-                        }
+                        }                                           
+
                     })
                     ->addColumn('dia_budget', function($data)
                     {           
@@ -550,11 +784,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10004) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10005) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -571,11 +805,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10010) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -591,11 +825,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10012) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -605,25 +839,19 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->summesreal10011;
                                 break;
-                                case 10015:                                         
-                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
-                                    //Promedio Ponderado Mensual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                      
-                                    $sumaproducto= DB::select(
-                                        'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10015) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10019) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE MONTH(A.fecha) =  ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY MONTH(A.fecha)', 
+                                case 10015:                                       
+                                    //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
+                                    //(sumatoria.mensual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.mesual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
+                                    $sumaproducto = DB::select(
+                                        'SELECT MONTH(fecha) as month, SUM(valor) * 1000 as suma
+                                        FROM [mansfield2].[dbo].[data]
+                                        WHERE variable_id = 10067
+                                        AND  MONTH(fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        GROUP BY MONTH(fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
-                                    $suma = $this->summesreal10019;
+                                    $suma= $this->summesreal10019; 
                                 break;
                                 case 10016:                                         
                                     //10016 MMSA_AGLOM_Adición de CN ppm
@@ -631,11 +859,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10016) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10066) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -645,7 +873,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10066
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -659,11 +887,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10018) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -679,11 +907,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10024) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -693,7 +921,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10025
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -707,11 +935,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -727,11 +955,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -747,11 +975,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -767,11 +995,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10040) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -787,11 +1015,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10041) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -807,11 +1035,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10042) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -827,11 +1055,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10043) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -847,11 +1075,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10044) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -867,11 +1095,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10049) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -887,11 +1115,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10050) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -907,11 +1135,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10051) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -927,11 +1155,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10054) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -947,11 +1175,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10055) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10059) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -961,7 +1189,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10059
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -975,11 +1203,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10056) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10060) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -989,7 +1217,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10060
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1003,11 +1231,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10057) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1023,11 +1251,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10058) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1066,15 +1294,150 @@ class DashboardController extends Controller
                         {
                             if (in_array($data->variable_id, $this->sumarray))
                             {
-                                $mes_real= DB::select(
-                                    'SELECT MONTH(fecha) as month, SUM(valor) as mes_real
-                                    FROM [mansfield].[dbo].[data]
-                                    WHERE variable_id = ?
-                                    AND  MONTH(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY MONTH(fecha)', 
-                                    [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );
+                                switch($data->variable_id)
+                                { 
+                                    case 10002:
+                                        //10002: MMSA_TP_Au Triturado                  
+                                        //SUMATORIA MENSUAL(((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035)                                     
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10005) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10004) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;
+                                    case 10008:
+                                        //10008: MMSA_TP_Au Triturado                  
+                                        //SUMATORIA MENSUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                     
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10011) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10010) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;                   
+                                    case 10022:
+                                        //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
+                                        //SUMAMENSUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10026) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10025) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10024) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;               
+                                    case 10023:
+                                        //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
+                                        //SUMAMENSUAL(((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035)                                    
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10025) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10024) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;  
+                                    case 10027:
+                                        //10027: MMSA_APILAM_STACKER_Au Apilado Stacker (oz)                  
+                                        //SUMATORIA MENSUAL(((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)*(10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                                     
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10031) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10030) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;
+                                    case 10028:
+                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                        //SUMAMENSUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)* 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10033) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10031) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10030) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;
+                                    default:
+                                        $mes_real= DB::select(
+                                            'SELECT MONTH(fecha) as month, SUM(valor) as mes_real
+                                            FROM [mansfield2].[dbo].[data]
+                                            WHERE variable_id = ?
+                                            AND  MONTH(fecha) = ?
+                                            AND  DATEPART(y, fecha) <= ?
+                                            GROUP BY MONTH(fecha)', 
+                                            [$data->variable_id, date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        );                               
+                                    break; 
+                                }
                                 if(isset($mes_real[0]->mes_real))
                                 {
                                     $m_real = $mes_real[0]->mes_real;
@@ -1099,7 +1462,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $mes_real= DB::select(
                                         'SELECT MONTH(fecha) as month, AVG(valor) as mes_real
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = ?
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1130,14 +1493,14 @@ class DashboardController extends Controller
                                     if (in_array($data->variable_id, $this->divarray))
                                     {
                                         switch($data->variable_id)
-                                        {
+                                        { 
                                             case 10006:                                       
                                                 //10006	MMSA_TP_Productividad t/h                    
                                                 //sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.mesual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
                                                 $suma= $this->summesreal10005;                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10062
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1151,7 +1514,7 @@ class DashboardController extends Controller
                                                 $suma= $this->summesreal10011;                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10063
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1165,7 +1528,7 @@ class DashboardController extends Controller
                                                 $suma= $this->summesreal10019;                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10064
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1178,7 +1541,7 @@ class DashboardController extends Controller
                                                 //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                 $suma= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10031
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1187,7 +1550,7 @@ class DashboardController extends Controller
                                                 );                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10065
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1241,11 +1604,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10004) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10005) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1255,7 +1618,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10005
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1270,11 +1633,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10010) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1290,11 +1653,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10012) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1310,11 +1673,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10015) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1327,7 +1690,7 @@ class DashboardController extends Controller
                                 case 10016:
                                     $mes_budget= DB::select(
                                         'SELECT MONTH(fecha) as month, AVG(valor) as mes_budget
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = ?
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1358,11 +1721,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10018) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1378,11 +1741,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10024) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1392,7 +1755,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10025
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1406,11 +1769,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1426,11 +1789,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1446,11 +1809,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1466,11 +1829,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10040) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1486,11 +1849,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10041) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1506,11 +1869,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10042) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1526,11 +1889,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10043) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1546,11 +1909,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10044) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1566,11 +1929,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10049) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1586,11 +1949,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10050) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1606,11 +1969,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10051) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1626,11 +1989,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10054) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1646,11 +2009,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10055) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10059) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1660,7 +2023,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10059
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1674,11 +2037,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10056) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10060) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1688,7 +2051,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10060
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1702,11 +2065,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10057) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1722,11 +2085,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10058) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1767,7 +2130,7 @@ class DashboardController extends Controller
                             {
                                 $mes_budget= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as mes_budget
-                                    FROM [mansfield].[dbo].[budget]
+                                    FROM [mansfield2].[dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1798,7 +2161,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $mes_budget= DB::select(
                                         'SELECT MONTH(fecha) as month, AVG(valor) as mes_budget
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = ?
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1836,7 +2199,7 @@ class DashboardController extends Controller
                                                 $suma= $this->summesbudget10005;                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10062
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1850,7 +2213,7 @@ class DashboardController extends Controller
                                                 $suma= $this->summesbudget10011;                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10063
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1864,7 +2227,7 @@ class DashboardController extends Controller
                                                 $suma= $this->summesbudget10019;                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10064
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1877,7 +2240,7 @@ class DashboardController extends Controller
                                                 //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                 $suma= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10031
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1886,7 +2249,7 @@ class DashboardController extends Controller
                                                 );                                     
                                                 $suma2= DB::select(
                                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10065
                                                     AND  MONTH(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -1940,11 +2303,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10004) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10005) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -1954,7 +2317,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10005
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1969,11 +2332,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10010) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -1989,11 +2352,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10012) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2003,25 +2366,19 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->sumtrireal10011;
                                 break;
-                                case 10015:                                         
-                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
-                                    //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                case 10015:                                       
+                                    //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
+                                    //(sumatoria.trimestral(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                     $sumaproducto= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10015) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10019) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) * 1000 as suma
+                                        FROM [mansfield2].[dbo].[data]
+                                        WHERE variable_id = 10067
+                                        AND  DATEPART(QUARTER, fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        GROUP BY DATEPART(QUARTER, fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
-                                    $suma = $this->sumtrireal10019;
+                                    );                                    
+                                    $suma= $this->sumtrireal10019; 
                                 break;
                                 case 10016:                                       
                                     //10016 MMSA_AGLOM_Adición de CN ppm                    
@@ -2029,11 +2386,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10016) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10066) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2043,7 +2400,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10066
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2057,11 +2414,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10018) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2077,11 +2434,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10024) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2091,7 +2448,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10025
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2105,11 +2462,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2125,11 +2482,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2145,11 +2502,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2165,11 +2522,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10040) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2185,11 +2542,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10041) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2205,11 +2562,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10042) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2225,11 +2582,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10043) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2245,11 +2602,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10044) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2265,11 +2622,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10049) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2285,11 +2642,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10050) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2305,11 +2662,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10051) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2325,11 +2682,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10054) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2345,11 +2702,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10055) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10059) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2359,7 +2716,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10059
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2373,11 +2730,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10056) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10060) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2387,7 +2744,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10060
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2401,11 +2758,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10057) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2421,11 +2778,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10058) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2464,15 +2821,144 @@ class DashboardController extends Controller
                         {
                             if (in_array($data->variable_id, $this->sumarray))
                             {
-                                $trimestre_real= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
-                                    FROM [mansfield].[dbo].[data]
-                                    WHERE variable_id = ?
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );
+                                switch($data->variable_id)
+                                {
+                                    case 10002:   
+                                        //10002: MMSA_TP_Au Triturado                  
+                                        //SUMATORIA TRIMESTRAL(((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10005) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10004) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;
+                                    case 10008:   
+                                        //10008: MMSA_TP_Au Triturado                  
+                                        //SUMATORIA TRIMESTRAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10011) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10010) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;                   
+                                    case 10022:
+                                        //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
+                                        //SUMATRIMESTRAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10026) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10025) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10024) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;               
+                                    case 10023:
+                                        //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
+                                        //SUMATORIA TRIMESTRAL(((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035)                              
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10025) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10024) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break; 
+                                    case 10027:   
+                                        //10027: MMSA_APILAM_STACKER_Au Apilado Stacker oz                  
+                                        //SUMATORIA TRIMESTRAL(((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker T)*(10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                                 
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10031) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10030) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;
+                                    case 10028:
+                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                        //SUMATRIMESTRAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10033) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10031) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10030) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;
+                                    default:
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
+                                            FROM [mansfield2].[dbo].[data]
+                                            WHERE variable_id = ?
+                                            AND  DATEPART(QUARTER, fecha) = ?
+                                            AND  DATEPART(y, fecha) <= ?
+                                            GROUP BY DATEPART(QUARTER, fecha)', 
+                                            [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;
+                                }
                                 if(isset($trimestre_real[0]->trimestre_real))
                                 {
                                     $t_real = $trimestre_real[0]->trimestre_real;
@@ -2497,7 +2983,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_real
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = ?
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2535,7 +3021,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumtrireal10005;                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10062
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -2549,7 +3035,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumtrireal10011;                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10063
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -2563,7 +3049,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumtrireal10019;                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10064
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -2576,7 +3062,7 @@ class DashboardController extends Controller
                                                 //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                 $suma= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10031
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -2585,7 +3071,7 @@ class DashboardController extends Controller
                                                 );                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10065
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -2639,11 +3125,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10004) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10005) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2653,7 +3139,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10005
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2668,11 +3154,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10010) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2688,11 +3174,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10012) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2708,11 +3194,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10015) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2726,7 +3212,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $trimestre_budget= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = ?
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2757,11 +3243,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10018) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2777,11 +3263,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10024) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2791,7 +3277,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10025
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -2805,11 +3291,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2825,11 +3311,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2845,11 +3331,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2865,11 +3351,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10040) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2885,11 +3371,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10041) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2905,11 +3391,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10042) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2925,11 +3411,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10043) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2945,11 +3431,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10044) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2965,11 +3451,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10049) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2985,11 +3471,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10050) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3005,11 +3491,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10051) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3025,11 +3511,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10054) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3045,11 +3531,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10055) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10059) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3059,7 +3545,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10059
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3073,11 +3559,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10056) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10060) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3087,7 +3573,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10060
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3101,11 +3587,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10057) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3121,11 +3607,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10058) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3166,7 +3652,7 @@ class DashboardController extends Controller
                             {
                                 $trimestre_budget= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
-                                    FROM [mansfield].[dbo].[budget]
+                                    FROM [mansfield2].[dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3197,7 +3683,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $trimestre_budget= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = ?
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3235,7 +3721,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumtribudget10005;                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10062
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3249,7 +3735,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumtribudget10011;                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10063
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3263,7 +3749,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumtribudget10019;                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10064
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3276,7 +3762,7 @@ class DashboardController extends Controller
                                                 //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                 $suma= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10031
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3285,7 +3771,7 @@ class DashboardController extends Controller
                                                 );                                     
                                                 $suma2= DB::select(
                                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10065
                                                     AND  DATEPART(QUARTER, fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3327,7 +3813,7 @@ class DashboardController extends Controller
                         } 
                     })
                     ->addColumn('anio_real', function($data)
-                    {         
+                    {          
                         if (in_array($data->variable_id, $this->pparray))
                         {
                             switch($data->variable_id)
@@ -3339,11 +3825,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10004) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10005) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3353,7 +3839,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10005
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3368,11 +3854,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10010) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3388,11 +3874,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10012) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3402,25 +3888,19 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma = $this->sumanioreal10011;
                                 break;
-                                case 10015:                                         
-                                    //10015 MMSA_AGLOM_Adición de Cemento kg/t
-                                    //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
+                                case 10015:                                       
+                                    //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
+                                    //(sumatoria.anual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                     $sumaproducto= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10015) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
-                                        where variable_id = 10019) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
+                                        'SELECT YEAR(fecha) as year, SUM(valor) * 1000 as suma
+                                        FROM [mansfield2].[dbo].[data]
+                                        WHERE variable_id = 10067
+                                        AND  YEAR(fecha) = ?
+                                        AND  DATEPART(y, fecha) <= ?
+                                        GROUP BY YEAR(fecha)', 
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
-                                    $suma = $this->sumanioreal10019;
+                                    );                                    
+                                    $suma= $this->sumanioreal10019; 
                                 break;
                                 case 10016:                                       
                                     //10016 MMSA_AGLOM_Adición de CN ppm 
@@ -3428,11 +3908,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10016) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10066) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3442,7 +3922,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10066
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3456,11 +3936,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10018) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3476,11 +3956,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10024) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3490,7 +3970,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10025
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3504,11 +3984,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3524,11 +4004,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3544,11 +4024,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3564,11 +4044,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10040) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3584,11 +4064,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10041) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3604,11 +4084,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10042) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3624,11 +4104,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10043) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3644,11 +4124,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10044) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3664,11 +4144,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10049) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3684,11 +4164,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10050) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3704,11 +4184,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10051) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3724,11 +4204,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10054) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3744,11 +4224,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10055) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10059) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3758,7 +4238,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10059
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3772,11 +4252,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10056) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10060) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3786,7 +4266,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10060
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3800,11 +4280,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10057) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3820,11 +4300,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10058) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -3862,16 +4342,145 @@ class DashboardController extends Controller
                         else
                         {
                             if (in_array($data->variable_id, $this->sumarray))
-                            {
-                                $anio_real= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
-                                    FROM [mansfield].[dbo].[data]
-                                    WHERE variable_id = ?
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );
+                            {                                
+                                switch($data->variable_id)
+                                {
+                                    case 10002:   
+                                        //10002: MMSA_TP_Au Triturado                  
+                                        //SUMATORIA ANUAL(((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035)    
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10005) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10004) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;
+                                    case 10008:   
+                                        //10008: MMSA_TP_Au Triturado                  
+                                        //SUMATORIA ANUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)    
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10011) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10010) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;                 
+                                    case 10022:
+                                        //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
+                                        //SUMAANUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)     
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10026) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10025) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10024) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;             
+                                    case 10023:
+                                        //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
+                                        //SUMATORIA ANUAL(((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035)     
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10025) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10024) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break; 
+                                    case 10027:   
+                                        //10027: MMSA_APILAM_STACKER_Au Apilado Stacker oz                  
+                                        //SUMATORIA ANUAL(((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)*(10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)    
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10031) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10030) as B
+                                            ON A.fecha = B.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;
+                                    case 10028:   
+                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                        //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10033) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10031) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10030) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;
+                                    default:
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
+                                            FROM [mansfield2].[dbo].[data]
+                                            WHERE variable_id = ?
+                                            AND  YEAR(fecha) = ?
+                                            AND  DATEPART(y, fecha) <= ?
+                                            GROUP BY YEAR(fecha)', 
+                                            [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;
+                                }
                                 if(isset($anio_real[0]->anio_real))
                                 {
                                     $a_real = $anio_real[0]->anio_real;
@@ -3896,7 +4505,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $anio_real= DB::select(
                                         'SELECT YEAR(fecha) as year, AVG(valor) as anio_real
-                                        FROM [mansfield].[dbo].[data]
+                                        FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = ?
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3934,7 +4543,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumanioreal10005;                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10062
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3948,7 +4557,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumanioreal10011;                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10063
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3962,7 +4571,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumanioreal10019;                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10064
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3975,7 +4584,7 @@ class DashboardController extends Controller
                                                 //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                 $suma= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10031
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -3984,7 +4593,7 @@ class DashboardController extends Controller
                                                 );                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[data]
+                                                    FROM [mansfield2].[dbo].[data]
                                                     WHERE variable_id = 10065
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -4038,11 +4647,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10004) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10005) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4052,7 +4661,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10005
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4067,11 +4676,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10010) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4087,11 +4696,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10012) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4107,11 +4716,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10015) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4125,7 +4734,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $anio_budget= DB::select(
                                         'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = ?
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4156,11 +4765,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10018) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10019) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4176,11 +4785,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10024) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4190,7 +4799,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10025
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4204,11 +4813,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10011) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4224,11 +4833,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4244,11 +4853,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4264,11 +4873,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10040) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4284,11 +4893,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10041) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4304,11 +4913,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10042) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4324,11 +4933,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10043) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4344,11 +4953,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10044) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10045) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4364,11 +4973,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10049) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4384,11 +4993,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10050) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4404,11 +5013,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10051) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10052) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4424,11 +5033,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10054) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4444,11 +5053,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10055) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10059) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4458,7 +5067,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10059
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4472,11 +5081,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10056) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10060) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4486,7 +5095,7 @@ class DashboardController extends Controller
                                     );                                     
                                     $suma= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = 10060
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4500,11 +5109,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10057) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4520,11 +5129,11 @@ class DashboardController extends Controller
                                     $sumaproducto= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10058) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         where variable_id = 10061) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4565,7 +5174,7 @@ class DashboardController extends Controller
                             {
                                 $anio_budget= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
-                                    FROM [mansfield].[dbo].[budget]
+                                    FROM [mansfield2].[dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4596,7 +5205,7 @@ class DashboardController extends Controller
                                     //Promedio valores <>0
                                     $anio_budget= DB::select(
                                         'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
-                                        FROM [mansfield].[dbo].[budget]
+                                        FROM [mansfield2].[dbo].[budget]
                                         WHERE variable_id = ?
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4634,7 +5243,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumaniobudget10005;                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10062
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -4648,7 +5257,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumaniobudget10011;                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10063
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -4662,7 +5271,7 @@ class DashboardController extends Controller
                                                 $suma= $this->sumaniobudget10019;                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10064
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -4675,7 +5284,7 @@ class DashboardController extends Controller
                                                 //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                 $suma= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10031
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
@@ -4684,7 +5293,7 @@ class DashboardController extends Controller
                                                 );                                     
                                                 $suma2= DB::select(
                                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                    FROM [mansfield].[dbo].[budget]
+                                                    FROM [mansfield2].[dbo].[budget]
                                                     WHERE variable_id = 10065
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
