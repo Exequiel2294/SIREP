@@ -1,0 +1,212 @@
+
+TRITURACION PRIMARIA Y SECUNDARIA
+
+    (L)10005: Mineral Triturado - MMSA_TP_Mineral Triturado (t): 
+        Ruta modificada: Se copia ruta de Metalurgia.TPyS.Mineral húmedo día (t)
+        Se obtiene el valor ya calculado
+
+    (L)10004: Ley Au - MMSA_TP_Ley Au (g/t): 
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.TPyS.Ley Au (ppm)
+
+    (L)10002: Au Triturado - MMSA_TP_Au Triturado (oz):
+        Calculo: (Mineral Triturado * Ley Au)/31.1035
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10006: Productividad - MMSA_TP_Productividad (t/h):
+        Calculo: (Mineral triturado/ Horas Operativas Trituración Primaria)
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10003: Disponibilidad - MMSA_TP_Disponibilidad (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.TPyS.Disponibilidad
+
+    (L)10007: Utilización - MMSA_TP_Utilización (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.TPyS.Utilizacion
+
+    (L)10062: MMSA_TP_Horas Operativas Trituración Primaria
+        Ruta modificada: Se copia ruta de Reporte Comparativo.TS Horas Operativas (h)
+        Se obtiene el valor ya calculado 
+
+
+HPGR 
+
+    (L)10008: Au Triturado - MMSA_HPGR_Au Triturado (oz):
+        Calculo: (Mineral Triturado * Ley Au)/31.1035
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10009: Disponibilidad - MMSA_HPGR_Disponibilidad (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.HPGR.Disponibilidad
+
+    (L)10010: Ley Au - MMSA_HPGR_Ley Au (g/t):
+        Carga Manual
+        Ruta modificada: Se copia ruta de Reporte Comparativo.16.HPGR.Ley de mineral.Au (g/t)
+
+    (L)10011: Mineral Triturado - MMSA_HPGR_Mineral Triturado (t):
+        Ruta modificada: Se copia ruta de Metalurgia.HPGR.Mineral húmedo día (t)
+
+    (L)10012: P80 - MMSA_HPGR_P80 (mm):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.HPGR.P80
+
+    (L)10013: Productividad - MMSA_HPGR_Productividad (t/h):
+        Calculo: (Mineral triturado/ Horas Operativas Trituración Terciaria)
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10014: Utilización - MMSA_HPGR_Utilización (%):
+        Ruta modificada: Se copia valor de Metalurgia.HPGR.Utilizacion
+
+    (L)10063: Horas Operativas Trituración Terciaria - MMSA_HPGR_Horas Operativas Trituración Terciaria
+        Ruta modificada: Se copia ruta de Reporte Comparativo.HPGR Horas Operativas (h)
+        Se obtiene el valor ya calculado 
+
+
+AGLOMERACION
+
+    (L)10067: Cemento - MMSA_AGLOM_Cemento
+        Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Cemento
+
+    (L)10015: Adición de Cemento - MMSA_AGLOM_Adición de Cemento (kg/t):
+        Calculo
+        (Cemento * 1000)/Mineral Aglomerado
+        De ser asi se tendra que cargar un nuevo tag para cemento, y tag Adicion de Cemento quedara sin uso.
+
+    (C)10016: Adición de CN - MMSA_AGLOM_Adición de CN (ppm):
+        Ruta modificada: Se copia valor de Reporte Comparativo.35.Aglomeración.Solución cianurada.CN  (ppm)
+
+    (L)10017: Disponibilidad - MMSA_AGLOM_Disponibilidad (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Disponibilidad
+
+    (L)10018: Humedad - MMSA_AGLOM_Humedad (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Humedad
+
+    (L)10019: Mineral Aglomerado - MMSA_AGLOM_Mineral Aglomerado (t):
+        Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Mineral humedo día
+
+    (L)10020: Productividad - MMSA_AGLOM_Productividad (t/h):
+        Calculo
+        Mineral Aglomerado/Horas Operativas Aglomeración
+
+    (L)10021: Utilización - MMSA_AGLOM_Utilización (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Utilizacion
+
+    (L)10066: Flujo - MMSA_AGLOM_Flujo:
+        Ruta modificada: Se copia valor de Reporte Comparativo.34.Aglomeración.Solución cianurada.Flujo (m3/h)
+
+    (L)10064: Horas Operativas Aglomeración - MMSA_AGLOM_Horas Operativas Aglomeración:
+        Necesario para calcular Productividad.
+        Ruta modificada: Se copia ruta de Reporte Comparativo.Aglomeracion Horas Operativas (h)
+        Se obtiene el valor ya calculado 
+
+
+
+APILAMIENTO - STACKER
+
+    (C)10027: Au Apilado Stacker - MMSA_APILAM_STACKER_Au Apilado Stacker (oz):
+        Calculo: (Mineral Apilado Stacker * Ley Au)/31.1035
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (C)10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker:
+        Calculo: ((Recuperacion/100) * Mineral Apilado Stacker * Ley Au) / 31.1035
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10029: Disponibilidad - MMSA_APILAM_STACKER_Disponibilidad %:
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.Apilamiento.Stacking.Disponibilidad
+
+    (C)10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t):
+        Ruta modificada: Se copia valor de Reporte Comparativo.16.HPGR.Ley de mineral.Au (g/t)
+        ¿Es correcto que tenga el mismo valor que HPGR?
+        ¿Al modificar uno se debera modificar el otro, conlleva a que se modifquen varia información?
+
+    (C)10031: Mineral Apilado Stacker - MMSA_APILAM_STACKER_Mineral Apilado Stacker (t):
+        Ruta modificada: Se copia valor de Metalurgia.HPGR.Mineral humedo día (t)
+        ¿Es correcto que tenga el mismo valor que HPGR?
+        ¿Al modificar uno se debera modificar el otro, conlleva a que se modifquen varia información?
+
+    (C)10032: Productividad - MMSA_APILAM_STACKER_Productividad (t/h):
+        Calculo: Mineral Apilado Stacker/Tiempo Operativo
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10033: Recuperación - MMSA_APILAM_STACKER_Recuperación (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.Apilamiento.Stacking.Recuperacion
+
+    (L)10034: Utilización - MMSA_APILAM_STACKER_Utilización (%):
+        Carga Manual
+        Ruta modificada: Se copia valor de Metalurgia.Apilamiento.Stacking.Recuperacion
+
+    (L)10065: Tiempo Operativo - MMSA_APILAM_STACKER_Tiempo Operativo:
+        Ruta modificada: Se copia valor de Reporte Comparativo.41.Apilamiento.Stacking.Tiempo operativo (h)
+
+
+APILAMIENTO - PRIMARIA Y SECUNDARIA
+
+    (L)10022: Au Extraible Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz):
+        Calculo: ((Recuperacion/100) * Mineral Trituración Secundaria Apilado Camiones * Ley Au) / 31.1035
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10023: Au Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones (oz):
+        Calculo: (Mineral Trituración Secundaria Apilado Camiones * Ley Au)/31.1035
+        NO SE TENDRIA QUE PODER MODIFICAR
+
+    (L)10024: Ley Au - MMSA_APILAM_PYS_Ley Au (g/t):
+        Ruta modificada: Se copia valor de Reporte Comparativo.43.Apilamiento.Camiones.Ley (t)
+
+    (L)10025: Mineral Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones (t):
+        Ruta modificada: Se copia valor de Reporte Comparativo.42.Apilamiento.Camiones.Tonelaje Día
+
+    (L)10026: Recuperación - MMSA_APILAM_PYS_Recuperación (%):
+        Ruta modificada: Se copia valor de Reporte Comparativo.44.Apilamiento.Camiones.Recuperación (%)
+
+------------------------------------------------------------
+
+APILAMIENTO - TOTAL APILAMIENTO
+
+    10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t):
+
+    10036: Recuperación - MMSA_APILAM_TA_Recuperación (%):
+
+    10037: Total Au Apilado - MMSA_APILAM_TA_Total Au Apilado (oz):
+
+    10038: Total Au Extraible Apilado - MMSA_APILAM_TA_Total Au Extraible Apilado (oz):
+
+    10039: Total Mineral Apilado - MMSA_APILAM_TA_Total Mineral Apilado (t):
+
+
+LIXIVIACION
+
+10053: Au Lixiviado - MMSA_LIXI_Au Lixiviado (oz):
+        Ruta modificada: Se copia valor de Reporte Comparativo.51.Lixiviación.Oz Au lixiviadas.
+
+10054: CN Solución PLS - MMSA_LIXI_CN en solución PLS (ppm):
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.CN en PLS (ppm)
+
+10055: CN Solución Barren - MMSA_LIXI_CN Solución Barren (ppm):
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.CN en solución de riego BLS (ppm)
+
+10056: CN Solución ILS - MMSA_LIXI_CN Solución ILS (ppm):
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.CN en solución de riego ILS (ppm)
+
+10057: Ley Au Solución PLS - MMSA_LIXI_Ley Au Solución PLS (ppm):
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.Ley Au PLS (ppm)
+
+10058: pH Solución PLS - MMSA_LIXI_pH en Solución PLS:
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.pH en PLS
+
+10059: Solución Barren -   MMSA_LIXI_Solución Barren (m3):
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.Flujo BLS día (m3)
+
+10060: Solución ILS - MMSA_LIXI_Solución ILS (m3):
+        Ruta modificada: Se copia valor de Metalurgia.Lixiviacion.Flujo ILS día (m3)
+
+10061: Solución PLS - MMSA_LIXI_Solución PLS (m3):
+
+
+
+
