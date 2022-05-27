@@ -36,6 +36,7 @@ class DashboardController extends Controller
              [10003, 10007, 10009, 10014, 10017, 10021, 10026, 10029, 10034];
             $this->divarray = 
               [10006, 10013, 10020, 10032];
+           
 
             //INICIO CALCULOS REUTILIZABLES
                 //MES REAL
@@ -506,7 +507,7 @@ class DashboardController extends Controller
                     ->addColumn('dia_real', function($data)
                     {        
                         switch($data->variable_id)
-                        {                    
+                        {                                    
                             case 10002:
                                 //MMSA_TP_Au Triturado oz                  
                                 //((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035                                     
@@ -519,7 +520,8 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10004) as B
+                                    where variable_id = 10004
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
@@ -537,13 +539,15 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10062) as B
+                                    where variable_id = 10062
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
                                 ); 
                             break;                   
                             case 10008:
+                            case 10037:
                                 //MMSA_TP_Au Triturado oz                  
                                 //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                                 $d_real = 
@@ -555,7 +559,8 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10010) as B
+                                    where variable_id = 10010
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
@@ -573,7 +578,8 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10063) as B
+                                    where variable_id = 10063
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
@@ -591,7 +597,8 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10019) as B
+                                    where variable_id = 10019
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
@@ -609,7 +616,8 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10064) as B
+                                    where variable_id = 10064
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
@@ -675,6 +683,7 @@ class DashboardController extends Controller
                                 ); 
                             break;                   
                             case 10028:
+                            case 10038:
                                 //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                 //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
                                 $d_real = 
@@ -709,21 +718,23 @@ class DashboardController extends Controller
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10065) as B
+                                    where variable_id = 10065
+                                    AND valor <> 0) as B
                                     ON A.fecha = B.fecha
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
                                 ); 
-                            break; 
+                            break;               
                             case 10040:
                                 //10040 MMSA_SART_Eficiencia (%)
-                                //((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100                                    
+                                //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100) / (10043 MMSA_SART_Ley Cu Alimentada ppm)                               
                                 $d_real = 
                                 DB::select(
-                                    'SELECT (A.valor-B.valor) * 100 as dia_real FROM
+                                    'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
-                                    where variable_id = 10043) as A
+                                    where variable_id = 10043
+                                    AND valor <> 0) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
                                     FROM [mansfield2].[dbo].[data]
@@ -732,7 +743,67 @@ class DashboardController extends Controller
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
                                 ); 
-                            break; 
+                            break;                
+                            case 10046:
+                                //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                 
+                                //((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035                           
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * (B.valor-C.valor))/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10052) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10051) as B
+                                    ON A.fecha = B.fecha
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10050) as C
+                                    ON A.fecha = C.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;               
+                            case 10049:
+                                //MMSA_ADR_Eficiencia (%)
+                                //(((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS)                               
+                                $d_real = 
+                                DB::select(
+                                    'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10051
+                                    AND valor <> 0) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10050) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                 
+                            case 10053:
+                                //MMSA_LIXI_Au Lixiviado (oz)                  
+                                //((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10061) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10057) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;
                             default:                        
                                 if(isset($data->dia_real)) 
                                 { 
@@ -1010,12 +1081,14 @@ class DashboardController extends Controller
                                 case 10040:                                         
                                     //10040 MMSA_SART_Eficiencia %
                                     //Promedio Ponderado Mensual(10045 MMSA_SART_PLS a SART m3, 10040 MMSA_SART_Eficiencia %)   
-                                    //Promedio Ponderado Mensual(10045 MMSA_SART_PLS a SART m3, ((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100)                  
+                                    //Promedio Ponderado Mensual(10045 MMSA_SART_PLS a SART m3, 
+                                    //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100)/(10043 MMSA_SART_Ley Cu Alimentada ppm))                  
                                     $sumaproducto= DB::select(
-                                        'SELECT MONTH(A1.fecha),SUM(((A1.valor-A2.valor)*100) * B.valor) as sumaproducto FROM
+                                        'SELECT MONTH(A1.fecha),SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10043) as A1
+                                        where variable_id = 10043
+                                        AND valor <> 0 ) as A1
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
@@ -1115,22 +1188,30 @@ class DashboardController extends Controller
                                 break;
                                 case 10049:                                         
                                     //10049 MMSA_ADR_Eficiencia %
-                                    //Promedio Ponderado Mensual(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)                    
+                                    //Promedio Ponderado Mensual(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)   
+                                    //Promedio Ponderado Mensual(10052 MMSA_ADR_PLS a Carbones m3, 
+                                    //((((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS))                  
                                     $sumaproducto= DB::select(
-                                        'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
+                                        'SELECT MONTH(A1.fecha),SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10049) as A
+                                        where variable_id = 10051
+                                        AND valor <> 0 ) as A1
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
+                                        where variable_id = 10050) as A2
+                                        ON A1.fecha = A2.fecha
+                                        INNER JOIN
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE MONTH(A.fecha) =  ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY MONTH(A.fecha)', 
+                                        ON A2.fecha = B.fecha
+                                        WHERE MONTH(A1.fecha) =  ?
+                                        AND  DATEPART(y, A1.fecha) <=  ?
+                                        GROUP BY MONTH(A1.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
+                                    );                                       
                                     $suma= $this->summesreal10052; 
                                 break;
                                 case 10050:                                         
@@ -1341,6 +1422,7 @@ class DashboardController extends Controller
                                         ); 
                                     break;
                                     case 10008:
+                                    case 10037:
                                         //10008: MMSA_TP_Au Triturado                  
                                         //SUMATORIA MENSUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                     
                                         $mes_real = 
@@ -1426,6 +1508,7 @@ class DashboardController extends Controller
                                         ); 
                                     break;
                                     case 10028:
+                                    case 10038:
                                         //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                         //SUMAMENSUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)* 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                         $mes_real = 
@@ -1444,6 +1527,51 @@ class DashboardController extends Controller
                                             FROM [mansfield2].[dbo].[data]
                                             where variable_id = 10030) as C
                                             ON A.fecha = C.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;                    
+                                    case 10046:
+                                        //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
+                                        //SUMAMENSUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM((A.valor * (B.valor-C.valor))/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10052) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10051) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10050) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE MONTH(A.fecha) =  ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY MONTH(A.fecha)', 
+                                            [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break; 
+                                    case 10053:
+                                        //MMSA_LIXI_Au Lixiviado (oz)                  
+                                        //SUMATORIA MENSUAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035 )                                     
+                                        $mes_real = 
+                                        DB::select(
+                                            'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10061) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10057) as B
+                                            ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
                                             AND  DATEPART(y, A.fecha) <=  ?
                                             GROUP BY MONTH(A.fecha)', 
@@ -2542,12 +2670,14 @@ class DashboardController extends Controller
                                 break;
                                 case 10040:                                         
                                     //10040 MMSA_SART_Eficiencia %
-                                    //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, ((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100))                     
+                                    //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 
+                                    //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100) / (10043 MMSA_SART_Ley Cu Alimentada ppm)               
                                     $sumaproducto= DB::select(
-                                        'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM(((A1.valor-A2.valor)*100) * B.valor) as sumaproducto FROM
+                                        'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10043) as A1
+                                        where variable_id = 10043
+                                        AND valor <> 0) as A1
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
@@ -2647,20 +2777,28 @@ class DashboardController extends Controller
                                 break;
                                 case 10049:                                         
                                     //10049 MMSA_ADR_Eficiencia %
-                                    //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)                    
+                                    //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)
+                                    //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 
+                                    //((((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS))               
                                     $sumaproducto= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10049) as A
+                                        where variable_id = 10051
+                                        AND valor <> 0) as A1
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
+                                        where variable_id = 10050) as A2
+                                        ON A1.fecha = A2.fecha                                        
+                                        INNER JOIN 
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        ON A2.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A1.fecha) = ?
+                                        AND  DATEPART(y, A1.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A1.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
                                     $suma= $this->sumtrireal10052; 
@@ -2872,6 +3010,7 @@ class DashboardController extends Controller
                                         );
                                     break;
                                     case 10008:   
+                                    case 10037:
                                         //10008: MMSA_TP_Au Triturado                  
                                         //SUMATORIA TRIMESTRAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
                                         $trimestre_real= DB::select(
@@ -2953,6 +3092,7 @@ class DashboardController extends Controller
                                         );
                                     break;
                                     case 10028:
+                                    case 10038:
                                         //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                         //SUMATRIMESTRAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                         $trimestre_real= DB::select(
@@ -2970,6 +3110,49 @@ class DashboardController extends Controller
                                             FROM [mansfield2].[dbo].[data]
                                             where variable_id = 10030) as C
                                             ON A.fecha = C.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break;                  
+                                    case 10046:
+                                        //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
+                                        //SUMATRIMESTRAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10052) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10051) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10050) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE DATEPART(QUARTER, A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                            [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break; 
+                                    case 10053:   
+                                        //MMSA_LIXI_Au Lixiviado (oz)                  
+                                        //SUMATORIA TRIMESTRAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035)                                 
+                                        $trimestre_real= DB::select(
+                                            'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10061) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10057) as B
+                                            ON A.fecha = B.fecha
                                             WHERE DATEPART(QUARTER, A.fecha) = ?
                                             AND  DATEPART(y, A.fecha) <=  ?
                                             GROUP BY DATEPART(QUARTER, A.fecha)', 
@@ -4069,37 +4252,13 @@ class DashboardController extends Controller
                                 break;
                                 case 10040:                                         
                                     //10040 MMSA_SART_Eficiencia %
-                                    //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, ((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100))                     
-                                    $sumaproducto= DB::select(
-                                        'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM(((A1.valor-A2.valor)*100) * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10043) as A1
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10044) as A2
-                                        ON A1.fecha = A2.fecha                                        
-                                        INNER JOIN 
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10045) as B
-                                        ON A2.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A1.fecha) = ?
-                                        AND  DATEPART(y, A1.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A1.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
-                                    $suma= $this->sumtrireal10045; 
-                                break;
-                                case 10040:                                         
-                                    //10040 MMSA_SART_Eficiencia %
                                     //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, ((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100))                   
                                     $sumaproducto= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A1.valor-A2.valor)*100) * B.valor) as sumaproducto FROM
+                                        'SELECT YEAR(A1.fecha) as year, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10043) as A1
+                                        where variable_id = 10043
+                                        AND valor <> 0) as A1
                                         INNER JOIN
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
@@ -4110,9 +4269,9 @@ class DashboardController extends Controller
                                         FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10045) as B
                                         ON A2.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
+                                        WHERE YEAR(A1.fecha) = ?
+                                        AND  DATEPART(y, A1.fecha) <=  ?
+                                        GROUP BY YEAR(A1.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
                                     $suma= $this->sumanioreal10045; 
@@ -4199,22 +4358,29 @@ class DashboardController extends Controller
                                 break;
                                 case 10049:                                         
                                     //10049 MMSA_ADR_Eficiencia %
-                                    //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)                    
+                                    //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)
+                                    //Promedio Ponderado Anual((((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS))                   
                                     $sumaproducto= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        'SELECT YEAR(A1.fecha) as year, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10049) as A
+                                        where variable_id = 10051
+                                        AND valor <> 0) as A1
+                                        INNER JOIN
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [mansfield2].[dbo].[data]
+                                        where variable_id = 10050) as A2
+                                        ON A1.fecha = A2.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [mansfield2].[dbo].[data]
                                         where variable_id = 10052) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
+                                        ON A2.fecha = B.fecha
+                                        WHERE YEAR(A1.fecha) = ?
+                                        AND  DATEPART(y, A1.fecha) <=  ?
+                                        GROUP BY YEAR(A1.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
+                                    );                                      
                                     $suma= $this->sumanioreal10052; 
                                 break;
                                 case 10050:                                         
@@ -4423,7 +4589,8 @@ class DashboardController extends Controller
                                             [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                         ); 
                                     break;
-                                    case 10008:   
+                                    case 10008: 
+                                    case 10037:  
                                         //10008: MMSA_TP_Au Triturado                  
                                         //SUMATORIA ANUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)    
                                         $anio_real= DB::select(
@@ -4504,7 +4671,8 @@ class DashboardController extends Controller
                                             [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                         ); 
                                     break;
-                                    case 10028:   
+                                    case 10028: 
+                                    case 10038:  
                                         //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                         //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
                                         $anio_real= DB::select(
@@ -4522,6 +4690,49 @@ class DashboardController extends Controller
                                             FROM [mansfield2].[dbo].[data]
                                             where variable_id = 10030) as C
                                             ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    break;                
+                                    case 10046:
+                                        //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
+                                        //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM((A.valor * (B.valor-C.valor))/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10052) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10051) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10050) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        );
+                                    break; 
+                                    case 10053:   
+                                        //MMSA_LIXI_Au Lixiviado (oz)                  
+                                        //SUMATORIA ANUAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035)    
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10061) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [mansfield2].[dbo].[data]
+                                            where variable_id = 10057) as B
+                                            ON A.fecha = B.fecha
                                             WHERE YEAR(A.fecha) = ?
                                             AND  DATEPART(y, A.fecha) <=  ?
                                             GROUP BY YEAR(A.fecha)',
@@ -5440,7 +5651,6 @@ class DashboardController extends Controller
 
     public function load(Request $request)
     {       
-
         $id = $request->get('id');
         if($id == '' || $id == null)
         {
