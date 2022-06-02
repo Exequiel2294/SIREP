@@ -27,7 +27,6 @@ TRITURACION PRIMARIA Y SECUNDARIA
    10062: MMSA_TP_Horas Operativas Trituración Primaria -> 11h
         Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_100_002!PI_100_RunHs_PIP
 
-
 HPGR
 
     10011: Mineral Triturado - MMSA_HPGR_Mineral Triturado (t): -> 8h
@@ -56,7 +55,6 @@ HPGR
     /*NO VISIBLE*/
     10063: Horas Operativas Trituración Terciaria - MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
         Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_100_003!PI_100_3_RunHs_PIP
-
 
 AGLOMERACION
 
@@ -96,7 +94,6 @@ AGLOMERACION
     10064: Horas Operativas Aglomeración - MMSA_AGLOM_Horas Operativas Aglomeración: -> 11h
         Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_200_001!PI_200_RunHs_PIP
 
-
 APILAMIENTO - STACKER
 
     10031: Mineral Apilado Stacker - MMSA_APILAM_STACKER_Mineral Apilado Stacker (t):  -> 8h
@@ -134,7 +131,6 @@ APILAMIENTO - STACKER
         Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_200_001!PI_200_RunHs_PIP
         IDEM MMSA_AGLOM_Horas Operativas Aglomeración
 
-
 APILAMIENTO - PRIMARIA Y SECUNDARIA
 
     10022: Au Extraible Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz):
@@ -153,7 +149,6 @@ APILAMIENTO - PRIMARIA Y SECUNDARIA
 
     10026: Recuperación - MMSA_APILAM_PYS_Recuperación (%):
         Ruta modificada: Se copia valor de Reporte Comparativo.44.Apilamiento.Camiones.Recuperación (%)
-
 
 APILAMIENTO - TOTAL APILAMIENTO
 
@@ -209,7 +204,6 @@ LIXIVIACION
     10058: pH Solución PLS - MMSA_LIXI_pH en Solución PLS:
         Se carga desde el sistema
 
-
 SART
 
     10045: PLS a SART - MMSA_SART_PLS a SART (m3):  -> 8h
@@ -230,7 +224,6 @@ SART
     10040: Eficiencia - MMSA_SART_Eficiencia (%):
         Calculo: ((MMSA_SART_Ley Cu Alimentada - MMSA_SART_Ley Cu Salida) * 100) / MMSA_SART_Ley Cu Alimentada
         No se tendria que poder modificar
-
 
 ADR
 
@@ -257,8 +250,11 @@ ADR
     10048: Au Doré - MMSA_ADR_Au Doré (oz):
         Se realiza la carga en el sistema
 
-Variables 8h:
-	10005: Mineral Triturado 		- MMSA_TP_Mineral Triturado (t)
+
+
+
+Variables 8h: -> TIPO 1
+    10005: Mineral Triturado 		- MMSA_TP_Mineral Triturado (t)
 	10011: Mineral Triturado 		- MMSA_HPGR_Mineral Triturado (t)
 	10019: Mineral Aglomerado 		- MMSA_AGLOM_Mineral Aglomerado (t) IDEM MMSA_HPGR_Mineral Triturado
 	10067: Cemento 					- MMSA_AGLOM_Cemento
@@ -271,8 +267,7 @@ Variables 8h:
 	10056: CN Solución ILS 			- MMSA_LIXI_CN Solución ILS (ppm)
 	10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
 	
-	
-Variables 11h:
+Variables 11h: -> TIPO 2
 	10003: Disponibilidad 							- MMSA_TP_Disponibilidad (%)
 	10007: Utilización 								- MMSA_TP_Utilización (%)
 	10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
@@ -296,18 +291,18 @@ Variables 11h:
 	10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
 	10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
 	
-Variables de carga manual:
+Variables de carga manual: -> TIPO 3 (9 variables)
 	10004: Ley Au 				            - MMSA_TP_Ley Au (g/t)
 	10012: P80 					            - MMSA_HPGR_P80 (mm)
 	10018: Humedad 				            - MMSA_AGLOM_Humedad (%)
-	10033: Recuperación 		            - MMSA_APILAM_STACKER_Recuperación (%)
-	10036: Recuperación 		            - MMSA_APILAM_TA_Recuperación (%) IDEM MMSA_APILAM_STACKER_Recuperación
+	10033: Recuperación 		            - MMSA_APILAM_STACKER_Recuperación (%) -> SE INSERTA A LAS 8 CON VALOR 75 fijo
+	10036: Recuperación 		            - MMSA_APILAM_TA_Recuperación (%) IDEM MMSA_APILAM_STACKER_Recuperación -> SE INSERTA A LAS 8 CON VALOR 75% fijo
 	10054: CN Solución PLS 		            - MMSA_LIXI_CN en solución PLS (ppm)
 	10058: pH Solución PLS 		            - MMSA_LIXI_pH en Solución PLS
 	10047: Au Desorbido Electrodepositado   - MMSA_ADR_Au Desorbido Electrodepositado (oz)
 	10048: Au Doré 				            - MMSA_ADR_Au Doré (oz)
 	
-Variables calculadas:
+Variables calculadas: -> TIPO 4 (15 variables)
 	10002: Au Triturado 				- MMSA_TP_Au Triturado (oz)
 	10006: Productividad 				- MMSA_TP_Productividad (t/h)
 	10008: Au Triturado 				- MMSA_HPGR_Au Triturado (oz)
@@ -315,19 +310,104 @@ Variables calculadas:
 	10020: Productividad 				- MMSA_AGLOM_Productividad (t/h)
 	10015: Adición de Cemento 			- MMSA_AGLOM_Adición de Cemento (kg/t)
 	10027: Au Apilado Stacker 			- MMSA_APILAM_STACKER_Au Apilado Stacker (oz)
-	10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
+	10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker 
 	10032: Productividad 				- MMSA_APILAM_STACKER_Productividad (t/h)
-	10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz)
-	10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz)
+	10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) IDEM MMSA_HPGR_Au Triturado
+	10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
 	10053: Au Lixiviado 				- MMSA_LIXI_Au Lixiviado (oz)
 	10040: Eficiencia 					- MMSA_SART_Eficiencia (%)
 	10049: Eficiencia 					- MMSA_ADR_Eficiencia (%)
 	10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
 	
-Variables 11/21:
+Variables 11_21hs: -> TIPO 5
 	10010: Ley Au - MMSA_HPGR_Ley Au (g/t)
 	10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
 	10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
+
+REVISAR
+    MMSA_AGLOM_Cemento - ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Aglomeración.Cemento
+    MMSA_AGLOM_Adición de CN (ppm) no coincide
+    MMSA_LIXI_CN Solución Barren (ppm) no coincide
+    MMSA_LIXI_CN Solución ILS (ppm) no coincide
+    MMSA_SART_Ley Cu Alimentada (ppm) no coincide
+
+JOBS 1 -> 8h:
+    INSERT INTO [mansfield2].[dbo].[data]
+    SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
+    (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
+        ,[Atributo]
+        ,[Unidad de medida]
+        ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+    FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_8h]) AS D
+    INNER JOIN
+    (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 1) AS V
+    ON V.descripcion = D.descripcion
+    UNION  
+    SELECT id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, -1 as valor, 1 as estado  
+    FROM  [mansfield2].[dbo].[variable]  where TIPO IN (2,3,4,5) 
+
+JOBS2 -> 11h:
+    DELETE FROM [mansfield2].[dbo].[data] 
+    WHERE variable_id in (SELECT id FROM variable where tipo = 2)
+    AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
+    AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
+
+    INSERT INTO [mansfield2].[dbo].[data]
+    SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
+    (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
+        ,[Atributo]
+        ,[Unidad de medida]
+        ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+    FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11h]) AS D
+    INNER JOIN
+    (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 2) AS V
+    ON V.descripcion = D.descripcion
+
+JOBS3 -> 11_21h:
+    DELETE FROM [mansfield2].[dbo].[data] 
+    WHERE variable_id in (SELECT id FROM variable where tipo = 5)
+    AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
+    AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
+
+    INSERT INTO [mansfield2].[dbo].[data]
+    SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
+    (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
+        ,[Atributo]
+        ,[Unidad de medida]
+        ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+    FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11_21h]) AS D
+    INNER JOIN
+    (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 5) AS V
+    ON V.descripcion = D.descripcion
+
+El sistema realiza carga de data, importandola desde el PI a:
+    Horas 8:        12 variables
+    Horas 11:       22 variables
+    Calculadas:     15 Variables
+    Carga Manual:   9 variables
+
+Pendientes:
+    Analisis de variables que no eran visibles y necesarias para calculos
+	10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
+	10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria
+	10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración
+	10065: Tiempo Operativo 						- MMSA_APILAM_STACKER_Tiempo Operativo IDEM MMSA_AGLOM_Horas Operativas Aglomeración
+    10067: Cemento - MMSA_AGLOM_Cemento
+
+
+
+Para la autenticacion del usuario se utiliza el protoclo  de licencia abierta LDAP, que es un protocolo de ligero de acceso a Directorio. Con el mismo lo usuarios se van a autenticar contrea las credenciales del Active Directory.
+En el mismo se crearon grupos de seguridad que definiran los roles del usuario, dentro del sistema los roles estan definidos por el grupo de seguridad al cual pertenecen dentro del sistema. 
+Si el usuario no pertence a ninguno de los mencionados no podras crear una sesion en el sistema.
+
+Las inyecciones de LDAP se pueden mitigar con los siguientes controles de seguridad:
+1.Aplicar la validación de entrada del lado del servidor: todas las entradas deben validarse con una lista de caracteres y cadenas permitidos.
+2.Escape de cadenas de entrada controladas por el usuario: esto convertirá las entradas maliciosas en valores de cadena y no en predicados LDAP.
+3.Implementar el principio de privilegios mínimos: al proteger la cuenta LDAP necesaria para vincular un directorio, las consultas LDAP no se ejecutarán sin autorización.
+
+
+
+
 
 
 

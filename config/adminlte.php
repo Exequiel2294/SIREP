@@ -238,6 +238,11 @@ return [
             'icon' => 'nav-icon fas fa-book',
         ],
         [
+            'text' => 'comentario',
+            'url'  => 'comentario',
+            'icon' => 'nav-icon fas fa-comment',
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],

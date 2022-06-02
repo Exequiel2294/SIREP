@@ -622,7 +622,7 @@
                 },
                 columnDefs: [
                     {
-                        targets: [5,6,7,8,9,10,11,12,13,14,15,16],
+                        targets: [5,6,7,8,9,10,11,12,13,14,15,16,17],
                         className: "dt-center"
                     }
                 ],
@@ -648,32 +648,40 @@
 
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
-            var id=$(this).data('id');
-            var variable_id=$(this).data('vbleid');
-            console.log(id,variable_id);
-            $.get('dashboard/'+id+'/edit/'+variable_id, function(data){
-                if (data != -1)
-                {
-                    $('#form-button').val(0); 
-                    $('#modal-title').html('Editar Registro'); 
-                    $('#modal-form').trigger("reset"); 
-                    $('#modal').modal('show');
-                    $('#id').val(data.id);
-                    $('#area').val(data.area);
-                    $('#categoria').val(data.categoria);
-                    $('#subcategoria').val(data.subcategoria);
-                    $('#variable').val(data.variable);
-                    $('#fecha').val(data.fecha);
-                    $('#valor').val(data.valor);
+            $.ajax({
+                url:"{{route('dashboard.edit') }}",
+                method:"POST",
+                data:{
+                    id: $(this).data('id'),
+                    variable_id:$(this).data('vbleid'),
+                    selecteddate: moment(date_selected).utc().format('YYYY-MM-DD'),
+                    _token: $('input[name="_token"]').val()
+                },
+                success:function(data)
+                {  
+                    if (data['val'] == 1)
+                    {
+                        $('#form-button').val(0); 
+                        $('#modal-title').html('Editar Registro'); 
+                        $('#modal-form').trigger("reset"); 
+                        $('#modal').modal('show');
+                        $('#id').val(data['generic'].id);
+                        $('#area').val(data['generic'].area);
+                        $('#categoria').val(data['generic'].categoria);
+                        $('#subcategoria').val(data['generic'].subcategoria);
+                        $('#variable').val(data['generic'].variable);
+                        $('#fecha').val(data['generic'].fecha);
+                        $('#valor').val(data['generic'].valor);
+                    }
+                    else
+                    {
+                        Swal.fire({
+                            title: data['msg'],
+                            icon: 'warning',
+                        })
+                    }
                 }
-                else
-                {
-                    Swal.fire({
-                        title: 'No tienes los permisos necesarios',
-                        icon: 'warning',
-                    })
-                }
-            })
+            });
         });      
         /* EDIT BUTTON */
 
@@ -738,6 +746,7 @@
                     data:{
                         id: $("#id").val(),
                         valor:$('#valor').val(),
+                        selecteddate: moment(date_selected).format('YYYY-MM-DD'),
                         _token: $('input[name="_token"]').val()
                     },
                     success:function(data)

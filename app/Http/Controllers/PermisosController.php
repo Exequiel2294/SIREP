@@ -51,6 +51,7 @@ class PermisosController extends Controller
                         ->toArray();
         $variables = DB::table('variable')
                         ->select('id','descripcion')
+                        ->where('tipo','<>',4)
                         ->where('estado',1)
                         ->orderBy('orden','asc')
                         ->get();

@@ -254,7 +254,7 @@
                         render: function(data){
                             if(data != null)
                             {
-                                return moment.utc(data).local().format("DD/MM/Y HH:mm");
+                                return moment(data).format("DD/MM/Y");
                             }
                             else
                             {

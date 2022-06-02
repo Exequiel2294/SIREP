@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Data;
 use App\Models\Historial;
+use App\Models\Variable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,15 +26,15 @@ class DashboardController extends Controller
         if(request()->ajax()) {
             $this->date = $request->get('fecha');
             $this->pparray = 
-            [10004, 10010, 10012, 10015,10016, 10018, 10024, 10030, 10033, 10035, 10036, 
+            [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
              10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
              10056, 10057, 10058];//se coloca 10015 en pparray por el budget
             $this->sumarray = 
             [10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 
              10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 
-             10059, 10060, 10061];
+             10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067];
             $this->promarray = 
-             [10003, 10007, 10009, 10014, 10017, 10021, 10026, 10029, 10034];
+             [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];
             $this->divarray = 
               [10006, 10013, 10020, 10032];
            
@@ -932,7 +933,7 @@ class DashboardController extends Controller
                                     //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
                                     //(sumatoria.mensual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.mesual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                     $sumaproducto = DB::select(
-                                        'SELECT MONTH(fecha) as month, SUM(valor) * 1000 as suma
+                                        'SELECT MONTH(fecha) as month, SUM(valor) * 1000 as sumaproducto
                                         FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10067
                                         AND  MONTH(fecha) = ?
@@ -941,34 +942,6 @@ class DashboardController extends Controller
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                     
                                     $suma= $this->summesreal10019; 
-                                break;
-                                case 10016:                                         
-                                    //10016 MMSA_AGLOM_Adición de CN ppm
-                                    //Promedio Ponderado Mensual(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)                      
-                                    $sumaproducto= DB::select(
-                                        'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10016) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10066) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE MONTH(A.fecha) =  ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY MONTH(A.fecha)', 
-                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
-                                    $suma= DB::select(
-                                        'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                        FROM [mansfield2].[dbo].[data]
-                                        WHERE variable_id = 10066
-                                        AND  MONTH(fecha) = ?
-                                        AND  DATEPART(y, fecha) <= ?
-                                        GROUP BY MONTH(fecha)', 
-                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
                                 break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
@@ -2522,7 +2495,7 @@ class DashboardController extends Controller
                                     //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
                                     //(sumatoria.trimestral(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                     $sumaproducto= DB::select(
-                                        'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) * 1000 as suma
+                                        'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) * 1000 as sumaproducto
                                         FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10067
                                         AND  DATEPART(QUARTER, fecha) = ?
@@ -2531,34 +2504,6 @@ class DashboardController extends Controller
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );                                    
                                     $suma= $this->sumtrireal10019; 
-                                break;
-                                case 10016:                                       
-                                    //10016 MMSA_AGLOM_Adición de CN ppm                    
-                                    //Promedio Ponderado Trimestral(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)                         
-                                    $sumaproducto= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10016) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10066) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
-                                    $suma= DB::select(
-                                        'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                        FROM [mansfield2].[dbo].[data]
-                                        WHERE variable_id = 10066
-                                        AND  DATEPART(QUARTER, fecha) = ?
-                                        AND  DATEPART(y, fecha) <= ?
-                                        GROUP BY DATEPART(QUARTER, fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
                                 break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
@@ -4104,7 +4049,7 @@ class DashboardController extends Controller
                                     //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
                                     //(sumatoria.anual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                     $sumaproducto= DB::select(
-                                        'SELECT YEAR(fecha) as year, SUM(valor) * 1000 as suma
+                                        'SELECT YEAR(fecha) as year, SUM(valor) * 1000 as sumaproducto
                                         FROM [mansfield2].[dbo].[data]
                                         WHERE variable_id = 10067
                                         AND  YEAR(fecha) = ?
@@ -4113,34 +4058,6 @@ class DashboardController extends Controller
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     );                                    
                                     $suma= $this->sumanioreal10019; 
-                                break;
-                                case 10016:                                       
-                                    //10016 MMSA_AGLOM_Adición de CN ppm 
-                                    //Promedio Ponderado Anual(10066 MMSA_AGLOM_Flujo, 10016 MMSA_AGLOM_Adición de CN ppm)                        
-                                    $sumaproducto= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10016) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
-                                        where variable_id = 10066) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );                                     
-                                    $suma= DB::select(
-                                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                        FROM [mansfield2].[dbo].[data]
-                                        WHERE variable_id = 10066
-                                        AND  YEAR(fecha) = ?
-                                        AND  DATEPART(y, fecha) <= ?
-                                        GROUP BY YEAR(fecha)', 
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
                                 break;
                                 case 10018:                                         
                                     //10018 MMSA_AGLOM_Humedad %
@@ -5623,30 +5540,64 @@ class DashboardController extends Controller
         } 
     }
 
-    public function edit($id, $variable_id)
-    {   
-        $where = ['user_id' => Auth::user()->id, 'variable_id' => $variable_id];    
-        $uservbles = DB::table('permisos_variables')
-                    ->where($where)
-                    ->get();
-       if ($uservbles->count() > 0)
-       {
-            $where = array('data.id' => $id);
-            $generic =  DB::table('area')
-                        ->join('categoria', 'categoria.area_id', '=','area.id')
-                        ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
-                        ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
-                        ->join('data', 'data.variable_id', '=','variable.id')
+    public function edit(Request $request)
+    { 
+        $vbles_c = DB::table('variable')->where('tipo',4)->pluck('id')->toArray();
+        $selecteddate = $request->selecteddate;   
+        if (in_array($request->variable_id,$vbles_c))
+        {
+            $data['msg'] = 'Esta variable es calculada, la misma no puede ser modificada.';
+            $data['val'] = -1;
+            return response()->json($data); 
+        }  
+        else
+        {
+            $where = ['user_id' => Auth::user()->id, 'variable_id' => $request->variable_id];    
+            $uservbles = DB::table('permisos_variables')
                         ->where($where)
-                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
-                        ->first();
-            
-            return response()->json($generic);
-       }
-       else
-       {
-            return response()->json(-1);
-       }
+                        ->get();
+           if ($uservbles->count() == 0)
+           {
+                $data['msg'] = 'No cuenta con los permisos necesarios para editar esta variable.';
+                $data['val'] = -1;
+                return response()->json($data);
+           }
+           else
+           {
+                if (date($selecteddate) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
+                {  
+                    $vbles_11h = DB::table('variable')->where('tipo',2)->pluck('id')->toArray();
+                    $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();
+                    if (in_array($request->variable_id,$vbles_11h) && (int)date('H') < 14)
+                    {
+                        $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
+                        $data['val'] = -1;
+                        return response()->json($data);
+                    }
+                    else
+                    {
+                        if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H') < 21)
+                        {
+                            $data['msg'] = 'No puede modificar esta variable hasta su ultima carga a las 21hs.';
+                            $data['val'] = -1;
+                            return response()->json($data);
+                        }
+                        
+                    }
+                }                  
+                $where = array('data.id' => $request->id);
+                $data['val'] = 1;
+                $data['generic'] =  DB::table('area')
+                            ->join('categoria', 'categoria.area_id', '=','area.id')
+                            ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
+                            ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
+                            ->join('data', 'data.variable_id', '=','variable.id')
+                            ->where($where)
+                            ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                            ->first();
+                return response()->json($data);              
+           }
+        }
     }
 
     public function load(Request $request)
@@ -5674,10 +5625,53 @@ class DashboardController extends Controller
                 $data = Data::findOrFail($id);
                 $oldvalue = $data->valor;
                 $newvalue = $request->get('valor');
-                $data->update(
-                [
-                    'valor' =>$newvalue
-                ]);
+                switch($data->variable_id)
+                {
+                    case 10011: 
+                    case 10019:
+                    case 10031: 
+                    case 10039:
+                        DB::table('data')
+                            ->whereIn('variable_id',[10011,10019,10031,10039])
+                            ->where('fecha', $data->fecha)
+                            ->update(['valor' =>$newvalue]);                    
+                    break;  
+                    case 10010: 
+                    case 10030:
+                    case 10035: 
+                        DB::table('data')
+                            ->whereIn('variable_id',[10010,10030,10035])
+                            ->where('fecha', $data->fecha)
+                            ->update(['valor' =>$newvalue]);                    
+                    break;   
+                    case 10064: 
+                    case 10065:
+                        DB::table('data')
+                            ->whereIn('variable_id',[10064,10065])
+                            ->where('fecha', $data->fecha)
+                            ->update(['valor' =>$newvalue]);                    
+                    break;  
+                    case 10052: 
+                    case 10061:
+                        DB::table('data')
+                            ->whereIn('variable_id',[10052,10061])
+                            ->where('fecha', $data->fecha)
+                            ->update(['valor' =>$newvalue]);                    
+                    break;  
+                    case 10051: 
+                    case 10057:
+                        DB::table('data')
+                            ->whereIn('variable_id',[10051,10057])
+                            ->where('fecha', $data->fecha)
+                            ->update(['valor' =>$newvalue]);                    
+                    break;
+                    default:
+                        $data->update(
+                        [
+                            'valor' =>$newvalue
+                        ]);
+                    break;              
+                } 
                 if($oldvalue != $newvalue)
                 {
                     Historial::create([
