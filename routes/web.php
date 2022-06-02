@@ -35,9 +35,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
-    Route::get('dashboard/{id}/edit/{variable_id}','DashboardController@edit')->name('dashboard.edit');
+    Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit');
     
     Route::get('historial', 'HistorialController@index')->name('historial');
+
+    Route::get('comentario', 'ComentarioController@index')->name('comentario');
+    Route::post('comentario/load', 'ComentarioController@load')->name('comentario.load');
+    Route::get('comentario/{timezone}/show','ComentarioController@show')->name('comentario.show');
 });
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {
