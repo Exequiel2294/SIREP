@@ -193,10 +193,13 @@
             }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "categoria/" + id,
+                    url: "comentario/" + id,
                     type: 'delete',
                     data:{_token: $('input[name="_token"]').val()},
-                    success: function (data) { 
+                    success: function (data) {            
+                        $.get('comentario/'+moment().zone()+'/show', function(data){
+                            $(".lineatiempo").html(data);
+                        })
                         swalWithBootstrapButtons.fire(
                             'Borrado!',
                             'El registro fue eliminado.',
