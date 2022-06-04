@@ -263,11 +263,6 @@
             text-align:center;
             vertical-align: inherit!important;
         }
-
-        /*.bluewhite{            
-           color: white;
-            background-color: #4682B4;
-        }*/
         .buttonclass{
             background-color:#525C66
         }
@@ -298,6 +293,10 @@
             display: none;  
         }
 
+        .column9{
+            color: red;
+        }
+
     </style> 
 @stop
 
@@ -326,7 +325,6 @@
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 date_selected = e.date;
-                console.log(moment(date_selected).format('YYYY-MM-DD'));
                 $('#procesos-table').DataTable().ajax.reload(null, false);
                 if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 19)
                 {
@@ -363,9 +361,6 @@
             {
                 return 'Reporte '+moment(date_selected).format('YYYY-MM-DD');
             }
-
-
-
             var tabledata = $("#procesos-table").DataTable({
                 dom:    "<'datatables-p'<'datatables-button'B>>" + 
                         "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
@@ -459,7 +454,7 @@
                 responsive: true,
                 scrollX : true,
                 select: true,
-                scrollY: 400,                
+                scrollY: '65vh',                
                 scrollCollapse: true,
                 paging: false,
                 ajax:{                
@@ -496,26 +491,26 @@
                     {data:'unidad', name:'unidad', orderable: false, searchable: false, width:'25px'}, 
                     {data:'dia_real', name:'dia_real', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data: null, orderable: false,searchable: false,
@@ -561,26 +556,26 @@
                     },
                     {data:'mes_real', name:'mes_real', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data: null, orderable: false,searchable: false,
@@ -623,26 +618,26 @@
                     },
                     {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data:null, orderable: false,searchable: false,
@@ -685,26 +680,26 @@
                     },
                     {data:'anio_real', name:'anio_real', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false,
                         render: function(data,type,row){
-                            if (row['unidad'] == '%')
+                            if (data != '-')
                             {
-                                return Math.round(data);
+                                if (row['unidad'] == '%')
+                                {
+                                    return Math.round(data);
+                                }
                             }
-                            else
-                            {
-                                return data;
-                            }
+                            return data;
                         }
                     },
                     {data:null, orderable: false,searchable: false,
@@ -962,15 +957,14 @@
                                 <th rowspan="2">CATEGORIA</th>
                                 <th rowspan="2">SUBCATEGORIA</th>
                                 <th rowspan="2">orden</th>
-                                <th rowspan="2" style="min-width:25px!important;" class="thcenter bluewhite"></th> 
-                                <!-- <th rowspan="2">FECHA</th> -->
+                                <th rowspan="2" style="min-width:25px!important;" class="thcenter"></th> 
                                 <th rowspan="2">Categoria</th>
-                                <th rowspan="2" class="thcenter bluewhite exportable">NOMBRE</th>
-                                <th rowspan="2" class="thcenter bluewhite" style="min-width:25px!important;">U.</th>
-                                <th colspan="3" class="thcenter bluewhite" style="min-width:12vw!important;">DIA</th>
-                                <th colspan="3" class="thcenter bluewhite" style="min-width:12vw!important;">MES</th>
-                                <th colspan="3" class="thcenter bluewhite" style="min-width:12vw!important;">TRIMESTRE</th>
-                                <th colspan="3" class="thcenter bluewhite" style="min-width:12vw!important;">AÑO</th>
+                                <th rowspan="2" class="thcenter exportable">NOMBRE</th>
+                                <th rowspan="2" class="thcenter" style="min-width:25px!important;">U.</th>
+                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">DIA</th>
+                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">MES</th>
+                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">TRIMESTRE</th>
+                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">AÑO</th>
                             </tr>
                             <tr>
                                 <th class="thcenter exportable">Real</th>
