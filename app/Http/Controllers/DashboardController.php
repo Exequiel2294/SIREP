@@ -490,6 +490,7 @@ class DashboardController extends Controller
                                 'variable.nombre as variable', 
                                 'variable.orden as var_orden',
                                 'variable.unidad as unidad',
+                                'variable.export as var_export',
                                 'data.valor as dia_real',
                                 'budget.valor as dia_budget',
                                 'data.valor as anio_budget'
@@ -5564,7 +5565,7 @@ class DashboardController extends Controller
            }
            else
            {
-                if (date($selecteddate) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
+                if (date('Y-m-d', strtotime($selecteddate)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
                 {  
                     $vbles_11h = DB::table('variable')->where('tipo',2)->pluck('id')->toArray();
                     $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();
@@ -5576,7 +5577,7 @@ class DashboardController extends Controller
                     }
                     else
                     {
-                        if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H') < 21)
+                        if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H') < 24)
                         {
                             $data['msg'] = 'No puede modificar esta variable hasta su ultima carga a las 21hs.';
                             $data['val'] = -1;

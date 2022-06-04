@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('comentario', 'ComentarioController@index')->name('comentario');
     Route::post('comentario/load', 'ComentarioController@load')->name('comentario.load');
     Route::get('comentario/{timezone}/show','ComentarioController@show')->name('comentario.show');
+    Route::delete('comentario/{id}','ComentarioController@delete')->name('comentario.delete');
 });
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {

@@ -52,7 +52,7 @@ class ComentarioController extends Controller
         $comentarios =  
          DB::table('comentario')
             ->join('users','comentario.user_id', '=', 'users.id')
-            ->select('comentario.asunto as asunto', 'comentario.comentario as comentario', 'comentario.created_at as fecha', 'users.name as user')
+            ->select('comentario.asunto as asunto', 'comentario.comentario as comentario', 'comentario.created_at as fecha', 'users.name as user','comentario.user_id as user_id','comentario.id as id')
             ->orderby('fecha','desc')
             ->get();
 
@@ -72,8 +72,18 @@ class ComentarioController extends Controller
                 <div class="timeline-item">
                 <span class="time"><i class="fas fa-clock"></i> '.date('H:i:s', strtotime('-'.$timezone.' minutes',strtotime($comentario->fecha))).'</span>
                     <h3 class="timeline-header"><a href="#">'.$comentario->user.'</a> '.$comentario->asunto.'</h3>
-                    <div class="timeline-body">'.$comentario->comentario.'</div>
-                </div>
+                    <div class="timeline-body">'.$comentario->comentario.'</div>';
+            
+            if ($comentario->user_id == auth()->user()->id)
+            {
+                $timeline.= 
+                '<div class="timeline-footer">
+                    <a class="btn btn-danger btn-sm delete" id='.$comentario->id.'>Eliminar</a>
+                </div>';
+            }
+            
+            $timeline.=
+                '</div>
             </div>';
         }
 
@@ -82,6 +92,13 @@ class ComentarioController extends Controller
         </div>';
 
         return $timeline;
+    }
+
+    public function delete($id)
+    {
+        $where = ['id' => $id, 'user_id'=> auth()->user()->id];
+        Comentario::where($where)->delete();
+
     }
 }
 
