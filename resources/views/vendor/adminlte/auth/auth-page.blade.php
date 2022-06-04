@@ -32,8 +32,8 @@
             {{-- Card Header --}}
             @hasSection('auth_header')
                 <div class="login-logo" style="padding-top:2rem;">
-                    <a href="http://mansfield.test/home">
-                        <img src="http://mansfield.test/images/logo.png" height="80">
+                    <a href="{{ env('APP_URL') }}/home">
+                        <img src="{{ env('APP_URL') }}/images/logo.png" height="80">
                     </a>
                 </div>
                 <div class="card-header {{ config('adminlte.classes_auth_header', '') }}">
