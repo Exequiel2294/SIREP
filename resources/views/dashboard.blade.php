@@ -38,12 +38,29 @@
             flex: 0 0 100%;
             max-width: 83rem;
         }
+        .section-header > div > div{
+            margin-top:1rem;
+        }
         @media(min-width:300px) {
+            .section-header > div{
+                flex: 0 0 98%;
+            }
+        }
+        .buttons-copy, .buttons-csv{
+            display: none!important;
+        }
+        @media(min-width:530px) {
             .section-header > div{
                 flex-direction: row;
                 justify-content: space-between;
                 flex: 0 0 98%;
             }
+            .section-header > div > div{
+                margin-top:0rem;
+            }
+            .buttons-copy, .buttons-csv{
+            display: inline-block!important;
+        }
         }
         @media(min-width:450px) {
             .section-header > div{
@@ -291,10 +308,6 @@
         }
         .dataTables_scrollBody::-webkit-scrollbar { 
             display: none;  
-        }
-
-        .column9{
-            color: red;
         }
 
     </style> 
@@ -945,7 +958,7 @@
             <div class="card">
                 <div class="generic-body">   
                     <div class="alert alert-light alert-dismissible fade show" style="display:none;" role="alert">
-                        <strong>Advertencia!</strong>&nbsp;Es posible que algunos datos aún no se encuentren cargados.
+                        <p><strong>Advertencia!</strong>&nbsp;Es posible que algunos datos aún no se encuentren cargados.</p>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
