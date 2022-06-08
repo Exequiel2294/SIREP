@@ -19,7 +19,7 @@ class CreateComentarioTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');            
             $table->unsignedBigInteger('area_id');
             $table->foreign('area_id')->references('id')->on('comentario_area');          
-            $table->string('comentario'); 
+            $table->string('comentario',1000); 
             $table->tinyInteger('estado')->default(1);
             $table->date('fecha');
             $table->date('created_at');
