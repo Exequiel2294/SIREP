@@ -8,5 +8,6 @@ return [
     'subcategoria'                => 'Subcategoria',
     'historial'                   => 'Historial',
     'permisos'                    => 'Permisos',
-    'comentario'                  => 'Comentarios'
+    'comentario'                  => 'Comentarios',
+    'comentario_area'             => 'A. Comentario'
 ];

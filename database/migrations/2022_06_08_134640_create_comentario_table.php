@@ -16,11 +16,14 @@ class CreateComentarioTable extends Migration
         Schema::create('comentario', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('asunto');            
+            $table->foreign('user_id')->references('id')->on('users');            
+            $table->unsignedBigInteger('area_id');
+            $table->foreign('area_id')->references('id')->on('comentario_area');          
             $table->string('comentario'); 
             $table->tinyInteger('estado')->default(1);
-            $table->timestamps();
+            $table->date('fecha');
+            $table->date('created_at');
+            $table->date('updated_at');
         });
     }
 

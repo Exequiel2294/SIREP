@@ -1,19 +1,20 @@
 @extends('adminlte::page')
 
-@section('title', 'Comentarios')
+@section('title', 'Area')
 @section('post_title', config('app.name'))
 
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Comentarios</h1>
-            <a href="javascript:void(0)" class="btn btn-success" id="add">Agregar</a> 
+            <h1>Comentario - Area</h1>
+            <a href="javascript:void(0)" class="btn btn-success" id="add">Añadir</a> 
         </div> 
     </div>  
 @stop
 
 @section('css')
     <style>
+
 
         /* Section content-header */
         .section-header {
@@ -121,7 +122,6 @@
             .generic-card {
                 width: 95%;
                 margin-top: 1rem;
-                margin-left: 1rem;
             }
         }
         .generic-body {
@@ -129,24 +129,186 @@
         }
 
 
-       
+        /* DATATABLES */
+        .datatables-p {
+            display: flex;
+            justify-content: center;
+            padding: 0 .5rem;
+            margin-top: 1rem;
+        }
+        @media(min-width:750px) {
+            .datatables-p {
+                margin-top: 2rem;
+            }
+        }
+        .dt-buttons .btn-secondary {
+            background-color: #0f62ac;
+            border-color: #0f62ac;
+        }
+        @media(min-width:750px) {
+            .dt-buttons .btn-secondary {
+                font-size: 1.15rem;
+            }
+        }
+        .datatables-s {
+            display: flex;
+            flex-direction: column;
+        }
+        @media(min-width:750px) {
+            .datatables-s {        
+                margin-top: 1rem;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        .datatables-s .datatables-length {
+            display: flex;
+            justify-content: center;
+            margin-top: .5rem;
+        }
+        @media(min-width:750px) {
+            .datatables-s .datatables-length {
+                margin-left: 2rem;
+            }
+        }
+        .datatables-s .datatables-filter {
+            display: flex;
+            justify-content: center;
+            margin-top: .5rem;
+        }
+        @media(min-width:750px) {
+            .datatables-s .datatables-filter {
+                margin-right: 2rem;
+            }
+        }
+        .datatables-t {
+            padding: .5rem 0 0 .3rem;
+            margin: auto;
+            max-width: 80rem;
+        }
+        @media(min-width:750px) {
+            .datatables-t {
+                margin-top: 1rem;
+                width: 95%;
+            }
+        }
+
+        .datatables-c {        
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+        @media(min-width:750px) {
+            .datatables-c {        
+                margin-top: 1rem;
+                justify-content: space-between;
+                flex-direction: row; 
+            }
+        }
+        .datatables-c .datatables-information {
+            justify-content: center;
+            margin-top: .5rem;
+            display: none;
+        }
+        @media(min-width:450px) {
+            .datatables-c .datatables-information {
+                display: flex;
+            }
+        }
+        @media(min-width:750px) {
+            .datatables-c .datatables-information {
+                margin-left: 2rem;
+            }
+        }
+        .datatables-c .datatables-processing {
+            margin-top: .5rem;
+            display: flex;
+            justify-content: center;
+        }
+        @media(min-width:450px) {
+            .datatables-c .datatables-processing {
+                margin: 1rem 0 0 0;
+            }
+        }
+        @media(min-width:750px) {
+            .datatables-c .datatables-processing {
+                margin: .5rem 2rem 0 0;
+            }
+        }
     </style> 
 @stop
 
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
-        $(document).ready(function(){  
-            console.log(moment().zone());
-            $.get('comentario/'+moment().zone()+'/show', function(data){
-                $(".lineatiempo").html(data);
-            })
+
+        /*PRESS NAV-LINK BUTTON*/
+        $('.nav-link').click(function (){ 
+            setTimeout(
+                function() {
+                    var oTable = $('#data-table').dataTable();
+                    oTable.fnAdjustColumnSizing();
+                }, 
+            350);
         });
+        /*PRESS NAV-LINK BUTTON*/
+        
+
+        /* DATATABLES */
+        $(document).ready(function(){     
+            $("#data-table").DataTable({
+                dom:    "<'datatables-t'<'datatables-table'tr>>" + 
+                         "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                processing: true,
+                bInfo: true,
+                serverSide: true,
+                responsive: true,
+                scrollX : true,
+                ajax:{                
+                    url: "{{route('comentario_area')}}",
+                    type: 'GET',
+                },
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast":"Último",
+                        "sNext":"Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "sProcessing":"Procesando...",
+                },
+                columns: [
+                    {data:'nombre', name:'nombre'},
+                    {data:'estado',name:'estado',
+                        render: function(data){
+                            if(data == 1){
+                                return 'Activo';
+                            }
+                            else
+                            {
+                                return 'Desactivo';
+                            }                            
+                        } 
+                    },
+                    {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
+                ],
+                order: [[0, 'asc']]            
+            });
+        });
+        /* DATATABLES */
 
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar Comentario'); 
+            $('#modal-title').html('Cargar Area'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
@@ -156,16 +318,13 @@
          /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
-            $.get('categoria/'+id+'/edit', function(data){
+            $.get('comentario_area/'+id+'/edit', function(data){
                 $('#form-button').val(0); 
-                $('#modal-title').html('Editar Categoria'); 
+                $('#modal-title').html('Editar Area'); 
                 $('#modal-form').trigger("reset"); 
                 $('#modal').modal('show');
-                $('#id').val(data.id);      
-                $("#area_id").val(data.area_id).attr("selected", "selected");                    
-                $('#nombre').val(data.nombre);                   
-                $('#descripcion').val(data.descripcion);                   
-                $('#orden').val(data.orden);                     
+                $('#id').val(data.id);                          
+                $('#nombre').val(data.nombre);                           
                 $("#estado").val(data.estado).attr("selected", "selected");
             })
         });      
@@ -193,13 +352,12 @@
             }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "comentario/" + id,
+                    url: "comentario_area/" + id,
                     type: 'delete',
                     data:{_token: $('input[name="_token"]').val()},
-                    success: function (data) {            
-                        $.get('comentario/'+moment().zone()+'/show', function(data){
-                            $(".lineatiempo").html(data);
-                        })
+                    success: function (data) { 
+                        var oTable = $('#data-table').dataTable();
+                        oTable.fnDraw(false); 
                         swalWithBootstrapButtons.fire(
                             'Borrado!',
                             'El registro fue eliminado.',
@@ -235,16 +393,17 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
-                asunto: {
+                nombre: {
                     required: true,
                     minlength: 2,
                     maxlength: 100
                 },
-                comentario: {
-                    required: false,
-                    minlength: 2,
-                    maxlength: 250
-                },
+                estado: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 1
+                }
                 
             },
             messages: {  
@@ -287,11 +446,13 @@
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
                 $.ajax({
-                    url:"{{route('comentario.load') }}",
+                    url:"{{route('comentario_area.load') }}",
                     method:"POST",
                     data:{
-                        asunto:$('#asunto').val(),
-                        comentario:$('#comentario').val(),
+                        id: $("#id").val(),
+                        nombre:$('#nombre').val(),
+                        descripcion:$('#descripcion').val(),
+                        estado:$('#estado').val(),
                         _token: $('input[name="_token"]').val()
                     },
                     success:function(data)
@@ -303,10 +464,10 @@
                             $(".alert-error").css('display','none');
                             $('#modal-form').trigger("reset");
                             $('#form-button').html('Guardar Cambios');
-                            MansfieldRep.notification('Comentario cargado con exito', 'MansfieldRep', 'success');            
-                            $.get('comentario/'+moment().zone()+'/show', function(data){
-                                $(".lineatiempo").html(data);
-                            })
+                            var oTable = $('#data-table').dataTable();
+                            oTable.fnDraw(false);
+                            MansfieldRep.notification('Area cargada con exito', 'MansfieldRep', 'success');
+                            
                         }else{
                             $('#form-button').html('Guardar Cambios');
                             printErrorMsg(data.error);
@@ -344,18 +505,20 @@
 
 @section('content')
     <div class="row" style="justify-content: center; overflow:auto;">
-        <div class="generic-card">            
-            <div class="generic-body">                     
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="timeline lineatiempo"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>               
+        <div class="generic-card">
+            <div class="card">
+                <div class="generic-body">        
+                    <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
+                        <thead>
+                            <tr>    
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                                <th style="min-width:50px!important;"></th>            
+                            </tr>
+                        </thead>      
+                    </table>                
+                </div>
+            </div>
         </div> 
         @csrf
     </div> 
@@ -381,22 +544,25 @@
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group row">
-                            <label for="asunto" class="col-sm-2 col-form-label">Asunto</label>
+                            <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
                             <div class="col-sm-10">
-                              <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto">
+                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre">
                             </div>
-                        </div>
+                        </div>    
                         <div class="form-group row">
-                            <label for="comentario" class="col-sm-2 col-form-label">Comentario</label>
+                            <label for="estado" class="col-sm-2 col-form-label">Estado</label>
                             <div class="col-sm-10">
-                              <textarea type="text" class="form-control" id="comentario" name="comentario" placeholder="Comentario" rows="6"></textarea>
+                                <select class="form-control company" name="estado" id="estado">
+                                    <option value=0>Desactivo</option>
+                                    <option value=1 selected>Activo</option>
+                                </select> 
                             </div>
                         </div>              
                         @csrf
                     </form>
                 </div>
                 <div class="modal-foot">
-                    <button type="button" class="btn btn-primary" id="form-button">Cargar</button>
+                    <button type="button" class="btn btn-primary" id="form-button">Guardar Cambios</button>
                 </div>
             </div>
         </div>

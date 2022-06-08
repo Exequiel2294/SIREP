@@ -238,11 +238,6 @@ return [
             'icon' => 'nav-icon fas fa-book',
         ],
         [
-            'text' => 'comentario',
-            'url'  => 'comentario',
-            'icon' => 'nav-icon fas fa-comment',
-        ],
-        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],
@@ -277,6 +272,11 @@ return [
                     'text' => 'permisos',
                     'url'  => 'permisos',
                     'icon' => 'nav-icon fas fa-users-cog',
+                ],
+                [
+                    'text' => 'comentario_area',
+                    'url'  => 'comentario_area',
+                    'icon' => 'nav-icon fas fa-comment-alt',
                 ],
             ],
         ],

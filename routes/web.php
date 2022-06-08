@@ -26,7 +26,7 @@ Auth::routes([
 ]);
 
 Route::get('/home', function() {
-    return view('dashboard');
+    return redirect()->route('dashboard');
 })->name('home')->middleware('auth');
 
 Route::group(['middleware' => ['auth']], function() {
@@ -39,9 +39,9 @@ Route::group(['middleware' => ['auth']], function() {
     
     Route::get('historial', 'HistorialController@index')->name('historial');
 
-    Route::get('comentario', 'ComentarioController@index')->name('comentario');
     Route::post('comentario/load', 'ComentarioController@load')->name('comentario.load');
-    Route::get('comentario/{timezone}/show','ComentarioController@show')->name('comentario.show');
+    Route::get('comentario/comentariostable', 'ComentarioController@comentariostable')->name('comentario.comentariostable'); 
+    Route::get('comentario/{id}/edit','ComentarioController@edit')->name('comentario.edit');
     Route::delete('comentario/{id}','ComentarioController@delete')->name('comentario.delete');
 });
 
@@ -76,4 +76,9 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::post('permisos/check', 'PermisosController@check')->name('permisos.check');
     Route::post('permisos/load', 'PermisosController@load')->name('permisos.load');
     //Route::get('permisos/{id}', 'PermisosController@load')->name('permisos.load');
+
+    Route::get('comentario_area', 'ComentarioAreaController@index')->name('comentario_area');
+    Route::post('comentario_area/load', 'ComentarioAreaController@load')->name('comentario_area.load');
+    Route::get('comentario_area/{id}/edit','ComentarioAreaController@edit')->name('comentario_area.edit');
+    Route::delete('comentario_area/{id}','ComentarioAreaController@delete')->name('comentario_area.delete');
 });
