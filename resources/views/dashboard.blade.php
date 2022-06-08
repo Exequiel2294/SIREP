@@ -869,6 +869,45 @@
             });
         /* ADD BUTTON*/
 
+        /* EDIT BUTTON */
+        $(document).on('click', '.edit', function(){ 
+            $.ajax({
+                url:"{{route('dashboard.edit') }}",
+                method:"POST",
+                data:{
+                    id: $(this).data('id'),
+                    variable_id:$(this).data('vbleid'),
+                    selecteddate: moment(date_selected).utc().format('YYYY-MM-DD'),
+                    _token: $('input[name="_token"]').val()
+                },
+                success:function(data)
+                {  
+                    if (data['val'] == 1)
+                    {
+                        $('#form-button').val(0); 
+                        $('#modal-title').html('Editar Registro'); 
+                        $('#modal-form').trigger("reset"); 
+                        $('#modal').modal('show');
+                        $('#id').val(data['generic'].id);
+                        $('#area').val(data['generic'].area);
+                        $('#categoria').val(data['generic'].categoria);
+                        $('#subcategoria').val(data['generic'].subcategoria);
+                        $('#variable').val(data['generic'].variable);
+                        $('#fecha').val(data['generic'].fecha);
+                        $('#valor').val(data['generic'].valor);
+                    }
+                    else
+                    {
+                        Swal.fire({
+                            title: data['msg'],
+                            icon: 'warning',
+                        })
+                    }
+                }
+            });
+        });      
+        /* EDIT BUTTON */
+        
         /* EDIT BUTTON COMENTARIO*/
         $(document).on('click', '.edit-comentario', function(){ 
             var id=$(this).data('id');
@@ -891,8 +930,7 @@
                     })
                 }
             })
-        });  
-             
+        });               
         /* EDIT BUTTON COMENTARIO*/
 
         /* EDIT2 BUTTON */  
