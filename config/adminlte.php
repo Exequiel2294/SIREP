@@ -278,6 +278,11 @@ return [
                     'url'  => 'permisos',
                     'icon' => 'nav-icon fas fa-users-cog',
                 ],
+                [
+                    'text' => 'comentario_area',
+                    'url'  => 'comentario_area',
+                    'icon' => 'nav-icon fas fa-comment-alt',
+                ],
             ],
         ],
     ],

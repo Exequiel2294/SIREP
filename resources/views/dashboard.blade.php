@@ -187,23 +187,23 @@
                 justify-content: space-between;
             }
         }
-        .datatables-s .datatables-length {
+        .datatables-s .datatables-length, .datatables-s .datatables-title {
             display: flex;
             justify-content: center;
             margin-top: .5rem;
         }
         @media(min-width:750px) {
-            .datatables-s .datatables-length {
+            .datatables-s .datatables-length, .datatables-s .datatables-title {
                 margin-left: 2rem;
             }
         }
-        .datatables-s .datatables-filter {
+        .datatables-s .datatables-filter, .datatables-s .datatables-btn-cargar {
             display: flex;
             justify-content: center;
             margin-top: .5rem;
         }
         @media(min-width:750px) {
-            .datatables-s .datatables-filter {
+            .datatables-s .datatables-filter, .datatables-s .datatables-btn-cargar {
                 margin-right: 2rem;
             }
         }
@@ -324,6 +324,8 @@
                 function() {
                     var oTable = $('#procesos-table').dataTable();
                     oTable.fnAdjustColumnSizing();
+                    var oTable2 = $('#comentarios-table').dataTable();
+                    oTable2.fnAdjustColumnSizing();
                 }, 
             350);
         });
@@ -338,7 +340,10 @@
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 date_selected = e.date;
+                test = moment(date_selected).format('YYYY-MM-DD');
+                console.log(date_selected);
                 $('#procesos-table').DataTable().ajax.reload(null, false);
+                $('#comentarios-table').DataTable().ajax.reload(null, false);
                 if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 19)
                 {
                     $(".alert-light").css('display','flex');
@@ -352,12 +357,9 @@
         
 
         /* DATATABLES */
-        $(document).ready(function(){  
+        $(document).ready(function(){            
             
-            /** */
             var collapsedGroups = {};
-            /** */
-
             if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 14)
             {
                $(".alert-light").css('display','flex');
@@ -783,59 +785,115 @@
                     [1, 'asc'],
                     [2, 'asc']
                 ]
-            });         
+            });     
          
-            /** */
+         /** */
             $('#procesos-table tbody').on('click', 'tr.dtrg-level-1', function () {
                 var name = $(this).data('name');
                 collapsedGroups[name] = !collapsedGroups[name];
                 tabledata.draw();
             });
             /** */
-
             
+            var tablecomentario = $("#comentarios-table").DataTable({
+                dom:     "<'datatables-s'<'datatables-title'l><'datatables-btn-cargar'f>>" +
+                         "<'datatables-t'<'datatables-table'tr>>" + 
+                         "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
+                lengthChange: false,
+                paging: false,
+                processing: true,
+                bInfo: false,
+                serverSide: true,
+                responsive: true,                
+                scrollX : true,
+                select: true,
+                scrollY: '65vh',                
+                scrollCollapse: true,
+                paging: false,
+                ajax:{                
+                    url: "{{route('comentario.comentariostable')}}",
+                    type: 'GET',
+                    data: function(d){
+                        d.fecha = moment(date_selected).format('YYYY-MM-DD');
+                        d._token = $('input[name="_token"]').val();
+                    }
+                },
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast":"Último",
+                        "sNext":"Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "sProcessing":"Procesando...",
+                },
+                columns: [           
+                               
+                    {data:'id', name:'id', orderable: false, searchable: false, visible: false},
+                    {data:'area', name:'area', orderable: false, searchable: false},
+                    {data:'usuario', name:'usuario', orderable: false,searchable: false},        
+                    {data:'comentario', name:'comentario', orderable: false,searchable: false},               
+                    {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
+                ], 
+                columnDefs: [
+                    {
+                        targets: [0,1],
+                        className: "dt-center"
+                    }
+                ],
+                orderFixed: [
+                    [0, 'asc']
+                ]
+            });   
+
+            $('.datatables-title').html('<div style="font-size:1.5rem; font-weight:500;">Comentarios</div>');
+            $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit"  class="btn btn-success add" title="Editar registro">Cargar</a>');
 
         });
         /* DATATABLES */
 
-        /* EDIT BUTTON */
-        $(document).on('click', '.edit', function(){ 
-            $.ajax({
-                url:"{{route('dashboard.edit') }}",
-                method:"POST",
-                data:{
-                    id: $(this).data('id'),
-                    variable_id:$(this).data('vbleid'),
-                    selecteddate: moment(date_selected).utc().format('YYYY-MM-DD'),
-                    _token: $('input[name="_token"]').val()
-                },
-                success:function(data)
-                {  
-                    if (data['val'] == 1)
-                    {
-                        $('#form-button').val(0); 
-                        $('#modal-title').html('Editar Registro'); 
-                        $('#modal-form').trigger("reset"); 
-                        $('#modal').modal('show');
-                        $('#id').val(data['generic'].id);
-                        $('#area').val(data['generic'].area);
-                        $('#categoria').val(data['generic'].categoria);
-                        $('#subcategoria').val(data['generic'].subcategoria);
-                        $('#variable').val(data['generic'].variable);
-                        $('#fecha').val(data['generic'].fecha);
-                        $('#valor').val(data['generic'].valor);
-                    }
-                    else
-                    {
-                        Swal.fire({
-                            title: data['msg'],
-                            icon: 'warning',
-                        })
-                    }
-                }
+
+        /* ADD BUTTON*/
+        $(document).on('click', '.add', function(){ 
+                $('#form-button-comentario').val(1);     
+                $('#modal-title-comentario').html('Cargar Comentario'); 
+                $('#modal-form-comentario').trigger("reset"); 
+                $('#modal-comentario').modal('show');  
+                $('#id_comentario').val('');   
             });
-        });      
-        /* EDIT BUTTON */
+        /* ADD BUTTON*/
+
+        /* EDIT BUTTON COMENTARIO*/
+        $(document).on('click', '.edit-comentario', function(){ 
+            var id=$(this).data('id');
+            $.get('comentario/'+id+'/edit', function(data){
+                if (data['val'] == 1)
+                {
+                    $('#form-button-comentario').val(0); 
+                    $('#modal-title-comentario').html('Editar Comentario'); 
+                    $('#modal-form-comentario').trigger("reset"); 
+                    $('#modal-comentario').modal('show');
+                    $('#id_comentario').val(data['generic'].id);                          
+                    $('#comentario').val(data['generic'].comentario);                           
+                    $("#area_id_comentario").val(data['generic'].area_id).attr("selected", "selected");
+                }
+                else
+                {
+                    Swal.fire({
+                        title: data['msg'],
+                        icon: 'warning',
+                    })
+                }
+            })
+        });  
+             
+        /* EDIT BUTTON COMENTARIO*/
 
         /* EDIT2 BUTTON */  
         $(document).on('click', '.edit2', function() {
@@ -846,7 +904,77 @@
         });
         /* EDIT2 BUTTON */
 
-        /* FORM BUTTON */        
+
+        /* DELETE BUTTON */  
+        $(document).on('click', '.delete-comentario', function() {
+            let id = $(this).data('id');
+            const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: true
+            })
+
+            swalWithBootstrapButtons.fire({
+            title: 'Estas seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+            }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "comentario/" + id,
+                    type: 'delete',
+                    data:{_token: $('input[name="_token"]').val()},
+                    success: function (data) { 
+                        if (data['val'] == 1)
+                        {
+                            var oTable = $('#comentarios-table').dataTable();
+                            oTable.fnDraw(false); 
+                            swalWithBootstrapButtons.fire(
+                                'Borrado!',
+                                'El registro fue eliminado.',
+                                'success'
+                            )
+                        }
+                        else
+                        {
+                            Swal.fire({
+                                title: data['msg'],
+                                icon: 'warning',
+                            })                            
+                        }
+                    },
+                    error: function (data){
+                        swalWithBootstrapButtons.fire(
+                            'Error!',
+                            'El registro no puede ser borrado! Hay recursos usandolo.',
+                            'warning'
+                        )
+                    }
+                });
+               
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelado',
+                    'Tu registro esta a salvo :)',
+                    'error'
+                )
+            }
+            })
+
+
+        });
+        /* DELETE BUTTON */
+
+        /* FORM BUTTON DASHBOARD*/        
         $("#modal-form").validate({
             rules: {
                 valor: {
@@ -933,7 +1061,102 @@
                 $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
             });
         }
-        /* FORM BUTTON */
+        /* FORM BUTTON DASHCOARD*/
+
+        /* FORM BUTTON DASHBOARD*/        
+        $("#modal-form-comentario").validate({
+            rules: {
+                area_id_comentario: {
+                    required: true
+                },
+                comentario: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 250
+                },
+            },
+            messages: {  
+         
+            },
+            errorElement: 'span', 
+            errorClass: 'help-block help-block-error', 
+            focusInvalid: false, 
+            ignore: "", 
+            highlight: function (element, errorClass, validClass) { 
+                $(element).closest('.form-group').addClass('text-danger'); 
+                $(element).closest('.form-control').addClass('is-invalid');
+            },
+            unhighlight: function (element) { 
+                $(element).closest('.form-group').removeClass('text-danger'); 
+                $(element).closest('.form-control').removeClass('is-invalid');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('text-danger');
+            },
+            errorPlacement: function (error, element) {
+                if ($(element).is('select') && element.hasClass('bs-select')) {
+                    error.insertAfter(element);
+                } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
+                    element.next().after(error);
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); 
+                }
+            },
+            invalidHandler: function (event, validator) {                 
+            },
+            submitHandler: function (form) {
+                return true; 
+            }
+        });
+
+        $("#form-button-comentario").click(function(){
+            if($("#modal-form-comentario").valid()){
+                $('#form-button').html('Guardando..');
+                $.ajax({
+                    url:"{{route('comentario.load') }}",
+                    method:"POST",
+                    data:{
+                        id: $("#id_comentario").val(),
+                        area_id_comentario:$('#area_id_comentario').val(),
+                        selecteddate: moment(date_selected).format('YYYY-MM-DD'),
+                        comentario:$('#comentario').val(),
+                        _token: $('input[name="_token"]').val()
+                    },
+                    success:function(data)
+                    {  
+                        $('#modal').scrollTop(0);
+                        if($.isEmptyObject(data.error)){
+                            $('#modal-comentario').modal('hide');
+                            $(".alert-error").css('display','none');
+                            $('#modal-form-comentario').trigger("reset");
+                            $('#form-button-comentario').html('Cargar');
+                            var oTable = $('#comentarios-table').dataTable();
+                            oTable.fnDraw(false);
+                            if($('#form-button').val() == 1){
+                                MansfieldRep.notification('Registro cargado con exito', 'MansfieldRep', 'success');
+                            }   
+                            else{
+                                MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                            } 
+                        }else{
+                            $('#form-button').html('Guardar Cambios');
+                            printErrorMsg(data.error);
+                        } 
+                    }
+                });
+            }            
+        });
+
+        function printErrorMsg(msg) {
+            $(".alert-error").css('display','flex');
+            $(".print-error-msg").find("ul").html('');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+        /* FORM BUTTON DASHCOARD*/
 
         /* CLOSE ALERT */
         $(document).on('click', '#close-alert', function(){       
@@ -947,6 +1170,13 @@
             $(".alert-error").css('display','none');
         });
         /* ACTION TO CLOSE MODAL */
+
+        /* ACTION TO CLOSE MODAL COMENTARIO */
+        $('#modal').on('hidden.bs.modal', function () {
+            $("#modal-form-comentario").validate().resetForm();
+            $(".alert-error").css('display','none');
+        });
+        /* ACTION TO CLOSE MODAL COMENTARIO*/
 
 
     </script>
@@ -992,6 +1222,26 @@
                                 <th class="thcenter exportable">Real</th>
                                 <th class="thcenter exportable">Budget</th>
                                 <th class="thcenter exportable">%</th>
+                            </tr>
+                        </thead>  
+                    </table>                
+                </div>
+            </div>
+        </div> 
+        @csrf
+    </div>
+    <div class="row" style="justify-content: center; overflow:auto;">
+        <div class="generic-card">
+            <div class="card">
+                <div class="generic-body">   
+                    <table style="width:100%; border-collapse: collapse !important;" class="table-sm table-bord table-hover" id="comentarios-table">
+                        <thead style=" border-collapse: collapse !important;">
+                            <tr>
+                                <th></th>
+                                <th class="thcenter" style="min-width:6vw!important;">Area</th>
+                                <th class="thcenter" style="min-width:6vw!important;">Usuario</th>
+                                <th class="thcenter" style="min-width:25vw!important;">Procesos</th>
+                                <th class="thcenter" style="min-width:25px!important;"></th>
                             </tr>
                         </thead>  
                     </table>                
@@ -1062,6 +1312,52 @@
                 </div>
                 <div class="modal-foot">
                     <button type="button" class="btn btn-primary" id="form-button">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-comentario" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-head">
+                    <h5 id="modal-title-comentario"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert-error">
+                    <div class="print-error-msg">
+                        <h4><i class="icon fa fa-ban"></i> El formulario contiene errores</h4>
+                        <ul></ul>
+                    </div>
+                    <button type="button" id="close-alert" class="close" aria-hidden="true">×</button>          
+                </div>
+                <div class="modal-bod">
+                    <form action="post" id="modal-form-comentario" name="modal-form-comentario" autocomplete="off">
+                        <input type="hidden" name="id_comentario" id="id_comentario">                       
+                        <div class="form-group row">
+                            <label for="area_id_comentario" class="col-sm-2 col-form-label">Area</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="area_id_comentario" id="area_id_comentario">
+                                    <option value="" selected disabled>Seleccione Area</option>
+                                    @foreach($areas as $id => $nombre)
+                                            <option value="{{$id}}">{{$nombre}}</option>
+                                    @endforeach
+                                </select> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="comentario" class="col-sm-2 col-form-label">Comentario</label>
+                            <div class="col-sm-10">
+                              <textarea type="text" class="form-control" id="comentario" name="comentario" placeholder="Comentario" rows="6"></textarea>
+                            </div>
+                        </div>              
+                        @csrf
+                    </form>
+                </div>
+                <div class="modal-foot">
+                    <button type="button" class="btn btn-primary" id="form-button-comentario">Cargar</button>
                 </div>
             </div>
         </div>

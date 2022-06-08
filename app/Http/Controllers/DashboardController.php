@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Data;
 use App\Models\Historial;
+use App\Models\ComentarioArea;
 use App\Models\Variable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     { 
-        return view('dashboard');
+        $areas = ComentarioArea::orderBy('nombre')->pluck('nombre','id')->toArray();
+        return view('dashboard', compact('areas'));
     }
 
     public function procesostable(Request $request)
@@ -26,13 +28,13 @@ class DashboardController extends Controller
         if(request()->ajax()) {
             $this->date = $request->get('fecha');
             $this->pparray = 
-            [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
-             10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
-             10056, 10057, 10058];//se coloca 10015 en pparray por el budget
+                [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
+                10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
+                10056, 10057, 10058];//se coloca 10015 en pparray por el budget
             $this->sumarray = 
-            [10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 
-             10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 
-             10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067];
+                [10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 
+                10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 
+                10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067];
             $this->promarray = 
              [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];
             $this->divarray = 
