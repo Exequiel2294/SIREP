@@ -1072,7 +1072,7 @@
                 comentario: {
                     required: true,
                     minlength: 2,
-                    maxlength: 250
+                    maxlength: 1000
                 },
             },
             messages: {  

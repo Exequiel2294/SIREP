@@ -26,7 +26,7 @@ class ComentarioController extends Controller
                 $request->all(),
                 [   
                     'area_id_comentario' => 'required|exists:comentario_area,id',
-                    'comentario' => 'required|string|min:5|max:250'
+                    'comentario' => 'required|string|min:5|max:1000'
                 ]             
             );
             if ($validator->fails()) 
@@ -54,7 +54,7 @@ class ComentarioController extends Controller
                 [   
                     'id'    => 'required|numeric|exists:comentario,id',  
                     'area_id_comentario' => 'required|exists:comentario_area,id',
-                    'comentario' => 'required|string|min:5|max:250'
+                    'comentario' => 'required|string|min:5|max:1000'
                 ]            
             );
             if ($validator->fails()) 
