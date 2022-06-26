@@ -5654,13 +5654,6 @@ class DashboardController extends Controller
                             ->where('fecha', $data->fecha)
                             ->update(['valor' =>$newvalue]);                    
                     break;  
-                    case 10052: 
-                    case 10061:
-                        DB::table('data')
-                            ->whereIn('variable_id',[10052,10061])
-                            ->where('fecha', $data->fecha)
-                            ->update(['valor' =>$newvalue]);                    
-                    break;  
                     case 10051: 
                     case 10057:
                         DB::table('data')

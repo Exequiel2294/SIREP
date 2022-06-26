@@ -636,7 +636,7 @@
                             </div>
                         </div>
                         <fieldset id="fieldset-permisos" class="form-group border">
-                            <legend class="w-auto px-2">Seleccionar Usuario para transferir permisos</legend>                         
+                            <legend class="w-auto px-2">Seleccionar Usuario desde el cual se van a transferir los permisos</legend>                         
                             <div class="form-group row fieldset-div">
                                 <div class="form-group">
                                     <select class="form-control" name="usercopy_id" id="usercopy_id">

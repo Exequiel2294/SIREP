@@ -11,6 +11,8 @@ use LdapRecord\Models\ActiveDirectory\Group;
 use LdapRecord\Models\ActiveDirectory\User;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Http\JsonResponse;
+
 class LoginController extends Controller
 {
     /*
@@ -58,23 +60,42 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if (!Auth::user()->hasAnyRole(['Reportes_L', 'Reportes_E', 'Admin'])){
-            $email = Auth::user()->email;
-            $user = User::findByOrFail('mail', $email);
+        
+        $email = Auth::user()->email;
+        $user = User::findByOrFail('mail', $email);
 
-            $reportesE= Group::find('CN=Reportes_E,CN=Users,DC=argentina,DC=FSM,DC=CORP');
-            $reportesL = Group::find('CN=Reportes_L,CN=Users,DC=argentina,DC=FSM,DC=CORP');
-            $reportesA = Group::find('CN=Reportes_A,CN=Users,DC=argentina,DC=FSM,DC=CORP');
+        $reportesE= Group::find('CN=Reportes_E,CN=Users,DC=argentina,DC=FSM,DC=CORP');
+        $reportesL = Group::find('CN=Reportes_L,CN=Users,DC=argentina,DC=FSM,DC=CORP');
+        $reportesA = Group::find('CN=Reportes_A,CN=Users,DC=argentina,DC=FSM,DC=CORP');
 
-            if ($user->groups()->exists($reportesE)) {
-                Auth::user()->assignRole('reportes_E');
-            }
-            if ($user->groups()->exists($reportesL)) {
-                Auth::user()->assignRole('reportes_L');
-            }
-            if ($user->groups()->exists($reportesA)) {
-                Auth::user()->assignRole('Admin');
-            }
+        if ($user->groups()->exists($reportesE)) {
+            Auth::user()->syncRoles('reportes_E');
         }
+        if ($user->groups()->exists($reportesL)) {
+            Auth::user()->syncRoles('reportes_L');
+        }
+        if ($user->groups()->exists($reportesA)) {
+            Auth::user()->syncRoles('Admin');
+        }
+        
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        $request->session()->flush();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
     }
 }
