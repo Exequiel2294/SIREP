@@ -24,6 +24,11 @@ class PermisosController extends Controller
     public function index()
     {
         $usuarios = DB::table('users')
+                    ->join('model_has_roles', 'model_has_roles.model_id', '=', 'users.id')
+                    ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->where('roles.name', 'Reportes_L')
+                    ->orWhere('roles.name', 'Admin')
+                    ->select('users.id', 'users.name')
                     ->get();
         return view('permisos',['usuarios'=>$usuarios]);
     }

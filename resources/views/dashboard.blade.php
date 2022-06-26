@@ -315,6 +315,7 @@
 
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script> 
+    <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
 
@@ -884,6 +885,7 @@
                 {  
                     if (data['val'] == 1)
                     {
+                        
                         $('#form-button').val(0); 
                         $('#modal-title').html('Editar Registro'); 
                         $('#modal-form').trigger("reset"); 
@@ -1216,6 +1218,14 @@
         });
         /* ACTION TO CLOSE MODAL COMENTARIO*/
 
+        /* MODAL DRAGGABLE */
+        $('.modal.draggable>.modal-dialog').draggable({
+            cursor: 'move',
+            handle: '.modal-head'
+        });
+        $('.modal.draggable>.modal-dialog>.modal-content>.modal-head').css('cursor', 'move');
+        /* MODAL DRAGGABLE */
+
 
     </script>
 @stop
@@ -1290,7 +1300,7 @@
     </div> 
 
     {{-- MODAL --}}
-    <div class="modal fade" id="modal" aria-hidden="true">
+    <div class="modal draggable fade" id="modal" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-head">

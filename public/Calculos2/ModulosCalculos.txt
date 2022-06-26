@@ -1,384 +1,390 @@
 
 PENDIENTE MMSA_APILAM_STACKER_Tiempo Operativo
 
-TRITURACION PRIMARIA Y SECUNDARIA
+VARIABLE AREA
 
-    10005: Mineral Triturado - MMSA_TP_Mineral Triturado (t): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Primaria Mineral
+    TRITURACION PRIMARIA Y SECUNDARIA
 
-    10004: Ley Au - MMSA_TP_Ley Au (g/t): 
-        Se Carga en sistema
+        10005: Mineral Triturado - MMSA_TP_Mineral Triturado (t): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Primaria Mineral
 
-    10002: Au Triturado - MMSA_TP_Au Triturado (oz):
-        Calculo: (Mineral Triturado * Ley Au)/31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10004: Ley Au - MMSA_TP_Ley Au (g/t): 
+            Se Carga en sistema
 
-    10006: Productividad - MMSA_TP_Productividad (t/h):
-        Calculo: (Mineral triturado/ Horas Operativas Trituración Primaria)
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10002: Au Triturado - MMSA_TP_Au Triturado (oz):
+            Calculo: (Mineral Triturado * Ley Au)/31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10003: Disponibilidad - MMSA_TP_Disponibilidad (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituracion Primaria Disponibilidad (%)
+        10006: Productividad - MMSA_TP_Productividad (t/h):
+            Calculo: (Mineral triturado/ Horas Operativas Trituración Primaria)
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10007: Utilización - MMSA_TP_Utilización (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituracion Primaria Utilizacion (%)
+        10003: Disponibilidad - MMSA_TP_Disponibilidad (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituracion Primaria Disponibilidad (%)
 
-    /*NO VISIBLE*/
-   10062: MMSA_TP_Horas Operativas Trituración Primaria -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_100_002!PI_100_RunHs_PIP
+        10007: Utilización - MMSA_TP_Utilización (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituracion Primaria Utilizacion (%)
 
-HPGR
+        /*NO VISIBLE*/
+        10062: MMSA_TP_Horas Operativas Trituración Primaria -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_100_002!PI_100_RunHs_PIP
 
-    10011: Mineral Triturado - MMSA_HPGR_Mineral Triturado (t): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
+    HPGR
 
-    10010: Ley Au - MMSA_HPGR_Ley Au (g/t): -> 11/21h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Ley Au (g/t)
+        10011: Mineral Triturado - MMSA_HPGR_Mineral Triturado (t): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
 
-    10008: Au Triturado - MMSA_HPGR_Au Triturado (oz):
-        Calculo: (Mineral Triturado * Ley Au)/31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10010: Ley Au - MMSA_HPGR_Ley Au (g/t): -> 11/21h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Ley Au (g/t)
 
-    10013: Productividad - MMSA_HPGR_Productividad (t/h):
-        Calculo: (Mineral triturado/ Horas Operativas Trituración Terciaria)
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10008: Au Triturado - MMSA_HPGR_Au Triturado (oz):
+            Calculo: (Mineral Triturado * Ley Au)/31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10009: Disponibilidad - MMSA_HPGR_Disponibilidad (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Disponibilidad (%)
+        10013: Productividad - MMSA_HPGR_Productividad (t/h):
+            Calculo: (Mineral triturado/ Horas Operativas Trituración Terciaria)
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10014: Utilización - MMSA_HPGR_Utilización (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Utilizacion (%)
+        10009: Disponibilidad - MMSA_HPGR_Disponibilidad (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Disponibilidad (%)
 
-    10012: P80 - MMSA_HPGR_P80 (mm):
-        Se Carga en sistema
+        10014: Utilización - MMSA_HPGR_Utilización (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Utilizacion (%)
 
-    /*NO VISIBLE*/
-    10063: Horas Operativas Trituración Terciaria - MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_100_003!PI_100_3_RunHs_PIP
+        10012: P80 - MMSA_HPGR_P80 (mm):
+            Se Carga en sistema
 
-AGLOMERACION
+        /*NO VISIBLE*/
+        10063: Horas Operativas Trituración Terciaria - MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_100_003!PI_100_3_RunHs_PIP
 
-    10019: Mineral Aglomerado - MMSA_AGLOM_Mineral Aglomerado (t): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
-        IDEM MMSA_HPGR_Mineral Triturado
+    AGLOMERACION
 
-    10020: Productividad - MMSA_AGLOM_Productividad (t/h):
-        Calculo
-        Mineral Aglomerado/Horas Operativas Aglomeración
+        10019: Mineral Aglomerado - MMSA_AGLOM_Mineral Aglomerado (t): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
+            IDEM MMSA_HPGR_Mineral Triturado
 
-    10021: Utilización - MMSA_AGLOM_Utilización (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Utilizacion (%)
+        10020: Productividad - MMSA_AGLOM_Productividad (t/h):
+            Calculo
+            Mineral Aglomerado/Horas Operativas Aglomeración
 
-    10017: Disponibilidad - MMSA_AGLOM_Disponibilidad (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Disponibilidad (%)
+        10021: Utilización - MMSA_AGLOM_Utilización (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Utilizacion (%)
 
-    10015: Adición de Cemento - MMSA_AGLOM_Adición de Cemento (kg/t):
-        Calculo
-        (Cemento * 1000)/Mineral Aglomerado
-        Se creo una nueva variable: 10067 MMSA_AGLOM_Cemento
-        Variable: Adicion de Cemento queda sin uso (Analizar su posible eliminacion)
+        10017: Disponibilidad - MMSA_AGLOM_Disponibilidad (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Disponibilidad (%)
 
-    10016: Adición de CN - MMSA_AGLOM_Adición de CN (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeración Solución Cianurada CN (ppm)
+        10015: Adición de Cemento - MMSA_AGLOM_Adición de Cemento (kg/t):
+            Calculo
+            (Cemento * 1000)/Mineral Aglomerado
+            Se creo una nueva variable: 10067 MMSA_AGLOM_Cemento
+            Variable: Adicion de Cemento queda sin uso (Analizar su posible eliminacion)
 
-    10018: Humedad - MMSA_AGLOM_Humedad (%):
-        Se carga en sistema
+        10016: Adición de CN - MMSA_AGLOM_Adición de CN (ppm): -> 11h -> Carga Manual
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeración Solución Cianurada CN (ppm)
+        ****** MODIFICACION 16/06/2022 ************
+        Se modifica en el .21 la descripcion del atributo(se saca el _11h) y queda como MMSA_AGLOM_Adición de CN unicamente
+            
+        *******************************************
 
-    /*NO VISIBLE*/
-    10067: Cemento - MMSA_AGLOM_Cemento -> 8h
-        Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Cemento
+        10018: Humedad - MMSA_AGLOM_Humedad (%):
+            Se carga en sistema
 
-    10066: Flujo - MMSA_AGLOM_Flujo: -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Conciliado.SCADA.Planta.Aglomeración.Solución cianurada.Flujo (m3/h)
+        /*NO VISIBLE*/
+        10067: Cemento - MMSA_AGLOM_Cemento -> 8h
+            Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Cemento
 
-    10064: Horas Operativas Aglomeración - MMSA_AGLOM_Horas Operativas Aglomeración: -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_200_001!PI_200_RunHs_PIP
+        10066: Flujo - MMSA_AGLOM_Flujo: -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Conciliado.SCADA.Planta.Aglomeración.Solución cianurada.Flujo (m3/h)
 
-APILAMIENTO - STACKER
+        10064: Horas Operativas Aglomeración - MMSA_AGLOM_Horas Operativas Aglomeración: -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_200_001!PI_200_RunHs_PIP
 
-    10031: Mineral Apilado Stacker - MMSA_APILAM_STACKER_Mineral Apilado Stacker (t):  -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
-        IDEM MMSA_HPGR_Mineral Triturado
+    APILAMIENTO - STACKER
 
-    10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t):
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Ley Au (g/t)
-        IDEM MMSA_HPGR_Ley Au
+        10031: Mineral Apilado Stacker - MMSA_APILAM_STACKER_Mineral Apilado Stacker (t):  -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
+            IDEM MMSA_HPGR_Mineral Triturado
 
-    10027: Au Apilado Stacker - MMSA_APILAM_STACKER_Au Apilado Stacker (oz):
-        Calculo: (Mineral Apilado Stacker * Ley Au)/31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
-        IDEM MMSA_HPGR_Au Triturado
+        10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t):
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Ley Au (g/t)
+            IDEM MMSA_HPGR_Ley Au
 
-    10033: Recuperación - MMSA_APILAM_STACKER_Recuperación (%):
-        Se carga manual
+        10027: Au Apilado Stacker - MMSA_APILAM_STACKER_Au Apilado Stacker (oz):
+            Calculo: (Mineral Apilado Stacker * Ley Au)/31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
+            IDEM MMSA_HPGR_Au Triturado
 
-    10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker:
-        Calculo: ((Recuperacion/100) * Mineral Apilado Stacker * Ley Au) / 31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10033: Recuperación - MMSA_APILAM_STACKER_Recuperación (%):
+            Se carga manual
 
-    10032: Productividad - MMSA_APILAM_STACKER_Productividad (t/h):
-        Calculo: Mineral Apilado Stacker/Tiempo Operativo
-        NO SE TENDRIA QUE PODER MODIFICAR    
-    
-    10029: Disponibilidad - MMSA_APILAM_STACKER_Disponibilidad %: -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Disponibilidad (%)
+        10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker:
+            Calculo: ((Recuperacion/100) * Mineral Apilado Stacker * Ley Au) / 31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10034: Utilización - MMSA_APILAM_STACKER_Utilización (%): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Utilizacion (%)
+        10032: Productividad - MMSA_APILAM_STACKER_Productividad (t/h):
+            Calculo: Mineral Apilado Stacker/Tiempo Operativo
+            NO SE TENDRIA QUE PODER MODIFICAR    
+        
+        10029: Disponibilidad - MMSA_APILAM_STACKER_Disponibilidad %: -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Disponibilidad (%)
 
-    /*NO VISIBLE*/
-    10065: Tiempo Operativo - MMSA_APILAM_STACKER_Tiempo Operativo: -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_200_001!PI_200_RunHs_PIP
-        IDEM MMSA_AGLOM_Horas Operativas Aglomeración
+        10034: Utilización - MMSA_APILAM_STACKER_Utilización (%): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Aglomeracion Utilizacion (%)
 
-APILAMIENTO - PRIMARIA Y SECUNDARIA
+        /*NO VISIBLE*/
+        10065: Tiempo Operativo - MMSA_APILAM_STACKER_Tiempo Operativo: -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Alias_PLC_200_001!PI_200_RunHs_PIP
+            IDEM MMSA_AGLOM_Horas Operativas Aglomeración
 
-    10022: Au Extraible Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz):
-        Calculo: ((Recuperacion/100) * Mineral Trituración Secundaria Apilado Camiones * Ley Au) / 31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
+    APILAMIENTO - PRIMARIA Y SECUNDARIA
 
-    10023: Au Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones (oz):
-        Calculo: (Mineral Trituración Secundaria Apilado Camiones * Ley Au)/31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10022: Au Extraible Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz):
+            Calculo: ((Recuperacion/100) * Mineral Trituración Secundaria Apilado Camiones * Ley Au) / 31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10024: Ley Au - MMSA_APILAM_PYS_Ley Au (g/t):
-        Ruta modificada: Se copia valor de Reporte Comparativo.43.Apilamiento.Camiones.Ley (t)
+        10023: Au Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones (oz):
+            Calculo: (Mineral Trituración Secundaria Apilado Camiones * Ley Au)/31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10025: Mineral Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones (t):
-        Ruta modificada: Se copia valor de Reporte Comparativo.42.Apilamiento.Camiones.Tonelaje Día
+        10024: Ley Au - MMSA_APILAM_PYS_Ley Au (g/t):
+            Ruta modificada: Se copia valor de Reporte Comparativo.43.Apilamiento.Camiones.Ley (t)
 
-    10026: Recuperación - MMSA_APILAM_PYS_Recuperación (%):
-        Ruta modificada: Se copia valor de Reporte Comparativo.44.Apilamiento.Camiones.Recuperación (%)
+        10025: Mineral Trituración Secundaria Apilado Camiones - MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones (t):
+            Ruta modificada: Se copia valor de Reporte Comparativo.42.Apilamiento.Camiones.Tonelaje Día
 
-APILAMIENTO - TOTAL APILAMIENTO
+        10026: Recuperación - MMSA_APILAM_PYS_Recuperación (%):
+            Ruta modificada: Se copia valor de Reporte Comparativo.44.Apilamiento.Camiones.Recuperación (%)
 
-    10039: Total Mineral Apilado - MMSA_APILAM_TA_Total Mineral Apilado (t): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
-        IDEM MMSA_HPGR_Mineral Triturado
+    APILAMIENTO - TOTAL APILAMIENTO
 
-    10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t): -> 11/21h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Ley Au (g/t)
-        IDEM MMSA_HPGR_Ley Au
+        10039: Total Mineral Apilado - MMSA_APILAM_TA_Total Mineral Apilado (t): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Terciaria Mineral
+            IDEM MMSA_HPGR_Mineral Triturado
 
-    10037: Total Au Apilado - MMSA_APILAM_TA_Total Au Apilado (oz):
-        Calculo: (Mineral Apilado Stacker * Ley Au)/31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
-        IDEM MMSA_HPGR_Au Triturado
+        10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t): -> 11/21h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor HPGR Ley Au (g/t)
+            IDEM MMSA_HPGR_Ley Au
 
-    10036: Recuperación - MMSA_APILAM_TA_Recuperación (%):
-        IDEM MMSA_APILAM_STACKER_Recuperación
-        Se carga manual
+        10037: Total Au Apilado - MMSA_APILAM_TA_Total Au Apilado (oz):
+            Calculo: (Mineral Apilado Stacker * Ley Au)/31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
+            IDEM MMSA_HPGR_Au Triturado
 
-    10038: Total Au Extraible Apilado - MMSA_APILAM_TA_Total Au Extraible Apilado (oz):
-        IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker:
-        Calculo: ((Recuperacion/100) * Mineral Apilado Stacker * Ley Au) / 31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
+        10036: Recuperación - MMSA_APILAM_TA_Recuperación (%):
+            IDEM MMSA_APILAM_STACKER_Recuperación
+            Se carga manual
 
-LIXIVIACION
+        10038: Total Au Extraible Apilado - MMSA_APILAM_TA_Total Au Extraible Apilado (oz):
+            IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker:
+            Calculo: ((Recuperacion/100) * Mineral Apilado Stacker * Ley Au) / 31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
 
-    10059: Solución Barren -   MMSA_LIXI_Solución Barren (m3): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Lixiviación.Flujo BLS día (m3)
+    LIXIVIACION
 
-    10055: CN Solución Barren - MMSA_LIXI_CN Solución Barren (ppm): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Lixivación CN en Solucion Barren (ppm)
+        10059: Solución Barren -   MMSA_LIXI_Solución Barren (m3): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Lixiviación.Flujo BLS día (m3)
 
-    10060: Solución ILS - MMSA_LIXI_Solución ILS (m3): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Lixiviación.Flujo ILS día (m3)
+        10055: CN Solución Barren - MMSA_LIXI_CN Solución Barren (ppm): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Lixivación CN en Solucion Barren (ppm)
 
-    10056: CN Solución ILS - MMSA_LIXI_CN Solución ILS (ppm): -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Lixivación CN en Solucion ILS (ppm)
+        10060: Solución ILS - MMSA_LIXI_Solución ILS (m3): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Lixiviación.Flujo ILS día (m3)
 
-    10061: Solución PLS - MMSA_LIXI_Solución PLS (m3): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR PLS + ILS a Carbones (m3)
-
-    10057: Ley Au Solución PLS - MMSA_LIXI_Ley Au Solución PLS (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au PLS + ILS (ppm)
-
-    10053: Au Lixiviado - MMSA_LIXI_Au Lixiviado (oz):
-        Calculo: (Solución PLS * Ley Au Solución PLS)/31.1035
-        NO SE TENDRIA QUE PODER MODIFICAR
-
-    10054: CN Solución PLS - MMSA_LIXI_CN en solución PLS (ppm):
-        Se carga desde el sistema
-
-    10058: pH Solución PLS - MMSA_LIXI_pH en Solución PLS:
-        Se carga desde el sistema
-
-SART
-
-    10045: PLS a SART - MMSA_SART_PLS a SART (m3):  -> 8h
-        Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Planta SART.Solución Pregnant.Volumen Día (m3)
-
-    10043: Ley Cu Alimentada - MMSA_SART_Ley Cu Alimentada (ppm): ->11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Cu Alimentada (ppm)
-
-    10044: Ley Cu Salida - MMSA_SART_Ley Cu Salida (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Cu Salida (ppm)
-
-    10041: Ley Au Alimentada - MMSA_SART_Ley Au Alimentada (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Au Alimentada (ppm)
-
-    10042: Ley Au Salida - MMSA_SART_Ley Au Salida (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Au Salida (ppm)
-
-    10040: Eficiencia - MMSA_SART_Eficiencia (%):
-        Calculo: ((MMSA_SART_Ley Cu Alimentada - MMSA_SART_Ley Cu Salida) * 100) / MMSA_SART_Ley Cu Alimentada
-        No se tendria que poder modificar
-
-ADR
-
-    10052: PLS a Carbones - MMSA_ADR_PLS a Carbones (m3): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR PLS + ILS a Carbones (m3)
-        IDEM: MMSA_LIXI_Solución PLS
-
-    10051: Ley de Au PLS - MMSA_ADR_Ley de Au PLS (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au PLS + ILS (ppm)
-        IDEM: MMSA_LIXI_Ley Au Solución PLS
-
-    10050: Ley de Au BLS - MMSA_ADR_Ley de Au BLS (ppm): -> 11h
-        Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au BLS (ppm)
-
-    10049: Eficiencia - MMSA_ADR_Eficiencia (%):
-        ((MMSA_ADR_Ley de Au PLS - MMSA_ADR_Ley de Au BLS) * 100) / MMSA_ADR_Ley de Au PLS
-
-    10046: Au Adsorbido - MMSA_ADR_Au Adsorbido (oz):
-        Calculo: (MMSA_ADR_PLS a Carbones * (MMSA_ADR_Ley de Au PLS - MMSA_ADR_Ley de Au BLS))/31.1035
-
-    10047: Au Desorbido Electrodepositado - MMSA_ADR_Au Desorbido Electrodepositado (oz):
-        Se realiza la carga en el sistema
-
-    10048: Au Doré - MMSA_ADR_Au Doré (oz):
-        Se realiza la carga en el sistema
-
-
-
-
-Variables 8h: -> TIPO 1
-    10005: Mineral Triturado 		- MMSA_TP_Mineral Triturado (t)
-	10011: Mineral Triturado 		- MMSA_HPGR_Mineral Triturado (t)
-	10019: Mineral Aglomerado 		- MMSA_AGLOM_Mineral Aglomerado (t) IDEM MMSA_HPGR_Mineral Triturado
-	10067: Cemento 					- MMSA_AGLOM_Cemento
-	10066: Flujo 					- MMSA_AGLOM_Flujo
-	10031: Mineral Apilado Stacker 	- MMSA_APILAM_STACKER_Mineral Apilado Stacker (t) IDEM MMSA_HPGR_Mineral Triturado
-	10039: Total Mineral Apilado 	- MMSA_APILAM_TA_Total Mineral Apilado (t) IDEM MMSA_HPGR_Mineral Triturado
-	10059: Solución Barren 			- MMSA_LIXI_Solución Barren (m3)
-	10055: CN Solución Barren 		- MMSA_LIXI_CN Solución Barren (ppm)
-	10060: Solución ILS 			- MMSA_LIXI_Solución ILS (m3)
-	10056: CN Solución ILS 			- MMSA_LIXI_CN Solución ILS (ppm)
-	10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
-	
-Variables 11h: -> TIPO 2
-	10003: Disponibilidad 							- MMSA_TP_Disponibilidad (%)
-	10007: Utilización 								- MMSA_TP_Utilización (%)
-	10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
-	10009: Disponibilidad 							- MMSA_HPGR_Disponibilidad (%)
-	10014: Utilización 								- MMSA_HPGR_Utilización (%)
-	10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
-	10021: Utilización 								- MMSA_AGLOM_Utilización (%)
-	10017: Disponibilidad 							- MMSA_AGLOM_Disponibilidad (%)
-	10016: Adición de CN 							- MMSA_AGLOM_Adición de CN (ppm)
-	10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración
-	10029: Disponibilidad 							- MMSA_APILAM_STACKER_Disponibilidad %
-	10034: Utilización 								- MMSA_APILAM_STACKER_Utilización (%)
-	10065: Tiempo Operativo 						- MMSA_APILAM_STACKER_Tiempo Operativo IDEM MMSA_AGLOM_Horas Operativas Aglomeración
-	10061: Solución PLS 							- MMSA_LIXI_Solución PLS (m3)
-	10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
-	10043: Ley Cu Alimentada 						- MMSA_SART_Ley Cu Alimentada (ppm)
-	10044: Ley Cu Salida 							- MMSA_SART_Ley Cu Salida (ppm)
-	10041: Ley Au Alimentada 						- MMSA_SART_Ley Au Alimentada (ppm)
-	10042: Ley Au Salida 							- MMSA_SART_Ley Au Salida (ppm
-	10052: PLS a Carbones 							- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
-	10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
-	10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
-	
-Variables de carga manual: -> TIPO 3 (9 variables)
-	10004: Ley Au 				            - MMSA_TP_Ley Au (g/t)
-	10012: P80 					            - MMSA_HPGR_P80 (mm)
-	10018: Humedad 				            - MMSA_AGLOM_Humedad (%)
-	10033: Recuperación 		            - MMSA_APILAM_STACKER_Recuperación (%) -> SE INSERTA A LAS 8 CON VALOR 75 fijo
-	10036: Recuperación 		            - MMSA_APILAM_TA_Recuperación (%) IDEM MMSA_APILAM_STACKER_Recuperación -> SE INSERTA A LAS 8 CON VALOR 75% fijo
-	10054: CN Solución PLS 		            - MMSA_LIXI_CN en solución PLS (ppm)
-	10058: pH Solución PLS 		            - MMSA_LIXI_pH en Solución PLS
-	10047: Au Desorbido Electrodepositado   - MMSA_ADR_Au Desorbido Electrodepositado (oz)
-	10048: Au Doré 				            - MMSA_ADR_Au Doré (oz)
-	
-Variables calculadas: -> TIPO 4 (15 variables)
-	10002: Au Triturado 				- MMSA_TP_Au Triturado (oz)
-	10006: Productividad 				- MMSA_TP_Productividad (t/h)
-	10008: Au Triturado 				- MMSA_HPGR_Au Triturado (oz)
-	10013: Productividad 				- MMSA_HPGR_Productividad (t/h)
-	10020: Productividad 				- MMSA_AGLOM_Productividad (t/h)
-	10015: Adición de Cemento 			- MMSA_AGLOM_Adición de Cemento (kg/t)
-	10027: Au Apilado Stacker 			- MMSA_APILAM_STACKER_Au Apilado Stacker (oz)
-	10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker 
-	10032: Productividad 				- MMSA_APILAM_STACKER_Productividad (t/h)
-	10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) IDEM MMSA_HPGR_Au Triturado
-	10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
-	10053: Au Lixiviado 				- MMSA_LIXI_Au Lixiviado (oz)
-	10040: Eficiencia 					- MMSA_SART_Eficiencia (%)
-	10049: Eficiencia 					- MMSA_ADR_Eficiencia (%)
-	10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
-	
-Variables 11_21hs: -> TIPO 5
-	10010: Ley Au - MMSA_HPGR_Ley Au (g/t)
-	10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
-	10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
-
-REVISAR
-    MMSA_AGLOM_Cemento - ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Aglomeración.Cemento
-    MMSA_AGLOM_Adición de CN (ppm) no coincide
-    MMSA_LIXI_CN Solución Barren (ppm) no coincide
-    MMSA_LIXI_CN Solución ILS (ppm) no coincide
-    MMSA_SART_Ley Cu Alimentada (ppm) no coincide
-
-JOBS 1 -> 8h:
-    INSERT INTO [mansfield2].[dbo].[data]
-    SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
-    (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
-        ,[Atributo]
-        ,[Unidad de medida]
-        ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
-    FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_8h]) AS D
-    INNER JOIN
-    (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 1) AS V
-    ON V.descripcion = D.descripcion
-    UNION  
-    SELECT id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, -1 as valor, 1 as estado  
-    FROM  [mansfield2].[dbo].[variable]  where TIPO IN (2,3,4,5) 
-
-JOBS2 -> 11h:
-    DELETE FROM [mansfield2].[dbo].[data] 
-    WHERE variable_id in (SELECT id FROM variable where tipo = 2)
-    AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
-    AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
-
-    INSERT INTO [mansfield2].[dbo].[data]
-    SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
-    (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
-        ,[Atributo]
-        ,[Unidad de medida]
-        ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
-    FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11h]) AS D
-    INNER JOIN
-    (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 2) AS V
-    ON V.descripcion = D.descripcion
-
-JOBS3 -> 11_21h:
-    DELETE FROM [mansfield2].[dbo].[data] 
-    WHERE variable_id in (SELECT id FROM variable where tipo = 5)
-    AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
-    AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
-
-    INSERT INTO [mansfield2].[dbo].[data]
-    SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
-    (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
-        ,[Atributo]
-        ,[Unidad de medida]
-        ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
-    FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11_21h]) AS D
-    INNER JOIN
-    (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 5) AS V
-    ON V.descripcion = D.descripcion
+        10056: CN Solución ILS - MMSA_LIXI_CN Solución ILS (ppm): -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Lixivación CN en Solucion ILS (ppm)
+
+        10061: Solución PLS - MMSA_LIXI_Solución PLS (m3): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR PLS + ILS a Carbones (m3)
+
+        10057: Ley Au Solución PLS - MMSA_LIXI_Ley Au Solución PLS (ppm): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au PLS + ILS (ppm)
+
+        10053: Au Lixiviado - MMSA_LIXI_Au Lixiviado (oz):
+            Calculo: (Solución PLS * Ley Au Solución PLS)/31.1035
+            NO SE TENDRIA QUE PODER MODIFICAR
+
+        10054: CN Solución PLS - MMSA_LIXI_CN en solución PLS (ppm):
+            Se carga desde el sistema
+
+        10058: pH Solución PLS - MMSA_LIXI_pH en Solución PLS:
+            Se carga desde el sistema
+
+    SART
+
+        10045: PLS a SART - MMSA_SART_PLS a SART (m3):  -> 8h
+            Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Planta SART.Solución Pregnant.Volumen Día (m3)
+
+        10043: Ley Cu Alimentada - MMSA_SART_Ley Cu Alimentada (ppm): ->11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Cu Alimentada (ppm)
+
+        10044: Ley Cu Salida - MMSA_SART_Ley Cu Salida (ppm): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Cu Salida (ppm)
+
+        10041: Ley Au Alimentada - MMSA_SART_Ley Au Alimentada (ppm): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Au Alimentada (ppm)
+
+        10042: Ley Au Salida - MMSA_SART_Ley Au Salida (ppm): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta SART Ley Au Salida (ppm)
+
+        10040: Eficiencia - MMSA_SART_Eficiencia (%):
+            Calculo: ((MMSA_SART_Ley Cu Alimentada - MMSA_SART_Ley Cu Salida) * 100) / MMSA_SART_Ley Cu Alimentada
+            No se tendria que poder modificar
+
+    ADR
+
+        10052: PLS a Carbones - MMSA_ADR_PLS a Carbones (m3): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR PLS + ILS a Carbones (m3)
+            IDEM: MMSA_LIXI_Solución PLS
+
+        10051: Ley de Au PLS - MMSA_ADR_Ley de Au PLS (ppm): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au PLS + ILS (ppm)
+            IDEM: MMSA_LIXI_Ley Au Solución PLS
+
+        10050: Ley de Au BLS - MMSA_ADR_Ley de Au BLS (ppm): -> 11h
+            Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au BLS (ppm)
+
+        10049: Eficiencia - MMSA_ADR_Eficiencia (%):
+            ((MMSA_ADR_Ley de Au PLS - MMSA_ADR_Ley de Au BLS) * 100) / MMSA_ADR_Ley de Au PLS
+
+        10046: Au Adsorbido - MMSA_ADR_Au Adsorbido (oz):
+            Calculo: (MMSA_ADR_PLS a Carbones * (MMSA_ADR_Ley de Au PLS - MMSA_ADR_Ley de Au BLS))/31.1035
+
+        10047: Au Desorbido Electrodepositado - MMSA_ADR_Au Desorbido Electrodepositado (oz):
+            Se realiza la carga en el sistema
+
+        10048: Au Doré - MMSA_ADR_Au Doré (oz):
+            Se realiza la carga en el sistema
+
+
+VARIABLE TIPO
+
+    Variables 8h: -> TIPO 1
+        10005: Mineral Triturado 		- MMSA_TP_Mineral Triturado (t)
+        10011: Mineral Triturado 		- MMSA_HPGR_Mineral Triturado (t)
+        10019: Mineral Aglomerado 		- MMSA_AGLOM_Mineral Aglomerado (t) IDEM MMSA_HPGR_Mineral Triturado
+        10067: Cemento 					- MMSA_AGLOM_Cemento
+        10066: Flujo 					- MMSA_AGLOM_Flujo
+        10031: Mineral Apilado Stacker 	- MMSA_APILAM_STACKER_Mineral Apilado Stacker (t) IDEM MMSA_HPGR_Mineral Triturado
+        10039: Total Mineral Apilado 	- MMSA_APILAM_TA_Total Mineral Apilado (t) IDEM MMSA_HPGR_Mineral Triturado
+        10059: Solución Barren 			- MMSA_LIXI_Solución Barren (m3)
+        10055: CN Solución Barren 		- MMSA_LIXI_CN Solución Barren (ppm)
+        10060: Solución ILS 			- MMSA_LIXI_Solución ILS (m3)
+        10056: CN Solución ILS 			- MMSA_LIXI_CN Solución ILS (ppm)
+        10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
+        
+    Variables 11h: -> TIPO 2
+        10003: Disponibilidad 							- MMSA_TP_Disponibilidad (%)
+        10007: Utilización 								- MMSA_TP_Utilización (%)
+        10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
+        10009: Disponibilidad 							- MMSA_HPGR_Disponibilidad (%)
+        10014: Utilización 								- MMSA_HPGR_Utilización (%)
+        10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
+        10021: Utilización 								- MMSA_AGLOM_Utilización (%)
+        10017: Disponibilidad 							- MMSA_AGLOM_Disponibilidad (%)
+        10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración
+        10029: Disponibilidad 							- MMSA_APILAM_STACKER_Disponibilidad %
+        10034: Utilización 								- MMSA_APILAM_STACKER_Utilización (%)
+        10065: Tiempo Operativo 						- MMSA_APILAM_STACKER_Tiempo Operativo IDEM MMSA_AGLOM_Horas Operativas Aglomeración
+        10061: Solución PLS 							- MMSA_LIXI_Solución PLS (m3)
+        10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
+        10043: Ley Cu Alimentada 						- MMSA_SART_Ley Cu Alimentada (ppm)
+        10044: Ley Cu Salida 							- MMSA_SART_Ley Cu Salida (ppm)
+        10041: Ley Au Alimentada 						- MMSA_SART_Ley Au Alimentada (ppm)
+        10042: Ley Au Salida 							- MMSA_SART_Ley Au Salida (ppm
+        10052: PLS a Carbones 							- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
+        10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
+        10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
+        
+    Variables de carga manual: -> TIPO 3 (9 variables)
+        10004: Ley Au 				            - MMSA_TP_Ley Au (g/t)
+        10012: P80 					            - MMSA_HPGR_P80 (mm)
+        10016: Adición de CN 					- MMSA_AGLOM_Adición de CN (ppm)
+        10018: Humedad 				            - MMSA_AGLOM_Humedad (%)
+        10033: Recuperación 		            - MMSA_APILAM_STACKER_Recuperación (%) -> SE INSERTA A LAS 8 CON VALOR 75 fijo
+        10036: Recuperación 		            - MMSA_APILAM_TA_Recuperación (%) IDEM MMSA_APILAM_STACKER_Recuperación -> SE INSERTA A LAS 8 CON VALOR 75% fijo
+        10054: CN Solución PLS 		            - MMSA_LIXI_CN en solución PLS (ppm)
+        10058: pH Solución PLS 		            - MMSA_LIXI_pH en Solución PLS
+        10047: Au Desorbido Electrodepositado   - MMSA_ADR_Au Desorbido Electrodepositado (oz)
+        10048: Au Doré 				            - MMSA_ADR_Au Doré (oz)
+        
+    Variables calculadas: -> TIPO 4 (15 variables)
+        10002: Au Triturado 				- MMSA_TP_Au Triturado (oz)
+        10006: Productividad 				- MMSA_TP_Productividad (t/h)
+        10008: Au Triturado 				- MMSA_HPGR_Au Triturado (oz)
+        10013: Productividad 				- MMSA_HPGR_Productividad (t/h)
+        10020: Productividad 				- MMSA_AGLOM_Productividad (t/h)
+        10015: Adición de Cemento 			- MMSA_AGLOM_Adición de Cemento (kg/t)
+        10027: Au Apilado Stacker 			- MMSA_APILAM_STACKER_Au Apilado Stacker (oz)
+        10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker 
+        10032: Productividad 				- MMSA_APILAM_STACKER_Productividad (t/h)
+        10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) IDEM MMSA_HPGR_Au Triturado
+        10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
+        10053: Au Lixiviado 				- MMSA_LIXI_Au Lixiviado (oz)
+        10040: Eficiencia 					- MMSA_SART_Eficiencia (%)
+        10049: Eficiencia 					- MMSA_ADR_Eficiencia (%)
+        10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
+        
+    Variables 11_21hs: -> TIPO 5
+        10010: Ley Au - MMSA_HPGR_Ley Au (g/t)
+        10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
+        10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
+
+    REVISAR
+        MMSA_AGLOM_Cemento - ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Aglomeración.Cemento
+        MMSA_AGLOM_Adición de CN (ppm) no coincide
+        MMSA_LIXI_CN Solución Barren (ppm) no coincide
+        MMSA_LIXI_CN Solución ILS (ppm) no coincide
+        MMSA_SART_Ley Cu Alimentada (ppm) no coincide
+
+    JOBS 1 -> 8h:
+        INSERT INTO [mansfield2].[dbo].[data]
+        SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
+        (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
+            ,[Atributo]
+            ,[Unidad de medida]
+            ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+        FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_8h]) AS D
+        INNER JOIN
+        (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 1) AS V
+        ON V.descripcion = D.descripcion
+        UNION  
+        SELECT id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, -1 as valor, 1 as estado  
+        FROM  [mansfield2].[dbo].[variable]  where TIPO IN (2,3,4,5) 
+
+    JOBS2 -> 11h:
+        DELETE FROM [mansfield2].[dbo].[data] 
+        WHERE variable_id in (SELECT id FROM variable where tipo = 2)
+        AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
+        AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
+
+        INSERT INTO [mansfield2].[dbo].[data]
+        SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
+        (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
+            ,[Atributo]
+            ,[Unidad de medida]
+            ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+        FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11h]) AS D
+        INNER JOIN
+        (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 2) AS V
+        ON V.descripcion = D.descripcion
+
+    JOBS3 -> 11_21h:
+        DELETE FROM [mansfield2].[dbo].[data] 
+        WHERE variable_id in (SELECT id FROM variable where tipo = 5)
+        AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
+        AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
+
+        INSERT INTO [mansfield2].[dbo].[data]
+        SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
+        (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
+            ,[Atributo]
+            ,[Unidad de medida]
+            ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+        FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11_21h]) AS D
+        INNER JOIN
+        (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 5) AS V
+        ON V.descripcion = D.descripcion
 
 El sistema realiza carga de data, importandola desde el PI a:
     Horas 8:        12 variables
@@ -406,10 +412,30 @@ Las inyecciones de LDAP se pueden mitigar con los siguientes controles de seguri
 3.Implementar el principio de privilegios mínimos: al proteger la cuenta LDAP necesaria para vincular un directorio, las consultas LDAP no se ejecutarán sin autorización.
 
 
+Pendientes
+.Que al modificar MMSA_ADR_PLS a Carbones (m3) o MMSA_LIXI_Solución PLS no se vea afectado el otro. -> LISTO
+.Lista para asignacion de permisos que solo sea para usuarios con rol ESCRITURA O ADMINISTRACION. -> LISTO
+.Que el usuario cada vez que inicie sesion se verifique a grupo de seguridad corresponde para que si alla cambiado de grupo de seguridad cambie su rol. -> LISTO
+.Fijarse si el modal puede quedar movible.-> LISTO
+
+.Tabla averiguar tema scroll y.
+.Crear notificaciones para trabajos fallidos sql -> LISTO
+.La sesion queda abierta cuando cierra sesion, y se abre el link en una nueva pestaña. -> validar
+
+Siguiente tarea:
+Tema del envio de correo, con el daily en pdf.
 
 
+VALIDAR SI EL AUTENTICADOR PUEDE ESTAR 
 
+TABLAS
+MMSA_MS4M
+CPARAMENTRO 9 LEY AU.
 
+MS4M_MINERAL DE ESA TABLA SE SACAN LOS DATOS PARA EL SCRIPT DEL DAILY 
+
+aCTUALIZARDL
+IMPRIMIRDL GENERA Y ENVIA PDF
 
 
 

@@ -173,7 +173,6 @@
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
-        
 
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
@@ -280,7 +279,7 @@
                     {data:'valornuevo', name:'valornuevo'},
                     {data:'usuario', name:'usuario'}
                 ],
-                order: [[1, 'asc']]            
+                order: [[0, 'desc']]            
             });
         });
         /* DATATABLES */
