@@ -318,6 +318,7 @@
     <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
+        var idx = -1;        
 
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
@@ -340,9 +341,9 @@
                 defaultDate: date_selected
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
+                idx = -1;
                 date_selected = e.date;
                 test = moment(date_selected).format('YYYY-MM-DD');
-                console.log(date_selected);
                 $('#procesos-table').DataTable().ajax.reload(null, false);
                 $('#comentarios-table').DataTable().ajax.reload(null, false);
                 if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 19)
@@ -472,7 +473,18 @@
                 select: true,
                 scrollY: '65vh',                
                 scrollCollapse: true,
-                paging: false,
+                paging: false, 
+                "preDrawCallback": function (settings) {
+                    pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
+                },
+                "drawCallback": function (settings) {
+                    if (idx >= 0)
+                    {
+                        let row = $("#procesos-table").DataTable().row(idx);
+                        row.select();                        
+                        $('div.dataTables_scrollBody').scrollTop(pageScrollPos); 
+                    }
+                },
                 ajax:{                
                     url: "{{route('dashboard.procesostable')}}",
                     type: 'GET',
@@ -859,6 +871,23 @@
         });
         /* DATATABLES */
 
+        /*$('#procesos-table').on( 'draw.dt', function () {
+            if (idx >= 0)
+            {
+                //$("#procesos-table").DataTable().row(idx).select();
+                let row = $("#procesos-table").DataTable().row(idx);
+                row.select();
+                
+                //var pos = row.position();
+
+                if (pos != undefined)
+                {                
+                    $('.dataTables_scrollBody').animate({
+                        scrollTop: (pos['top'])
+                    },500);
+                }
+            }
+        });*/
 
         /* ADD BUTTON*/
         $(document).on('click', '.add', function(){ 
@@ -872,6 +901,16 @@
 
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
+            //pos = $(this).parent().position();
+            idx = $("#procesos-table").DataTable().row($(this).parent()).index();
+            /*if (pos != undefined)
+            {                
+                alert(pos['top']);
+            }*/
+            //let row = $("#procesos-table").DataTable().row(20).select();
+            
+                  
+            //console.log(idx, $("#procesos-table").DataTable().rows().count());
             $.ajax({
                 url:"{{route('dashboard.edit') }}",
                 method:"POST",
@@ -1084,7 +1123,7 @@
                             }   
                             else{
                                 MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
-                            } 
+                            }                          
                         }else{
                             $('#form-button').html('Guardar Cambios');
                             printErrorMsg(data.error);
@@ -1188,6 +1227,7 @@
                 });
             }            
         });
+        
 
         function printErrorMsg(msg) {
             $(".alert-error").css('display','flex');

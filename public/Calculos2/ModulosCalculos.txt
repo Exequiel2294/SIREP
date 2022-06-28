@@ -423,6 +423,7 @@ Pendientes
 .La sesion queda abierta cuando cierra sesion, y se abre el link en una nueva pestaña. -> validar
 
 Siguiente tarea:
+Cuando se modifique una fila que al recargar la tabla vuelva a a la misma fila modificada
 Tema del envio de correo, con el daily en pdf.
 
 
