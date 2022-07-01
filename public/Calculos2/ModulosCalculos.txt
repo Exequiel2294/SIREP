@@ -274,15 +274,15 @@ VARIABLE TIPO
     Variables 11h: -> TIPO 2
         10003: Disponibilidad 							- MMSA_TP_Disponibilidad (%)
         10007: Utilización 								- MMSA_TP_Utilización (%)
-        10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
         10009: Disponibilidad 							- MMSA_HPGR_Disponibilidad (%)
         10014: Utilización 								- MMSA_HPGR_Utilización (%)
-        10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
-        10021: Utilización 								- MMSA_AGLOM_Utilización (%)
         10017: Disponibilidad 							- MMSA_AGLOM_Disponibilidad (%)
-        10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración
+        10021: Utilización 								- MMSA_AGLOM_Utilización (%)
         10029: Disponibilidad 							- MMSA_APILAM_STACKER_Disponibilidad %
         10034: Utilización 								- MMSA_APILAM_STACKER_Utilización (%)
+        10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
+        10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
+        10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración
         10065: Tiempo Operativo 						- MMSA_APILAM_STACKER_Tiempo Operativo IDEM MMSA_AGLOM_Horas Operativas Aglomeración
         10061: Solución PLS 							- MMSA_LIXI_Solución PLS (m3)
         10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
@@ -319,9 +319,9 @@ VARIABLE TIPO
         10032: Productividad 				- MMSA_APILAM_STACKER_Productividad (t/h)
         10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) IDEM MMSA_HPGR_Au Triturado
         10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
-        10053: Au Lixiviado 				- MMSA_LIXI_Au Lixiviado (oz)
         10040: Eficiencia 					- MMSA_SART_Eficiencia (%)
         10049: Eficiencia 					- MMSA_ADR_Eficiencia (%)
+        10053: Au Lixiviado 				- MMSA_LIXI_Au Lixiviado (oz)
         10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
         
     Variables 11_21hs: -> TIPO 5

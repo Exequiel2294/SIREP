@@ -808,18 +808,6 @@ class DashboardController extends Controller
                                     [(int)date('z', strtotime($this->date)) + 1]
                                 ); 
                             break;
-                            case 10018:
-                                //MMSA_AGLOM_Humedad (%)
-                                if(isset($data->dia_real)) 
-                                { 
-                                    $d_real = $data->dia_real;
-                                    return number_format($d_real, 1, '.', ',');                                    
-                                }        
-                                else
-                                {
-                                    return '-';
-                                } 
-                            break;
                             default:                        
                                 if(isset($data->dia_real)) 
                                 { 
