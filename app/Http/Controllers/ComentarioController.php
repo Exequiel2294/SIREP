@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use LdapRecord\Models\ActiveDirectory\Group;
+use Illuminate\Support\Facades\Auth;
 
 
 class ComentarioController extends Controller
@@ -19,53 +20,26 @@ class ComentarioController extends Controller
 
     public function load(Request $request)
     {
-        $id = $request->get('id');        
-        if($id == '' || $id == null)
-        {            
-            $validator = Validator::make(
-                $request->all(),
-                [   
-                    'area_id_comentario' => 'required|exists:comentario_area,id',
-                    'comentario' => 'required|string|min:5|max:1000'
-                ]             
-            );
-            if ($validator->fails()) 
-            {
-                return response()->json(['error'=>$validator->errors()->all()]);
-            }
-            else
-            {
-                Comentario::create(
-                [
-                    'user_id' => auth()->user()->id,
-                    'area_id' => $request->get('area_id_comentario'),
-                    'comentario' => $request->get('comentario'),
-                    'fecha' => $request->get('selecteddate'),
-                    'created_at' => date('Y-m-d'),
-                    'updated_at' => date('Y-m-d')
-                ]);
-                return;                
-            }
-        }
-        else
+        if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
         {
-            $validator = Validator::make(
-                $request->all(),
-                [   
-                    'id'    => 'required|numeric|exists:comentario,id',  
-                    'area_id_comentario' => 'required|exists:comentario_area,id',
-                    'comentario' => 'required|string|min:5|max:1000'
-                ]            
-            );
-            if ($validator->fails()) 
-            {
-                return response()->json(['error'=>$validator->errors()->all()]);
-            }
-            else
-            {
-                Comentario::where('id',$id)
-                    ->update(
-                    [                      
+            $id = $request->get('id');        
+            if($id == '' || $id == null)
+            {            
+                $validator = Validator::make(
+                    $request->all(),
+                    [   
+                        'area_id_comentario' => 'required|exists:comentario_area,id',
+                        'comentario' => 'required|string|min:5|max:1000'
+                    ]             
+                );
+                if ($validator->fails()) 
+                {
+                    return response()->json(['error'=>$validator->errors()->all()]);
+                }
+                else
+                {
+                    Comentario::create(
+                    [
                         'user_id' => auth()->user()->id,
                         'area_id' => $request->get('area_id_comentario'),
                         'comentario' => $request->get('comentario'),
@@ -73,9 +47,39 @@ class ComentarioController extends Controller
                         'created_at' => date('Y-m-d'),
                         'updated_at' => date('Y-m-d')
                     ]);
-                return;                
+                    return;                
+                }
             }
-        }
+            else
+            {
+                $validator = Validator::make(
+                    $request->all(),
+                    [   
+                        'id'    => 'required|numeric|exists:comentario,id',  
+                        'area_id_comentario' => 'required|exists:comentario_area,id',
+                        'comentario' => 'required|string|min:5|max:1000'
+                    ]            
+                );
+                if ($validator->fails()) 
+                {
+                    return response()->json(['error'=>$validator->errors()->all()]);
+                }
+                else
+                {
+                    Comentario::where('id',$id)
+                        ->update(
+                        [                      
+                            'user_id' => auth()->user()->id,
+                            'area_id' => $request->get('area_id_comentario'),
+                            'comentario' => $request->get('comentario'),
+                            'fecha' => $request->get('selecteddate'),
+                            'created_at' => date('Y-m-d'),
+                            'updated_at' => date('Y-m-d')
+                        ]);
+                    return;                
+                }
+            }
+        }   
     }
 
     public function comentariostable (Request $request)

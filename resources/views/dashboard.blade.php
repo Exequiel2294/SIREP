@@ -523,7 +523,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -535,7 +542,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -588,7 +602,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -600,7 +621,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -650,7 +678,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -662,7 +697,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -712,7 +754,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -724,7 +773,14 @@
                             {
                                 if (row['unidad'] == '%')
                                 {
-                                    return Math.round(data);
+                                    if (row['variable'] == 'Humedad')
+                                    {
+                                        return Math.round(data*10)/10 ;
+                                    }
+                                    else
+                                    {
+                                        return Math.round(data);
+                                    }
                                 }
                             }
                             return data;
@@ -865,8 +921,12 @@
                 ]
             });   
 
-            $('.datatables-title').html('<div style="font-size:1.5rem; font-weight:500;">Comentarios</div>');
-            $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit"  class="btn btn-success add" title="Editar registro">Cargar</a>');
+            $('.datatables-title').html('<div style="font-size:1.5rem; font-weight:500;">Comentarios</div>')            
+            @if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit"  class="btn btn-success add" title="Editar registro">Cargar</a>');
+            @else
+                $('.datatables-btn-cargar').html('');
+            @endif
 
         });
         /* DATATABLES */
@@ -1213,14 +1273,14 @@
                             $('#form-button-comentario').html('Cargar');
                             var oTable = $('#comentarios-table').dataTable();
                             oTable.fnDraw(false);
-                            if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Registro cargado con exito', 'MansfieldRep', 'success');
+                            if($('#form-button-comentario').val() == 1){
+                                MansfieldRep.notification('Comentario cargado con exito', 'MansfieldRep', 'success');
                             }   
                             else{
-                                MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Comentario actualizado con exito', 'MansfieldRep', 'success');
                             } 
                         }else{
-                            $('#form-button').html('Guardar Cambios');
+                            $('#form-button-comentario').html('Guardar Cambios');
                             printErrorMsg(data.error);
                         } 
                     }

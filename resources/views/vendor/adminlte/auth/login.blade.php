@@ -62,6 +62,21 @@
             @enderror
         </div>
 
+        {{-- Dominio field 
+        <div class="input-group mb-3">
+            <select class="form-control @error('dominio') is-invalid @enderror" name="dominio" id="dominio" style="border: 1px solid #ced4da;">
+                <option value="" selected disabled>Seleccione Dominio</option>
+                <option value=0>Argentina</option>
+                <option value=1>Peru</option>
+            </select>
+
+            @error('dominio')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div> --}}
+
         {{-- Login field --}}
         <div class="row">
             <div class="col-7">

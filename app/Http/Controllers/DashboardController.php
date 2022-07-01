@@ -571,8 +571,8 @@ class DashboardController extends Controller
                                 ); 
                             break;
                             case 10013:
-                                //MMSA_TP_Productividad t/h
-                                //(10011 MMSA_TP_Mineral Triturado t)/ (10063 Horas Operativas Trituración Terciaria h)                                    
+                                //MMSA_HPGR_Productividad (t/h) t/h
+                                //(10011 MMSA_HPGR_Mineral Triturado t)/ (10063 Horas Operativas Trituración Terciaria h)                                    
                                 $d_real = 
                                 DB::select(
                                     'SELECT A.valor/B.valor as dia_real FROM
