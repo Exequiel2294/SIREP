@@ -9,7 +9,7 @@ VARIABLE AREA
             Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Trituración Primaria Mineral
 
         10004: Ley Au - MMSA_TP_Ley Au (g/t): 
-            Se Carga en sistema
+            Se obtiene de [10.1.10.25].[DB_SIOM].[dbo].[MMSA_MS4M_DAILY_DET] WHERE CPARAMETRO = 9
 
         10002: Au Triturado - MMSA_TP_Au Triturado (oz):
             Calculo: (Mineral Triturado * Ley Au)/31.1035
@@ -185,13 +185,13 @@ VARIABLE AREA
         10059: Solución Barren -   MMSA_LIXI_Solución Barren (m3): -> 8h
             Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Lixiviación.Flujo BLS día (m3)
 
-        10055: CN Solución Barren - MMSA_LIXI_CN Solución Barren (ppm): -> 8h
+        10055: CN Solución Barren - MMSA_LIXI_CN Solución Barren (ppm): ->11h
             Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Lixivación CN en Solucion Barren (ppm)
 
         10060: Solución ILS - MMSA_LIXI_Solución ILS (m3): -> 8h
             Ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Lixiviación.Flujo ILS día (m3)
 
-        10056: CN Solución ILS - MMSA_LIXI_CN Solución ILS (ppm): -> 8h
+        10056: CN Solución ILS - MMSA_LIXI_CN Solución ILS (ppm): ->11h
             Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Lixivación CN en Solucion ILS (ppm)
 
         10061: Solución PLS - MMSA_LIXI_Solución PLS (m3): -> 11h
@@ -241,7 +241,7 @@ VARIABLE AREA
             Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au PLS + ILS (ppm)
             IDEM: MMSA_LIXI_Ley Au Solución PLS
 
-        10050: Ley de Au BLS - MMSA_ADR_Ley de Au BLS (ppm): -> 11h
+        10050: Ley de Au BLS - MMSA_ADR_Ley de Au BLS (ppm): -> 11hs
             Ruta: \\FSM-ARG-PIDA01\Produccion.Valor Planta ADR Ley de Au BLS (ppm)
 
         10049: Eficiencia - MMSA_ADR_Eficiencia (%):
@@ -268,9 +268,7 @@ VARIABLE TIPO
         10031: Mineral Apilado Stacker 	- MMSA_APILAM_STACKER_Mineral Apilado Stacker (t) IDEM MMSA_HPGR_Mineral Triturado
         10039: Total Mineral Apilado 	- MMSA_APILAM_TA_Total Mineral Apilado (t) IDEM MMSA_HPGR_Mineral Triturado
         10059: Solución Barren 			- MMSA_LIXI_Solución Barren (m3)
-        10055: CN Solución Barren 		- MMSA_LIXI_CN Solución Barren (ppm)
         10060: Solución ILS 			- MMSA_LIXI_Solución ILS (m3)
-        10056: CN Solución ILS 			- MMSA_LIXI_CN Solución ILS (ppm)
         10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
         
     Variables 11h: -> TIPO 2
@@ -295,9 +293,10 @@ VARIABLE TIPO
         10052: PLS a Carbones 							- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
         10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
         10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
+        10056: CN Solución ILS 			                - MMSA_LIXI_CN Solución ILS (ppm)
+        10055: CN Solución Barren 		        - MMSA_LIXI_CN Solución Barren (ppm)
         
     Variables de carga manual: -> TIPO 3 (9 variables)
-        10004: Ley Au 				            - MMSA_TP_Ley Au (g/t)
         10012: P80 					            - MMSA_HPGR_P80 (mm)
         10016: Adición de CN 					- MMSA_AGLOM_Adición de CN (ppm)
         10018: Humedad 				            - MMSA_AGLOM_Humedad (%)
@@ -330,6 +329,9 @@ VARIABLE TIPO
         10030: Ley Au - MMSA_APILAM_STACKER_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
         10035: Ley Au - MMSA_APILAM_TA_Ley Au (g/t) IDEM MMSA_HPGR_Ley Au
 
+    Variables 11_21hs: -> TIPO 6
+        10004: Ley Au - MMSA_TP_Ley Au (g/t)
+
     REVISAR
         MMSA_AGLOM_Cemento - ruta: \\FSM-ARG-PIDA01\Calculado.Planta.Aglomeración.Cemento
         MMSA_AGLOM_Adición de CN (ppm) no coincide
@@ -339,18 +341,19 @@ VARIABLE TIPO
 
     JOBS 1 -> 8h:
         INSERT INTO [mansfield2].[dbo].[data]
-        SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
-        (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
-            ,[Atributo]
-            ,[Unidad de medida]
-            ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+        SELECT V.id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, D.valor, 1 as estado  FROM
+        (SELECT [Descripcion], CONVERT(numeric(20,8), [Valor]) AS "Valor"
         FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_8h]) AS D
-        INNER JOIN
-        (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 1) AS V
+        RIGHT JOIN
+        (SELECT id,descripcion 
+        FROM [mansfield2].[dbo].[variable] where tipo = 1) AS V
         ON V.descripcion = D.descripcion
         UNION  
-        SELECT id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, -1 as valor, 1 as estado  
-        FROM  [mansfield2].[dbo].[variable]  where TIPO IN (2,3,4,5) 
+        SELECT id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, NULL as Valor, 1 as estado  
+        FROM  [mansfield2].[dbo].[variable]  where tipo IN (2,3,4,5,6) AND id NOT IN (10033,10036)
+        UNION
+        SELECT id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, 75 as Valor, 1 as estado  
+        FROM  [mansfield2].[dbo].[variable]  where id IN (10033,10036);
 
     JOBS2 -> 11h:
         DELETE FROM [mansfield2].[dbo].[data] 
@@ -359,15 +362,13 @@ VARIABLE TIPO
         AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
 
         INSERT INTO [mansfield2].[dbo].[data]
-        SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
-        (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
-            ,[Atributo]
-            ,[Unidad de medida]
-            ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+        SELECT V.id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, D.valor, 1 as estado  FROM
+        (SELECT [Descripcion], CONVERT(numeric(20,8), [Valor]) AS "Valor"
         FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11h]) AS D
-        INNER JOIN
-        (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 2) AS V
-        ON V.descripcion = D.descripcion
+        RIGHT JOIN
+        (SELECT id,descripcion 
+        FROM [mansfield2].[dbo].[variable] where tipo = 2) AS V
+        ON V.descripcion = D.descripcion;
 
     JOBS3 -> 11_21h:
         DELETE FROM [mansfield2].[dbo].[data] 
@@ -376,15 +377,29 @@ VARIABLE TIPO
         AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)))
 
         INSERT INTO [mansfield2].[dbo].[data]
-        SELECT V.id, D.fecha, D.valor, 1 as estado  FROM
-        (SELECT DATEADD(day,-1,convert(date,Fecha)) as fecha,[Descripcion]
-            ,[Atributo]
-            ,[Unidad de medida]
-            ,CONVERT(numeric(20,8), [Valor]) AS "Valor"
+        SELECT V.id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, D.valor, 1 as estado  FROM
+        (SELECT [Descripcion],CONVERT(numeric(20,8), [Valor]) AS "Valor"
         FROM [10.1.10.21].[Produccion].[Dbo].[SISTEMA_REPORTES_11_21h]) AS D
-        INNER JOIN
+        RIGHT JOIN
         (SELECT * FROM [mansfield2].[dbo].[variable] where tipo = 5) AS V
-        ON V.descripcion = D.descripcion
+        ON V.descripcion = D.descripcion;
+
+    JOBS4 -> 8:45
+        DELETE FROM [mansfield2].[dbo].[data] 
+        WHERE variable_id in (SELECT id FROM variable where tipo = 6)
+        AND month(fecha) = MONTH(DATEADD(day, -1, CAST(GETDATE() AS date)))
+        AND day(fecha) = DAY(DATEADD(day, -1, CAST(GETDATE() AS date)));
+
+        INSERT INTO [mansfield2].[dbo].[data]
+        SELECT TOP 1 10004 as id, DATEADD(day, -1, CAST(GETDATE() AS date)) as fecha, D.valor, 1 as estado  FROM
+        (SELECT valor 
+        FROM [10.1.10.25].[DB_SIOM].[dbo].[MMSA_MS4M_DAILY_DET]
+        WHERE CPARAMETRO = 9
+        AND FECHA = (DATEADD(day,-1,Convert(date,getdate())))) as D
+        RIGHT JOIN 
+        (SELECT id FROM [mansfield2].[dbo].[variable] where id = 10004) AS V
+        ON 1=1;    
+
 
 El sistema realiza carga de data, importandola desde el PI a:
     Horas 8:        12 variables
@@ -437,6 +452,96 @@ MS4M_MINERAL DE ESA TABLA SE SACAN LOS DATOS PARA EL SCRIPT DEL DAILY
 
 aCTUALIZARDL
 IMPRIMIRDL GENERA Y ENVIA PDF
+
+
+Sistema
+10:
+lixi
+
+
+VISTA CORPORATIVO:
+
+SELECT v.id, v.nombre, v.descripcion, d.fecha, v.unidad, d.valor
+FROM data d 
+INNER JOIN variable v
+ON d.variable_id = v.id
+WHERE d.fecha = CONVERT(DATE,DATEADD(d,-1,GETDATE()))
+AND v.id NOT IN (10002, 10006, 10008, 10013, 10015, 10020,10027,10028,10032,10037,10038,10053,10040,10049,10046,10066)
+/*10002 -> MMSA_TP_Au Triturado oz*/
+UNION
+SELECT TOP 1 V.id, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+(SELECT fecha, variable_id, valor
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10005) as A
+INNER JOIN   
+(SELECT fecha, variable_id, valor
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10004
+AND valor <> 0) as B
+ON A.fecha = B.fecha
+INNER JOIN
+(SELECT id, nombre, descripcion, unidad 
+FROM [mansfield2].[dbo].[variable]
+WHERE ID = 10002) as V
+ON 1 = 1
+WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+/*10006 -> MMSA_TP_Productividad t/h*/
+UNION
+SELECT TOP 1 V.id, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10005) as A
+INNER JOIN   
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10062
+AND valor <> 0) as B
+ON A.fecha = B.fecha
+INNER JOIN
+(SELECT id, nombre, descripcion, unidad 
+FROM [mansfield2].[dbo].[variable]
+WHERE ID = 10006) as V
+ON 1 = 1
+WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+/*
+10008 -> MMSA_HPGR_Au Triturado (oz)
+10037 -> MMSA_APILAM_TA_Total Au Apilado (oz)
+*/
+UNION
+SELECT V.id, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10011) as A
+INNER JOIN   
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10010
+AND valor <> 0) as B
+ON A.fecha = B.fecha
+INNER JOIN
+(SELECT id, nombre, descripcion, unidad 
+FROM [mansfield2].[dbo].[variable]
+WHERE ID in (10008,10037)) as V
+ON 1 = 1
+WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+/*10013 -> MMSA_HPGR_Productividad*/
+UNION
+SELECT V.id, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10011) as A
+INNER JOIN   
+(SELECT fecha, variable_id, [valor]
+FROM [mansfield2].[dbo].[data]
+where variable_id = 10063
+AND valor <> 0) as B
+ON A.fecha = B.fecha
+INNER JOIN
+(SELECT id, nombre, descripcion, unidad 
+FROM [mansfield2].[dbo].[variable]
+WHERE ID = 10013) as V
+ON 1 = 1
+WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
 
 

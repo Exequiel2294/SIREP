@@ -517,30 +517,8 @@
                     {data:'var_export', name:'var_export', visible:false}, 
                     {data:'variable', name:'variable', orderable: false}, 
                     {data:'unidad', name:'unidad', orderable: false, searchable: false, width:'25px'}, 
-                    {data:'dia_real', name:'dia_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'dia_real', name:'dia_real', orderable: false,searchable: false},
+                    {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['dia_budget'] != '-' && row['dia_real'] != '-')
@@ -582,30 +560,8 @@
                                          
                         }
                     },
-                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
+                    {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['mes_budget'] != '-' && row['mes_real'] != '-')
@@ -644,30 +600,8 @@
                             }                                         
                         }
                     },
-                    {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false},
+                    {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
                     {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
@@ -706,30 +640,8 @@
                             }     
                         }
                     },
-                    {data:'anio_real', name:'anio_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data);
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'anio_real', name:'anio_real', orderable: false,searchable: false},
+                    {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
                     {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['anio_budget'] != '-' && row['anio_real'] != '-')
@@ -865,8 +777,12 @@
                 ]
             });   
 
-            $('.datatables-title').html('<div style="font-size:1.5rem; font-weight:500;">Comentarios</div>');
-            $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit"  class="btn btn-success add" title="Editar registro">Cargar</a>');
+            $('.datatables-title').html('<div style="font-size:1.5rem; font-weight:500;">Comentarios</div>')            
+            @if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit"  class="btn btn-success add" title="Editar registro">Cargar</a>');
+            @else
+                $('.datatables-btn-cargar').html('');
+            @endif
 
         });
         /* DATATABLES */
@@ -1213,14 +1129,14 @@
                             $('#form-button-comentario').html('Cargar');
                             var oTable = $('#comentarios-table').dataTable();
                             oTable.fnDraw(false);
-                            if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Registro cargado con exito', 'MansfieldRep', 'success');
+                            if($('#form-button-comentario').val() == 1){
+                                MansfieldRep.notification('Comentario cargado con exito', 'MansfieldRep', 'success');
                             }   
                             else{
-                                MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Comentario actualizado con exito', 'MansfieldRep', 'success');
                             } 
                         }else{
-                            $('#form-button').html('Guardar Cambios');
+                            $('#form-button-comentario').html('Guardar Cambios');
                             printErrorMsg(data.error);
                         } 
                     }
