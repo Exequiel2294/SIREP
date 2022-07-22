@@ -961,16 +961,7 @@
 
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
-            //pos = $(this).parent().position();
             idx = $("#procesos-table").DataTable().row($(this).parent()).index();
-            /*if (pos != undefined)
-            {                
-                alert(pos['top']);
-            }*/
-            //let row = $("#procesos-table").DataTable().row(20).select();
-            
-                  
-            //console.log(idx, $("#procesos-table").DataTable().rows().count());
             $.ajax({
                 url:"{{route('dashboard.edit') }}",
                 method:"POST",
@@ -999,10 +990,20 @@
                     }
                     else
                     {
-                        Swal.fire({
-                            title: data['msg'],
-                            icon: 'warning',
-                        })
+                        if (data['val'] == -2)
+                        {
+                            Swal.fire({
+                                html: data['html'],
+                                icon: 'warning',
+                            })
+                        }
+                        else
+                        {    
+                            Swal.fire({
+                                title: data['msg'],
+                                icon: 'warning',
+                            })                        
+                        }
                     }
                 }
             });

@@ -90,7 +90,6 @@ VARIABLE AREA
         10018: Humedad - MMSA_AGLOM_Humedad (%):
             Se carga en sistema
 
-        /*NO VISIBLE*/
         10067: Cemento - MMSA_AGLOM_Cemento -> 8h
             Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Cemento
 
