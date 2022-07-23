@@ -493,6 +493,7 @@ class DashboardController extends Controller
                                 'variable.orden as var_orden',
                                 'variable.unidad as unidad',
                                 'variable.export as var_export',
+                                'variable.tipo as tipo',
                                 'data.valor as dia_real',
                                 'budget.valor as dia_budget',
                                 'data.valor as anio_budget'
@@ -5527,14 +5528,21 @@ class DashboardController extends Controller
                     ->addColumn('action', function($data)
                     {
                         $button = '';  
-                        if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                        if ($data->tipo == 4)
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
-                        }     
+                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Información Variable"><i style="color:#0F62AC;" class="fa-lg fas fa-info-circle"></i></a>';
+                        }
                         else
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
-                        }                   
+                            if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                            {
+                                $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            }     
+                            else
+                            {
+                                $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            }  
+                        }                 
                         return $button;
                     })
                     ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
@@ -5549,8 +5557,299 @@ class DashboardController extends Controller
         $selecteddate = $request->selecteddate;   
         if (in_array($request->variable_id,$vbles_c))
         {
-            $data['msg'] = 'Esta variable es calculada, la misma no puede ser modificada.';
-            $data['val'] = -1;
+            $data['val'] = -2;
+            switch ($request->variable_id)
+            {
+                
+                case 10002:	//MMSA_TP_Au Triturado (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>TP_Mineral Triturado</li>
+                                <li>TP_Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10006:	//MMSA_TP_Productividad (t/h)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>TP_Mineral Triturado</li>
+                                <li>TP_Horas Operativas</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>A / B</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10008:	//MMSA_HPGR_Au Triturado (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>HPGR_Mineral Triturado</li>
+                                <li>HPGR_Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10013:	//MMSA_HPGR_Productividad (t/h)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>HPGR_Mineral Triturado</li>
+                                <li>HPGR_Horas Operativas</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>A / B</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10015:	//MMSA_AGLOM_Adición de Cemento (kg/t)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>AGLOM_Mineral Aglomerado</li>
+                                <li>AGLOM_Cemento</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( B * 1000 )/A</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10020:	//MMSA_AGLOM_Productividad (t/h)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>AGLOM_Mineral Aglomerado</li>
+                                <li>AGLOM_Horas Operativas</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>A / B</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10027:	//MMSA_APILAM_STACKER_Au Apilado Stacker (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>APIL_ST_Mineral Apilado</li>
+                                <li>APIL_ST_Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10028:	//MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>APIL_ST_Mineral Apilado</li>
+                                <li>APIL_ST_Ley Au</li>
+                                <li>APIL_ST_Recuperación</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>(( C / 100 ) * A * B) / 31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10032:	//MMSA_APILAM_STACKER_Productividad (t/h)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>APIL_ST_Mineral Apilado</li>
+                                <li>APIL_ST_Tiempo Operativo</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>A / B</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10037:	//MMSA_APILAM_TA_Total Au Apilado (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>APIL_TA_Mineral Apilado</li>
+                                <li>APIL_TA_Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10038:	//MMSA_APILAM_TA_Total Au Extraible Apilado (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>APIL_TA_Mineral Apilado</li>
+                                <li>APIL_TA_Ley Au</li>
+                                <li>APIL_TA_Recuperación</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>(( C / 100 ) * A * B) / 31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10040:	//MMSA_SART_Eficiencia (%)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>SART_Ley Cu Alimentada</li>
+                                <li>SART_Ley Cu Salida</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>(( A - B ) * 100) / A</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10046:	//MMSA_ADR_Au Adsorbido (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>ADR_PLS a Carbones</li>
+                                <li>ADR_Ley de Au PLS+ILS</li>
+                                <li>ADR_Ley de Au BLS</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * ( B - C ))/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10049:	//MMSA_ADR_Eficiencia (%)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>ADR_Ley de Au PLS+ILS</li>
+                                <li>ADR_Ley de Au BLS</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>(( A - B ) * 100) / A</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10053:	//MMSA_LIXI_Au Lixiviado (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>LIXI_Solución PLS</li>
+                                <li>LIXI_Ley Au Solución PLS</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+            }
             return response()->json($data); 
         }  
         else
