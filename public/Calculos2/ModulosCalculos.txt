@@ -204,9 +204,11 @@ VARIABLE AREA
             NO SE TENDRIA QUE PODER MODIFICAR
 
         10054: CN Solución PLS - MMSA_LIXI_CN en solución PLS (ppm):
+            ***NO se muestran actualemte 13/07/2022 por pedido de VictorSilva***
             Se carga desde el sistema
 
         10058: pH Solución PLS - MMSA_LIXI_pH en Solución PLS:
+            ***NO se muestran actualemte 13/07/2022 por pedido de VictorSilva***
             Se carga desde el sistema
 
     SART

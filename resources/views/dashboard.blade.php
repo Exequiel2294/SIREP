@@ -518,102 +518,110 @@
                             objLayout['paddingRight'] = function(i) { return 4; };
                             doc.content[0].layout = objLayout; 
                             
-                            for (var i = 0; i < tabledata.data().count(); i++) {
-                                let text = doc.content[0].table.body[i+2][5].text;                               
-                                console.log(parseInt(text.replace('%','')));                                
-                                if (text != '-')
-                                {
-                                    if (parseInt(text.replace('%','')) < 90) 
+                            if (doc.content[0].table.body[3][5] != undefined)
+                            {
+                                for (var i = 0; i < tabledata.data().count(); i++) {
+                                    let text = doc.content[0].table.body[i+2][5].text;                          
+                                    if (text != '-')
                                     {
-                                            doc.content[0].table.body[i+2][5].color = 'red';
-                                            doc.content[0].table.body[i+2][5].bold = true;
-                                    }
-                                    else
-                                    {
-                                        if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                            doc.content[0].table.body[i+2][5].color = 'darkorange';
-                                            doc.content[0].table.body[i+2][5].bold = true;
+                                        if (parseInt(text.replace('%','')) < 90) 
+                                        {
+                                                doc.content[0].table.body[i+2][5].color = 'red';
+                                                doc.content[0].table.body[i+2][5].bold = true;
                                         }
                                         else
                                         {
-                                            doc.content[0].table.body[i+2][5].color = 'green';
-                                            doc.content[0].table.body[i+2][5].bold = true;
+                                            if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
+                                                doc.content[0].table.body[i+2][5].color = 'darkorange';
+                                                doc.content[0].table.body[i+2][5].bold = true;
+                                            }
+                                            else
+                                            {
+                                                doc.content[0].table.body[i+2][5].color = 'green';
+                                                doc.content[0].table.body[i+2][5].bold = true;
+                                            }
                                         }
                                     }
-                                }
-                            } 
-                            for (var i = 0; i < tabledata.data().count(); i++) {
-                                let text = doc.content[0].table.body[i+2][8].text;                               
-                                console.log(parseInt(text.replace('%','')));                                
-                                if (text != '-')
-                                {
-                                    if (parseInt(text.replace('%','')) < 90) 
-                                    {
-                                            doc.content[0].table.body[i+2][8].color = 'red';
-                                            doc.content[0].table.body[i+2][8].bold = true;
-                                    }
-                                    else
-                                    {
-                                        if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                            doc.content[0].table.body[i+2][8].color = 'darkorange';
-                                            doc.content[0].table.body[i+2][8].bold = true;
-                                        }
-                                        else
+                                } 
+                                if (doc.content[0].table.body[3][8] != undefined)
+                                {  
+                                    for (var i = 0; i < tabledata.data().count(); i++) {
+                                        let text = doc.content[0].table.body[i+2][8].text;                           
+                                        if (text != '-')
                                         {
-                                            doc.content[0].table.body[i+2][8].color = 'green';
-                                            doc.content[0].table.body[i+2][8].bold = true;
+                                            if (parseInt(text.replace('%','')) < 90) 
+                                            {
+                                                    doc.content[0].table.body[i+2][8].color = 'red';
+                                                    doc.content[0].table.body[i+2][8].bold = true;
+                                            }
+                                            else
+                                            {
+                                                if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
+                                                    doc.content[0].table.body[i+2][8].color = 'darkorange';
+                                                    doc.content[0].table.body[i+2][8].bold = true;
+                                                }
+                                                else
+                                                {
+                                                    doc.content[0].table.body[i+2][8].color = 'green';
+                                                    doc.content[0].table.body[i+2][8].bold = true;
+                                                }
+                                            }
                                         }
-                                    }
+                                    } 
+                                    if (doc.content[0].table.body[3][11] != undefined)
+                                    {       
+                                        for (var i = 0; i < tabledata.data().count(); i++) {
+                                            let text = doc.content[0].table.body[i+2][11].text;                         
+                                            if (text != '-')
+                                            {
+                                                if (parseInt(text.replace('%','')) < 90) 
+                                                {
+                                                        doc.content[0].table.body[i+2][11].color = 'red';
+                                                        doc.content[0].table.body[i+2][11].bold = true;
+                                                }
+                                                else
+                                                {
+                                                    if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
+                                                        doc.content[0].table.body[i+2][11].color = 'darkorange';
+                                                        doc.content[0].table.body[i+2][11].bold = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        doc.content[0].table.body[i+2][11].color = 'green';
+                                                        doc.content[0].table.body[i+2][11].bold = true;
+                                                    }
+                                                }
+                                            }
+                                        } 
+                                        if (doc.content[0].table.body[3][14] != undefined)
+                                        {  
+                                            for (var i = 0; i < tabledata.data().count(); i++) {
+                                                let text = doc.content[0].table.body[i+2][14].text;                         
+                                                if (text != '-')
+                                                {
+                                                    if (parseInt(text.replace('%','')) < 90) 
+                                                    {
+                                                            doc.content[0].table.body[i+2][14].color = 'red';
+                                                            doc.content[0].table.body[i+2][14].bold = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
+                                                            doc.content[0].table.body[i+2][14].color = 'darkorange';
+                                                            doc.content[0].table.body[i+2][14].bold = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            doc.content[0].table.body[i+2][14].color = 'green';
+                                                            doc.content[0].table.body[i+2][14].bold = true;
+                                                        }
+                                                    }
+                                                }
+                                            }                                           
+                                        }                                 
+                                    }                                  
                                 }
-                            } 
-                            for (var i = 0; i < tabledata.data().count(); i++) {
-                                let text = doc.content[0].table.body[i+2][11].text;                               
-                                console.log(parseInt(text.replace('%','')));                                
-                                if (text != '-')
-                                {
-                                    if (parseInt(text.replace('%','')) < 90) 
-                                    {
-                                            doc.content[0].table.body[i+2][11].color = 'red';
-                                            doc.content[0].table.body[i+2][11].bold = true;
-                                    }
-                                    else
-                                    {
-                                        if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                            doc.content[0].table.body[i+2][11].color = 'darkorange';
-                                            doc.content[0].table.body[i+2][11].bold = true;
-                                        }
-                                        else
-                                        {
-                                            doc.content[0].table.body[i+2][11].color = 'green';
-                                            doc.content[0].table.body[i+2][11].bold = true;
-                                        }
-                                    }
-                                }
-                            } 
-                            for (var i = 0; i < tabledata.data().count(); i++) {
-                                let text = doc.content[0].table.body[i+2][13].text;                               
-                                console.log(parseInt(text.replace('%','')));                                
-                                if (text != '-')
-                                {
-                                    if (parseInt(text.replace('%','')) < 90) 
-                                    {
-                                            doc.content[0].table.body[i+2][14].color = 'red';
-                                            doc.content[0].table.body[i+2][14].bold = true;
-                                    }
-                                    else
-                                    {
-                                        if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                            doc.content[0].table.body[i+2][14].color = 'darkorange';
-                                            doc.content[0].table.body[i+2][14].bold = true;
-                                        }
-                                        else
-                                        {
-                                            doc.content[0].table.body[i+2][14].color = 'green';
-                                            doc.content[0].table.body[i+2][14].bold = true;
-                                        }
-                                    }
-                                }
-                            } 
+                            }
                             
                         },
                         orientation: 'landscape',
