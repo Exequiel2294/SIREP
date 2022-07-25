@@ -463,11 +463,11 @@
                             // Set page margins [left,top,right,bottom] or [horizontal,vertical]
                             // or one number for equal spread
                             // It's important to create enough space at the top for a header !!!
-                            doc.pageMargins = [20,60,20,50];
+                            doc.pageMargins = [15,60,15,50];
                             // Set the font size fot the entire document
-                            doc.defaultStyle.fontSize = 11.5;
+                            doc.defaultStyle.fontSize = 7.8;
                             // Set the fontsize for the table header
-                            doc.styles.tableHeader.fontSize = 11.5;
+                            doc.styles.tableHeader.fontSize = 7.8;
                             // Create a header object with 3 columns
                             // Left side: Logo
                             // Middle: brandname
@@ -521,23 +521,29 @@
                             if (doc.content[0].table.body[3][5] != undefined)
                             {
                                 for (var i = 0; i < tabledata.data().count(); i++) {
+                                    doc.content[0].table.body[i+2][3].alignment = 'center';
+                                    doc.content[0].table.body[i+2][4].alignment = 'center';
+                                    doc.content[0].table.body[i+2][5].alignment = 'center';
                                     let text = doc.content[0].table.body[i+2][5].text;                          
                                     if (text != '-')
                                     {
                                         if (parseInt(text.replace('%','')) < 90) 
                                         {
-                                                doc.content[0].table.body[i+2][5].color = 'red';
+                                                doc.content[0].table.body[i+2][5].color = 'white';
+                                                doc.content[0].table.body[i+2][5].fillColor = 'red';
                                                 doc.content[0].table.body[i+2][5].bold = true;
                                         }
                                         else
                                         {
                                             if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                                doc.content[0].table.body[i+2][5].color = 'darkorange';
+                                                //doc.content[0].table.body[i+2][5].color = 'darkorange';
+                                                doc.content[0].table.body[i+2][5].fillColor = '#ffbb10';
                                                 doc.content[0].table.body[i+2][5].bold = true;
                                             }
                                             else
                                             {
-                                                doc.content[0].table.body[i+2][5].color = 'green';
+                                                doc.content[0].table.body[i+2][5].color = 'white';
+                                                doc.content[0].table.body[i+2][5].fillColor = 'green';
                                                 doc.content[0].table.body[i+2][5].bold = true;
                                             }
                                         }
@@ -546,23 +552,29 @@
                                 if (doc.content[0].table.body[3][8] != undefined)
                                 {  
                                     for (var i = 0; i < tabledata.data().count(); i++) {
+                                        doc.content[0].table.body[i+2][6].alignment = 'center';
+                                        doc.content[0].table.body[i+2][7].alignment = 'center';
+                                        doc.content[0].table.body[i+2][8].alignment = 'center';
                                         let text = doc.content[0].table.body[i+2][8].text;                           
                                         if (text != '-')
                                         {
                                             if (parseInt(text.replace('%','')) < 90) 
                                             {
-                                                    doc.content[0].table.body[i+2][8].color = 'red';
-                                                    doc.content[0].table.body[i+2][8].bold = true;
+                                                doc.content[0].table.body[i+2][8].color = 'white';
+                                                doc.content[0].table.body[i+2][8].fillColor = 'red';
+                                                doc.content[0].table.body[i+2][8].bold = true;
                                             }
                                             else
                                             {
                                                 if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                                    doc.content[0].table.body[i+2][8].color = 'darkorange';
+                                                    //doc.content[0].table.body[i+2][8].color = '#ffbb10';
+                                                    doc.content[0].table.body[i+2][8].fillColor = '#ffbb10';
                                                     doc.content[0].table.body[i+2][8].bold = true;
                                                 }
                                                 else
                                                 {
-                                                    doc.content[0].table.body[i+2][8].color = 'green';
+                                                    doc.content[0].table.body[i+2][8].color = 'white';
+                                                    doc.content[0].table.body[i+2][8].fillColor = 'green';
                                                     doc.content[0].table.body[i+2][8].bold = true;
                                                 }
                                             }
@@ -571,23 +583,29 @@
                                     if (doc.content[0].table.body[3][11] != undefined)
                                     {       
                                         for (var i = 0; i < tabledata.data().count(); i++) {
+                                            doc.content[0].table.body[i+2][9].alignment = 'center';
+                                            doc.content[0].table.body[i+2][10].alignment = 'center';
+                                            doc.content[0].table.body[i+2][11].alignment = 'center';
                                             let text = doc.content[0].table.body[i+2][11].text;                         
                                             if (text != '-')
                                             {
                                                 if (parseInt(text.replace('%','')) < 90) 
                                                 {
-                                                        doc.content[0].table.body[i+2][11].color = 'red';
-                                                        doc.content[0].table.body[i+2][11].bold = true;
+                                                    doc.content[0].table.body[i+2][11].color = 'white';
+                                                    doc.content[0].table.body[i+2][11].fillColor = 'red';
+                                                    doc.content[0].table.body[i+2][11].bold = true;
                                                 }
                                                 else
                                                 {
                                                     if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                                        doc.content[0].table.body[i+2][11].color = 'darkorange';
+                                                        //doc.content[0].table.body[i+2][11].color = '#ffbb10';
+                                                        doc.content[0].table.body[i+2][11].fillColor = '#ffbb10';
                                                         doc.content[0].table.body[i+2][11].bold = true;
                                                     }
                                                     else
                                                     {
-                                                        doc.content[0].table.body[i+2][11].color = 'green';
+                                                        doc.content[0].table.body[i+2][11].color = 'white';
+                                                        doc.content[0].table.body[i+2][11].fillColor = 'green';
                                                         doc.content[0].table.body[i+2][11].bold = true;
                                                     }
                                                 }
@@ -596,23 +614,29 @@
                                         if (doc.content[0].table.body[3][14] != undefined)
                                         {  
                                             for (var i = 0; i < tabledata.data().count(); i++) {
-                                                let text = doc.content[0].table.body[i+2][14].text;                         
+                                                let text = doc.content[0].table.body[i+2][14].text;  
+                                                doc.content[0].table.body[i+2][12].alignment = 'center';
+                                                doc.content[0].table.body[i+2][13].alignment = 'center';
+                                                doc.content[0].table.body[i+2][14].alignment = 'center';                       
                                                 if (text != '-')
                                                 {
                                                     if (parseInt(text.replace('%','')) < 90) 
                                                     {
-                                                            doc.content[0].table.body[i+2][14].color = 'red';
-                                                            doc.content[0].table.body[i+2][14].bold = true;
+                                                        doc.content[0].table.body[i+2][14].color = 'white';
+                                                        doc.content[0].table.body[i+2][14].fillColor = 'red';
+                                                        doc.content[0].table.body[i+2][14].bold = true;
                                                     }
                                                     else
                                                     {
                                                         if (parseInt(text.replace('%','')) > 89 && parseInt(text.replace('%','')) < 100) {
-                                                            doc.content[0].table.body[i+2][14].color = 'darkorange';
+                                                            //doc.content[0].table.body[i+2][14].color = '#ffbb10';
+                                                            doc.content[0].table.body[i+2][14].fillColor = '#ffbb10';
                                                             doc.content[0].table.body[i+2][14].bold = true;
                                                         }
                                                         else
                                                         {
-                                                            doc.content[0].table.body[i+2][14].color = 'green';
+                                                            doc.content[0].table.body[i+2][14].color = 'white';
+                                                            doc.content[0].table.body[i+2][14].fillColor = 'green';
                                                             doc.content[0].table.body[i+2][14].bold = true;
                                                         }
                                                     }
@@ -622,9 +646,8 @@
                                     }                                  
                                 }
                             }
-                            
                         },
-                        orientation: 'landscape',
+                        //orientation: 'landscape',
                         exportOptions: {
                             columns: [4,':visible.exportable']
                         }
@@ -1508,7 +1531,7 @@
                                 <th rowspan="2">SUBCATEGORIA</th>
                                 <th rowspan="2">orden</th>
                                 <th rowspan="2" style="min-width:25px!important;" class="thcenter"></th> 
-                                <th rowspan="2">Categoria</th>
+                                <th rowspan="2">ÁREA</th>
                                 <th rowspan="2" class="thcenter exportable">NOMBRE</th>
                                 <th rowspan="2" class="thcenter exportable" style="min-width:25px!important;">U.</th>
                                 <th colspan="3" class="thcenter" style="min-width:12vw!important;">DIA</th>
@@ -1545,7 +1568,7 @@
                         <thead style=" border-collapse: collapse !important;">
                             <tr>
                                 <th></th>
-                                <th class="thcenter" style="min-width:6vw!important;">Area</th>
+                                <th class="thcenter" style="min-width:6vw!important;">Área</th>
                                 <th class="thcenter" style="min-width:6vw!important;">Usuario</th>
                                 <th class="thcenter" style="min-width:25vw!important;">Procesos</th>
                                 <th class="thcenter" style="min-width:25px!important;"></th>
@@ -1579,7 +1602,7 @@
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group row">
-                            <label for="area" class="col-sm-2 col-form-label">Area</label>
+                            <label for="area" class="col-sm-2 col-form-label">Área</label>
                             <div class="col-sm-10">
                               <input type="text" class="form-control" id="area" name="area" disabled>
                             </div>
@@ -1644,10 +1667,10 @@
                     <form action="post" id="modal-form-comentario" name="modal-form-comentario" autocomplete="off">
                         <input type="hidden" name="id_comentario" id="id_comentario">                       
                         <div class="form-group row">
-                            <label for="area_id_comentario" class="col-sm-2 col-form-label">Area</label>
+                            <label for="area_id_comentario" class="col-sm-2 col-form-label">Área</label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="area_id_comentario" id="area_id_comentario">
-                                    <option value="" selected disabled>Seleccione Area</option>
+                                    <option value="" selected disabled>Seleccione Área</option>
                                     @foreach($areas as $id => $nombre)
                                             <option value="{{$id}}">{{$nombre}}</option>
                                     @endforeach
