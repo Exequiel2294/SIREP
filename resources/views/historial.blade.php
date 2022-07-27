@@ -253,7 +253,7 @@
                         render: function(data){
                             if(data != null)
                             {
-                                return moment(data).format("DD/MM/Y");
+                                return moment.utc(data).local().format("DD/MM/Y HH:mm");
                             }
                             else
                             {
@@ -261,7 +261,10 @@
                             }
                         }
                     },
-                    {data:'variable', name:'variable'},
+                    {data:'variable', name:'variable',
+                        render: function(data){
+                            return data.substring(5);
+                    }},
                     {data:'fecha_data', name:'fecha_data',
                         render: function(data){
                             if(data != null)
@@ -274,7 +277,7 @@
                             }
                         }
                     },
-                    {data:'transaccion', name:'transaccion'},
+                    //{data:'transaccion', name:'transaccion'},
                     {data:'valorviejo', name:'valorviejo'},
                     {data:'valornuevo', name:'valornuevo'},
                     {data:'usuario', name:'usuario'}
@@ -296,8 +299,8 @@
                             <tr>    
                                 <th>Fecha Mod.</th>
                                 <th>Variable</th>
-                                <th>Fecha</th>
-                                <th>Transaccion</th>
+                                <th>Fecha Data</th>
+                                <!-- <th>Transaccion</th> -->
                                 <th>Valor V.</th>
                                 <th>Valor N.</th>
                                 <th>Usuario</th>            
