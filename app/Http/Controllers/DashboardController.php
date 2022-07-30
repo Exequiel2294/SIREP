@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\SendEmail;
 
 
 class DashboardController extends Controller
@@ -25,9 +26,9 @@ class DashboardController extends Controller
         return view('dashboard', compact('areas'));
     }
 
-    public function sendDaily()
+    /*public function sendDaily()
     {                
-        $this->date = '2022-07-12';
+        $this->date = date('Y-m-d');
         $this->pparray = 
             [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
             10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
@@ -5521,22 +5522,19 @@ class DashboardController extends Controller
         //return view('pdf.procesos', compact('registros'));
 
         $pdf = Pdf::loadView('pdf.procesos', compact('registros')); 
-        return $pdf->download('invoice.pdf');     
+        //return $pdf->download('invoice.pdf');     
         $data["email"] = "ejensen@mansfieldmin.com";
-        $data["title"] = "From ItSolutionStuff.com";
-        $data["body"] = "This is Demo";
 
-
-        Mail::send('pdf.procesos', $data, function ($message) use ($data, $pdf) {
-            $message->to($data["email"], $data["email"])
-                    ->subject($data["title"])
-                    ->attachData($pdf->output(), "DailyReport.pdf");
+        Mail::send('mails.dailytable', $data, function ($message) use ($data, $pdf) {
+            $message->to($data['email']);
+            $message->subject('DailyReport '.$this->date);
+            $message->attachData($pdf->output(), 'DailyReport'.$this->date.'.pdf'); //attached pdf file
         });
 
         dd('Mail sent successfully');
         //return $pdf->download('invoice.pdf');
 
-    }
+    }*/
 
     public function procesostable(Request $request)
     {        

@@ -188,7 +188,7 @@
                             @endphp
                             <td>{{$registro->var_export}}</td>
                             <td>{{$registro->nombre}}</td>
-                            <td>{{$registro->unidad}}</td>
+                            <td class="text-center">{{$registro->unidad}}</td>
                             <td class="text-center">{{$registro->dia_real}}</td>
                             <td class="text-center">{{$registro->dia_budget}}</td>
                             @if ($dia_por == '-')

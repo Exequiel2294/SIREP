@@ -1,22 +1,10 @@
-<h1><strong> Reporte díario con la visita del blog </strong> </h1>
+<h4><strong> Daily Report {{date('d-m-Y',strtotime("-1 days"))}}</strong> </h4>
 
-<p>Hoy, Sse han registrado un total de 4 visitas en la web.</p>
-
-<p>Las páginas visitas han sido:</p>
 <div>
-    <table>
-        <tr class="bg-indigo-400 bg-opacity-100 text-white">
-                <th class="text-left">Página</th>
-                <th class="text-left">Fecha</th>
-
-        </tr>
-        <tbody>
-           
-                <tr class="border-b-2">
-                    <td>  5   </td>
-                    <td>  2   </td>
-                </tr>
-           
-        </tbody>
-    </table>
+    Buenas tardes
+    <br><br>
+    Se adjunta Daily report correspondiente al día {{date('d-m-Y',strtotime("-1 days"))}}.
+    Por favor no olviden informar los datos manuales en la plataforma. Les recordamos que es responsabilidad de cada área verificar si los valores capturados por SIREP son correctos ya que el daily que enviamos diariamente por excel dejará de realizarse a partir del mes que viene. No duden en comunicarse en caso de encontrar diferencias significativas.
+    <br><br>
+    Para acceso a la plataforma: http://10.1.10.30:8080/<br><br>
 </div>

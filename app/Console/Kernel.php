@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('send:dailyreport')->everyMinute();
+        $schedule->command('send:dailyreport');
         /*$schedule->call(function () {
             DB::table('data_conexions')->delete();
         })->everyMinute(); //->dailyAt('16:00');*/
