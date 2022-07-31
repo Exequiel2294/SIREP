@@ -5531,14 +5531,16 @@ class SendDailyReport extends Command
 
         $registros2 = $tabla->getData();
         $registros= $registros2->data;
+        if ($registros <> [] && $registros <> NULL)
+        {
+            $pdf = Pdf::loadView('pdf.procesos', compact('registros')); 
+            $data["email"] = "ejensen@mansfieldmin.com";
 
-        $pdf = Pdf::loadView('pdf.procesos', compact('registros')); 
-        $data["email"] = "ejensen@mansfieldmin.com";
-
-        Mail::send('mails.dailytable', $data, function ($message) use ($data, $pdf) {
-            $message->to($data['email']);
-            $message->subject('DailyReport '.$this->date);
-            $message->attachData($pdf->output(), 'DailyReport'.$this->date.'.pdf'); //attached pdf file
-        });
+            Mail::send('mails.dailytable', $data, function ($message) use ($data, $pdf) {
+                $message->to($data['email']);
+                $message->subject('DailyReport '.$this->date);
+                $message->attachData($pdf->output(), 'DailyReport'.$this->date.'.pdf'); //attached pdf file
+            });
+        }
     }
 }
