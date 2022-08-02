@@ -5534,7 +5534,14 @@ class SendDailyReport extends Command
         if ($registros <> [] && $registros <> NULL)
         {
             $pdf = Pdf::loadView('pdf.procesos', compact('registros')); 
-            $data["email"] = "ejensen@mansfieldmin.com";
+            if ( env('APP_ENV') == 'production')
+            {
+                $data["email"] = "mmsa.dailyreport_procesos@mansfieldmin.com";
+            }
+            else
+            {
+                $data["email"] = "ejensen@mansfieldmin.com";
+            }
 
             Mail::send('mails.dailytable', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
