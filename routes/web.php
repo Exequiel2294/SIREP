@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Website;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,16 +29,16 @@ Route::get('/home', function() {
     return redirect()->route('dashboard');
 })->name('home')->middleware('auth');
 
-Route::get('senddailyreport', 'DashboardController@sendDaily')->name('senddailyreport'); 
+
 
 Route::group(['middleware' => ['auth']], function() {
 
     
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-    //Route::get('dashboard', [Website::class, 'index']);
     Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
-    Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit');    
+    Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit'); 
+       
     Route::get('historial', 'HistorialController@index')->name('historial');    
 
     Route::post('comentario/load', 'ComentarioController@load')->name('comentario.load');
