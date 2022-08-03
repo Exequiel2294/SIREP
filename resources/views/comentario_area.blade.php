@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Area')
+@section('title', 'Área')
 @section('post_title', config('app.name'))
 
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Comentario - Area</h1>
+            <h1>Comentario - Área</h1>
             <a href="javascript:void(0)" class="btn btn-success" id="add">Añadir</a> 
         </div> 
     </div>  
@@ -286,6 +286,17 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
+                    {data:'area',name:'area',
+                        render: function(data){
+                            if(data == 1){
+                                return 'Mina';
+                            }
+                            else
+                            {
+                                return 'Procesos';
+                            }                            
+                        } 
+                    },     
                     {data:'nombre', name:'nombre'},
                     {data:'estado',name:'estado',
                         render: function(data){
@@ -308,7 +319,7 @@
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar Area'); 
+            $('#modal-title').html('Cargar Área'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
@@ -320,11 +331,12 @@
             var id=$(this).data('id');
             $.get('comentario_area/'+id+'/edit', function(data){
                 $('#form-button').val(0); 
-                $('#modal-title').html('Editar Area'); 
+                $('#modal-title').html('Editar Área'); 
                 $('#modal-form').trigger("reset"); 
                 $('#modal').modal('show');
                 $('#id').val(data.id);                          
-                $('#nombre').val(data.nombre);                           
+                $('#nombre').val(data.nombre);         
+                $("#area").val(data.area).attr("selected", "selected");                            
                 $("#estado").val(data.estado).attr("selected", "selected");
             })
         });      
@@ -393,6 +405,12 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
+                area: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 1
+                },
                 nombre: {
                     required: true,
                     minlength: 2,
@@ -451,7 +469,7 @@
                     data:{
                         id: $("#id").val(),
                         nombre:$('#nombre').val(),
-                        descripcion:$('#descripcion').val(),
+                        area:$('#area').val(),
                         estado:$('#estado').val(),
                         _token: $('input[name="_token"]').val()
                     },
@@ -466,7 +484,7 @@
                             $('#form-button').html('Guardar Cambios');
                             var oTable = $('#data-table').dataTable();
                             oTable.fnDraw(false);
-                            MansfieldRep.notification('Area cargada con exito', 'MansfieldRep', 'success');
+                            MansfieldRep.notification('Área cargada con exito', 'MansfieldRep', 'success');
                             
                         }else{
                             $('#form-button').html('Guardar Cambios');
@@ -511,6 +529,7 @@
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
                             <tr>    
+                                <th>Área</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
                                 <th style="min-width:50px!important;"></th>            
@@ -542,7 +561,16 @@
                 </div>
                 <div class="modal-bod">
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
-                        <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="id" id="id"> 
+                        <div class="form-group row">
+                            <label for="area" class="col-sm-2 col-form-label">Área</label>
+                            <div class="col-sm-10">
+                                <select class="form-control company" name="area" id="area">
+                                    <option value=0>Procesos</option>
+                                    <option value=1 selected>Mina</option>
+                                </select> 
+                            </div>
+                        </div> 
                         <div class="form-group row">
                             <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
                             <div class="col-sm-10">

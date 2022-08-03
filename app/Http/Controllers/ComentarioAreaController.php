@@ -21,7 +21,7 @@ class ComentarioAreaController extends Controller
     {
         if(request()->ajax()) {
             $list = DB::table('comentario_area')
-                        ->select('id','nombre', 'estado')
+                        ->select('id','area','nombre', 'estado')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -48,6 +48,7 @@ class ComentarioAreaController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [   
+                    'area'   => 'required|numeric|between:0,1',
                     'nombre' => 'required|string|min:3|max:250|unique:comentario_area,nombre',
                     'estado' => 'required|numeric|between:0,1'
                 ]             
@@ -60,6 +61,7 @@ class ComentarioAreaController extends Controller
             {
                 ComentarioArea::create(
                     [
+                        'area'   => $request->get('area'),
                         'nombre' => $request->get('nombre'),
                         'estado' => $request->get('estado')
                     ]);
@@ -72,6 +74,7 @@ class ComentarioAreaController extends Controller
                 $request->all(),
                 [   
                     'id'    => 'required|numeric|exists:comentario_area,id',
+                    'area'   => 'required|numeric|between:0,1',
                     'nombre' => 'required|string|min:3|max:250|unique:comentario_area,nombre,'.$request->get('id'),
                     'estado' => 'required|numeric|between:0,1'
                 ]            
@@ -85,6 +88,7 @@ class ComentarioAreaController extends Controller
                 ComentarioArea::where('id',$id)
                     ->update(
                     [
+                        'area'   => $request->get('area'),
                         'nombre' => $request->get('nombre'),
                         'estado' => $request->get('estado')
                     ]);

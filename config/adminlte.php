@@ -228,9 +228,14 @@ return [
 
         ['header' => 'Menu'],
         [
-            'text' => 'dashboard',
+            'text' => 'dashboard_process',
             'url'  => 'dashboard',
-            'icon' => 'nav-icon fas fa-tachometer-alt',
+            'icon' => 'nav-icon fas fa-table',
+        ],
+        [
+            'text' => 'dashboard_mine',
+            'url'  => 'dashboard_mine',
+            'icon' => 'nav-icon fas fa-table',
         ],
         [
             'text' => 'historial',
