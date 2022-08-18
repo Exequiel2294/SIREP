@@ -45,6 +45,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('comentario/comentariostable', 'ComentarioController@comentariostable')->name('comentario.comentariostable'); 
     Route::get('comentario/{id}/edit','ComentarioController@edit')->name('comentario.edit');
     Route::delete('comentario/{id}','ComentarioController@delete')->name('comentario.delete');
+
+    Route::get('historial_por_variable', 'HistorialVariableController@index')->name('historial_por_variable');
+    Route::post('valores.variables', 'HistorialVariableController@getValores')->name('valores.variables');
+    Route::get('historial/{id}/edit','HistorialVariableController@edit')->name('historial.edit');
+
 });
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {
@@ -83,4 +88,7 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::post('comentario_area/load', 'ComentarioAreaController@load')->name('comentario_area.load');
     Route::get('comentario_area/{id}/edit','ComentarioAreaController@edit')->name('comentario_area.edit');
     Route::delete('comentario_area/{id}','ComentarioAreaController@delete')->name('comentario_area.delete');
+
+    
+    
 });
