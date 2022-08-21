@@ -44,6 +44,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit'); 
        
     Route::get('historial', 'HistorialController@index')->name('historial');    
+       
+    Route::get('conciliado', 'ConciliadoController@index')->name('conciliado'); 
+    Route::post('conciliado/getvariables', 'ConciliadoController@getvariables')->name('conciliado.getvariables'); 
+    Route::post('conciliado/load', 'ConciliadoController@load')->name('conciliado.load');  
 
     Route::post('comentario/load', 'ComentarioController@load')->name('comentario.load');
     Route::get('comentario/comentariostable', 'ComentarioController@comentariostable')->name('comentario.comentariostable'); 

@@ -243,6 +243,11 @@ return [
             'icon' => 'nav-icon fas fa-book',
         ],
         [
+            'text' => 'conciliado',
+            'url'  => 'conciliado',
+            'icon' => 'nav-icon fas fa-sync-alt',
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],

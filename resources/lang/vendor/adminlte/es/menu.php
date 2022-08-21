@@ -11,5 +11,6 @@ return [
     'comentario'                  => 'Comentarios',
     'comentario_area'             => 'A. Comentario',
     'dashboard_process'           => 'Tablero Procesos',
-    'dashboard_mine'              => 'Tablero Mina'
+    'dashboard_mine'              => 'Tablero Mina',
+    'conciliado'                  => 'Conciliar Data'
 ];

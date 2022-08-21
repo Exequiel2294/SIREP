@@ -603,14 +603,6 @@ Pendientes
 .Que el usuario cada vez que inicie sesion se verifique a grupo de seguridad corresponde para que si alla cambiado de grupo de seguridad cambie su rol. -> LISTO
 .Fijarse si el modal puede quedar movible.-> LISTO
 
-.Tabla averiguar tema scroll y.
-.Crear notificaciones para trabajos fallidos sql -> LISTO
-.La sesion queda abierta cuando cierra sesion, y se abre el link en una nueva pestaña. -> validar
-
-Siguiente tarea:
-Cuando se modifique una fila que al recargar la tabla vuelva a a la misma fila modificada
-Tema del envio de correo, con el daily en pdf.
-
 
 VALIDAR SI EL AUTENTICADOR PUEDE ESTAR 
 
@@ -619,14 +611,6 @@ MMSA_MS4M
 CPARAMENTRO 9 LEY AU.
 
 MS4M_MINERAL DE ESA TABLA SE SACAN LOS DATOS PARA EL SCRIPT DEL DAILY 
-
-aCTUALIZARDL
-IMPRIMIRDL GENERA Y ENVIA PDF
-
-
-Sistema
-10:
-lixi
 
 
 VISTA CORPORATIVO DAILY:
@@ -896,6 +880,9 @@ VISTA CORPORATIVO DAILY:
 
 
 INSERT_SIREP_DIA_CONCIL
+
+SIREP PENDIENTE:
+Pedido se Cesar Prentice, que le cu salida no tenga decimales
 
 
 

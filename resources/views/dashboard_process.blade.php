@@ -466,7 +466,6 @@
                 select: true,
                 scrollY: '65vh',                
                 scrollCollapse: true,
-                paging: false, 
                 "preDrawCallback": function (settings) {
                     pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
                 },
@@ -1428,7 +1427,7 @@
                         <div class="form-group row">
                             <label for="valor" class="col-sm-2 col-form-label">Valor</label>
                             <div class="col-sm-10">
-                              <input type="number" class="form-control" id="valor" name="valor">
+                                <input type="number" class="form-control" id="valor" name="valor">
                             </div>
                         </div>                
                         @csrf
