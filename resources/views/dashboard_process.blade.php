@@ -464,8 +464,6 @@
                 responsive: true,
                 scrollX : true,
                 select: true,
-                scrollY: '65vh',                
-                scrollCollapse: true,
                 "preDrawCallback": function (settings) {
                     pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
                 },

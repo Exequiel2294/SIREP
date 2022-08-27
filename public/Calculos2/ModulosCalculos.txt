@@ -884,6 +884,9 @@ INSERT_SIREP_DIA_CONCIL
 SIREP PENDIENTE:
 Pedido se Cesar Prentice, que le cu salida no tenga decimales
 
+DEFINIR:
+Que meses se puede conciliar, cuanto meses atras? para defiir el tema de los años tambien
+
 
 
 

@@ -60,7 +60,7 @@
         }
         .modal-bod {
             flex: 1 1 auto;
-            padding: 1.8rem 1.5rem 0 1.8rem;
+            padding: 1rem 1rem 0 1rem;
         }
         .modal-foot {
             display: flex;
@@ -473,68 +473,93 @@
 
             $("#form-button").click(function(){ 
                 if($("#modal-form-loadvbles").valid())
-                {              
-                    $('#form-button').html('Guardando..');    
-                    conciliado_load.length = 0;                
-                    var table = $('#conciliado-table').DataTable();
-                    var arrayid = table.column(7).data().toArray();  
-                    for (var i=0; i < arrayid.length; i++)
+                {     
+                    if ($("#btn-select").val() == 1)
                     {
-                        index = conciliado_load.findIndex(x => x.variable_id === parseInt(arrayid[i]));
-                        if (index == -1) {
-                            let val = $("#"+arrayid[i]).val();
-                            val = val.replaceAll(',','');
-                            if ((!isNumeric(val) && val !='') || parseFloat(val) < 0)
-                            {
-                                var row_data = table.row(i).data();
-                                conciliado_load.length = 0;
-                                MansfieldRep.notification('Error en variable:<br>' + row_data['subcat'] + ' - ' + row_data['variable'] + '<br>Los Datos No Fueron Cargados','MansfieldRep', 'error');
-                                $('#form-button').html('Guardar');
-                                break;
-                            }
-                            else
-                            {
-                                val = (typeof parseFloat(val.replaceAll(',','')) == 'number' && val != '') ? parseFloat(val.replaceAll(',','')) : null;
-                                if (val != null)
+                        const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: true
+                        })
+
+                        swalWithBootstrapButtons.fire({
+                        title: 'Estas seguro?',
+                        text: "De existir datos conciliados para el mes seleccionado, los mismos se suplantaran por los registros actuales.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Aceptar',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {       
+                                $('#form-button').html('Guardando..');    
+                                conciliado_load.length = 0;                
+                                var table = $('#conciliado-table').DataTable();
+                                var arrayid = table.column(7).data().toArray();  
+                                for (var i=0; i < arrayid.length; i++)
                                 {
-                                    var variable =
-                                    {
-                                        variable_id:parseInt(arrayid[i]),
-                                        value:val
-                                    }
-                                    conciliado_load.push(variable);
-                                }
-                            }
-                        } 
-                    }  
-                    if (!(i < arrayid.length)) 
+                                    index = conciliado_load.findIndex(x => x.variable_id === parseInt(arrayid[i]));
+                                    if (index == -1) {
+                                        let val = $("#"+arrayid[i]).val();
+                                        val = val.replaceAll(',','');
+                                        if ((!isNumeric(val) && val !='') || parseFloat(val) < 0)
+                                        {
+                                            var row_data = table.row(i).data();
+                                            conciliado_load.length = 0;
+                                            MansfieldRep.notification('Error en variable:<br>' + row_data['subcat'] + ' - ' + row_data['variable'] + '<br>Los Datos No Fueron Cargados','MansfieldRep', 'error');
+                                            $('#form-button').html('Guardar');
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            val = (val != '') ? parseFloat(val) : null;
+                                            var variable =
+                                            {
+                                                variable_id:parseInt(arrayid[i]),
+                                                value:val
+                                            }
+                                            conciliado_load.push(variable);                                
+                                        }
+                                    } 
+                                }  
+                                if (!(i < arrayid.length)) 
+                                {
+                                    console.log(conciliado_load);
+                                    $.ajax({
+                                        url:"{{route('conciliado.load') }}",
+                                        method:"POST",
+                                        data:{
+                                            month: $( "#month" ).val(),
+                                            conciliado_load:conciliado_load,
+                                            _token: $('input[name="_token"]').val()
+                                        },
+                                        success:function(data)
+                                        {  
+                                            if($.isEmptyObject(data.error)){
+                                                $('#conciliado-table').DataTable().ajax.reload(null, false); 
+                                                $('#form-button').html('Guardar');
+                                                if($('#form-button').val() == 1){
+                                                    MansfieldRep.notification('Registros cargados con exito', 'MansfieldRep', 'success');
+                                                }   
+                                                else{
+                                                    MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                                                }                          
+                                            }else{
+                                                $('#form-button').html('Guardar');
+                                                console.log(data.error);
+                                            } 
+                                        }
+                                    });
+                                }                         
+                            
+                            } 
+                        }) 
+                    }
+                    else
                     {
-                        console.log(conciliado_load);
-                        $.ajax({
-                            url:"{{route('conciliado.load') }}",
-                            method:"POST",
-                            data:{
-                                month: $( "#month" ).val(),
-                                conciliado_load:conciliado_load,
-                                _token: $('input[name="_token"]').val()
-                            },
-                            success:function(data)
-                            {  
-                                if($.isEmptyObject(data.error)){
-                                    $('#conciliado-table').DataTable().ajax.reload(null, false); 
-                                    $('#form-button').html('Guardar');
-                                    if($('#form-button').val() == 1){
-                                        MansfieldRep.notification('Registros cargados con exito', 'MansfieldRep', 'success');
-                                    }   
-                                    else{
-                                        MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
-                                    }                          
-                                }else{
-                                    $('#form-button').html('Guardar');
-                                    console.log(data.error);
-                                } 
-                            }
-                        });
+                        $("div.datatables-length").html('<div style="color:red;">Primero debe Cargar las <b>Variables</b></div>');
                     }
                 }                             
             });
@@ -544,10 +569,17 @@
             $("#btn-import").click(function(){ 
                 if($("#modal-form-loadvbles").valid())
                 {
-                    $('#form-button-import').val(1);     
-                    $('#modal-title-import').html('Pegar Columna Datos'); 
-                    $('#modal-form-import').trigger("reset"); 
-                    $('#modal-import').modal('show');  
+                    if ($("#btn-select").val() == 1)
+                    {
+                        $('#form-button-import').val(1);     
+                        $('#modal-title-import').html('Importar Datos'); 
+                        $('#modal-form-import').trigger("reset"); 
+                        $('#modal-import').modal('show');  
+                    }
+                    else
+                    {
+                        $("div.datatables-length").html('<div style="color:red;">Primero debe Cargar las <b>Variables</b></div>');
+                    }
                 }
             });
 
@@ -555,6 +587,11 @@
                 rules: {
                     import: {
                         required: true
+                    },
+                    decimalseparator: {
+                        required: true,
+                        number: true,
+                        range: [0,1]
                     }
                 },
                 messages: {  
@@ -595,43 +632,40 @@
 
             $("#form-button-import").click(function(){
                 if($("#modal-form-import").valid()){  
-                    const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: true
-                    })
-
-                    swalWithBootstrapButtons.fire({
-                    title: 'Estas seguro?',
-                    text: "De existir datos conciliados para el mes seleccionado, los mismos se suplantaran.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Aceptar',
-                    cancelButtonText: 'Cancelar',
-                    reverseButtons: true
-                    }).then((result) => {
-                        if (result.value) {
-                            var import_data = $("#import").val();
-                            import_data = import_data.split(/\r?\n/);
-                            if (import_data[import_data.length-1] == '')
-                            {
-                                import_data.pop();
-                            }
-                            var table = $('#conciliado-table').DataTable();
-                            var arrayid = table.column(7).data().toArray();  
-                            for (let i=0; i < import_data.length; i++)
-                            {
-                                let val = import_data[i].replaceAll(' ','').replaceAll(',','');
-                                let val2 = (isNumeric(val)) ? parseFloat(val).toLocaleString('en-US') : '';
-                                $("#"+arrayid[i]).val(val2);
-                            }         
-                            $('#modal-import').modal('hide');
-                            $('#modal-form-import').trigger("reset");
-                        
+                    var import_data = $("#import").val();
+                    import_data = import_data.split(/\r?\n/);
+                    if (import_data[import_data.length-1] == '')
+                    {
+                        import_data.pop();
+                    }
+                    var table = $('#conciliado-table').DataTable();
+                    var arrayid = table.column(7).data().toArray();  
+                    if ($("#decimalseparator").val() == 0)
+                    {
+                        for (let i=0; i < import_data.length; i++)
+                        {
+                            let val = import_data[i].replaceAll(' ','').replaceAll(',','');
+                            let val2 = (isNumeric(val)) ? parseFloat(val).toLocaleString('en-US') : val.replaceAll('-','');
+                            $("#"+arrayid[i]).val(val2);
+                        }  
+                    }
+                    else
+                    {
+                        for (let i=0; i < import_data.length; i++)
+                        {
+                            let val = import_data[i].replaceAll(' ','').replaceAll('.','').replaceAll(',','.');
+                            let val2 = (isNumeric(val)) ? parseFloat(val).toLocaleString('en-US') : val.replaceAll('-','');
+                            $("#"+arrayid[i]).val(val2);
                         } 
-                    })
+                    }       
+                    for (var i=import_data.length; i < arrayid.length; i++)
+                    {
+                        $("#"+arrayid[i]).val(null);
+                    } 
+                    $('#modal-import').modal('hide');
+                    $('#modal-form-import').trigger("reset");
+                    
+                    
                 }
             });
 
@@ -732,9 +766,19 @@
                 </div>
                 <div class="modal-bod">
                     <form action="post" id="modal-form-import" name="modal-form-import" autocomplete="off">
-                        <div class="form-group row">
+                        <div class="form-group">
+                            <label for="decimalseparator" class="col-sm-12 col-form-label">Seleccione Separador Decimal</label>
                             <div class="col-sm-12">
-                                <textarea type="text" class="form-control" id="import" name="import" rows="13"></textarea>
+                                <select class="form-control" name="decimalseparator" id="decimalseparator">
+                                    <option value=0 selected="selected">Punto</option> 
+                                    <option value=1 selected="selected">Coma</option>                                    
+                                </select> 
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label for="separadordecimal" class="col-sm-12 col-form-label">Pegue Columna de Datos</label>
+                            <div class="col-sm-12">
+                                <textarea type="text" class="form-control" id="import" name="import" rows="10"></textarea>
                             </div>
                         </div>              
                         @csrf
