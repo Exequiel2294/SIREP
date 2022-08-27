@@ -324,6 +324,7 @@
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
         const conciliado_load = [];
+        const var_oz = [10072, 10075, 10078, 10081, 10084, 10087, 10090, 10095, 10099, 10102, 10105, 10108];
         $('.nav-link').click(function (){ 
             setTimeout(
                 function() {
@@ -378,14 +379,30 @@
                     {data:'var_orden', name:'var_orden', visible:false},  
                     {data:'variable', name:'variable', orderable: false}, 
                     {data:'unidad', name:'unidad', orderable: false, searchable: false, width:'25px'}, 
-                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false},  
+                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false,
+                        render:function(data, type, row){
+                            if (data != '-')
+                            {
+                                let val = parseFloat(data);
+                                return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="'+data+'" readonly hidden>'+val.toLocaleString('en-US');
+                            }
+                            return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="" readonly hidden>'+data;
+                        }
+                    },  
                     {data:'conciliado_data', name:'conciliado_data', orderable: false, searchable: false,
                         render: function (data,type,row){
-                            let val = (data == null) ? '' : parseFloat(data);
-                            return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US')+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
+                            if(var_oz.indexOf(parseInt(row['variable_id'])) != -1)
+                            {                                  
+                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;" readonly>';
+                            }
+                            else
+                            {
+                                let val = (data == null) ? '' : parseFloat(data);
+                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US')+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
+                            }
                         }
                     },
-                    {data:'variable_id', name:'variable_id', visible: false},        
+                    {data:'variable_id', name:'variable_id', visible: false}    
                 ],  
                 rowGroup: {
                     dataSrc: ['categoria', 'subcategoria']
@@ -503,6 +520,8 @@
                                     index = conciliado_load.findIndex(x => x.variable_id === parseInt(arrayid[i]));
                                     if (index == -1) {
                                         let val = $("#"+arrayid[i]).val();
+                                        let val2 = $("#r"+arrayid[i]).val();
+                                        val3 =  (val2 == '') ? null : parseFloat(val2);
                                         val = val.replaceAll(',','');
                                         if ((!isNumeric(val) && val !='') || parseFloat(val) < 0)
                                         {
@@ -518,12 +537,14 @@
                                             var variable =
                                             {
                                                 variable_id:parseInt(arrayid[i]),
-                                                value:val
+                                                value:val,
+                                                valuereal:val3
                                             }
                                             conciliado_load.push(variable);                                
                                         }
                                     } 
                                 }  
+                                console.log(conciliado_load);
                                 if (!(i < arrayid.length)) 
                                 {
                                     console.log(conciliado_load);
@@ -531,6 +552,7 @@
                                         url:"{{route('conciliado.load') }}",
                                         method:"POST",
                                         data:{
+                                            area_id: $( "#area_id" ).val(),
                                             month: $( "#month" ).val(),
                                             conciliado_load:conciliado_load,
                                             _token: $('input[name="_token"]').val()
@@ -736,7 +758,7 @@
                                     <th class="thcenter">U.</th>
                                     <th class="thcenter" style="min-width:15vw!important;">Mensual Real</th>  
                                     <th class="thcenter" style="min-width:15vw!important;">Conciliado</th>  
-                                    <th>variable_id</th> 
+                                    <th>variable_id</th>  
                                 </tr>
                             </thead>      
                         </table>  
