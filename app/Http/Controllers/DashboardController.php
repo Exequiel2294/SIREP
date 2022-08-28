@@ -22,14 +22,15 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     { 
-        $areas = ComentarioArea::orderBy('nombre')->pluck('nombre','id')->toArray();
+        $where = ['area_id' => 1, 'estado' => 1];
+        $areas = ComentarioArea::orderBy('nombre')->where($where)->pluck('nombre','id')->toArray();
         return view('dashboard_process', compact('areas'));
     }
 
     public function index2(Request $request)
     { 
-        $where = ['estado' => 1, 'area' => 1];
-        $areas = ComentarioArea::orderBy('nombre')->pluck('nombre','id')->toArray();
+        $where = ['area_id' => 2, 'estado' => 1];
+        $areas = ComentarioArea::orderBy('nombre')->where($where)->pluck('nombre','id')->toArray();
         return view('dashboard_mine', compact('areas'));
     }
 
@@ -5559,9 +5560,17 @@ class DashboardController extends Controller
         } 
     }
 
-    public function getpdfprocesostable()
+    public function getpdfprocesostable($date)
     {
-        $this->date = date('Y-m-d',strtotime("-1 days"));
+        if ($date == 1)
+        {         
+            $this->date = date('Y-m-d',strtotime("-1 days"));
+        }
+        else
+        {   
+            $this->date = $date;
+        }
+
         $this->pparray = 
             [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
             10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
@@ -11052,7 +11061,19 @@ class DashboardController extends Controller
 
 
         $registros= $tabla->getData()->data;
-        $pdf = Pdf::loadView('pdf.procesos', compact('registros'));
+        $tablacomentarios =
+        DB::select(
+            'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+            INNER JOIN users u
+            ON c.user_id = u.id
+            INNER JOIN comentario_area ca
+            ON c.area_id = ca.id
+            WHERE c.fecha = ?
+            AND ca.area_id = 1',
+            [$this->date]
+        );
+        $date = $this->date;
+        $pdf = Pdf::loadView('pdf.procesos', compact('registros', 'tablacomentarios','date'));
         return $pdf->download('DailyReportProcesos'.$this->date.'.pdf');
     }
 
@@ -12362,6 +12383,7 @@ class DashboardController extends Controller
                                 'subcategoria.nombre as subcat',
                                 'variable.id as variable_id',
                                 'variable.nombre as variable', 
+                                'variable.tipo as tipo',
                                 'variable.orden as var_orden',
                                 'variable.unidad as unidad',
                                 'variable.export as var_export',
@@ -12472,7 +12494,25 @@ class DashboardController extends Controller
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
                                 ); 
-                            break;                            
+                            break;    
+                            case 10087:
+                                //Au ROM a Leach Pad                 
+                                //(10082*10083 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10085) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [mansfield2].[dbo].[data]
+                                    where variable_id = 10086) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1]
+                                ); 
+                            break;                         
                             case 10090:
                                 //Total Au Minado oz                  
                                 //(10088*10089 / 31.1035                                     
@@ -14515,14 +14555,21 @@ class DashboardController extends Controller
                     ->addColumn('action', function($data)
                     {
                         $button = '';  
-                        if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                        if ($data->tipo == 4)
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
-                        }     
+                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Información Variable"><i style="color:#0F62AC;" class="fa-lg fas fa-info-circle"></i></a>';
+                        }
                         else
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
-                        }                   
+                            if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
+                            {
+                                $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            }     
+                            else
+                            {
+                                $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                            }  
+                        }                 
                         return $button;
                     })
                     ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
@@ -14531,9 +14578,16 @@ class DashboardController extends Controller
         } 
     }
 
-    public function getpdfminatable()
+    public function getpdfminatable($date)
     {
-        $this->date = date('Y-m-d',strtotime("-1 days")); 
+        if ($date == 1)
+        {         
+            $this->date = date('Y-m-d',strtotime("-1 days"));
+        }
+        else
+        {   
+            $this->date = $date;
+        }
         $this->ley = 
             [10071, 10074, 10077, 10080, 10083, 10086, 10089, 10094, 10098, 10101, 10104, 10107]; 
         
@@ -17978,7 +18032,19 @@ class DashboardController extends Controller
             ->make(true);             
          
         $registros= $tabla->getData()->data;
-        $pdf = Pdf::loadView('pdf.mina', compact('registros'));
+        $tablacomentarios =
+        DB::select(
+            'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+            INNER JOIN users u
+            ON c.user_id = u.id
+            INNER JOIN comentario_area ca
+            ON c.area_id = ca.id
+            WHERE c.fecha = ?
+            AND ca.area_id = 2',
+            [$this->date]
+        );
+        $date = $this->date;
+        $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
         return $pdf->download('DailyReportMina'.$this->date.'.pdf');
     }
 
@@ -18270,6 +18336,234 @@ class DashboardController extends Controller
                             <ol type="A">
                                 <li>LIXI_Solución PLS</li>
                                 <li>LIXI_Ley Au Solución PLS</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10072:	//Au ROM a Trituradora (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Mineral ROM a Trituradora</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10075:	//Au ROM Alta Ley a Stockpile (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Mineral ROM Alta Ley a Stockpile</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10078:	//Au ROM Media Ley a Stockpile (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Mineral ROM Media Ley a Stockpile</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10081:	//Au ROM Baja Ley a Stockpile (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Mineral ROM Baja Ley a Stockpile</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10084:	//Total Au ROM a Stockpiles (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Total Mineral ROM a Stockpiles</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10087:	//Au ROM a Leach Pad (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Mineral ROM a Leach Pad</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10090:	//Total Au Minado (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Total Mineral Minado</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10095:	//Au Alta Ley Stockpile a Trituradora (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Alta Ley Stockpile a Trituradora</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10099:	//Au Media Ley Stockpile a Trituradora (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Media Ley Stockpile a Trituradora</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10102:	//Au Baja Ley Stockpile a Trituradora (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Baja Ley Stockpile a Trituradora</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10105:	//Au de Stockpiles a Trituradora (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Total de Stockpiles a Trituradora</li>
+                                <li>Ley Au</li>
+                            </ol>
+                        </div>
+                        <div style="text-align:left;">
+                            <h3>Calculo Asociado:</h3>
+                            <ul>
+                                <li>( A * B )/31.1035</li>
+                            </ul>
+                        </div>
+                    </div>';
+                break;
+                case 10108:	//Au (ROM+Stockpiles) a Trituradora (oz)
+                    $data['html'] = 
+                    '<div>
+                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
+                        <div style="text-align:left;">
+                            <h3>Variables asociadas:</h3>
+                            <ol type="A">
+                                <li>Total Mineral (ROM+Stockpiles) a Trituradora</li>
+                                <li>Ley Au</li>
                             </ol>
                         </div>
                         <div style="text-align:left;">

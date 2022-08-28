@@ -286,17 +286,7 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
-                    {data:'area',name:'area',
-                        render: function(data){
-                            if(data == 1){
-                                return 'Mina';
-                            }
-                            else
-                            {
-                                return 'Procesos';
-                            }                            
-                        } 
-                    },     
+                    {data:'area',name:'area'},     
                     {data:'nombre', name:'nombre'},
                     {data:'estado',name:'estado',
                         render: function(data){
@@ -336,7 +326,7 @@
                 $('#modal').modal('show');
                 $('#id').val(data.id);                          
                 $('#nombre').val(data.nombre);         
-                $("#area").val(data.area).attr("selected", "selected");                            
+                $("#area_id").val(data.area_id).attr("selected", "selected");                            
                 $("#estado").val(data.estado).attr("selected", "selected");
             })
         });      
@@ -405,11 +395,8 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
-                area: {
-                    required: true,
-                    number: true,
-                    min: 0,
-                    max: 1
+                area_id: {
+                    required: true
                 },
                 nombre: {
                     required: true,
@@ -469,7 +456,7 @@
                     data:{
                         id: $("#id").val(),
                         nombre:$('#nombre').val(),
-                        area:$('#area').val(),
+                        area_id:$('#area_id').val(),
                         estado:$('#estado').val(),
                         _token: $('input[name="_token"]').val()
                     },
@@ -563,11 +550,13 @@
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id"> 
                         <div class="form-group row">
-                            <label for="area" class="col-sm-2 col-form-label">Área</label>
+                            <label for="area_id" class="col-sm-2 col-form-label">Área</label>
                             <div class="col-sm-10">
-                                <select class="form-control company" name="area" id="area">
-                                    <option value=0>Procesos</option>
-                                    <option value=1 selected>Mina</option>
+                                <select class="form-control company" name="area_id" id="area_id">
+                                    <option value="" selected disabled>Seleccione Area</option>
+                                    @foreach($areas as $id => $nombre)
+                                            <option value="{{$id}}">{{$nombre}}</option>
+                                    @endforeach
                                 </select> 
                             </div>
                         </div> 

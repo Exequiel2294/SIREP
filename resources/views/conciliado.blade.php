@@ -324,7 +324,7 @@
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
         const conciliado_load = [];
-        const var_oz = [10072, 10075, 10078, 10081, 10084, 10087, 10090, 10095, 10099, 10102, 10105, 10108];
+        const var_calc = [10072, 10075, 10078, 10081, 10084, 10087, 10090, 10095, 10099, 10102, 10105, 10108, 10002, 10006, 10008, 10013, 10015, 10020, 10027, 10028, 10032, 10037, 10038, 10040, 10046, 10049, 10053];
         $('.nav-link').click(function (){ 
             setTimeout(
                 function() {
@@ -391,7 +391,7 @@
                     },  
                     {data:'conciliado_data', name:'conciliado_data', orderable: false, searchable: false,
                         render: function (data,type,row){
-                            if(var_oz.indexOf(parseInt(row['variable_id'])) != -1)
+                            if(var_calc.indexOf(parseInt(row['variable_id'])) != -1)
                             {                                  
                                 return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;" readonly>';
                             }

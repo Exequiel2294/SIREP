@@ -1969,7 +1969,7 @@ class ConciliadoController extends Controller
                         }
                         else
                         {
-                            if (in_array($variable['variable_id'], $minasumarray))
+                            if (in_array($variable['variable_id'], $this->minasumarray))
                             {
                                 $conciliado = $variable['value'] - $variable['valuereal'];
                                 $data =
@@ -1982,7 +1982,7 @@ class ConciliadoController extends Controller
                             } 
                             else
                             {
-                                if (in_array($variable['variable_id'], $minaleyarray))
+                                if (in_array($variable['variable_id'], $this->minaleyarray))
                                 {
                                     switch ($variable['variable_id'])
                                     {
@@ -2164,7 +2164,7 @@ class ConciliadoController extends Controller
                                 }
                                 else
                                 {
-                                    if (in_array($variable['variable_id'], $minapercarray))
+                                    if (in_array($variable['variable_id'], $this->minapercarray))
                                     {
                                         $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
                                         $data =
@@ -2175,20 +2175,20 @@ class ConciliadoController extends Controller
                                         $newvalue = $oldvalue + $conciliado;
                                     }
                                 }
-                            }  
-                            DB::table('data')
-                                    ->where($this->where)
-                                    ->update(['valor' => $newvalue]);
-                                $id = $data->id;
-                            Historial::create([
-                                'data_id' => $id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => 'CONCILIADO',
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $newvalue,
-                                'usuario' => auth()->user()->name
-                            ]); 
+                            }   
                         }   
+                        DB::table('data')
+                        ->where($this->where)
+                        ->update(['valor' => $newvalue]);
+                            $id = $data->id;
+                        Historial::create([
+                            'data_id' => $id,
+                            'fecha' => date('Y-m-d H:i:s'),
+                            'transaccion' => 'CONCILIADO',
+                            'valorviejo' => $oldvalue,
+                            'valornuevo' => $newvalue,
+                            'usuario' => auth()->user()->name
+                        ]);
                     } 
                 } 
                 

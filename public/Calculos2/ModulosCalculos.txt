@@ -467,7 +467,7 @@ VARIABLES MINA POR AREA
         10081:	Au ROM Baja Ley a Stockpile         - 12cparametro 00	(oz):
             Calculo: (10079 * 10080)/31.1035
 
-        10082:	Toral Mineral ROM a Stockpiles      - 13cparametro 67	(t):
+        10082:	Total Mineral ROM a Stockpiles      - 13cparametro 67	(t):
             Valor Sacado de Tabla
 
         10083:	Ley Au                              - 14cparametro 68	(g/t):
@@ -483,7 +483,7 @@ VARIABLES MINA POR AREA
             Valor Sacado de Tabla
 
         10087	Au ROM a Leach Pad                  - 18cparametro 18	(oz):
-            Valor Sacado de Tabla
+           Calculo: (10085 * 10086)/31.1035
 
         10088:	Total Mineral Minado                - 19cparametro 72	(t):
             Valor Sacado de Tabla
@@ -573,12 +573,13 @@ VARIABLES MINA POR AREA
             Valor Sacado de Tabla
 
 VARIABLES TIPO MINA
-    CALCULADAS:
+    CALCULADAS - Tipo 4:
         10072:	Au ROM a Trituradora                -	03cparametro 00	- (oz)
         10075:	Au ROM Alta Ley a Stockpile         -	06cparametro 00	- (oz)
         10078:	Au ROM Media Ley a Stockpile        -	09cparametro 00	- (oz)
         10081:	Au ROM Baja Ley a Stockpile         -	12cparametro 00	- (oz)
         10084:	Total Au ROM a Stockpiles	        -   15cparametro 00	- (oz)
+        10087:  Au ROM a Leach Pad                  -   18cparametro 18 - (oz)
         10090:	Total Au Minado                     -	21cparametro 00	- (oz)
         10095:	Au Alta Ley Stockpile a Trituradora -	25cparametro 00	- (oz)
         10099:	Au Media Ley Stockpile a Trituradora-	28cparametro 00	- (oz)

@@ -37,9 +37,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('dashboard_mine', 'DashboardController@index2')->name('dashboard_mine');
     Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable');
-    Route::get('dashboard/getpdfprocesostable', 'DashboardController@getpdfprocesostable')->name('dashboard.getpdfprocesostable'); 
+    Route::get('dashboard/{date}/getpdfprocesostable', 'DashboardController@getpdfprocesostable')->name('dashboard.getpdfprocesostable'); 
     Route::get('dashboard/minatable', 'DashboardController@minatable')->name('dashboard.minatable'); 
-    Route::get('dashboard/getpdfminatable', 'DashboardController@getpdfminatable')->name('dashboard.getpdfminatable'); 
+    Route::get('dashboard/{date}/getpdfminatable', 'DashboardController@getpdfminatable')->name('dashboard.getpdfminatable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
     Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit'); 
        

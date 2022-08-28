@@ -93,9 +93,9 @@ class ComentarioController extends Controller
                 ON c.user_id = u.id
                 INNER JOIN comentario_area ca
                 ON c.area_id = ca.id
-                WHERE DATEPART(y, c.fecha) = ?
-                AND ca.area = 0',
-                [(int)date('z', strtotime(date($request->get('fecha')))) + 1]
+                WHERE c.fecha = ?
+                AND ca.area_id = ?',
+                [$request->get('fecha'), $request->get('area_id')]
             );
                             
             return datatables() ->of($table)

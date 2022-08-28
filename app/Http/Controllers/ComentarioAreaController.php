@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ComentarioArea;
 
 use App\Http\Controllers\Controller;
+use App\Models\Area;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,9 +20,11 @@ class ComentarioAreaController extends Controller
 
     public function index(Request $request)
     {
+        $areas = Area::orderBy('nombre')->pluck('nombre','id')->toArray();
         if(request()->ajax()) {
             $list = DB::table('comentario_area')
-                        ->select('id','area','nombre', 'estado')
+                        ->join('area', 'comentario_area.area_id', '=', 'area.id')
+                        ->select('comentario_area.id as id','area.nombre as area','comentario_area.nombre as nombre', 'comentario_area.estado as estado')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -36,7 +39,7 @@ class ComentarioAreaController extends Controller
                     ->addIndexColumn()
                     ->make(true);
         } 
-        return view('comentario_area');
+        return view('comentario_area', compact('areas'));
     }
 
     public function load(Request $request)
@@ -48,7 +51,7 @@ class ComentarioAreaController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [   
-                    'area'   => 'required|numeric|between:0,1',
+                    'area_id'   => 'required|exists:area,id',
                     'nombre' => 'required|string|min:3|max:250|unique:comentario_area,nombre',
                     'estado' => 'required|numeric|between:0,1'
                 ]             
@@ -61,7 +64,7 @@ class ComentarioAreaController extends Controller
             {
                 ComentarioArea::create(
                     [
-                        'area'   => $request->get('area'),
+                        'area_id'   => $request->get('area_id'),
                         'nombre' => $request->get('nombre'),
                         'estado' => $request->get('estado')
                     ]);
@@ -74,7 +77,7 @@ class ComentarioAreaController extends Controller
                 $request->all(),
                 [   
                     'id'    => 'required|numeric|exists:comentario_area,id',
-                    'area'   => 'required|numeric|between:0,1',
+                    'area_id'   => 'required|exists:area,id',
                     'nombre' => 'required|string|min:3|max:250|unique:comentario_area,nombre,'.$request->get('id'),
                     'estado' => 'required|numeric|between:0,1'
                 ]            
@@ -88,7 +91,7 @@ class ComentarioAreaController extends Controller
                 ComentarioArea::where('id',$id)
                     ->update(
                     [
-                        'area'   => $request->get('area'),
+                        'area_id'   => $request->get('area_id'),
                         'nombre' => $request->get('nombre'),
                         'estado' => $request->get('estado')
                     ]);

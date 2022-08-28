@@ -465,16 +465,10 @@
                     {
                         extend: 'pdfHtml5',
                         action: function ( e, dt, button, config ) {
-                            $.ajax({
-                                url:"{{route('dashboard.getpdfminatable') }}",
-                                method:"GET",
-                                async: false,
-                                success:function(data)
-                                {  
-
-                                }
-                            });
-                            //window.location.href = "{{ route('dashboard.getpdfminatable')}}";
+                            let date = moment(date_selected).format('YYYY-MM-DD');
+                            let url = '{{ route("dashboard.getpdfminatable", ":date" )}}';
+                            url = url.replace(':date', date);
+                            window.location.href = url;
                         }   
                     },
                     {
@@ -495,9 +489,6 @@
                 responsive: true,
                 scrollX : true,
                 select: true,
-                scrollY: '65vh',                
-                scrollCollapse: true,
-                paging: false, 
                 "preDrawCallback": function (settings) {
                     pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
                 },
@@ -1015,6 +1006,7 @@
                     type: 'GET',
                     data: function(d){
                         d.fecha = moment(date_selected).format('YYYY-MM-DD');
+                        d.area_id = 2;
                         d._token = $('input[name="_token"]').val();
                     }
                 },
@@ -1092,16 +1084,7 @@
 
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
-            //pos = $(this).parent().position();
             idx = $("#mina-table").DataTable().row($(this).parent()).index();
-            /*if (pos != undefined)
-            {                
-                alert(pos['top']);
-            }*/
-            //let row = $("#mina-table").DataTable().row(20).select();
-            
-                  
-            //console.log(idx, $("#mina-table").DataTable().rows().count());
             $.ajax({
                 url:"{{route('dashboard.edit') }}",
                 method:"POST",
@@ -1114,8 +1097,7 @@
                 success:function(data)
                 {  
                     if (data['val'] == 1)
-                    {
-                        
+                    {                        
                         $('#form-button').val(0); 
                         $('#modal-title').html('Editar Registro'); 
                         $('#modal-form').trigger("reset"); 
@@ -1130,10 +1112,20 @@
                     }
                     else
                     {
-                        Swal.fire({
-                            title: data['msg'],
-                            icon: 'warning',
-                        })
+                        if (data['val'] == -2)
+                        {
+                            Swal.fire({
+                                html: data['html'],
+                                icon: 'warning',
+                            })
+                        }
+                        else
+                        {    
+                            Swal.fire({
+                                title: data['msg'],
+                                icon: 'warning',
+                            })                        
+                        }
                     }
                 }
             });

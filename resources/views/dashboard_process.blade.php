@@ -443,7 +443,10 @@
                     {
                         extend: 'pdfHtml5',
                         action: function ( e, dt, button, config ) {
-                            window.location.href = "{{ route('dashboard.getpdfprocesostable')}}";
+                            let date = moment(date_selected).format('YYYY-MM-DD');
+                            let url = '{{ route("dashboard.getpdfprocesostable", ":date" )}}';
+                            url = url.replace(':date', date);
+                            window.location.href = url;
                         }   
                     },
                     {
@@ -874,6 +877,7 @@
                     type: 'GET',
                     data: function(d){
                         d.fecha = moment(date_selected).format('YYYY-MM-DD');
+                        d.area_id = 1;
                         d._token = $('input[name="_token"]').val();
                     }
                 },
@@ -913,7 +917,7 @@
 
             $('.datatables-title').html('<div style="font-size:1.5rem; font-weight:500;">Comentarios</div>')            
             @if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
-                $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit"  class="btn btn-success add" title="Editar registro">Cargar</a>');
+                $('.datatables-btn-cargar').html('<a href="javascript:void(0)" name="edit" val=1  class="btn btn-success add-comentario" title="Editar registro">Cargar</a>');
             @else
                 $('.datatables-btn-cargar').html('');
             @endif
@@ -922,13 +926,13 @@
         /* DATATABLES */
 
         /* ADD BUTTON*/
-        $(document).on('click', '.add', function(){ 
-                $('#form-button-comentario').val(1);     
-                $('#modal-title-comentario').html('Cargar Comentario'); 
-                $('#modal-form-comentario').trigger("reset"); 
-                $('#modal-comentario').modal('show');  
-                $('#id_comentario').val('');   
-            });
+        $(document).on('click', '.add-comentario', function(){ 
+            $('#form-button-comentario').val(1);     
+            $('#modal-title-comentario').html('Cargar Comentario'); 
+            $('#modal-form-comentario').trigger("reset"); 
+            $('#modal-comentario').modal('show');  
+            $('#id_comentario').val('');   
+        });
         /* ADD BUTTON*/
 
         /* EDIT BUTTON */
@@ -1175,7 +1179,7 @@
         }
         /* FORM BUTTON DASHCOARD*/
 
-        /* FORM BUTTON DASHBOARD*/        
+        /* FORM BUTTON COMENTARIO*/        
         $("#modal-form-comentario").validate({
             rules: {
                 area_id_comentario: {
@@ -1269,7 +1273,7 @@
                 $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
             });
         }
-        /* FORM BUTTON DASHCOARD*/
+        /* FORM BUTTON COMENTARIO*/
 
         /* CLOSE ALERT */
         $(document).on('click', '#close-alert', function(){       
@@ -1361,7 +1365,7 @@
                                 <th></th>
                                 <th class="thcenter" style="min-width:6vw!important;">Área</th>
                                 <th class="thcenter" style="min-width:6vw!important;">Usuario</th>
-                                <th class="thcenter" style="min-width:25vw!important;">Procesos</th>
+                                <th class="thcenter" style="min-width:25vw!important;">Comentario</th>
                                 <th class="thcenter" style="min-width:25px!important;"></th>
                             </tr>
                         </thead>  

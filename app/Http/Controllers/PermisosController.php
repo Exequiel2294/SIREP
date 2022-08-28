@@ -29,6 +29,7 @@ class PermisosController extends Controller
                     ->where('roles.name', 'Reportes_E')
                     ->orWhere('roles.name', 'Admin')
                     ->select('users.id', 'users.name')
+                    ->orderBy('users.name', 'ASC')
                     ->get();
         return view('permisos',['usuarios'=>$usuarios]);
     }
@@ -38,7 +39,10 @@ class PermisosController extends Controller
         $id = $request->post('id');
         $variables = DB::table('permisos_variables')
                     ->join('variable', 'permisos_variables.variable_id', '=', 'variable.id')
-                    ->select('permisos_variables.variable_id as id','variable.nombre as nombre','variable.descripcion as descripcion')
+                    ->join('subcategoria','variable.subcategoria_id', '=', 'subcategoria.id')
+                    ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
+                    ->join('area', 'categoria.area_id', '=', 'area.id')
+                    ->select('permisos_variables.variable_id as id', 'area.nombre as area','variable.nombre as nombre','variable.descripcion as descripcion')
                     ->where('permisos_variables.user_id','=',$id)
                     ->get();
 
@@ -55,10 +59,13 @@ class PermisosController extends Controller
                         ->pluck('variable_id')
                         ->toArray();
         $variables = DB::table('variable')
-                        ->select('id','descripcion')
-                        ->where('tipo','<>',4)
-                        ->where('estado',1)
-                        ->orderBy('orden','asc')
+                        ->join('subcategoria','variable.subcategoria_id', '=', 'subcategoria.id')
+                        ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
+                        ->join('area', 'categoria.area_id', '=', 'area.id')
+                        ->select('area.id as area_id', 'area.nombre as area', 'variable.id as id', 'variable.nombre as nombre', 'variable.descripcion as descripcion')
+                        ->where('variable.tipo','<>',4)
+                        ->where('variable.estado',1)
+                        ->orderBy('variable.orden','asc')
                         ->get();
         return datatables()->of($variables)
         ->addColumn('action', function($data)
