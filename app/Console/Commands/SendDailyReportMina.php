@@ -55,7 +55,7 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, SUM(valor) AS mes_real
-                    FROM [mansfield2].[dbo].[data] 
+                    FROM [dbo].[data] 
                     WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND MONTH(fecha) = '.$month.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
@@ -63,7 +63,7 @@ class SendDailyReportMina extends Command
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -72,11 +72,11 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10070) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10071) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -85,11 +85,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10073) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10074) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -98,11 +98,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10076) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10077) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -111,11 +111,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10079) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10080) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -123,11 +123,11 @@ class SendDailyReportMina extends Command
                     AND YEAR(A.fecha) = '.$year.'UNION 
                     SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10082) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10083) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -136,11 +136,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10085) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10086) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -149,11 +149,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10088) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10089) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -162,11 +162,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10093) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10094) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -175,11 +175,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10097) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10098) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -188,11 +188,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10100) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10101) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -201,11 +201,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10103) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10104) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -214,11 +214,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10106) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10107) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -230,7 +230,7 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, AVG(valor) AS mes_real
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     WHERE variable_id IN (10114,10115,10116)
                     AND  MONTH(fecha) = '.$month.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
@@ -239,7 +239,7 @@ class SendDailyReportMina extends Command
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10114,10115,10116)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -251,13 +251,13 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, ((d.valor/DAY(d.fecha))*'.$day.') AS mes_budget FROM
                     (SELECT variable_id, fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND MONTH(fecha) = '.$month.'                        
                     AND YEAR(fecha) = '.$year.') AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -266,11 +266,11 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT 10072 as variable_id, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10070) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10071) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -278,11 +278,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10075, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10073) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10074) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -290,11 +290,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10078, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10076) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10077) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -302,11 +302,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10081, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10079) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10080) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -314,11 +314,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10084, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10082) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10083) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -326,11 +326,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10087, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10085) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10086) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -338,11 +338,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10090, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10088) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10089) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -350,11 +350,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10095, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10093) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10094) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -362,11 +362,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10099, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10097) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10098) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -374,11 +374,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10102, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10100) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10101) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -386,11 +386,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10105, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10103) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10104) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -398,11 +398,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10108, ( ( (A.valor/DAY(A.fecha)) *  B.valor ) / 31.1035) * '.$day.' as mes_budget FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10106) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10107) as B
                     ON A.fecha = B.fecha
                     WHERE MONTH(A.fecha) = '.$month.'
@@ -412,13 +412,13 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, d.valor AS mes_budget FROM
                     (SELECT variable_id, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     WHERE variable_id IN (10114,10115,10116)
                     AND  MONTH(fecha) = '.$month.'
                     AND YEAR(fecha) = '.$year.') AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10114,10115,10116)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -429,7 +429,7 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                     (SELECT variable_id, SUM(valor) AS tri_real
-                    FROM [mansfield2].[dbo].[data] 
+                    FROM [dbo].[data] 
                     WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND DATEPART(QUARTER, fecha) = '.$quarter.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
@@ -437,7 +437,7 @@ class SendDailyReportMina extends Command
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -447,11 +447,11 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as tri_real FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10070) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10071) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -460,11 +460,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10073) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10074) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -473,11 +473,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10076) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10077) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -486,11 +486,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10079) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10080) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -498,11 +498,11 @@ class SendDailyReportMina extends Command
                     AND YEAR(A.fecha) = '.$year.'UNION 
                     SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10082) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10083) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -511,11 +511,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10085) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10086) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -524,11 +524,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10088) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10089) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -537,11 +537,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10093) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10094) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -550,11 +550,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10097) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10098) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -563,11 +563,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10100) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10101) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -576,11 +576,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10103) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10104) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -589,11 +589,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10106) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10107) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -605,7 +605,7 @@ class SendDailyReportMina extends Command
                     DB::select(
                         'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                         (SELECT variable_id, AVG(valor) AS mes_real
-                        FROM [mansfield2].[dbo].[data]
+                        FROM [dbo].[data]
                         WHERE variable_id IN (10114,10115,10116)
                         AND  DATEPART(QUARTER, fecha) = '.$quarter.'
                         AND  DATEPART(y, fecha) <= '.$daypart.'
@@ -614,7 +614,7 @@ class SendDailyReportMina extends Command
                         GROUP BY variable_id) AS d
                         RIGHT JOIN
                         (SELECT id 
-                        FROM [mansfield2].[dbo].[variable] 
+                        FROM [dbo].[variable] 
                         WHERE id IN (10114,10115,10116)) AS v
                         ON d.variable_id = v.id
                         ORDER BY id ASC'
@@ -630,7 +630,7 @@ class SendDailyReportMina extends Command
                         WHEN MONTH(fecha) < '.$month.' THEN valor
                         WHEN MONTH(fecha) = '.$month.' THEN (valor/DAY(fecha)) * '.$day.'
                     END) AS valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND DATEPART(QUARTER, fecha) = '.$quarter.'
                     AND MONTH(fecha) <= '.$month.'
@@ -638,7 +638,7 @@ class SendDailyReportMina extends Command
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -653,11 +653,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10070) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10071) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -671,11 +671,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10073) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10074) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -689,11 +689,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10076) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10077) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -707,11 +707,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10079) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10080) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -725,11 +725,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10082) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10083) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -743,11 +743,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10085) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10086) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -761,11 +761,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10088) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10089) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -779,11 +779,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10093) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10094) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -797,11 +797,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10097) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10098) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -815,11 +815,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10100) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10101) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -833,11 +833,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10103) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10104) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -851,11 +851,11 @@ class SendDailyReportMina extends Command
                     END) AS trimestre_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10106) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10107) as B
                     ON A.fecha = B.fecha
                     WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
@@ -874,7 +874,7 @@ class SendDailyReportMina extends Command
                         WHEN MONTH(fecha) < '.$month.' THEN DAY(fecha)
                         WHEN MONTH(fecha) = '.$month.' THEN '.$day.'
                     END) AS dias
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     WHERE variable_id IN (10114,10115,10116)
                     AND DATEPART(QUARTER, fecha) = '.$quarter.'
                     AND MONTH(fecha) <= '.$month.'
@@ -882,7 +882,7 @@ class SendDailyReportMina extends Command
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10114,10115,10116)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -893,14 +893,14 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, d.valor AS anio_real FROM
                     (SELECT variable_id, SUM(valor) AS valor
-                    FROM [mansfield2].[dbo].[data] 
+                    FROM [dbo].[data] 
                     WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND YEAR(fecha) = '.$year.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -910,11 +910,11 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10070) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10071) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -922,11 +922,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10073) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10074) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -934,11 +934,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10076) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10077) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -946,11 +946,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10079) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10080) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -958,11 +958,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10082) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10083) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -970,11 +970,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10085) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10086) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -982,11 +982,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10088) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10089) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -994,11 +994,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10093) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10094) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1006,11 +1006,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10097) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10098) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1018,11 +1018,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10100) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10101) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1030,11 +1030,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10103) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10104) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1042,11 +1042,11 @@ class SendDailyReportMina extends Command
                     UNION 
                     SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10106) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     where variable_id = 10107) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1057,7 +1057,7 @@ class SendDailyReportMina extends Command
                 DB::select(
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, AVG(valor) AS mes_real
-                    FROM [mansfield2].[dbo].[data]
+                    FROM [dbo].[data]
                     WHERE variable_id IN (10114,10115,10116)
                     AND  YEAR(fecha) = '.$year.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
@@ -1065,7 +1065,7 @@ class SendDailyReportMina extends Command
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10114,10115,10116)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -1081,14 +1081,14 @@ class SendDailyReportMina extends Command
                         WHEN MONTH(fecha) < '.$month.' THEN valor
                         WHEN MONTH(fecha) = '.$month.' THEN (valor/DAY(fecha)) * '.$day.'
                     END) AS valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND MONTH(fecha) <= '.$month.'
                     AND YEAR(fecha) = '.$year.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -1103,11 +1103,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10070) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10071) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1120,11 +1120,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10073) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10074) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1137,11 +1137,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10076) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10077) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1154,11 +1154,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10079) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10080) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1171,11 +1171,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10082) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10083) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1188,11 +1188,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10085) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10086) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1205,11 +1205,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10088) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10089) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1222,11 +1222,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10093) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10094) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1239,11 +1239,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10097) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10098) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1256,11 +1256,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10100) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10101) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1273,11 +1273,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10103) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10104) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1290,11 +1290,11 @@ class SendDailyReportMina extends Command
                     END) AS anio_budget
                     FROM
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10106) as A
                     INNER JOIN   
                     (SELECT fecha, valor
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     where variable_id = 10107) as B
                     ON A.fecha = B.fecha
                     WHERE YEAR(A.fecha) = '.$year.'
@@ -1312,14 +1312,14 @@ class SendDailyReportMina extends Command
                         WHEN MONTH(fecha) < '.$month.' THEN DAY(fecha)
                         WHEN MONTH(fecha) = '.$month.' THEN '.$day.'
                     END) AS dias
-                    FROM [mansfield2].[dbo].[budget]
+                    FROM [dbo].[budget]
                     WHERE variable_id IN (10114,10115,10116)                        
                     AND YEAR(fecha) = '.$year.'
                     AND MONTH(fecha) <= '.$month.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
-                    FROM [mansfield2].[dbo].[variable] 
+                    FROM [dbo].[variable] 
                     WHERE id IN (10114,10115,10116)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
@@ -1359,11 +1359,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10070) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10071) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1377,11 +1377,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10073) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10074) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1395,11 +1395,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10076) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10077) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1413,11 +1413,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10079) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10080) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1431,11 +1431,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10082) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10083) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1449,11 +1449,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10088) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10089) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1467,11 +1467,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10093) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10094) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1485,11 +1485,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10097) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10098) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1503,11 +1503,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10100) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10101) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1521,11 +1521,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10103) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10104) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1539,11 +1539,11 @@ class SendDailyReportMina extends Command
                         DB::select(
                             'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10106) as A
                             INNER JOIN   
                             (SELECT fecha, variable_id, [valor]
-                            FROM [mansfield2].[dbo].[data]
+                            FROM [dbo].[data]
                             where variable_id = 10107) as B
                             ON A.fecha = B.fecha
                             WHERE  DATEPART(y, A.fecha) = ?',
@@ -1594,7 +1594,7 @@ class SendDailyReportMina extends Command
                     case 't':
                         $dia_budget= DB::select(
                             'SELECT valor/DAY(fecha) as dia_budget
-                            FROM [mansfield2].[dbo].[budget]
+                            FROM [dbo].[budget]
                             WHERE variable_id = ?
                             AND MONTH(fecha) = ?',
                             [$data->variable_id, date('m', strtotime($this->date))]
@@ -1605,7 +1605,7 @@ class SendDailyReportMina extends Command
                     case '%':
                         $dia_budget= DB::select(
                             'SELECT valor as dia_budget
-                            FROM [mansfield2].[dbo].[budget]
+                            FROM [dbo].[budget]
                             WHERE variable_id = ?
                             AND MONTH(fecha) = ?',
                             [$data->variable_id, date('m', strtotime($this->date))]
@@ -1622,11 +1622,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10070) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10071) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1640,11 +1640,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10073) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10074) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1658,11 +1658,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10076) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10077) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1676,11 +1676,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10079) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10080) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1694,11 +1694,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10082) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10083) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1712,11 +1712,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10088) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10089) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1730,11 +1730,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10093) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10094) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1748,11 +1748,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10097) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10098) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1766,11 +1766,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10100) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10101) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1784,11 +1784,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10103) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10104) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',
@@ -1802,11 +1802,11 @@ class SendDailyReportMina extends Command
                                 DB::select(
                                     'SELECT ((A.valor/DAY(A.fecha)) * B.valor)/31.1035 as dia_budget FROM
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10106) as A
                                     INNER JOIN   
                                     (SELECT fecha, valor
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10107) as B
                                     ON MONTH(A.fecha) = MONTH(B.fecha)
                                     WHERE MONTH(A.fecha) = ?',

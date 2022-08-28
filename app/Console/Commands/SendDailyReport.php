@@ -60,7 +60,7 @@ class SendDailyReport extends Command
             $this->summesreal10005 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10005
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -70,7 +70,7 @@ class SendDailyReport extends Command
             $this->summesreal10011 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10011
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -80,7 +80,7 @@ class SendDailyReport extends Command
             $this->summesreal10019 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10019
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -90,7 +90,7 @@ class SendDailyReport extends Command
             $this->summesreal10039 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10039
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -100,7 +100,7 @@ class SendDailyReport extends Command
             $this->summesreal10045 =
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10045
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -110,7 +110,7 @@ class SendDailyReport extends Command
             $this->summesreal10052 =
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10052
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -120,7 +120,7 @@ class SendDailyReport extends Command
             $this->summesreal10061 =
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10061
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -131,7 +131,7 @@ class SendDailyReport extends Command
             $this->summesbudget10005 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10005
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -141,7 +141,7 @@ class SendDailyReport extends Command
             $this->summesbudget10011 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10011
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -151,7 +151,7 @@ class SendDailyReport extends Command
             $this->summesbudget10019 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10019
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -161,7 +161,7 @@ class SendDailyReport extends Command
             $this->summesbudget10039 = 
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10039
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -171,7 +171,7 @@ class SendDailyReport extends Command
             $this->summesbudget10045 =
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10045
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -181,7 +181,7 @@ class SendDailyReport extends Command
             $this->summesbudget10052 =
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10052
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -191,7 +191,7 @@ class SendDailyReport extends Command
             $this->summesbudget10061 =
             DB::select(
                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10061
                 AND  MONTH(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -202,7 +202,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10005 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10005
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -212,7 +212,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10011 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10011
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -222,7 +222,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10019 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10019
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -232,7 +232,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10039 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10039
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -242,7 +242,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10045 =
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10045
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -252,7 +252,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10052 =
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10052
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -262,7 +262,7 @@ class SendDailyReport extends Command
             $this->sumtrireal10061 =
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10061
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -273,7 +273,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10005 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10005
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -283,7 +283,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10011 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10011
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -293,7 +293,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10019 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10019
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -303,7 +303,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10039 = 
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10039
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -313,7 +313,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10045 =
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10045
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -323,7 +323,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10052 =
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10052
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -333,7 +333,7 @@ class SendDailyReport extends Command
             $this->sumtribudget10061 =
             DB::select(
                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10061
                 AND  DATEPART(QUARTER, fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -344,7 +344,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10005 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10005
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -354,7 +354,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10011 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10011
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -364,7 +364,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10019 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10019
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -374,7 +374,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10039 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10039
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -384,7 +384,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10045 =
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10045
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -394,7 +394,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10052 =
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10052
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -404,7 +404,7 @@ class SendDailyReport extends Command
             $this->sumanioreal10061 =
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[data]
+                FROM [dbo].[data]
                 WHERE variable_id = 10061
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -415,7 +415,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10005 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10005
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -425,7 +425,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10011 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10011
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -435,7 +435,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10019 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10019
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -445,7 +445,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10039 = 
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10039
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -455,7 +455,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10045 =
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10045
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -465,7 +465,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10052 =
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10052
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -475,7 +475,7 @@ class SendDailyReport extends Command
             $this->sumaniobudget10061 =
             DB::select(
                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [mansfield2].[dbo].[budget]
+                FROM [dbo].[budget]
                 WHERE variable_id = 10061
                 AND  YEAR(fecha) = ?
                 AND  DATEPART(y, fecha) <= ?
@@ -521,11 +521,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10005) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10004
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -540,11 +540,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10005) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10062
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -560,11 +560,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10011) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10010
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -579,11 +579,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10011) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10063
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -598,11 +598,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * 1000) / B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10067) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10019
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -617,11 +617,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10019) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10064
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -636,16 +636,16 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10026) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10025) as B
                                 ON A.fecha = B.fecha
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10024) as C
                                 ON A.fecha = C.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -659,11 +659,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10025) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10024) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -677,11 +677,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10031) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10030) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -696,16 +696,16 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10033) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10031) as B
                                 ON A.fecha = B.fecha
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10030) as C
                                 ON A.fecha = C.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -719,11 +719,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10031) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10065
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
@@ -738,12 +738,12 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10043
                                 AND valor <> 0) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10044) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -757,16 +757,16 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * (B.valor-C.valor))/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10052) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10051) as B
                                 ON A.fecha = B.fecha
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10050) as C
                                 ON A.fecha = C.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -780,12 +780,12 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10051
                                 AND valor <> 0) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10050) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -799,11 +799,11 @@ class SendDailyReport extends Command
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10061) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
-                                FROM [mansfield2].[dbo].[data]
+                                FROM [dbo].[data]
                                 where variable_id = 10057) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -879,11 +879,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10004) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10005) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -900,11 +900,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10010) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -920,11 +920,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10012) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -939,7 +939,7 @@ class SendDailyReport extends Command
                                 //(sumatoria.mensual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.mesual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                 $sumaproducto = DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) * 1000 as sumaproducto
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10067
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -954,11 +954,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10018) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -974,11 +974,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10024) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10025) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -988,7 +988,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10025
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1002,11 +1002,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10033) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1022,11 +1022,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10035) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1042,11 +1042,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10036) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1064,17 +1064,17 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A1.fecha),SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10043
                                     AND valor <> 0 ) as A1
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10044) as A2
                                     ON A1.fecha = A2.fecha
                                     INNER JOIN
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A2.fecha = B.fecha
                                     WHERE MONTH(A1.fecha) =  ?
@@ -1090,11 +1090,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10041) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1110,11 +1110,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10042) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1130,11 +1130,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10043) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1150,11 +1150,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10044) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1172,17 +1172,17 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A1.fecha),SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10051
                                     AND valor <> 0 ) as A1
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10050) as A2
                                     ON A1.fecha = A2.fecha
                                     INNER JOIN
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A2.fecha = B.fecha
                                     WHERE MONTH(A1.fecha) =  ?
@@ -1198,11 +1198,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10050) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1218,11 +1218,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10051) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1238,11 +1238,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10054) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1258,11 +1258,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10055) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10059) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1272,7 +1272,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10059
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1286,11 +1286,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10056) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10060) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1300,7 +1300,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10060
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1314,11 +1314,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10057) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1334,11 +1334,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10058) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1386,11 +1386,11 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10005) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10004) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1407,11 +1407,11 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10011) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10010) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1427,16 +1427,16 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10026) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10024) as C
                                         ON A.fecha = C.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1452,11 +1452,11 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10025) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10024) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1472,11 +1472,11 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10031) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10030) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1493,16 +1493,16 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10031) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10030) as C
                                         ON A.fecha = C.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1518,16 +1518,16 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM((A.valor * (B.valor-C.valor))/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10052) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10051) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10050) as C
                                         ON A.fecha = C.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1543,11 +1543,11 @@ class SendDailyReport extends Command
                                     DB::select(
                                         'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10061) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10057) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
@@ -1559,7 +1559,7 @@ class SendDailyReport extends Command
                                 default:
                                     $mes_real= DB::select(
                                         'SELECT MONTH(fecha) as month, SUM(valor) as mes_real
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         WHERE variable_id = ?
                                         AND  MONTH(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -1592,7 +1592,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $mes_real= DB::select(
                                     'SELECT MONTH(fecha) as month, AVG(valor) as mes_real
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = ?
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1630,7 +1630,7 @@ class SendDailyReport extends Command
                                             $suma= $this->summesreal10005;                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10062
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -1644,7 +1644,7 @@ class SendDailyReport extends Command
                                             $suma= $this->summesreal10011;                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10063
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -1658,7 +1658,7 @@ class SendDailyReport extends Command
                                             $suma= $this->summesreal10019;                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10064
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -1671,7 +1671,7 @@ class SendDailyReport extends Command
                                             //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                             $suma= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10031
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -1680,7 +1680,7 @@ class SendDailyReport extends Command
                                             );                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10065
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -1734,11 +1734,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10004) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10005) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1748,7 +1748,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10005
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1763,11 +1763,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10010) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1783,11 +1783,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10012) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1803,11 +1803,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10015) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1820,7 +1820,7 @@ class SendDailyReport extends Command
                             case 10016:
                                 $mes_budget= DB::select(
                                     'SELECT MONTH(fecha) as month, AVG(valor) as mes_budget
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1851,11 +1851,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10018) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1871,11 +1871,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10024) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10025) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1885,7 +1885,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10025
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -1899,11 +1899,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10033) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1919,11 +1919,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10035) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1939,11 +1939,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10036) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1959,11 +1959,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10040) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1979,11 +1979,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10041) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -1999,11 +1999,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10042) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2019,11 +2019,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10043) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2039,11 +2039,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10044) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2059,11 +2059,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10049) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2079,11 +2079,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10050) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2099,11 +2099,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10051) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2119,11 +2119,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10054) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2139,11 +2139,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10055) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10059) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2153,7 +2153,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10059
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2167,11 +2167,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10056) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10060) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2181,7 +2181,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10060
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2195,11 +2195,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10057) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2215,11 +2215,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT MONTH(A.fecha),SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10058) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE MONTH(A.fecha) =  ?
@@ -2260,7 +2260,7 @@ class SendDailyReport extends Command
                         {
                             $mes_budget= DB::select(
                                 'SELECT MONTH(fecha) as month, SUM(valor) as mes_budget
-                                FROM [mansfield2].[dbo].[budget]
+                                FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND  MONTH(fecha) = ?
                                 AND  DATEPART(y, fecha) <= ?
@@ -2291,7 +2291,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $mes_budget= DB::select(
                                     'SELECT MONTH(fecha) as month, AVG(valor) as mes_budget
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  MONTH(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2329,7 +2329,7 @@ class SendDailyReport extends Command
                                             $suma= $this->summesbudget10005;                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10062
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -2343,7 +2343,7 @@ class SendDailyReport extends Command
                                             $suma= $this->summesbudget10011;                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10063
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -2357,7 +2357,7 @@ class SendDailyReport extends Command
                                             $suma= $this->summesbudget10019;                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10064
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -2370,7 +2370,7 @@ class SendDailyReport extends Command
                                             //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                             $suma= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10031
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -2379,7 +2379,7 @@ class SendDailyReport extends Command
                                             );                                     
                                             $suma2= DB::select(
                                                 'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10065
                                                 AND  MONTH(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -2433,11 +2433,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10004) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10005) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2447,7 +2447,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10005
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2462,11 +2462,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10010) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2482,11 +2482,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10012) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2501,7 +2501,7 @@ class SendDailyReport extends Command
                                 //(sumatoria.trimestral(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) * 1000 as sumaproducto
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10067
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2516,11 +2516,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10018) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2536,11 +2536,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10024) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10025) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2550,7 +2550,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10025
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2564,11 +2564,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10033) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2584,11 +2584,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10035) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2604,11 +2604,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10036) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2625,17 +2625,17 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10043
                                     AND valor <> 0) as A1
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10044) as A2
                                     ON A1.fecha = A2.fecha                                        
                                     INNER JOIN 
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A2.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A1.fecha) = ?
@@ -2651,11 +2651,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10041) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2671,11 +2671,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10042) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2691,11 +2691,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10043) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2711,11 +2711,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10044) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2733,17 +2733,17 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10051
                                     AND valor <> 0) as A1
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10050) as A2
                                     ON A1.fecha = A2.fecha                                        
                                     INNER JOIN 
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A2.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A1.fecha) = ?
@@ -2759,11 +2759,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10050) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2779,11 +2779,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10051) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2799,11 +2799,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10054) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2819,11 +2819,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10055) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10059) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2833,7 +2833,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10059
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2847,11 +2847,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10056) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10060) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2861,7 +2861,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10060
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -2875,11 +2875,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10057) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2895,11 +2895,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10058) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2946,11 +2946,11 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10005) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10004) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2966,11 +2966,11 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10011) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10010) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -2985,16 +2985,16 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10026) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10024) as C
                                         ON A.fecha = C.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3009,11 +3009,11 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10025) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10024) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3028,11 +3028,11 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10031) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10030) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3048,16 +3048,16 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10031) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10030) as C
                                         ON A.fecha = C.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3072,16 +3072,16 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10052) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10051) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10050) as C
                                         ON A.fecha = C.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3096,11 +3096,11 @@ class SendDailyReport extends Command
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10061) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10057) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3112,7 +3112,7 @@ class SendDailyReport extends Command
                                 default:
                                     $trimestre_real= DB::select(
                                         'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         WHERE variable_id = ?
                                         AND  DATEPART(QUARTER, fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -3145,7 +3145,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $trimestre_real= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_real
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = ?
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3183,7 +3183,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumtrireal10005;                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10062
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3197,7 +3197,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumtrireal10011;                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10063
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3211,7 +3211,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumtrireal10019;                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10064
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3224,7 +3224,7 @@ class SendDailyReport extends Command
                                             //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                             $suma= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10031
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3233,7 +3233,7 @@ class SendDailyReport extends Command
                                             );                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10065
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3287,11 +3287,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10004) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10005) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3301,7 +3301,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10005
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3316,11 +3316,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10010) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3336,11 +3336,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10012) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3356,11 +3356,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10015) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3374,7 +3374,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $trimestre_budget= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3405,11 +3405,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10018) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3425,11 +3425,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10024) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10025) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3439,7 +3439,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10025
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3453,11 +3453,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10033) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3473,11 +3473,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10035) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3493,11 +3493,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10036) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3513,11 +3513,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10040) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3533,11 +3533,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10041) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3553,11 +3553,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10042) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3573,11 +3573,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10043) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3593,11 +3593,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10044) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3613,11 +3613,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10049) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3633,11 +3633,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10050) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3653,11 +3653,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10051) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3673,11 +3673,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10054) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3693,11 +3693,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10055) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10059) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3707,7 +3707,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10059
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3721,11 +3721,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10056) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10060) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3735,7 +3735,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10060
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3749,11 +3749,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10057) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3769,11 +3769,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10058) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -3814,7 +3814,7 @@ class SendDailyReport extends Command
                         {
                             $trimestre_budget= DB::select(
                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
-                                FROM [mansfield2].[dbo].[budget]
+                                FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND  DATEPART(QUARTER, fecha) = ?
                                 AND  DATEPART(y, fecha) <= ?
@@ -3845,7 +3845,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $trimestre_budget= DB::select(
                                     'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  DATEPART(QUARTER, fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -3883,7 +3883,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumtribudget10005;                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10062
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3897,7 +3897,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumtribudget10011;                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10063
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3911,7 +3911,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumtribudget10019;                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10064
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3924,7 +3924,7 @@ class SendDailyReport extends Command
                                             //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                             $suma= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10031
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3933,7 +3933,7 @@ class SendDailyReport extends Command
                                             );                                     
                                             $suma2= DB::select(
                                                 'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10065
                                                 AND  DATEPART(QUARTER, fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -3987,11 +3987,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10004) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10005) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4001,7 +4001,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10005
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4016,11 +4016,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10010) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4036,11 +4036,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10012) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4055,7 +4055,7 @@ class SendDailyReport extends Command
                                 //(sumatoria.anual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) * 1000 as sumaproducto
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10067
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4070,11 +4070,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10018) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4090,11 +4090,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10024) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10025) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4104,7 +4104,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10025
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4118,11 +4118,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10033) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4138,11 +4138,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10035) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4158,11 +4158,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10036) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4178,17 +4178,17 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A1.fecha) as year, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10043
                                     AND valor <> 0) as A1
                                     INNER JOIN
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10044) as A2
                                     ON A1.fecha = A2.fecha
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A2.fecha = B.fecha
                                     WHERE YEAR(A1.fecha) = ?
@@ -4204,11 +4204,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10041) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4224,11 +4224,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10042) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4244,11 +4244,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10043) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4264,11 +4264,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10044) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4285,17 +4285,17 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A1.fecha) as year, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10051
                                     AND valor <> 0) as A1
                                     INNER JOIN
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10050) as A2
                                     ON A1.fecha = A2.fecha
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A2.fecha = B.fecha
                                     WHERE YEAR(A1.fecha) = ?
@@ -4311,11 +4311,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10050) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4331,11 +4331,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10051) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4351,11 +4351,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10054) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4371,11 +4371,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10055) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10059) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4385,7 +4385,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10059
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4399,11 +4399,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10056) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10060) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4413,7 +4413,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = 10060
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4427,11 +4427,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10057) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4447,11 +4447,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10058) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4498,11 +4498,11 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10005) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10004) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4518,11 +4518,11 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10011) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10010) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4537,16 +4537,16 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10026) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10025) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10024) as C
                                         ON A.fecha = C.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4561,11 +4561,11 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10025) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10024) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4580,11 +4580,11 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10031) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10030) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4600,16 +4600,16 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10033) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10031) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10030) as C
                                         ON A.fecha = C.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4624,16 +4624,16 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM((A.valor * (B.valor-C.valor))/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10052) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10051) as B
                                         ON A.fecha = B.fecha
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10050) as C
                                         ON A.fecha = C.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4648,11 +4648,11 @@ class SendDailyReport extends Command
                                     $anio_real= DB::select(
                                         'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10061) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         where variable_id = 10057) as B
                                         ON A.fecha = B.fecha
                                         WHERE YEAR(A.fecha) = ?
@@ -4664,7 +4664,7 @@ class SendDailyReport extends Command
                                 default:
                                     $anio_real= DB::select(
                                         'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
-                                        FROM [mansfield2].[dbo].[data]
+                                        FROM [dbo].[data]
                                         WHERE variable_id = ?
                                         AND  YEAR(fecha) = ?
                                         AND  DATEPART(y, fecha) <= ?
@@ -4697,7 +4697,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $anio_real= DB::select(
                                     'SELECT YEAR(fecha) as year, AVG(valor) as anio_real
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM [dbo].[data]
                                     WHERE variable_id = ?
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4735,7 +4735,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumanioreal10005;                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10062
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -4749,7 +4749,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumanioreal10011;                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10063
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -4763,7 +4763,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumanioreal10019;                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10064
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -4776,7 +4776,7 @@ class SendDailyReport extends Command
                                             //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                             $suma= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10031
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -4785,7 +4785,7 @@ class SendDailyReport extends Command
                                             );                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[data]
+                                                FROM [dbo].[data]
                                                 WHERE variable_id = 10065
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -4839,11 +4839,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10004) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10005) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4853,7 +4853,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10005
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4868,11 +4868,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10010) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4888,11 +4888,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10012) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4908,11 +4908,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10015) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4926,7 +4926,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $anio_budget= DB::select(
                                     'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -4957,11 +4957,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10018) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10019) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4977,11 +4977,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10024) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10025) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -4991,7 +4991,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10025
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -5005,11 +5005,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10033) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10011) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5025,11 +5025,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10035) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5045,11 +5045,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10036) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10039) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5065,11 +5065,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10040) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5085,11 +5085,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10041) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5105,11 +5105,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10042) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5125,11 +5125,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10043) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5145,11 +5145,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10044) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10045) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5165,11 +5165,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10049) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5185,11 +5185,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10050) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5205,11 +5205,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10051) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10052) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5225,11 +5225,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10054) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5245,11 +5245,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10055) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10059) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5259,7 +5259,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10059
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -5273,11 +5273,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10056) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10060) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5287,7 +5287,7 @@ class SendDailyReport extends Command
                                 );                                     
                                 $suma= DB::select(
                                     'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = 10060
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -5301,11 +5301,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10057) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5321,11 +5321,11 @@ class SendDailyReport extends Command
                                 $sumaproducto= DB::select(
                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10058) as A
                                     INNER JOIN   
                                     (SELECT fecha, variable_id, [valor]
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     where variable_id = 10061) as B
                                     ON A.fecha = B.fecha
                                     WHERE YEAR(A.fecha) = ?
@@ -5366,7 +5366,7 @@ class SendDailyReport extends Command
                         {
                             $anio_budget= DB::select(
                                 'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
-                                FROM [mansfield2].[dbo].[budget]
+                                FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND  YEAR(fecha) = ?
                                 AND  DATEPART(y, fecha) <= ?
@@ -5397,7 +5397,7 @@ class SendDailyReport extends Command
                                 //Promedio valores <>0
                                 $anio_budget= DB::select(
                                     'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
-                                    FROM [mansfield2].[dbo].[budget]
+                                    FROM [dbo].[budget]
                                     WHERE variable_id = ?
                                     AND  YEAR(fecha) = ?
                                     AND  DATEPART(y, fecha) <= ?
@@ -5435,7 +5435,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumaniobudget10005;                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10062
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -5449,7 +5449,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumaniobudget10011;                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10063
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -5463,7 +5463,7 @@ class SendDailyReport extends Command
                                             $suma= $this->sumaniobudget10019;                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10064
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -5476,7 +5476,7 @@ class SendDailyReport extends Command
                                             //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                             $suma= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10031
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
@@ -5485,7 +5485,7 @@ class SendDailyReport extends Command
                                             );                                     
                                             $suma2= DB::select(
                                                 'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [mansfield2].[dbo].[budget]
+                                                FROM [dbo].[budget]
                                                 WHERE variable_id = 10065
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
