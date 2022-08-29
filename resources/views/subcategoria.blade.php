@@ -333,8 +333,6 @@
                         } 
                     },
                     {data:'orden', name:'orden'},
-                    {data:'created_at', name:'created_at'},
-                    {data:'updated_at',name:'updated_at'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
                 order: [[0, 'asc']]            
@@ -620,8 +618,6 @@
                                 <th>Descripción</th>
                                 <th>Estado</th>
                                 <th>Orden</th>
-                                <th>Alta</th>
-                                <th>Actualización</th>
                                 <th style="min-width:50px!important;"></th>            
                             </tr>
                         </thead>      

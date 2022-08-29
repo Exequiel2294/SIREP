@@ -35,11 +35,19 @@ Route::group(['middleware' => ['auth']], function() {
 
     
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable'); 
+    Route::get('dashboard_mine', 'DashboardController@index2')->name('dashboard_mine');
+    Route::get('dashboard/procesostable', 'DashboardController@procesostable')->name('dashboard.procesostable');
+    Route::get('dashboard/{date}/getpdfprocesostable', 'DashboardController@getpdfprocesostable')->name('dashboard.getpdfprocesostable'); 
+    Route::get('dashboard/minatable', 'DashboardController@minatable')->name('dashboard.minatable'); 
+    Route::get('dashboard/{date}/getpdfminatable', 'DashboardController@getpdfminatable')->name('dashboard.getpdfminatable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
     Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit'); 
        
     Route::get('historial', 'HistorialController@index')->name('historial');    
+       
+    Route::get('conciliado', 'ConciliadoController@index')->name('conciliado'); 
+    Route::post('conciliado/getvariables', 'ConciliadoController@getvariables')->name('conciliado.getvariables'); 
+    Route::post('conciliado/load', 'ConciliadoController@load')->name('conciliado.load');  
 
     Route::post('comentario/load', 'ComentarioController@load')->name('comentario.load');
     Route::get('comentario/comentariostable', 'ComentarioController@comentariostable')->name('comentario.comentariostable'); 

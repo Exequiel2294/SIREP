@@ -1,7 +1,7 @@
 
 PENDIENTE MMSA_APILAM_STACKER_Tiempo Operativo
 
-VARIABLE AREA
+VARIABLE PROCESOS POR AREA
 
     TRITURACION PRIMARIA Y SECUNDARIA
 
@@ -90,6 +90,7 @@ VARIABLE AREA
         10018: Humedad - MMSA_AGLOM_Humedad (%):
             Se carga en sistema
 
+        /*NO VISIBLE*/
         10067: Cemento - MMSA_AGLOM_Cemento -> 8h
             Ruta modificada: Se copia valor de Metalurgia.Aglomeracion.Cemento
 
@@ -204,11 +205,9 @@ VARIABLE AREA
             NO SE TENDRIA QUE PODER MODIFICAR
 
         10054: CN Solución PLS - MMSA_LIXI_CN en solución PLS (ppm):
-            ***NO se muestran actualemte 13/07/2022 por pedido de VictorSilva***
             Se carga desde el sistema
 
         10058: pH Solución PLS - MMSA_LIXI_pH en Solución PLS:
-            ***NO se muestran actualemte 13/07/2022 por pedido de VictorSilva***
             Se carga desde el sistema
 
     SART
@@ -258,19 +257,19 @@ VARIABLE AREA
             Se realiza la carga en el sistema
 
 
-VARIABLE TIPO
+VARIABLE TIPO PROCESOS
 
     Variables 8h: -> TIPO 1
         10005: Mineral Triturado 		- MMSA_TP_Mineral Triturado (t)
         10011: Mineral Triturado 		- MMSA_HPGR_Mineral Triturado (t)
         10019: Mineral Aglomerado 		- MMSA_AGLOM_Mineral Aglomerado (t) IDEM MMSA_HPGR_Mineral Triturado
-        10067: Cemento 					- MMSA_AGLOM_Cemento
-        10066: Flujo 					- MMSA_AGLOM_Flujo
         10031: Mineral Apilado Stacker 	- MMSA_APILAM_STACKER_Mineral Apilado Stacker (t) IDEM MMSA_HPGR_Mineral Triturado
         10039: Total Mineral Apilado 	- MMSA_APILAM_TA_Total Mineral Apilado (t) IDEM MMSA_HPGR_Mineral Triturado
+        10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
         10059: Solución Barren 			- MMSA_LIXI_Solución Barren (m3)
         10060: Solución ILS 			- MMSA_LIXI_Solución ILS (m3)
-        10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
+        10066: Flujo 					- MMSA_AGLOM_Flujo
+        10067: Cemento 					- MMSA_AGLOM_Cemento
         
     Variables 11h: -> TIPO 2
         10003: Disponibilidad 							- MMSA_TP_Disponibilidad (%)
@@ -281,21 +280,21 @@ VARIABLE TIPO
         10021: Utilización 								- MMSA_AGLOM_Utilización (%)
         10029: Disponibilidad 							- MMSA_APILAM_STACKER_Disponibilidad %
         10034: Utilización 								- MMSA_APILAM_STACKER_Utilización (%)
+        10041: Ley Au Alimentada 						- MMSA_SART_Ley Au Alimentada (ppm)
+        10042: Ley Au Salida 							- MMSA_SART_Ley Au Salida (ppm)
+        10043: Ley Cu Alimentada 						- MMSA_SART_Ley Cu Alimentada (ppm)
+        10044: Ley Cu Salida 							- MMSA_SART_Ley Cu Salida (ppm)
+        10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
+        10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
+        10052: PLS a Carbones 							- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
+        10055: CN Solución Barren 		                - MMSA_LIXI_CN Solución Barren (ppm)
+        10056: CN Solución ILS 			                - MMSA_LIXI_CN Solución ILS (ppm)
+        10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
+        10061: Solución PLS 							- MMSA_LIXI_Solución PLS (m3)
         10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
         10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
         10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración
         10065: Tiempo Operativo 						- MMSA_APILAM_STACKER_Tiempo Operativo IDEM MMSA_AGLOM_Horas Operativas Aglomeración
-        10061: Solución PLS 							- MMSA_LIXI_Solución PLS (m3)
-        10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
-        10043: Ley Cu Alimentada 						- MMSA_SART_Ley Cu Alimentada (ppm)
-        10044: Ley Cu Salida 							- MMSA_SART_Ley Cu Salida (ppm)
-        10041: Ley Au Alimentada 						- MMSA_SART_Ley Au Alimentada (ppm)
-        10042: Ley Au Salida 							- MMSA_SART_Ley Au Salida (ppm
-        10052: PLS a Carbones 							- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
-        10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
-        10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
-        10056: CN Solución ILS 			                - MMSA_LIXI_CN Solución ILS (ppm)
-        10055: CN Solución Barren 		        - MMSA_LIXI_CN Solución Barren (ppm)
         
     Variables de carga manual: -> TIPO 3 (9 variables)
         10012: P80 					            - MMSA_HPGR_P80 (mm)
@@ -303,27 +302,27 @@ VARIABLE TIPO
         10018: Humedad 				            - MMSA_AGLOM_Humedad (%)
         10033: Recuperación 		            - MMSA_APILAM_STACKER_Recuperación (%) -> SE INSERTA A LAS 8 CON VALOR 75 fijo
         10036: Recuperación 		            - MMSA_APILAM_TA_Recuperación (%) IDEM MMSA_APILAM_STACKER_Recuperación -> SE INSERTA A LAS 8 CON VALOR 75% fijo
-        10054: CN Solución PLS 		            - MMSA_LIXI_CN en solución PLS (ppm)
-        10058: pH Solución PLS 		            - MMSA_LIXI_pH en Solución PLS
         10047: Au Desorbido Electrodepositado   - MMSA_ADR_Au Desorbido Electrodepositado (oz)
         10048: Au Doré 				            - MMSA_ADR_Au Doré (oz)
+        10054: CN Solución PLS 		            - MMSA_LIXI_CN en solución PLS (ppm)
+        10058: pH Solución PLS 		            - MMSA_LIXI_pH en Solución PLS
         
     Variables calculadas: -> TIPO 4 (15 variables)
         10002: Au Triturado 				- MMSA_TP_Au Triturado (oz)
         10006: Productividad 				- MMSA_TP_Productividad (t/h)
         10008: Au Triturado 				- MMSA_HPGR_Au Triturado (oz)
         10013: Productividad 				- MMSA_HPGR_Productividad (t/h)
-        10020: Productividad 				- MMSA_AGLOM_Productividad (t/h)
         10015: Adición de Cemento 			- MMSA_AGLOM_Adición de Cemento (kg/t)
+        10020: Productividad 				- MMSA_AGLOM_Productividad (t/h)
         10027: Au Apilado Stacker 			- MMSA_APILAM_STACKER_Au Apilado Stacker (oz)
         10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker 
         10032: Productividad 				- MMSA_APILAM_STACKER_Productividad (t/h)
         10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) IDEM MMSA_HPGR_Au Triturado
         10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
         10040: Eficiencia 					- MMSA_SART_Eficiencia (%)
+        10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
         10049: Eficiencia 					- MMSA_ADR_Eficiencia (%)
         10053: Au Lixiviado 				- MMSA_LIXI_Au Lixiviado (oz)
-        10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
         
     Variables 11_21hs: -> TIPO 5
         10010: Ley Au - MMSA_HPGR_Ley Au (g/t)
@@ -401,6 +400,18 @@ VARIABLE TIPO
         (SELECT id FROM [mansfield2].[dbo].[variable] where id = 10004) AS V
         ON 1=1;    
 
+    JOB[10.1.10.25] COPIA DESDE DATA [10.1.10.30].[MANSFIELD2].[dbo].[data] A [10.1.10.25].[DB_SIOM].[dbo].[MMSA_SIREP_DATA]:
+        DELETE FROM [DB_SIOM].[dbo].[MMSA_SIREP_DATA] 
+        WHERE fecha >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0);
+
+        INSERT INTO [dbo].[MMSA_SIREP_DATA]
+        SELECT SD.variable_id, SD.fecha, SD.valor FROM [10.1.10.30].[MANSFIELD2].[Dbo].[MMSA_SIREP_DATA] SD
+        INNER JOIN [10.1.10.30].[MANSFIELD2].[Dbo].[VARIABLE] V ON SD.variable_id = V.id
+        WHERE V.estado = 1
+        AND V.descripcion not like '%cparametro%'
+        AND SD.fecha >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0)
+        ORDER BY SD.fecha DESC, orden ASC;
+
 
 El sistema realiza carga de data, importandola desde el PI a:
     Horas 8:        12 variables
@@ -416,6 +427,165 @@ Pendientes:
 	10065: Tiempo Operativo 						- MMSA_APILAM_STACKER_Tiempo Operativo IDEM MMSA_AGLOM_Horas Operativas Aglomeración
     10067: Cemento - MMSA_AGLOM_Cemento
 
+
+VARIABLES MINA POR AREA 
+
+    MINERAL MINADO 
+        10070:	Mineral ROM a Trituradora           - 01cparametro 08   (t):
+            Valor Sacado de Tabla
+
+        10071:	Ley Au                              - 02cparametro 09	(g/t):
+            Valor Sacado de Tabla
+
+        10072:	Au ROM a Trituradora                - 03cparametro 00	(oz):
+            Calculo: (10070 * 10071)/31.1035
+
+        10073:	Mineral ROM Alta Ley a Stockpile    - 04cparametro 59	(t):
+            Valor Sacado de Tabla
+
+        10074:	Ley Au                              - 05cparametro 60	(g/t):
+            Valor Sacado de Tabla
+
+        10075:	Au ROM Alta Ley a Stockpile         - 06cparametro 00	(oz):
+            Calculo: (10073 * 10074)/31.1035
+
+        10076:	Mineral ROM Media Ley a Stockpile   - 07cparametro 11	(t):
+            Valor Sacado de Tabla
+
+        10077:	Ley Au                              - 08cparametro 12	(g/t):
+            Valor Sacado de Tabla
+
+        10078:	Au ROM Media Ley a Stockpile        - 09cparametro 00	(oz):
+            Calculo: (10076 * 10077)/31.1035
+
+        10079:	Mineral ROM Baja Ley a Stockpile    - 10cparametro 13	(t):
+            Valor Sacado de Tabla
+
+        10080:	Ley Au                              - 11cparametro 14	(g/t):
+            Valor Sacado de Tabla
+
+        10081:	Au ROM Baja Ley a Stockpile         - 12cparametro 00	(oz):
+            Calculo: (10079 * 10080)/31.1035
+
+        10082:	Total Mineral ROM a Stockpiles      - 13cparametro 67	(t):
+            Valor Sacado de Tabla
+
+        10083:	Ley Au                              - 14cparametro 68	(g/t):
+            Valor Sacado de Tabla
+
+        10084:	Total Au ROM a Stockpiles           - 15cparametro 00	(oz):
+            Calculo: (10082 * 10083)/31.1035
+
+        10085:	Mineral ROM a Leach Pad             - 16cparametro 69	(t):
+            Valor Sacado de Tabla
+
+        10086:	Ley Au                              - 17cparametro 70	(g/t):
+            Valor Sacado de Tabla
+
+        10087	Au ROM a Leach Pad                  - 18cparametro 18	(oz):
+           Calculo: (10085 * 10086)/31.1035
+
+        10088:	Total Mineral Minado                - 19cparametro 72	(t):
+            Valor Sacado de Tabla
+
+        10089:	Ley Au                              - 20cparametro 73	(g/t):
+            Valor Sacado de Tabla
+
+        10090:	Total Au Minado                     - 21cparametro 00	(oz):
+            Calculo: (10088 * 10089)/31.1035
+
+        10091:	Esteril                             - 21cparametro 15	(t):
+            Valor Sacado de Tabla
+
+        10092:	Total Mineral Minado                - 22cparametro 25	(t):
+            Valor Sacado de Tabla
+
+    REMANEJO:
+        10093:	Alta Ley Stockpile a Trituradora    - 23cparametro 61	(t):
+            Valor Sacado de Tabla
+
+        10094:	Ley Au                              - 24cparametro 79	(g/t):
+            Valor Sacado de Tabla
+
+        10095	Au Alta Ley Stockpile a Trituradora - 25cparametro 00	(oz):
+            Calculo: (10093 * 10094)/31.1035
+
+        10097:	Media Ley Stockpile a Trituradora   - 26cparametro 18	(t):
+            Valor Sacado de Tabla
+
+        10098:	Ley Au                              - 27cparametro 19	(g/t):
+            Valor Sacado de Tabla
+
+        10099:	Au Media Ley Stockpile a Trituradora- 28cparametro 00	(oz):
+            Calculo: (10097 * 10098)/31.1035
+
+        10100:	Baja Ley Stockpile a Trituradora    - 29cparametro 20	(t):
+            Valor Sacado de Tabla
+
+        10101:	Ley Au                              - 30cparametro 21	(g/t):
+            Valor Sacado de Tabla
+
+        10102:	Au Baja Ley Stockpile a Trituradora - 32cparametro 00	(oz):
+            Calculo: (10100 * 10101)/31.1035
+
+        10103:	Total de Stockpiles a Trituradora   - 33cparametro 17	(t):
+            Valor Sacado de Tabla
+
+        10104:	Ley Au                              - 34cparametro 79	(g/t):
+            Valor Sacado de Tabla
+
+        10105:	Au de Stockpiles a Trituradora      - 35cparametro 00	(oz):
+            Calculo: (10103 * 10104)/31.1035
+
+    MOVIMIENTO TOTAL:
+        10106:	Total Mineral (ROM+Stockpiles) a Trituradora    -   36cparametro 23	(t):
+            Valor Sacado de Tabla
+
+        10107:	Ley Au                                          - 37cparametro 24	(g/t):
+            Valor Sacado de Tabla
+
+        10108:	Au (ROM+Stockpiles) a Trituradora               - 38cparametro 00	(oz):
+               Calculo: (10106 * 10107)/31.1035 
+
+        10109:	Total Mineral ROM a Stockpiles                  - 39cparametro 67	(t):
+            Valor Sacado de Tabla
+
+        10110:	Total Mineral ROM a Leach Pad                   - 40cparametro 96	(t):
+            Valor Sacado de Tabla
+
+        10111:	Total Mineral de Stockpiles a Leach Pad         - 41cparametro 97	(t):
+            Valor Sacado de Tabla
+
+        10112:	Esteril                                         - 42cparametro 98	(t):
+            Valor Sacado de Tabla
+
+        10113:	Total Material Movido                           - 43cparametro 26	(t):
+            Valor Sacado de Tabla
+
+    DISPONIBILIDAD MECANICA:
+        10114:	Flota Perforación                   - 44cparametro -1	(%):
+            Valor Sacado de Tabla
+
+        10115:	Flota Carguio                       - 45cparametro -1	(%):
+            Valor Sacado de Tabla
+
+        10116:	Flota Acarreo                       - 46cparametro -1	(%):
+            Valor Sacado de Tabla
+
+VARIABLES TIPO MINA
+    CALCULADAS - Tipo 4:
+        10072:	Au ROM a Trituradora                -	03cparametro 00	- (oz)
+        10075:	Au ROM Alta Ley a Stockpile         -	06cparametro 00	- (oz)
+        10078:	Au ROM Media Ley a Stockpile        -	09cparametro 00	- (oz)
+        10081:	Au ROM Baja Ley a Stockpile         -	12cparametro 00	- (oz)
+        10084:	Total Au ROM a Stockpiles	        -   15cparametro 00	- (oz)
+        10087:  Au ROM a Leach Pad                  -   18cparametro 18 - (oz)
+        10090:	Total Au Minado                     -	21cparametro 00	- (oz)
+        10095:	Au Alta Ley Stockpile a Trituradora -	25cparametro 00	- (oz)
+        10099:	Au Media Ley Stockpile a Trituradora-	28cparametro 00	- (oz)
+        10102:	Au Baja Ley Stockpile a Trituradora -	32cparametro 00	- (oz)
+        10105:	Au de Stockpiles a Trituradora      -	35cparametro 00	- (oz)
+        10108:	Au (ROM+Stockpiles) a Trituradora   -	38cparametro 00	- (oz)
 
 
 Para la autenticacion del usuario se utiliza el protoclo  de licencia abierta LDAP, que es un protocolo de ligero de acceso a Directorio. Con el mismo lo usuarios se van a autenticar contrea las credenciales del Active Directory.
@@ -434,14 +604,6 @@ Pendientes
 .Que el usuario cada vez que inicie sesion se verifique a grupo de seguridad corresponde para que si alla cambiado de grupo de seguridad cambie su rol. -> LISTO
 .Fijarse si el modal puede quedar movible.-> LISTO
 
-.Tabla averiguar tema scroll y.
-.Crear notificaciones para trabajos fallidos sql -> LISTO
-.La sesion queda abierta cuando cierra sesion, y se abre el link en una nueva pestaña. -> validar
-
-Siguiente tarea:
-Cuando se modifique una fila que al recargar la tabla vuelva a a la misma fila modificada
-Tema del envio de correo, con el daily en pdf.
-
 
 VALIDAR SI EL AUTENTICADOR PUEDE ESTAR 
 
@@ -451,101 +613,280 @@ CPARAMENTRO 9 LEY AU.
 
 MS4M_MINERAL DE ESA TABLA SE SACAN LOS DATOS PARA EL SCRIPT DEL DAILY 
 
-aCTUALIZARDL
-IMPRIMIRDL GENERA Y ENVIA PDF
+
+VISTA CORPORATIVO DAILY:
+
+    USE [mansfield2]
+    GO
+
+    /****** Object:  View [dbo].[SIREP_DIA]    Script Date: 1/7/2022 15:28:04 ******/
+    SET ANSI_NULLS ON
+    GO
+
+    SET QUOTED_IDENTIFIER ON
+    GO
 
 
-Sistema
-10:
-lixi
+    ALTER VIEW [dbo].[SIREP_DIA] AS
+    /*Vista para el DIA anterior a la fecha actual*/
+    SELECT v.id, v.orden, v.nombre, v.descripcion, d.fecha, v.unidad, d.valor
+    FROM data d 
+    INNER JOIN variable v
+    ON d.variable_id = v.id
+    WHERE d.fecha = CONVERT(DATE,DATEADD(d,-1,GETDATE()))
+    AND v.id NOT IN (10002, 10006, 10008, 10013, 10015, 10020, 10027, 10028, 10032, 10037, 10038, 10040, 10046, 10049, 10053,10066)
+
+    UNION /*10002 -> MMSA_TP_Au Triturado oz*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    (SELECT fecha, variable_id, valor
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10005) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, valor
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10004
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10002) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10006 -> MMSA_TP_Productividad t/h*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10005) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10062
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10006) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10008 -> MMSA_HPGR_Au Triturado (oz); 10037 -> MMSA_APILAM_TA_Total Au Apilado (oz)*/
+    SELECT V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10011) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10010
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID in (10008,10037)) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10013 -> MMSA_HPGR_Productividad*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10011) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10063
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10013) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10015 -> MMSA_AGLOM_Adición de Cemento kg/t*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * 1000) / B.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10067) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10019
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10015) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10020 -> MMSA_AGLOM_Productividad kg/t*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10019) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10064
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10020) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10027 -> MMSA_APILAM_STACKER_Au Apilado Stacker oz*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10031) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10030) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10027) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10028 -> MMSA_APILAM_STACKER_Au Extraible Apilado Stacker oz; 10038 MMSA_APILAM_TA_Total Au Extraible Apilado oz*/
+    SELECT V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, ((A.valor/100) * B.valor * C.valor)/31.1035 as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10033) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10031) as B
+    ON A.fecha = B.fecha
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10030) as C
+    ON A.fecha = C.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID IN (10028,10038)) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10032 -> MMSA_APILAM_STACKER_Productividad t/h*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10031) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10065
+    AND valor <> 0) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10032) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10040 -> MMSA_SART_Eficiencia %*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, ((A.valor-B.valor) * 100) / A.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10043
+    AND valor <> 0) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10044) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10040) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10046 -> MMSA_ADR_Au Adsorbido oz*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * (B.valor-C.valor))/31.1035 as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10052) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10051) as B
+    ON A.fecha = B.fecha
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10050) as C
+    ON A.fecha = C.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10046) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10049 -> MMSA_ADR_Eficiencia %*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, ((A.valor-B.valor) * 100) / A.valor as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10051
+    AND valor <> 0) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10050) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10049) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+    UNION /*10053 -> MMSA_LIXI_Au Lixiviado oz%*/
+    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10061) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10057) as B
+    ON A.fecha = B.fecha
+    INNER JOIN
+    (SELECT id, nombre, descripcion, unidad, orden 
+    FROM [mansfield2].[dbo].[variable]
+    WHERE ID = 10053) as V
+    ON 1 = 1
+    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+    order by orden asc
+    GO
 
 
-VISTA CORPORATIVO:
 
-SELECT v.id, v.nombre, v.descripcion, d.fecha, v.unidad, d.valor
-FROM data d 
-INNER JOIN variable v
-ON d.variable_id = v.id
-WHERE d.fecha = CONVERT(DATE,DATEADD(d,-1,GETDATE()))
-AND v.id NOT IN (10002, 10006, 10008, 10013, 10015, 10020,10027,10028,10032,10037,10038,10053,10040,10049,10046,10066)
-/*10002 -> MMSA_TP_Au Triturado oz*/
-UNION
-SELECT TOP 1 V.id, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
-(SELECT fecha, variable_id, valor
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10005) as A
-INNER JOIN   
-(SELECT fecha, variable_id, valor
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10004
-AND valor <> 0) as B
-ON A.fecha = B.fecha
-INNER JOIN
-(SELECT id, nombre, descripcion, unidad 
-FROM [mansfield2].[dbo].[variable]
-WHERE ID = 10002) as V
-ON 1 = 1
-WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
-/*10006 -> MMSA_TP_Productividad t/h*/
-UNION
-SELECT TOP 1 V.id, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
-(SELECT fecha, variable_id, [valor]
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10005) as A
-INNER JOIN   
-(SELECT fecha, variable_id, [valor]
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10062
-AND valor <> 0) as B
-ON A.fecha = B.fecha
-INNER JOIN
-(SELECT id, nombre, descripcion, unidad 
-FROM [mansfield2].[dbo].[variable]
-WHERE ID = 10006) as V
-ON 1 = 1
-WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
-/*
-10008 -> MMSA_HPGR_Au Triturado (oz)
-10037 -> MMSA_APILAM_TA_Total Au Apilado (oz)
-*/
-UNION
-SELECT V.id, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
-(SELECT fecha, variable_id, [valor]
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10011) as A
-INNER JOIN   
-(SELECT fecha, variable_id, [valor]
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10010
-AND valor <> 0) as B
-ON A.fecha = B.fecha
-INNER JOIN
-(SELECT id, nombre, descripcion, unidad 
-FROM [mansfield2].[dbo].[variable]
-WHERE ID in (10008,10037)) as V
-ON 1 = 1
-WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
-/*10013 -> MMSA_HPGR_Productividad*/
-UNION
-SELECT V.id, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
-(SELECT fecha, variable_id, [valor]
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10011) as A
-INNER JOIN   
-(SELECT fecha, variable_id, [valor]
-FROM [mansfield2].[dbo].[data]
-where variable_id = 10063
-AND valor <> 0) as B
-ON A.fecha = B.fecha
-INNER JOIN
-(SELECT id, nombre, descripcion, unidad 
-FROM [mansfield2].[dbo].[variable]
-WHERE ID = 10013) as V
-ON 1 = 1
-WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+INSERT_SIREP_DIA_CONCIL
 
+SIREP PENDIENTE:
+Pedido se Cesar Prentice, que le cu salida no tenga decimales
 
-
+DEFINIR:
+Que meses se puede conciliar, cuanto meses atras? para defiir el tema de los años tambien
 
 
 
