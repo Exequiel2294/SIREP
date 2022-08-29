@@ -28,12 +28,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //HORARIO UTC
-        /*$schedule->command('send:dailyreport')->between('17:55', '18:05');
+        $schedule->command('send:dailyreport')->between('17:55', '18:05');
         $schedule->command('send:dailyreportmina')->between('11:10', '11:20');
-        $schedule->command('send:dailyreportcombinado')->between('17:55', '18:05');*/
-        $schedule->command('send:dailyreport')->between('10:00', '22:00');
+        $schedule->command('send:dailyreportcombinado')->between('17:55', '18:05');
+        /*$schedule->command('send:dailyreport')->between('10:00', '22:00');
         $schedule->command('send:dailyreportmina')->between('10:00', '22:00');
-        $schedule->command('send:dailyreportcombinado')->between('10:00', '22:00');
+        $schedule->command('send:dailyreportcombinado')->between('10:00', '22:00');*/
         /*$schedule->call(function () {
             DB::table('data_conexions')->delete();
         })->everyMinute(); //->dailyAt('16:00');*/
