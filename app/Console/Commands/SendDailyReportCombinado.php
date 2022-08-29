@@ -2422,1386 +2422,545 @@ class SendDailyReportCombinado extends Command
                     }
                 })
                 ->addColumn('trimestre_real', function($data)
-                {              
-                    if (in_array($data->variable_id, $this->pparray))
+                {                      
+                    $tri_real = [];
+                    switch($data->variable_id)
                     {
-                        switch($data->variable_id)
-                        {
-                            case 10004:                                       
-                                //Promedio Ponderado Trimestral(10005,10004)                    
-                                //10004	Ley Au	MMSA_TP_Ley Au	g
-                                //10005	MMSA_TP_Mineral Triturado t                          
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10004) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10005) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10005
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10010:
-                            case 10030:                                       
-                                //10010 Ley Au MMSA_HPGR_Ley Au 
-                                //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10010 MMSA_HPGR_Ley Au g/t)                         
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10010) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtrireal10011;
-                            break;
-                            case 10012:                                       
-                                //10012 MMSA_HPGR_P80 mm
-                                //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10012 MMSA_HPGR_P80 mm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10012) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtrireal10011;
-                            break;
-                            case 10015:                                       
-                                //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
-                                //(sumatoria.trimestral(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) * 1000 as sumaproducto
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10067
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                    
-                                $suma= $this->sumtrireal10019; 
-                            break;
-                            case 10018:                                         
-                                //10018 MMSA_AGLOM_Humedad %
-                                //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10018) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10019) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtrireal10019;
-                            break;
-                            case 10024:                                       
-                                //10024 MMSA_APILAM_PYS_Ley Au g/t 
-                                //Promedio Ponderado Trimestral(10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t, 10024 MMSA_APILAM_PYS_Ley Au g/t)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10024) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10025) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10025
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10033:                                         
-                                //10033 MMSA_APILAM_STACKER_Recuperación %
-                                //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10033) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtrireal10011; 
-                            break;
-                            case 10035:                                       
-                                //10035 MMSA_APILAM_TA_Ley Au g/t
-                                //Promedio Ponderado Trimestral(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10035) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10039; 
-                            break;
-                            case 10036:                                         
-                                //10036 MMSA_APILAM_TA_Recuperación %
-                                //Promedio Ponderado Trimestral(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10036) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10039; 
-                            break;
-                            case 10040:                                         
-                                //10040 MMSA_SART_Eficiencia %
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 
-                                //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100) / (10043 MMSA_SART_Ley Cu Alimentada ppm)               
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10043
-                                    AND valor <> 0) as A1
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10044) as A2
-                                    ON A1.fecha = A2.fecha                                        
-                                    INNER JOIN 
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A2.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A1.fecha) = ?
-                                    AND  DATEPART(y, A1.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A1.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10045; 
-                            break;
-                            case 10041:                                         
-                                //10041 MMSA_SART_Ley Au Alimentada ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10041 MMSA_SART_Ley Au Alimentada ppm)                   
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10041) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10045;  
-                            break;
-                            case 10042:                                         
-                                //10042 MMSA_SART_Ley Au Salida ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10042 MMSA_SART_Ley Au Salida ppm)                 
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10042) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10045;  
-                            break;
-                            case 10043:                                         
-                                //10043 MMSA_SART_Ley Cu Alimentada ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10043 MMSA_SART_Ley Cu Alimentada ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10043) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10045;  
-                            break;
-                            case 10044:                                         
-                                //10044 MMSA_SART_Ley Cu Salida ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10044 MMSA_SART_Ley Cu Salida ppm)                    
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10044) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10045;  
-                            break;
-                            case 10049:                                         
-                                //10049 MMSA_ADR_Eficiencia %
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 
-                                //((((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS))               
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A1.fecha) as quarter, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10051
-                                    AND valor <> 0) as A1
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10050) as A2
-                                    ON A1.fecha = A2.fecha                                        
-                                    INNER JOIN 
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10052) as B
-                                    ON A2.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A1.fecha) = ?
-                                    AND  DATEPART(y, A1.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A1.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10052; 
-                            break;
-                            case 10050:                                         
-                                //10050 MMSA_ADR_Ley de Au BLS ppm
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10050 MMSA_ADR_Ley de Au BLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10050) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10052; 
-                            break;
-                            case 10051:                                         
-                                //10051 MMSA_ADR_Ley de Au PLS ppm
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10051 MMSA_ADR_Ley de Au PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10051) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10052; 
-                            break;
-                            case 10054:                                         
-                                //10054 MMSA_LIXI_CN en solución PLS ppm
-                                //Promedio Ponderado Trimestral(10061 MMSA_LIXI_Solución PLS m3, 10054 MMSA_LIXI_CN en solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10054) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10061; 
-                            break;
-                            case 10055:                                         
-                                //10055 MMSA_LIXI_CN Solución Barren ppm
-                                //Promedio Ponderado Trimestral(10059 MMSA_LIXI_Solución Barren m3, 10055 MMSA_LIXI_CN Solución Barren ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10055) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10059) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10059
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10056:                                         
-                                //10056 MMSA_LIXI_CN Solución ILS ppm
-                                //Promedio Ponderado Trimestral(10060 MMSA_LIXI_Solución ILS m3, 10056 MMSA_LIXI_CN Solución ILS ppm)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10056) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10060) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10060
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10057:                                         
-                                //10057 MMSA_LIXI_Ley Au Solución PLS ppm
-                                //Promedio Ponderado Trimestral(10061 MMSA_LIXI_Solución PLS m3, 10057 MMSA_LIXI_Ley Au Solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10057) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10061; 
-                            break;
-                            case 10058:                                       
-                                //10058 MMSA_LIXI_pH en Solución PLS
-                                //Promedio Ponderado Trimestral(10061 MMSA_LIXI_Solución PLS m3, 10058 MMSA_LIXI_pH en Solución PLS)                     
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10058) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtrireal10061; 
-                            break;
-                        }                         
-                        if(isset($sumaproducto[0]->sumaproducto) && isset($suma[0]->suma))
-                        {
-                            if ($suma[0]->suma > 0)
+                        case 10070: 
+                            $tri_real = $this->sumtrirealton[0];
+                        break;
+                        case 10071:
+                            if(isset($this->sumtrirealonz[0]->tri_real) && isset($this->sumtrirealton[0]->tri_real))
                             {
-                                $t_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($t_real > 100)
-                                {
-                                    return number_format(round($t_real), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($t_real, 2, '.', ',');
-                                }
-                            }
+                                $au = $this->sumtrirealonz[0]->tri_real;
+                                $min = $this->sumtrirealton[0]->tri_real;
+                            }   
                             else
                             {
-                                return '-';
-                            }
+                                $min = 0;
+                            }                             
+                        break;
+                        case 10072:
+                            $tri_real = $this->sumtrirealonz[0];
+                        break;
+                        case 10073: 
+                            $tri_real = $this->sumtrirealton[1];
+                        break;
+                        case 10074:
+                            if(isset($this->sumtrirealonz[1]->tri_real) && isset($this->sumtrirealton[1]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[1]->tri_real;
+                                $min = $this->sumtrirealton[1]->tri_real;
+                            }     
+                            else
+                            {
+                                $min = 0;
+                            }                              
+                        break;
+                        case 10075:
+                            $tri_real = $this->sumtrirealonz[1];
+                        break;                            
+                        case 10076: 
+                            $tri_real = $this->sumtrirealton[2];
+                        break;
+                        case 10077:
+                            if(isset($this->sumtrirealonz[2]->tri_real) && isset($this->sumtrirealton[2]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[2]->tri_real;
+                                $min = $this->sumtrirealton[2]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10078:
+                            $tri_real = $this->sumtrirealonz[2];
+                        break;
+                        case 10079: 
+                            $tri_real = $this->sumtrirealton[3];
+                        break;
+                        case 10080:
+                            if(isset($this->sumtrirealonz[3]->tri_real) && isset($this->sumtrirealton[3]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[3]->tri_real;
+                                $min = $this->sumtrirealton[3]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10081:
+                            $tri_real = $this->sumtrirealonz[3];
+                        break;
+                        case 10082: 
+                            $tri_real = $this->sumtrirealton[4];
+                        break;
+                        case 10083:
+                            if(isset($this->sumtrirealonz[4]->tri_real) && isset($this->sumtrirealton[4]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[4]->tri_real;
+                                $min = $this->sumtrirealton[4]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10084:
+                            $tri_real = $this->sumtrirealonz[4];
+                        break;
+                        case 10085: 
+                            $tri_real = $this->sumtrirealton[5];
+                        break;
+                        case 10086:
+                            if(isset($this->sumtrirealonz[5]->tri_real) && isset($this->sumtrirealton[5]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[5]->tri_real;
+                                $min = $this->sumtrirealton[5]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10087:
+                            $tri_real = $this->sumtrirealonz[5];
+                        break;
+                        case 10088: 
+                            $tri_real = $this->sumtrirealton[6];
+                        break;
+                        case 10089:
+                            if(isset($this->sumtrirealonz[6]->tri_real) && isset($this->sumtrirealton[6]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[6]->tri_real;
+                                $min = $this->sumtrirealton[6]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10090:
+                            $tri_real = $this->sumtrirealonz[6];
+                        break;
+                        case 10091: 
+                            $tri_real = $this->sumtrirealton[7];
+                        break;
+                        case 10092: 
+                            $tri_real = $this->sumtrirealton[8];
+                        break;
+                        case 10093: 
+                            $tri_real = $this->sumtrirealton[9];
+                        break;
+                        case 10094:
+                            if(isset($this->sumtrirealonz[7]->tri_real) && isset($this->sumtrirealton[9]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[7]->tri_real;
+                                $min = $this->sumtrirealton[9]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10095:
+                            $tri_real = $this->sumtrirealonz[7];
+                        break;
+                        case 10097: 
+                            $tri_real = $this->sumtrirealton[10];
+                        break;
+                        case 10098:
+                            if(isset($this->sumtrirealonz[8]->tri_real) && isset($this->sumtrirealton[10]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[8]->tri_real;
+                                $min = $this->sumtrirealton[10]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10099:
+                            $tri_real = $this->sumtrirealonz[8];
+                        break;
+                        case 10100: 
+                            $tri_real = $this->sumtrirealton[11];
+                        break;
+                        case 10101:
+                            if(isset($this->sumtrirealonz[9]->tri_real) && isset($this->sumtrirealton[11]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[9]->tri_real;
+                                $min = $this->sumtrirealton[11]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10102:
+                            $tri_real = $this->sumtrirealonz[9];
+                        break;
+                        case 10103: 
+                            $tri_real = $this->sumtrirealton[12];
+                        break;
+                        case 10104:
+                            if(isset($this->sumtrirealonz[10]->tri_real) && isset($this->sumtrirealton[12]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[10]->tri_real;
+                                $min = $this->sumtrirealton[12]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10105:
+                            $tri_real = $this->sumtrirealonz[10];
+                        break;
+                        case 10106: 
+                            $tri_real = $this->sumtrirealton[13];
+                        break;
+                        case 10107:
+                            if(isset($this->sumtrirealonz[11]->tri_real) && isset($this->sumtrirealton[13]->tri_real))
+                            {
+                                $au = $this->sumtrirealonz[11]->tri_real;
+                                $min = $this->sumtrirealton[13]->tri_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10108:
+                            $tri_real = $this->sumtrirealonz[11];
+                        break;
+                        case 10109: 
+                            $tri_real = $this->sumtrirealton[14];
+                        break;
+                        case 10110: 
+                            $tri_real = $this->sumtrirealton[15];
+                        break;
+                        case 10111: 
+                            $tri_real = $this->sumtrirealton[16];
+                        break;
+                        case 10112: 
+                            $tri_real = $this->sumtrirealton[17];
+                        break;
+                        case 10113: 
+                            $tri_real = $this->sumtrirealton[18];
+                        break;
+                        case 10114:
+                            $tri_real = $this->avgtrirealpor[0];
+                        break;
+                        case 10115:
+                            $tri_real = $this->avgtrirealpor[1];
+                        break;
+                        case 10116:
+                            $tri_real = $this->avgtrirealpor[2];
+                        break;
+                        default:
+                            return '-';
+                        break;
+                    }
+                    
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
                         }
                         else
                         {
                             return '-';
                         }
                     }
-                    else
+                    if(isset($tri_real->tri_real))
                     {
-                        if (in_array($data->variable_id, $this->sumarray))
+                        $m_real = $tri_real->tri_real;
+                        if($m_real > 100)
                         {
-                            switch($data->variable_id)
-                            {
-                                case 10002:   
-                                    //10002: MMSA_TP_Au Triturado                  
-                                    //SUMATORIA TRIMESTRAL(((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10005) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10004) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;
-                                case 10008:   
-                                case 10037:
-                                    //10008: MMSA_TP_Au Triturado                  
-                                    //SUMATORIA TRIMESTRAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10011) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10010) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;                   
-                                case 10022:
-                                    //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
-                                    //SUMATRIMESTRAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10026) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10025) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10024) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;               
-                                case 10023:
-                                    //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
-                                    //SUMATORIA TRIMESTRAL(((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035)                              
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10025) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10024) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break; 
-                                case 10027:   
-                                    //10027: MMSA_APILAM_STACKER_Au Apilado Stacker oz                  
-                                    //SUMATORIA TRIMESTRAL(((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker T)*(10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                                 
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10031) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10030) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;
-                                case 10028:
-                                case 10038:
-                                    //MMSA_APILAM_STACKER_Au Extraible Apilado                  
-                                    //SUMATRIMESTRAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10033) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10031) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10030) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;                  
-                                case 10046:
-                                    //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
-                                    //SUMATRIMESTRAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10052) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10051) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10050) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break; 
-                                case 10053:   
-                                    //MMSA_LIXI_Au Lixiviado (oz)                  
-                                    //SUMATORIA TRIMESTRAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035)                                 
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10061) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10057) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE DATEPART(QUARTER, A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;
-                                default:
-                                    $trimestre_real= DB::select(
-                                        'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
-                                        FROM [dbo].[data]
-                                        WHERE variable_id = ?
-                                        AND  DATEPART(QUARTER, fecha) = ?
-                                        AND  DATEPART(y, fecha) <= ?
-                                        GROUP BY DATEPART(QUARTER, fecha)', 
-                                        [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;
-                            }
-                            if(isset($trimestre_real[0]->trimestre_real))
-                            {
-                                $t_real = $trimestre_real[0]->trimestre_real;
-                                if($t_real > 100)
-                                {
-                                    return number_format(round($t_real), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($t_real, 2, '.', ',');
-                                }
-                            }
-                            else
-                            {
-                                return '-';
-                            }
+                            return number_format(round($m_real), 0, '.', ',');
                         }
                         else
                         {
-                            if (in_array($data->variable_id, $this->promarray))//revisar si variable 10016 corresponde a este grupo
-                            {
-                                //Promedio valores <>0
-                                $trimestre_real= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_real
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = ?
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    AND valor <> 0
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );
-                                if(isset($trimestre_real[0]->trimestre_real))
-                                {
-                                    $t_real = $trimestre_real[0]->trimestre_real;
-                                    if($t_real > 100)
-                                    {
-                                        return number_format(round($t_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($t_real, 2, '.', ',');
-                                    }
-                                }
-                                else
-                                {
-                                    return '-';
-                                }
-
-                            }
-                            else
-                            {
-                                if (in_array($data->variable_id, $this->divarray))
-                                {
-                                    switch($data->variable_id)
-                                    {
-                                        case 10006:                                       
-                                            //10006	MMSA_TP_Productividad t/h                    
-                                            //sumatoria.trimestral(10005 MMSA_TP_Mineral Triturado t)/sumatoria.trimestral(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
-                                            $suma= $this->sumtrireal10005;                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10062
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10013:                                       
-                                            //10013 MMSA_HPGR_Productividad t/h                   
-                                            //sumatoria.trimestral(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.trimestral(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
-                                            $suma= $this->sumtrireal10011;                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10063
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10020:                                       
-                                            //10020 MMSA_AGLOM_Productividad t/h                  
-                                            //sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.trimestral(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
-                                            $suma= $this->sumtrireal10019;                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10064
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10032:                                       
-                                            //10032 MMSA_APILAM_STACKER_Productividad t/h                 
-                                            //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
-                                            $suma= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10031
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            );                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10065
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                    }                            
-                                    if(isset($suma[0]->suma) && isset($suma2[0]->suma))
-                                    {
-                                        if ($suma2[0]->suma > 0)
-                                        {
-                                            $t_real = $suma[0]->suma/$suma2[0]->suma;
-                                            if($t_real > 100)
-                                            {
-                                                return number_format(round($t_real), 0, '.', ',');
-                                            }
-                                            else
-                                            {
-                                                return number_format($t_real, 2, '.', ',');
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return '-';
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return '-';
-                                    }
-                                }
-                                else
-                                {
-                                    return $data->variable_id;
-                                }
-                            }
+                            return number_format($m_real, 2, '.', ',');
                         }
-                    } 
+                    }
+                    else
+                    {
+                        return '-';
+                    }
                 })
                 ->addColumn('trimestre_budget', function($data)
-                {           
-                    if (in_array($data->variable_id, $this->pparray))
+                { 
+                    $trimestre_budget = [];
+                    switch($data->variable_id)
                     {
-                        switch($data->variable_id)
-                        {
-                            case 10004:                                       
-                                //Promedio Ponderado Trimestral(10005,10004)                    
-                                //10004	Ley Au	MMSA_TP_Ley Au	g
-                                //10005	MMSA_TP_Mineral Triturado t                          
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10004) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10005) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10005
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10010:
-                            case 10030:                                       
-                                //10010 Ley Au MMSA_HPGR_Ley Au 
-                                //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10010 MMSA_HPGR_Ley Au g/t)                         
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10010) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtribudget10011;
-                            break;
-                            case 10012:                                       
-                                //10012 MMSA_HPGR_P80 mm
-                                //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10012 MMSA_HPGR_P80 mm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10012) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtribudget10011;
-                            break;
-                            case 10015:                                         
-                                //10015 MMSA_AGLOM_Adición de Cemento kg/t
-                                //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10015) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10019) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtribudget10019;
-                            break;
-                            case 10016:
-                                //Promedio valores <>0
-                                $trimestre_budget= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = ?
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    AND valor <> 0
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );
-                                if(isset($trimestre_budget[0]->trimestre_budget))
-                                {
-                                    $t_budget = $trimestre_budget[0]->trimestre_budget;
-                                    if($t_budget > 100)
-                                    {
-                                        return number_format(round($t_budget), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($t_budget, 2, '.', ',');
-                                    }
-                                }
-                                else
-                                {
-                                    return '-';
-                                }
-                            break;
-                            case 10018:                                         
-                                //10018 MMSA_AGLOM_Humedad %
-                                //Promedio Ponderado Trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10018) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10019) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtribudget10019;
-                            break;
-                            case 10024:                                       
-                                //10024 MMSA_APILAM_PYS_Ley Au g/t 
-                                //Promedio Ponderado Trimestral(10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t, 10024 MMSA_APILAM_PYS_Ley Au g/t)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10024) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10025) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10025
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10033:                                         
-                                //10033 MMSA_APILAM_STACKER_Recuperación %
-                                //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10033) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumtribudget10011; 
-                            break;
-                            case 10035:                                       
-                                //10035 MMSA_APILAM_TA_Ley Au g/t
-                                //Promedio Ponderado Trimestral(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10035) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10039; 
-                            break;
-                            case 10036:                                         
-                                //10036 MMSA_APILAM_TA_Recuperación %
-                                //Promedio Ponderado Trimestral(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10036) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10039; 
-                            break;
-                            case 10040:                                         
-                                //10040 MMSA_SART_Eficiencia %
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10040 MMSA_SART_Eficiencia %)                     
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10040) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10045; 
-                            break;
-                            case 10041:                                         
-                                //10041 MMSA_SART_Ley Au Alimentada ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10041 MMSA_SART_Ley Au Alimentada ppm)                   
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10041) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10045;  
-                            break;
-                            case 10042:                                         
-                                //10042 MMSA_SART_Ley Au Salida ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10042 MMSA_SART_Ley Au Salida ppm)                 
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10042) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10045;  
-                            break;
-                            case 10043:                                         
-                                //10043 MMSA_SART_Ley Cu Alimentada ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10043 MMSA_SART_Ley Cu Alimentada ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10043) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10045;  
-                            break;
-                            case 10044:                                         
-                                //10044 MMSA_SART_Ley Cu Salida ppm
-                                //Promedio Ponderado Trimestral(10045 MMSA_SART_PLS a SART m3, 10044 MMSA_SART_Ley Cu Salida ppm)                    
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10044) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10045;  
-                            break;
-                            case 10049:                                         
-                                //10049 MMSA_ADR_Eficiencia %
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)                    
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10049) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10052; 
-                            break;
-                            case 10050:                                         
-                                //10050 MMSA_ADR_Ley de Au BLS ppm
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10050 MMSA_ADR_Ley de Au BLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10050) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10052; 
-                            break;
-                            case 10051:                                         
-                                //10051 MMSA_ADR_Ley de Au PLS ppm
-                                //Promedio Ponderado Trimestral(10052 MMSA_ADR_PLS a Carbones m3, 10051 MMSA_ADR_Ley de Au PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10051) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10052; 
-                            break;
-                            case 10054:                                         
-                                //10054 MMSA_LIXI_CN en solución PLS ppm
-                                //Promedio Ponderado Trimestral(10061 MMSA_LIXI_Solución PLS m3, 10054 MMSA_LIXI_CN en solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10054) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10061; 
-                            break;
-                            case 10055:                                         
-                                //10055 MMSA_LIXI_CN Solución Barren ppm
-                                //Promedio Ponderado Trimestral(10059 MMSA_LIXI_Solución Barren m3, 10055 MMSA_LIXI_CN Solución Barren ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10055) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10059) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10059
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10056:                                         
-                                //10056 MMSA_LIXI_CN Solución ILS ppm
-                                //Promedio Ponderado Trimestral(10060 MMSA_LIXI_Solución ILS m3, 10056 MMSA_LIXI_CN Solución ILS ppm)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10056) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10060) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10060
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10057:                                         
-                                //10057 MMSA_LIXI_Ley Au Solución PLS ppm
-                                //Promedio Ponderado Trimestral(10061 MMSA_LIXI_Solución PLS m3, 10057 MMSA_LIXI_Ley Au Solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10057) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10061; 
-                            break;
-                            case 10058:                                       
-                                //10058 MMSA_LIXI_pH en Solución PLS
-                                //Promedio Ponderado Trimestral(10061 MMSA_LIXI_Solución PLS m3, 10058 MMSA_LIXI_pH en Solución PLS)                     
-                                $sumaproducto= DB::select(
-                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10058) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumtribudget10061; 
-                            break;
-                        }                         
-                        if(isset($sumaproducto[0]->sumaproducto) && isset($suma[0]->suma))
-                        {
-                            if ($suma[0]->suma > 0)
+                        case 10070: 
+                            $trimestre_budget = $this->sumtribudgetton[0];
+                        break;
+                        case 10071:
+                            if(isset($this->sumtribudgetonz[0]->trimestre_budget) && isset($this->sumtribudgetton[0]->trimestre_budget))
                             {
-                                $t_budget = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($t_budget > 100)
-                                {
-                                    return number_format(round($t_budget), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($t_budget, 2, '.', ',');
-                                }
+                                $au = $this->sumtribudgetonz[0]->trimestre_budget;
+                                $min = $this->sumtribudgetton[0]->trimestre_budget;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            }                             
+                        break;
+                        case 10072:
+                            $trimestre_budget = $this->sumtribudgetonz[0];
+                        break;
+                        case 10073: 
+                            $trimestre_budget = $this->sumtribudgetton[1];
+                        break;
+                        case 10074:
+                            if(isset($this->sumtribudgetonz[1]->trimestre_budget) && isset($this->sumtribudgetton[1]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[1]->trimestre_budget;
+                                $min = $this->sumtribudgetton[1]->trimestre_budget;
+                            }     
+                            else
+                            {
+                                $min = 0;
+                            }                              
+                        break;
+                        case 10075:
+                            $trimestre_budget = $this->sumtribudgetonz[1];
+                        break;                            
+                        case 10076: 
+                            $trimestre_budget = $this->sumtribudgetton[2];
+                        break;
+                        case 10077:
+                            if(isset($this->sumtribudgetonz[2]->trimestre_budget) && isset($this->sumtribudgetton[2]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[2]->trimestre_budget;
+                                $min = $this->sumtribudgetton[2]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10078:
+                            $trimestre_budget = $this->sumtribudgetonz[2];
+                        break;
+                        case 10079: 
+                            $trimestre_budget = $this->sumtribudgetton[3];
+                        break;
+                        case 10080:
+                            if(isset($this->sumtribudgetonz[3]->trimestre_budget) && isset($this->sumtribudgetton[3]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[3]->trimestre_budget;
+                                $min = $this->sumtribudgetton[3]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10081:
+                            $trimestre_budget = $this->sumtribudgetonz[3];
+                        break;
+                        case 10082: 
+                            $trimestre_budget = $this->sumtribudgetton[4];
+                        break;
+                        case 10083:
+                            if(isset($this->sumtribudgetonz[4]->trimestre_budget) && isset($this->sumtribudgetton[4]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[4]->trimestre_budget;
+                                $min = $this->sumtribudgetton[4]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10084:
+                            $trimestre_budget = $this->sumtribudgetonz[4];
+                        break;
+                        case 10085: 
+                            $trimestre_budget = $this->sumtribudgetton[5];
+                        break;
+                        case 10086:
+                            if(isset($this->sumtribudgetonz[5]->trimestre_budget) && isset($this->sumtribudgetton[5]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[5]->trimestre_budget;
+                                $min = $this->sumtribudgetton[5]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10087:
+                            $trimestre_budget = $this->sumtribudgetonz[5];
+                        break;
+                        case 10088: 
+                            $trimestre_budget = $this->sumtribudgetton[6];
+                        break;
+                        case 10089:
+                            if(isset($this->sumtribudgetonz[6]->trimestre_budget) && isset($this->sumtribudgetton[6]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[6]->trimestre_budget;
+                                $min = $this->sumtribudgetton[6]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10090:
+                            $trimestre_budget = $this->sumtribudgetonz[6];
+                        break;
+                        case 10091: 
+                            $trimestre_budget = $this->sumtribudgetton[7];
+                        break;
+                        case 10092: 
+                            $trimestre_budget = $this->sumtribudgetton[8];
+                        break;
+                        case 10093: 
+                            $trimestre_budget = $this->sumtribudgetton[9];
+                        break;
+                        case 10094:
+                            if(isset($this->sumtribudgetonz[7]->trimestre_budget) && isset($this->sumtribudgetton[9]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[7]->trimestre_budget;
+                                $min = $this->sumtribudgetton[9]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10095:
+                            $trimestre_budget = $this->sumtribudgetonz[7];
+                        break;
+                        case 10097: 
+                            $trimestre_budget = $this->sumtribudgetton[10];
+                        break;
+                        case 10098:
+                            if(isset($this->sumtribudgetonz[8]->trimestre_budget) && isset($this->sumtribudgetton[10]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[8]->trimestre_budget;
+                                $min = $this->sumtribudgetton[10]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10099:
+                            $trimestre_budget = $this->sumtribudgetonz[8];
+                        break;
+                        case 10100: 
+                            $trimestre_budget = $this->sumtribudgetton[11];
+                        break;
+                        case 10101:
+                            if(isset($this->sumtribudgetonz[9]->trimestre_budget) && isset($this->sumtribudgetton[11]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[9]->trimestre_budget;
+                                $min = $this->sumtribudgetton[11]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10102:
+                            $trimestre_budget = $this->sumtribudgetonz[9];
+                        break;
+                        case 10103: 
+                            $trimestre_budget = $this->sumtribudgetton[12];
+                        break;
+                        case 10104:
+                            if(isset($this->sumtribudgetonz[10]->trimestre_budget) && isset($this->sumtribudgetton[12]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[10]->trimestre_budget;
+                                $min = $this->sumtribudgetton[12]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10105:
+                            $trimestre_budget = $this->sumtribudgetonz[10];
+                        break;
+                        case 10106: 
+                            $trimestre_budget = $this->sumtribudgetton[13];
+                        break;
+                        case 10107:
+                            if(isset($this->sumtribudgetonz[11]->trimestre_budget) && isset($this->sumtribudgetton[13]->trimestre_budget))
+                            {
+                                $au = $this->sumtribudgetonz[11]->trimestre_budget;
+                                $min = $this->sumtribudgetton[13]->trimestre_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10108:
+                            $trimestre_budget = $this->sumtribudgetonz[11];
+                        break;
+                        case 10109: 
+                            $trimestre_budget = $this->sumtribudgetton[14];
+                        break;
+                        case 10110: 
+                            $trimestre_budget = $this->sumtribudgetton[15];
+                        break;
+                        case 10111: 
+                            $trimestre_budget = $this->sumtribudgetton[16];
+                        break;
+                        case 10112: 
+                            $trimestre_budget = $this->sumtribudgetton[17];
+                        break;
+                        case 10113: 
+                            $trimestre_budget = $this->sumtribudgetton[18];
+                        break;
+                        case 10114:
+                            $trimestre_budget = $this->avgtribudgetpor[0];
+                        break;
+                        case 10115:
+                            $trimestre_budget = $this->avgtribudgetpor[1];
+                        break;
+                        case 10116:
+                            $trimestre_budget = $this->avgtribudgetpor[2];
+                        break;
+                        default:
+                            return '-';
+                        break;
+                    }
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+                    if(isset($trimestre_budget->trimestre_budget))
+                    {
+                        if ($trimestre_budget->trimestre_budget > 0)
+                        {
+                            $m_budget = $trimestre_budget->trimestre_budget;
+                            if($m_budget > 100)
+                            {
+                                return number_format(round($m_budget), 0, '.', ',');
                             }
                             else
                             {
-                                return '-';
+                                return number_format($m_budget, 2, '.', ',');
                             }
                         }
                         else
@@ -3811,1549 +2970,549 @@ class SendDailyReportCombinado extends Command
                     }
                     else
                     {
-                        if (in_array($data->variable_id, $this->sumarray))
-                        {
-                            $trimestre_budget= DB::select(
-                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_budget
-                                FROM [dbo].[budget]
-                                WHERE variable_id = ?
-                                AND  DATEPART(QUARTER, fecha) = ?
-                                AND  DATEPART(y, fecha) <= ?
-                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                            );
-                            if(isset($trimestre_budget[0]->trimestre_budget))
-                            {
-                                $t_budget = $trimestre_budget[0]->trimestre_budget;
-                                if($t_budget > 100)
-                                {
-                                    return number_format(round($t_budget), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($t_budget, 2, '.', ',');
-                                }
-                            }
-                            else
-                            {
-                                return '-';
-                            }
-                        }
-                        else
-                        {
-                            if (in_array($data->variable_id, $this->promarray))//revisar si variable 10016 corresponde a este grupo
-                            {
-                                //Promedio valores <>0
-                                $trimestre_budget= DB::select(
-                                    'SELECT DATEPART(QUARTER, fecha) as quarter, AVG(valor) as trimestre_budget
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = ?
-                                    AND  DATEPART(QUARTER, fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    AND valor <> 0
-                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                    [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                );
-                                if(isset($trimestre_budget[0]->trimestre_budget))
-                                {
-                                    $t_budget = $trimestre_budget[0]->trimestre_budget;
-                                    if($t_budget > 100)
-                                    {
-                                        return number_format(round($t_budget), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($t_budget, 2, '.', ',');
-                                    }
-                                }
-                                else
-                                {
-                                    return '-';
-                                }
-
-                            }
-                            else
-                            {
-                                if (in_array($data->variable_id, $this->divarray))
-                                {
-                                    switch($data->variable_id)
-                                    {
-                                        case 10006:                                       
-                                            //10006	MMSA_TP_Productividad t/h                    
-                                            //sumatoria.trimestral(10005 MMSA_TP_Mineral Triturado t)/sumatoria.trimestral(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
-                                            $suma= $this->sumtribudget10005;                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10062
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10013:                                       
-                                            //10013 MMSA_HPGR_Productividad t/h                   
-                                            //sumatoria.trimestral(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.trimestral(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
-                                            $suma= $this->sumtribudget10011;                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10063
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10020:                                       
-                                            //10020 MMSA_AGLOM_Productividad t/h                  
-                                            //sumatoria.trimestral(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.trimestral(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
-                                            $suma= $this->sumtribudget10019;                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10064
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10032:                                       
-                                            //10032 MMSA_APILAM_STACKER_Productividad t/h                 
-                                            //sumatoria.trimestral(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.trimestral(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
-                                            $suma= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10031
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            );                                     
-                                            $suma2= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10065
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                    }                            
-                                    if(isset($suma[0]->suma) && isset($suma2[0]->suma))
-                                    {
-                                        if ($suma2[0]->suma > 0)
-                                        {
-                                            $t_budget = $suma[0]->suma/$suma2[0]->suma;
-                                            if($t_budget > 100)
-                                            {
-                                                return number_format(round($t_budget), 0, '.', ',');
-                                            }
-                                            else
-                                            {
-                                                return number_format($t_budget, 2, '.', ',');
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return '-';
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return '-';
-                                    }
-                                }
-                                else
-                                {
-                                    return $data->variable_id;
-                                }
-                            }
-                        }
-                    } 
+                        return '-';
+                    }
                 })
                 ->addColumn('anio_real', function($data)
-                {          
-                    if (in_array($data->variable_id, $this->pparray))
+                {                     
+                    $anio_real = [];
+                    switch($data->variable_id)
                     {
-                        switch($data->variable_id)
-                        {
-                            case 10004:                                       
-                                //Promedio Ponderado Anual(10005,10004)                    
-                                //10004	Ley Au	MMSA_TP_Ley Au	g
-                                //10005	MMSA_TP_Mineral Triturado t                          
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10004) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10005) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10005
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10010:
-                            case 10030:                                       
-                                //10010 Ley Au MMSA_HPGR_Ley Au 
-                                //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t, 10010 MMSA_HPGR_Ley Au g/t)                         
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10010) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumanioreal10011;
-                            break;
-                            case 10012:                                       
-                                //10012 MMSA_HPGR_P80 mm
-                                //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t, 10012 MMSA_HPGR_P80 mm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10012) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumanioreal10011;
-                            break;
-                            case 10015:                                       
-                                //10015 MMSA_AGLOM_Adición de Cemento (kg/t)                   
-                                //(sumatoria.anual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) * 1000 as sumaproducto
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10067
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                    
-                                $suma= $this->sumanioreal10019; 
-                            break;
-                            case 10018:                                         
-                                //10018 MMSA_AGLOM_Humedad %
-                                //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10018) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10019) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumanioreal10019;
-                            break;
-                            case 10024:                                       
-                                //10024 MMSA_APILAM_PYS_Ley Au g/t 
-                                //Promedio Ponderado Anual(10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t, 10024 MMSA_APILAM_PYS_Ley Au g/t)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10024) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10025) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10025
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10033:                                         
-                                //10033 MMSA_APILAM_STACKER_Recuperación %
-                                //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10033) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumanioreal10011; 
-                            break;
-                            case 10035:                                       
-                                //10035 MMSA_APILAM_TA_Ley Au g/t
-                                //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10035) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10039; 
-                            break;
-                            case 10036:                                         
-                                //10036 MMSA_APILAM_TA_Recuperación %
-                                //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10036) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10039; 
-                            break;
-                            case 10040:                                         
-                                //10040 MMSA_SART_Eficiencia %
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, ((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100))                   
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A1.fecha) as year, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10043
-                                    AND valor <> 0) as A1
-                                    INNER JOIN
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10044) as A2
-                                    ON A1.fecha = A2.fecha
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A2.fecha = B.fecha
-                                    WHERE YEAR(A1.fecha) = ?
-                                    AND  DATEPART(y, A1.fecha) <=  ?
-                                    GROUP BY YEAR(A1.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10045; 
-                            break;
-                            case 10041:                                         
-                                //10041 MMSA_SART_Ley Au Alimentada ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10041 MMSA_SART_Ley Au Alimentada ppm)                   
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10041) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10045;  
-                            break;
-                            case 10042:                                         
-                                //10042 MMSA_SART_Ley Au Salida ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10042 MMSA_SART_Ley Au Salida ppm)                 
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10042) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10045;  
-                            break;
-                            case 10043:                                         
-                                //10043 MMSA_SART_Ley Cu Alimentada ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10043 MMSA_SART_Ley Cu Alimentada ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10043) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10045;  
-                            break;
-                            case 10044:                                         
-                                //10044 MMSA_SART_Ley Cu Salida ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10044 MMSA_SART_Ley Cu Salida ppm)                    
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10044) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10045;  
-                            break;
-                            case 10049:                                         
-                                //10049 MMSA_ADR_Eficiencia %
-                                //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)
-                                //Promedio Ponderado Anual((((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS))                   
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A1.fecha) as year, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10051
-                                    AND valor <> 0) as A1
-                                    INNER JOIN
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10050) as A2
-                                    ON A1.fecha = A2.fecha
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10052) as B
-                                    ON A2.fecha = B.fecha
-                                    WHERE YEAR(A1.fecha) = ?
-                                    AND  DATEPART(y, A1.fecha) <=  ?
-                                    GROUP BY YEAR(A1.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                      
-                                $suma= $this->sumanioreal10052; 
-                            break;
-                            case 10050:                                         
-                                //10050 MMSA_ADR_Ley de Au BLS ppm
-                                //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10050 MMSA_ADR_Ley de Au BLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10050) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10052; 
-                            break;
-                            case 10051:                                         
-                                //10051 MMSA_ADR_Ley de Au PLS ppm
-                                //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10051 MMSA_ADR_Ley de Au PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10051) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10052; 
-                            break;
-                            case 10054:                                         
-                                //10054 MMSA_LIXI_CN en solución PLS ppm
-                                //Promedio Ponderado Anual(10061 MMSA_LIXI_Solución PLS m3, 10054 MMSA_LIXI_CN en solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10054) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10061; 
-                            break;
-                            case 10055:                                         
-                                //10055 MMSA_LIXI_CN Solución Barren ppm
-                                //Promedio Ponderado Anual(10059 MMSA_LIXI_Solución Barren m3, 10055 MMSA_LIXI_CN Solución Barren ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10055) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10059) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10059
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10056:                                         
-                                //10056 MMSA_LIXI_CN Solución ILS ppm
-                                //Promedio Ponderado Anual(10060 MMSA_LIXI_Solución ILS m3, 10056 MMSA_LIXI_CN Solución ILS ppm)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10056) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10060) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = 10060
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10057:                                         
-                                //10057 MMSA_LIXI_Ley Au Solución PLS ppm
-                                //Promedio Ponderado Anual(10061 MMSA_LIXI_Solución PLS m3, 10057 MMSA_LIXI_Ley Au Solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10057) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10061; 
-                            break;
-                            case 10058:                                       
-                                //10058 MMSA_LIXI_pH en Solución PLS
-                                //Promedio Ponderado Anual(10061 MMSA_LIXI_Solución PLS m3, 10058 MMSA_LIXI_pH en Solución PLS)                     
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10058) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumanioreal10061; 
-                            break;
-                        }                         
-                        if(isset($sumaproducto[0]->sumaproducto) && isset($suma[0]->suma))
-                        {
-                            if ($suma[0]->suma > 0)
+                        case 10070: 
+                            $anio_real = $this->sumaniorealton[0];
+                        break;
+                        case 10071:
+                            if(isset($this->sumaniorealonz[0]->anio_real) && isset($this->sumaniorealton[0]->anio_real))
                             {
-                                $a_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($a_real > 100)
-                                {
-                                    return number_format(round($a_real), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($a_real, 2, '.', ',');
-                                }
-                            }
+                                $au = $this->sumaniorealonz[0]->anio_real;
+                                $min = $this->sumaniorealton[0]->anio_real;
+                            }   
                             else
                             {
-                                return '-';
-                            }
+                                $min = 0;
+                            }                             
+                        break;
+                        case 10072:
+                            $anio_real = $this->sumaniorealonz[0];
+                        break;
+                        case 10073: 
+                            $anio_real = $this->sumaniorealton[1];
+                        break;
+                        case 10074:
+                            if(isset($this->sumaniorealonz[1]->anio_real) && isset($this->sumaniorealton[1]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[1]->anio_real;
+                                $min = $this->sumaniorealton[1]->anio_real;
+                            }     
+                            else
+                            {
+                                $min = 0;
+                            }                              
+                        break;
+                        case 10075:
+                            $anio_real = $this->sumaniorealonz[1];
+                        break;                            
+                        case 10076: 
+                            $anio_real = $this->sumaniorealton[2];
+                        break;
+                        case 10077:
+                            if(isset($this->sumaniorealonz[2]->anio_real) && isset($this->sumaniorealton[2]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[2]->anio_real;
+                                $min = $this->sumaniorealton[2]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10078:
+                            $anio_real = $this->sumaniorealonz[2];
+                        break;
+                        case 10079: 
+                            $anio_real = $this->sumaniorealton[3];
+                        break;
+                        case 10080:
+                            if(isset($this->sumaniorealonz[3]->anio_real) && isset($this->sumaniorealton[3]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[3]->anio_real;
+                                $min = $this->sumaniorealton[3]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10081:
+                            $anio_real = $this->sumaniorealonz[3];
+                        break;
+                        case 10082: 
+                            $anio_real = $this->sumaniorealton[4];
+                        break;
+                        case 10083:
+                            if(isset($this->sumaniorealonz[4]->anio_real) && isset($this->sumaniorealton[4]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[4]->anio_real;
+                                $min = $this->sumaniorealton[4]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10084:
+                            $anio_real = $this->sumaniorealonz[4];
+                        break;
+                        case 10085: 
+                            $anio_real = $this->sumaniorealton[5];
+                        break;
+                        case 10086:
+                            if(isset($this->sumaniorealonz[5]->anio_real) && isset($this->sumaniorealton[5]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[5]->anio_real;
+                                $min = $this->sumaniorealton[5]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10087:
+                            $anio_real = $this->sumaniorealonz[5];
+                        break;
+                        case 10088: 
+                            $anio_real = $this->sumaniorealton[6];
+                        break;
+                        case 10089:
+                            if(isset($this->sumaniorealonz[6]->anio_real) && isset($this->sumaniorealton[6]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[6]->anio_real;
+                                $min = $this->sumaniorealton[6]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10090:
+                            $anio_real = $this->sumaniorealonz[6];
+                        break;
+                        case 10091: 
+                            $anio_real = $this->sumaniorealton[7];
+                        break;
+                        case 10092: 
+                            $anio_real = $this->sumaniorealton[8];
+                        break;
+                        case 10093: 
+                            $anio_real = $this->sumaniorealton[9];
+                        break;
+                        case 10094:
+                            if(isset($this->sumaniorealonz[7]->anio_real) && isset($this->sumaniorealton[9]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[7]->anio_real;
+                                $min = $this->sumaniorealton[9]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10095:
+                            $anio_real = $this->sumaniorealonz[7];
+                        break;
+                        case 10097: 
+                            $anio_real = $this->sumaniorealton[10];
+                        break;
+                        case 10098:
+                            if(isset($this->sumaniorealonz[8]->anio_real) && isset($this->sumaniorealton[10]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[8]->anio_real;
+                                $min = $this->sumaniorealton[10]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10099:
+                            $anio_real = $this->sumaniorealonz[8];
+                        break;
+                        case 10100: 
+                            $anio_real = $this->sumaniorealton[11];
+                        break;
+                        case 10101:
+                            if(isset($this->sumaniorealonz[9]->anio_real) && isset($this->sumaniorealton[11]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[9]->anio_real;
+                                $min = $this->sumaniorealton[11]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10102:
+                            $anio_real = $this->sumaniorealonz[9];
+                        break;
+                        case 10103: 
+                            $anio_real = $this->sumaniorealton[12];
+                        break;
+                        case 10104:
+                            if(isset($this->sumaniorealonz[10]->anio_real) && isset($this->sumaniorealton[12]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[10]->anio_real;
+                                $min = $this->sumaniorealton[12]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10105:
+                            $anio_real = $this->sumaniorealonz[10];
+                        break;
+                        case 10106: 
+                            $anio_real = $this->sumaniorealton[13];
+                        break;
+                        case 10107:
+                            if(isset($this->sumaniorealonz[11]->anio_real) && isset($this->sumaniorealton[13]->anio_real))
+                            {
+                                $au = $this->sumaniorealonz[11]->anio_real;
+                                $min = $this->sumaniorealton[13]->anio_real;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10108:
+                            $anio_real = $this->sumaniorealonz[11];
+                        break;
+                        case 10109: 
+                            $anio_real = $this->sumaniorealton[14];
+                        break;
+                        case 10110: 
+                            $anio_real = $this->sumaniorealton[15];
+                        break;
+                        case 10111: 
+                            $anio_real = $this->sumaniorealton[16];
+                        break;
+                        case 10112: 
+                            $anio_real = $this->sumaniorealton[17];
+                        break;
+                        case 10113: 
+                            $anio_real = $this->sumaniorealton[18];
+                        break;
+                        case 10114:
+                            $anio_real = $this->avganiorealpor[0];
+                        break;
+                        case 10115:
+                            $anio_real = $this->avganiorealpor[1];
+                        break;
+                        case 10116:
+                            $anio_real = $this->avganiorealpor[2];
+                        break;
+                        default:
+                            return '-';
+                        break;
+                    }
+                    
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
                         }
                         else
                         {
                             return '-';
                         }
                     }
-                    else
+                    if(isset($anio_real->anio_real))
                     {
-                        if (in_array($data->variable_id, $this->sumarray))
-                        {                                
-                            switch($data->variable_id)
-                            {
-                                case 10002:   
-                                    //10002: MMSA_TP_Au Triturado                  
-                                    //SUMATORIA ANUAL(((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035)    
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10005) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10004) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break;
-                                case 10008: 
-                                case 10037:  
-                                    //10008: MMSA_TP_Au Triturado                  
-                                    //SUMATORIA ANUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)    
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10011) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10010) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break;                 
-                                case 10022:
-                                    //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
-                                    //SUMAANUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)     
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10026) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10025) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10024) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;             
-                                case 10023:
-                                    //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
-                                    //SUMATORIA ANUAL(((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035)     
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10025) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10024) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break; 
-                                case 10027:   
-                                    //10027: MMSA_APILAM_STACKER_Au Apilado Stacker oz                  
-                                    //SUMATORIA ANUAL(((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)*(10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)    
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10031) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10030) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break;
-                                case 10028: 
-                                case 10038:  
-                                    //MMSA_APILAM_STACKER_Au Extraible Apilado                  
-                                    //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10033) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10031) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10030) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break;                
-                                case 10046:
-                                    //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
-                                    //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * (B.valor-C.valor))/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10052) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10051) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10050) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break; 
-                                case 10053:   
-                                    //MMSA_LIXI_Au Lixiviado (oz)                  
-                                    //SUMATORIA ANUAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035)    
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10061) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10057) as B
-                                        ON A.fecha = B.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break;
-                                default:
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(fecha) as year, SUM(valor) as anio_real
-                                        FROM [dbo].[data]
-                                        WHERE variable_id = ?
-                                        AND  YEAR(fecha) = ?
-                                        AND  DATEPART(y, fecha) <= ?
-                                        GROUP BY YEAR(fecha)', 
-                                        [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    );
-                                break;
-                            }
-                            if(isset($anio_real[0]->anio_real))
-                            {
-                                $a_real = $anio_real[0]->anio_real;
-                                if($a_real > 100)
-                                {
-                                    return number_format(round($a_real), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($a_real, 2, '.', ',');
-                                }
-                            }
-                            else
-                            {
-                                return '-';
-                            }
+                        $m_real = $anio_real->anio_real;
+                        if($m_real > 100)
+                        {
+                            return number_format(round($m_real), 0, '.', ',');
                         }
                         else
                         {
-                            if (in_array($data->variable_id, $this->promarray))//revisar si variable 10016 corresponde a este grupo
-                            {
-                                //Promedio valores <>0
-                                $anio_real= DB::select(
-                                    'SELECT YEAR(fecha) as year, AVG(valor) as anio_real
-                                    FROM [dbo].[data]
-                                    WHERE variable_id = ?
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    AND valor <> 0
-                                    GROUP BY YEAR(fecha)', 
-                                    [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );
-                                if(isset($anio_real[0]->anio_real))
-                                {
-                                    $a_real = $anio_real[0]->anio_real;
-                                    if($a_real > 100)
-                                    {
-                                        return number_format(round($a_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($a_real, 2, '.', ',');
-                                    }
-                                }
-                                else
-                                {
-                                    return '-';
-                                }
-
-                            }
-                            else
-                            {
-                                if (in_array($data->variable_id, $this->divarray))
-                                {
-                                    switch($data->variable_id)
-                                    {
-                                        case 10006:                                       
-                                            //10006	MMSA_TP_Productividad t/h                    
-                                            //sumatoria.anual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.anual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
-                                            $suma= $this->sumanioreal10005;                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10062
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10013:                                       
-                                            //10013 MMSA_HPGR_Productividad t/h                   
-                                            //sumatoria.anual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.anual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
-                                            $suma= $this->sumanioreal10011;                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10063
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10020:                                       
-                                            //10020 MMSA_AGLOM_Productividad t/h                  
-                                            //sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.anual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
-                                            $suma= $this->sumanioreal10019;                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10064
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10032:                                       
-                                            //10032 MMSA_APILAM_STACKER_Productividad t/h                 
-                                            //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
-                                            $suma= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10031
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            );                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[data]
-                                                WHERE variable_id = 10065
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                    }                            
-                                    if(isset($suma[0]->suma) && isset($suma2[0]->suma))
-                                    {
-                                        if ($suma2[0]->suma > 0)
-                                        {
-                                            $a_real = $suma[0]->suma/$suma2[0]->suma;
-                                            if($a_real > 100)
-                                            {
-                                                return number_format(round($a_real), 0, '.', ',');
-                                            }
-                                            else
-                                            {
-                                                return number_format($a_real, 2, '.', ',');
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return '-';
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return '-';
-                                    }
-                                }
-                                else
-                                {
-                                    return $data->variable_id;
-                                }
-                            }
+                            return number_format($m_real, 2, '.', ',');
                         }
-                    } 
+                    }
+                    else
+                    {
+                        return '-';
+                    }
                 })
                 ->addColumn('anio_budget', function($data)
-                {          
-                    if (in_array($data->variable_id, $this->pparray))
+                {                         
+                    $anio_budget = [];
+                    switch($data->variable_id)
                     {
-                        switch($data->variable_id)
-                        {
-                            case 10004:                                       
-                                //Promedio Ponderado Anual(10005,10004)                    
-                                //10004	Ley Au	MMSA_TP_Ley Au	g
-                                //10005	MMSA_TP_Mineral Triturado t                          
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10004) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10005) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10005
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10010:
-                            case 10030:                                       
-                                //10010 Ley Au MMSA_HPGR_Ley Au 
-                                //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t, 10010 MMSA_HPGR_Ley Au g/t)                         
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10010) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumaniobudget10011;
-                            break;
-                            case 10012:                                       
-                                //10012 MMSA_HPGR_P80 mm
-                                //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t, 10012 MMSA_HPGR_P80 mm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10012) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumaniobudget10011;
-                            break;
-                            case 10015:                                         
-                                //10015 MMSA_AGLOM_Adición de Cemento kg/t
-                                //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t, 10015 MMSA_AGLOM_Adición de Cemento kg/t)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10015) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10019) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumaniobudget10019;
-                            break;
-                            case 10016:
-                                //Promedio valores <>0
-                                $anio_budget= DB::select(
-                                    'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = ?
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    AND valor <> 0
-                                    GROUP BY YEAR(fecha)', 
-                                    [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );
-                                if(isset($anio_budget[0]->anio_budget))
-                                {
-                                    $a_budget = $anio_budget[0]->anio_budget;
-                                    if($a_budget > 100)
-                                    {
-                                        return number_format(round($a_budget), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($a_budget, 2, '.', ',');
-                                    }
-                                }
-                                else
-                                {
-                                    return '-';
-                                }
-                            break;
-                            case 10018:                                         
-                                //10018 MMSA_AGLOM_Humedad %
-                                //Promedio Ponderado Anual(10019 MMSA_AGLOM_Mineral Aglomerado t,10018 MMSA_AGLOM_Humedad %)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10018) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10019) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumaniobudget10019;
-                            break;
-                            case 10024:                                       
-                                //10024 MMSA_APILAM_PYS_Ley Au g/t 
-                                //Promedio Ponderado Anual(10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t, 10024 MMSA_APILAM_PYS_Ley Au g/t)                        
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10024) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10025) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10025
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10033:                                         
-                                //10033 MMSA_APILAM_STACKER_Recuperación %
-                                //Promedio Ponderado Anual(10011 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10033) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10011) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma = $this->sumaniobudget10011; 
-                            break;
-                            case 10035:                                       
-                                //10035 MMSA_APILAM_TA_Ley Au g/t
-                                //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10035) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10039; 
-                            break;
-                            case 10036:                                         
-                                //10036 MMSA_APILAM_TA_Recuperación %
-                                //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10036) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10039) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10039; 
-                            break;
-                            case 10040:                                         
-                                //10040 MMSA_SART_Eficiencia %
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10040 MMSA_SART_Eficiencia %)                     
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10040) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10045; 
-                            break;
-                            case 10041:                                         
-                                //10041 MMSA_SART_Ley Au Alimentada ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10041 MMSA_SART_Ley Au Alimentada ppm)                   
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10041) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10045;  
-                            break;
-                            case 10042:                                         
-                                //10042 MMSA_SART_Ley Au Salida ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10042 MMSA_SART_Ley Au Salida ppm)                 
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10042) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10045;  
-                            break;
-                            case 10043:                                         
-                                //10043 MMSA_SART_Ley Cu Alimentada ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10043 MMSA_SART_Ley Cu Alimentada ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10043) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10045;  
-                            break;
-                            case 10044:                                         
-                                //10044 MMSA_SART_Ley Cu Salida ppm
-                                //Promedio Ponderado Anual(10045 MMSA_SART_PLS a SART m3, 10044 MMSA_SART_Ley Cu Salida ppm)                    
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10044) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10045) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10045;  
-                            break;
-                            case 10049:                                         
-                                //10049 MMSA_ADR_Eficiencia %
-                                //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10049 MMSA_ADR_Eficiencia %)                    
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10049) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10052; 
-                            break;
-                            case 10050:                                         
-                                //10050 MMSA_ADR_Ley de Au BLS ppm
-                                //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10050 MMSA_ADR_Ley de Au BLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10050) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10052; 
-                            break;
-                            case 10051:                                         
-                                //10051 MMSA_ADR_Ley de Au PLS ppm
-                                //Promedio Ponderado Anual(10052 MMSA_ADR_PLS a Carbones m3, 10051 MMSA_ADR_Ley de Au PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10051) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10052) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10052; 
-                            break;
-                            case 10054:                                         
-                                //10054 MMSA_LIXI_CN en solución PLS ppm
-                                //Promedio Ponderado Anual(10061 MMSA_LIXI_Solución PLS m3, 10054 MMSA_LIXI_CN en solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10054) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10061; 
-                            break;
-                            case 10055:                                         
-                                //10055 MMSA_LIXI_CN Solución Barren ppm
-                                //Promedio Ponderado Anual(10059 MMSA_LIXI_Solución Barren m3, 10055 MMSA_LIXI_CN Solución Barren ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10055) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10059) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10059
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10056:                                         
-                                //10056 MMSA_LIXI_CN Solución ILS ppm
-                                //Promedio Ponderado Anual(10060 MMSA_LIXI_Solución ILS m3, 10056 MMSA_LIXI_CN Solución ILS ppm)                       
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10056) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10060) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= DB::select(
-                                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = 10060
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    GROUP BY YEAR(fecha)', 
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;
-                            case 10057:                                         
-                                //10057 MMSA_LIXI_Ley Au Solución PLS ppm
-                                //Promedio Ponderado Anual(10061 MMSA_LIXI_Solución PLS m3, 10057 MMSA_LIXI_Ley Au Solución PLS ppm)                      
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10057) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10061; 
-                            break;
-                            case 10058:                                       
-                                //10058 MMSA_LIXI_pH en Solución PLS
-                                //Promedio Ponderado Anual(10061 MMSA_LIXI_Solución PLS m3, 10058 MMSA_LIXI_pH en Solución PLS)                     
-                                $sumaproducto= DB::select(
-                                    'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10058) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[budget]
-                                    where variable_id = 10061) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE YEAR(A.fecha) = ?
-                                    AND  DATEPART(y, A.fecha) <=  ?
-                                    GROUP BY YEAR(A.fecha)',
-                                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );                                     
-                                $suma= $this->sumaniobudget10061; 
-                            break;
-                        }                         
-                        if(isset($sumaproducto[0]->sumaproducto) && isset($suma[0]->suma))
-                        {
-                            if ($suma[0]->suma > 0)
+                        case 10070: 
+                            $anio_budget = $this->sumaniobudgetton[0];
+                        break;
+                        case 10071:
+                            if(isset($this->sumaniobudgetonz[0]->anio_budget) && isset($this->sumaniobudgetton[0]->anio_budget))
                             {
-                                $a_budget = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($a_budget > 100)
-                                {
-                                    return number_format(round($a_budget), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($a_budget, 2, '.', ',');
-                                }
+                                $au = $this->sumaniobudgetonz[0]->anio_budget;
+                                $min = $this->sumaniobudgetton[0]->anio_budget;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            }                             
+                        break;
+                        case 10072:
+                            $anio_budget = $this->sumaniobudgetonz[0];
+                        break;
+                        case 10073: 
+                            $anio_budget = $this->sumaniobudgetton[1];
+                        break;
+                        case 10074:
+                            if(isset($this->sumaniobudgetonz[1]->anio_budget) && isset($this->sumaniobudgetton[1]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[1]->anio_budget;
+                                $min = $this->sumaniobudgetton[1]->anio_budget;
+                            }     
+                            else
+                            {
+                                $min = 0;
+                            }                              
+                        break;
+                        case 10075:
+                            $anio_budget = $this->sumaniobudgetonz[1];
+                        break;                            
+                        case 10076: 
+                            $anio_budget = $this->sumaniobudgetton[2];
+                        break;
+                        case 10077:
+                            if(isset($this->sumaniobudgetonz[2]->anio_budget) && isset($this->sumaniobudgetton[2]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[2]->anio_budget;
+                                $min = $this->sumaniobudgetton[2]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10078:
+                            $anio_budget = $this->sumaniobudgetonz[2];
+                        break;
+                        case 10079: 
+                            $anio_budget = $this->sumaniobudgetton[3];
+                        break;
+                        case 10080:
+                            if(isset($this->sumaniobudgetonz[3]->anio_budget) && isset($this->sumaniobudgetton[3]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[3]->anio_budget;
+                                $min = $this->sumaniobudgetton[3]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10081:
+                            $anio_budget = $this->sumaniobudgetonz[3];
+                        break;
+                        case 10082: 
+                            $anio_budget = $this->sumaniobudgetton[4];
+                        break;
+                        case 10083:
+                            if(isset($this->sumaniobudgetonz[4]->anio_budget) && isset($this->sumaniobudgetton[4]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[4]->anio_budget;
+                                $min = $this->sumaniobudgetton[4]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10084:
+                            $anio_budget = $this->sumaniobudgetonz[4];
+                        break;
+                        case 10085: 
+                            $anio_budget = $this->sumaniobudgetton[5];
+                        break;
+                        case 10086:
+                            if(isset($this->sumaniobudgetonz[5]->anio_budget) && isset($this->sumaniobudgetton[5]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[5]->anio_budget;
+                                $min = $this->sumaniobudgetton[5]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10087:
+                            $anio_budget = $this->sumaniobudgetonz[5];
+                        break;
+                        case 10088: 
+                            $anio_budget = $this->sumaniobudgetton[6];
+                        break;
+                        case 10089:
+                            if(isset($this->sumaniobudgetonz[6]->anio_budget) && isset($this->sumaniobudgetton[6]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[6]->anio_budget;
+                                $min = $this->sumaniobudgetton[6]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10090:
+                            $anio_budget = $this->sumaniobudgetonz[6];
+                        break;
+                        case 10091: 
+                            $anio_budget = $this->sumaniobudgetton[7];
+                        break;
+                        case 10092: 
+                            $anio_budget = $this->sumaniobudgetton[8];
+                        break;
+                        case 10093: 
+                            $anio_budget = $this->sumaniobudgetton[9];
+                        break;
+                        case 10094:
+                            if(isset($this->sumaniobudgetonz[7]->anio_budget) && isset($this->sumaniobudgetton[9]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[7]->anio_budget;
+                                $min = $this->sumaniobudgetton[9]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10095:
+                            $anio_budget = $this->sumaniobudgetonz[7];
+                        break;
+                        case 10097: 
+                            $anio_budget = $this->sumaniobudgetton[10];
+                        break;
+                        case 10098:
+                            if(isset($this->sumaniobudgetonz[8]->anio_budget) && isset($this->sumaniobudgetton[10]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[8]->anio_budget;
+                                $min = $this->sumaniobudgetton[10]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10099:
+                            $anio_budget = $this->sumaniobudgetonz[8];
+                        break;
+                        case 10100: 
+                            $anio_budget = $this->sumaniobudgetton[11];
+                        break;
+                        case 10101:
+                            if(isset($this->sumaniobudgetonz[9]->anio_budget) && isset($this->sumaniobudgetton[11]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[9]->anio_budget;
+                                $min = $this->sumaniobudgetton[11]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10102:
+                            $anio_budget = $this->sumaniobudgetonz[9];
+                        break;
+                        case 10103: 
+                            $anio_budget = $this->sumaniobudgetton[12];
+                        break;
+                        case 10104:
+                            if(isset($this->sumaniobudgetonz[10]->anio_budget) && isset($this->sumaniobudgetton[12]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[10]->anio_budget;
+                                $min = $this->sumaniobudgetton[12]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10105:
+                            $anio_budget = $this->sumaniobudgetonz[10];
+                        break;
+                        case 10106: 
+                            $anio_budget = $this->sumaniobudgetton[13];
+                        break;
+                        case 10107:
+                            if(isset($this->sumaniobudgetonz[11]->anio_budget) && isset($this->sumaniobudgetton[13]->anio_budget))
+                            {
+                                $au = $this->sumaniobudgetonz[11]->anio_budget;
+                                $min = $this->sumaniobudgetton[13]->anio_budget;
+                            }  
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10108:
+                            $anio_budget = $this->sumaniobudgetonz[11];
+                        break;
+                        case 10109: 
+                            $anio_budget = $this->sumaniobudgetton[14];
+                        break;
+                        case 10110: 
+                            $anio_budget = $this->sumaniobudgetton[15];
+                        break;
+                        case 10111: 
+                            $anio_budget = $this->sumaniobudgetton[16];
+                        break;
+                        case 10112: 
+                            $anio_budget = $this->sumaniobudgetton[17];
+                        break;
+                        case 10113: 
+                            $anio_budget = $this->sumaniobudgetton[18];
+                        break;
+                        case 10114:
+                            $anio_budget = $this->avganiobudgetpor[0];
+                        break;
+                        case 10115:
+                            $anio_budget = $this->avganiobudgetpor[1];
+                        break;
+                        case 10116:
+                            $anio_budget = $this->avganiobudgetpor[2];
+                        break;
+                        default:
+                            return '-';
+                        break;
+                    }
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+                    if(isset($anio_budget->anio_budget))
+                    {
+                        if ($anio_budget->anio_budget > 0)
+                        {
+                            $m_budget = $anio_budget->anio_budget;
+                            if($m_budget > 100)
+                            {
+                                return number_format(round($m_budget), 0, '.', ',');
                             }
                             else
                             {
-                                return '-';
+                                return number_format($m_budget, 2, '.', ',');
                             }
                         }
                         else
@@ -5363,169 +3522,8 @@ class SendDailyReportCombinado extends Command
                     }
                     else
                     {
-                        if (in_array($data->variable_id, $this->sumarray))
-                        {
-                            $anio_budget= DB::select(
-                                'SELECT YEAR(fecha) as year, SUM(valor) as anio_budget
-                                FROM [dbo].[budget]
-                                WHERE variable_id = ?
-                                AND  YEAR(fecha) = ?
-                                AND  DATEPART(y, fecha) <= ?
-                                GROUP BY YEAR(fecha)', 
-                                [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                            );
-                            if(isset($anio_budget[0]->anio_budget))
-                            {
-                                $a_budget = $anio_budget[0]->anio_budget;
-                                if($a_budget > 100)
-                                {
-                                    return number_format(round($a_budget), 0, '.', ',');
-                                }
-                                else
-                                {
-                                    return number_format($a_budget, 2, '.', ',');
-                                }
-                            }
-                            else
-                            {
-                                return '-';
-                            }
-                        }
-                        else
-                        {
-                            if (in_array($data->variable_id, $this->promarray))//revisar si variable 10016 corresponde a este grupo
-                            {
-                                //Promedio valores <>0
-                                $anio_budget= DB::select(
-                                    'SELECT YEAR(fecha) as year, AVG(valor) as anio_budget
-                                    FROM [dbo].[budget]
-                                    WHERE variable_id = ?
-                                    AND  YEAR(fecha) = ?
-                                    AND  DATEPART(y, fecha) <= ?
-                                    AND valor <> 0
-                                    GROUP BY YEAR(fecha)', 
-                                    [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                );
-                                if(isset($anio_budget[0]->anio_budget))
-                                {
-                                    $a_budget = $anio_budget[0]->anio_budget;
-                                    if($a_budget > 100)
-                                    {
-                                        return number_format(round($a_budget), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($a_budget, 2, '.', ',');
-                                    }
-                                }
-                                else
-                                {
-                                    return '-';
-                                }
-
-                            }
-                            else
-                            {
-                                if (in_array($data->variable_id, $this->divarray))
-                                {
-                                    switch($data->variable_id)
-                                    {
-                                        case 10006:                                       
-                                            //10006	MMSA_TP_Productividad t/h                    
-                                            //sumatoria.anual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.anual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
-                                            $suma= $this->sumaniobudget10005;                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10062
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10013:                                       
-                                            //10013 MMSA_HPGR_Productividad t/h                   
-                                            //sumatoria.anual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.anual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
-                                            $suma= $this->sumaniobudget10011;                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10063
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10020:                                       
-                                            //10020 MMSA_AGLOM_Productividad t/h                  
-                                            //sumatoria.anual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.anual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
-                                            $suma= $this->sumaniobudget10019;                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10064
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                        case 10032:                                       
-                                            //10032 MMSA_APILAM_STACKER_Productividad t/h                 
-                                            //sumatoria.anual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.anual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
-                                            $suma= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10031
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            );                                     
-                                            $suma2= DB::select(
-                                                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                                                FROM [dbo].[budget]
-                                                WHERE variable_id = 10065
-                                                AND  YEAR(fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                GROUP BY YEAR(fecha)', 
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                            ); 
-                                        break;
-                                    }                            
-                                    if(isset($suma[0]->suma) && isset($suma2[0]->suma))
-                                    {
-                                        if ($suma2[0]->suma > 0)
-                                        {
-                                            $a_budget = $suma[0]->suma/$suma2[0]->suma;
-                                            if($a_budget > 100)
-                                            {
-                                                return number_format(round($a_budget), 0, '.', ',');
-                                            }
-                                            else
-                                            {
-                                                return number_format($a_budget, 2, '.', ',');
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return '-';
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return '-';
-                                    }
-                                }
-                                else
-                                {
-                                    return $data->variable_id;
-                                }
-                            }
-                        }
-                    } 
+                        return '-';
+                    }
                 })
                 ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','mes_real','mes_budget','trimestre_real','anio_real'])
                 ->make(true);
@@ -6089,8 +4087,8 @@ class SendDailyReportCombinado extends Command
 
                 $this->avgtrirealpor =
                     DB::select(
-                        'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                        (SELECT variable_id, AVG(valor) AS mes_real
+                        'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
+                        (SELECT variable_id, AVG(valor) AS tri_real
                         FROM [dbo].[data]
                         WHERE variable_id IN (10114,10115,10116)
                         AND  DATEPART(QUARTER, fecha) = '.$quarter.'
@@ -6541,8 +4539,8 @@ class SendDailyReportCombinado extends Command
 
                 $this->avganiorealpor =
                 DB::select(
-                    'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                    (SELECT variable_id, AVG(valor) AS mes_real
+                    'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
+                    (SELECT variable_id, AVG(valor) AS anio_real
                     FROM [dbo].[data]
                     WHERE variable_id IN (10114,10115,10116)
                     AND  YEAR(fecha) = '.$year.'
@@ -6788,7 +4786,7 @@ class SendDailyReportCombinado extends Command
                 );
                 $this->avganiobudgetpor =
                 DB::select(
-                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS trimestre_budget FROM
+                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
                     (SELECT variable_id, 
                     SUM(CASE	
                         WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
