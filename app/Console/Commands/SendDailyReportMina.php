@@ -3502,15 +3502,17 @@ class SendDailyReportMina extends Command
             $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
             if ( env('APP_ENV') == 'production')
             {
+                $data["subject"] = "DailyReport Mina ";
                 $data["email"] = "mmsa.dailyreport_mina@mansfieldmin.com";
             }
             else
             {
-                $data["email"] = "ejensen@mansfieldmin.com";
+                $data["subject"] = "DEV DailyReport Mina ";
+                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
             }
             Mail::send('mails.dailytablemina', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
-                $message->subject('DailyReport Mina '.$this->date);
+                $message->subject($data["subject"].$this->date);
                 $message->attachData($pdf->output(), 'DailyReportMina'.$this->date.'.pdf'); //attached pdf file
             });
         }
@@ -3518,15 +3520,17 @@ class SendDailyReportMina extends Command
         {
             if ( env('APP_ENV') == 'production')
             {
-                $data["email"] = ["ejensen@mansfieldmin.com", "dpereira@mansfieldmin.com"];
+                $data["subject"] = "DailyReport Mina ";
+                $data["email"] = ["mmsa.soporteit@mansfieldmin.com"];
             }
             else
             {
-                $data["email"] = "ejensen@mansfieldmin.com";
+                $data["subject"] = "DEV DailyReport Mina ";
+                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
             }
             Mail::send('mails.dailytableminafail', $data, function ($message) use ($data) {
                 $message->to($data['email']);
-                $message->subject('DailyReport Mina '.$this->date);
+                $message->subject($data["subject"].$this->date);
             });
         }
 
