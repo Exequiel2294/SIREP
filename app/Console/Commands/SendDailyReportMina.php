@@ -603,8 +603,8 @@ class SendDailyReportMina extends Command
 
                 $this->avgtrirealpor =
                     DB::select(
-                        'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                        (SELECT variable_id, AVG(valor) AS mes_real
+                        'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
+                        (SELECT variable_id, AVG(valor) AS tri_real
                         FROM [dbo].[data]
                         WHERE variable_id IN (10114,10115,10116)
                         AND  DATEPART(QUARTER, fecha) = '.$quarter.'
@@ -1055,8 +1055,8 @@ class SendDailyReportMina extends Command
 
                 $this->avganiorealpor =
                 DB::select(
-                    'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                    (SELECT variable_id, AVG(valor) AS mes_real
+                    'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
+                    (SELECT variable_id, AVG(valor) AS anio_real
                     FROM [dbo].[data]
                     WHERE variable_id IN (10114,10115,10116)
                     AND  YEAR(fecha) = '.$year.'
@@ -1302,7 +1302,7 @@ class SendDailyReportMina extends Command
                 );
                 $this->avganiobudgetpor =
                 DB::select(
-                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS trimestre_budget FROM
+                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
                     (SELECT variable_id, 
                     SUM(CASE	
                         WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
@@ -2881,13 +2881,13 @@ class SendDailyReportMina extends Command
                         $trimestre_budget = $this->sumtribudgetton[18];
                     break;
                     case 10114:
-                        $trimestre_budget = $this->avgmesbudgetpor[0];
+                        $trimestre_budget = $this->avgtribudgetpor[0];
                     break;
                     case 10115:
-                        $trimestre_budget = $this->avgmesbudgetpor[1];
+                        $trimestre_budget = $this->avgtribudgetpor[1];
                     break;
                     case 10116:
-                        $trimestre_budget = $this->avgmesbudgetpor[2];
+                        $trimestre_budget = $this->avgtribudgetpor[2];
                     break;
                     default:
                         return '-';
