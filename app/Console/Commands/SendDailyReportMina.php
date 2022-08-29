@@ -3487,10 +3487,22 @@ class SendDailyReportMina extends Command
         $registros= $tabla->getData()->data;
         if ($registros <> [] && $registros <> NULL)
         {
-            $pdf = Pdf::loadView('pdf.mina', compact('registros')); 
+            $tablacomentarios =
+            DB::select(
+                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                INNER JOIN users u
+                ON c.user_id = u.id
+                INNER JOIN comentario_area ca
+                ON c.area_id = ca.id
+                WHERE c.fecha = ?
+                AND ca.area_id = 2',
+                [$this->date]
+            );
+            $date = $this->date;
+            $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
             if ( env('APP_ENV') == 'production')
             {
-                $data["email"] = "mmsa.dailyreport_procesos@mansfieldmin.com";
+                $data["email"] = "mmsa.dailyreport_mina@mansfieldmin.com";
             }
             else
             {

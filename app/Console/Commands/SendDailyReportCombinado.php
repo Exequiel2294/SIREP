@@ -8974,10 +8974,21 @@ class SendDailyReportCombinado extends Command
         $registros = array_merge($registrosmina, $registrosprocesos);
         if ($registros <> [] && $registros <> NULL)
         {
-            $pdf = Pdf::loadView('pdf.combinado', compact('registros')); 
+            $tablacomentarios =
+            DB::select(
+                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                INNER JOIN users u
+                ON c.user_id = u.id
+                INNER JOIN comentario_area ca
+                ON c.area_id = ca.id
+                WHERE c.fecha = ?',
+                [$this->date]
+            );
+            $date = $this->date;
+            $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'date', 'tablacomentarios')); 
             if ( env('APP_ENV') == 'production')
             {
-                $data["email"] = "mmsa.dailyreport_procesos@mansfieldmin.com";
+                $data["email"] = "mmsa.dailyreport@mansfieldmin.com";
             }
             else
             {
