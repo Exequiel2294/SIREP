@@ -303,6 +303,28 @@
                     @endforeach
                 </tbody>
             </table>
+            <div style="margin-top: 2rem; margin-bottom: 2rem;">
+                <p class="left" style="margin-left:-125px; font-size: 18px;"> Comentarios</p>
+            </div>
+            
+            <table style="border-collapse: collapse; border-spacing: 0;" class="table table-bordered table-sm table-striped" style>
+                <thead>
+                    <tr>                    
+                        <th>Área</th>
+                        <th>Usuario</th>
+                        <th style="width:500px!important;">Comentario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($tablacomentarios as $registro)
+                        <tr>
+                            <td>{{$registro->area}}</td>
+                            <td>{{$registro->usuario}}</td>
+                            <td>{{$registro->comentario}}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </main>
     </body>
 </html>
