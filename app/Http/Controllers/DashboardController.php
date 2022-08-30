@@ -11096,7 +11096,7 @@ class DashboardController extends Controller
                         'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                         (SELECT variable_id, SUM(valor) AS mes_real
                         FROM [dbo].[data] 
-                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                         AND MONTH(fecha) = '.$month.'
                         AND DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
@@ -11104,7 +11104,7 @@ class DashboardController extends Controller
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                         ON d.variable_id = v.id
                         ORDER BY id ASC'
                     );
@@ -11470,7 +11470,7 @@ class DashboardController extends Controller
                         'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                         (SELECT variable_id, SUM(valor) AS tri_real
                         FROM [dbo].[data] 
-                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                         AND DATEPART(QUARTER, fecha) = '.$quarter.'
                         AND DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
@@ -11478,7 +11478,7 @@ class DashboardController extends Controller
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                         ON d.variable_id = v.id
                         ORDER BY id ASC'
                     );
@@ -11934,14 +11934,14 @@ class DashboardController extends Controller
                         'SELECT v.id AS variable_id, d.valor AS anio_real FROM
                         (SELECT variable_id, SUM(valor) AS valor
                         FROM [dbo].[data] 
-                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                         AND YEAR(fecha) = '.$year.'
                         AND DATEPART(y, fecha) <= '.$daypart.'
                         GROUP BY variable_id) AS d
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                         ON d.variable_id = v.id
                         ORDER BY id ASC'
                     );
@@ -13143,6 +13143,9 @@ class DashboardController extends Controller
                             case 10116:
                                 $mes_real = $this->avgmesrealpor[2];
                             break;
+                            case 10117: 
+                                $mes_real = $this->summesrealton[19];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -13686,6 +13689,9 @@ class DashboardController extends Controller
                             break;
                             case 10116:
                                 $tri_real = $this->avgtrirealpor[2];
+                            break;
+                            case 10117: 
+                                $tri_real = $this->sumtrirealton[19];
                             break;
                             default:
                                 return '-';
@@ -14239,6 +14245,9 @@ class DashboardController extends Controller
                             case 10116:
                                 $anio_real = $this->avganiorealpor[2];
                             break;
+                            case 10117: 
+                                $anio_real = $this->sumaniorealton[19];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -14603,7 +14612,7 @@ class DashboardController extends Controller
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, SUM(valor) AS mes_real
                     FROM [dbo].[data] 
-                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                     AND MONTH(fecha) = '.$month.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -14611,7 +14620,7 @@ class DashboardController extends Controller
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -14977,7 +14986,7 @@ class DashboardController extends Controller
                     'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                     (SELECT variable_id, SUM(valor) AS tri_real
                     FROM [dbo].[data] 
-                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                     AND DATEPART(QUARTER, fecha) = '.$quarter.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -14985,7 +14994,7 @@ class DashboardController extends Controller
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -15441,14 +15450,14 @@ class DashboardController extends Controller
                     'SELECT v.id AS variable_id, d.valor AS anio_real FROM
                     (SELECT variable_id, SUM(valor) AS valor
                     FROM [dbo].[data] 
-                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                     AND YEAR(fecha) = '.$year.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -16619,6 +16628,9 @@ class DashboardController extends Controller
                     case 10116:
                         $mes_real = $this->avgmesrealpor[2];
                     break;
+                    case 10117: 
+                        $mes_real = $this->summesrealton[19];
+                    break;
                     default:
                         return '-';
                     break;
@@ -17162,6 +17174,9 @@ class DashboardController extends Controller
                     break;
                     case 10116:
                         $tri_real = $this->avgtrirealpor[2];
+                    break;
+                    case 10117: 
+                        $tri_real = $this->sumtrirealton[19];
                     break;
                     default:
                         return '-';
@@ -17714,6 +17729,9 @@ class DashboardController extends Controller
                     break;
                     case 10116:
                         $anio_real = $this->avganiorealpor[2];
+                    break;
+                    case 10117: 
+                        $anio_real = $this->sumaniorealton[19];
                     break;
                     default:
                         return '-';
