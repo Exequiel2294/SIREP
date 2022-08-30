@@ -573,7 +573,7 @@ VARIABLES MINA POR AREA
             Valor Sacado de Tabla
 
 VARIABLES TIPO MINA
-    CALCULADAS - Tipo 4:
+    CALCULADAS - Tipo 8:
         10072:	Au ROM a Trituradora                -	03cparametro 00	- (oz)
         10075:	Au ROM Alta Ley a Stockpile         -	06cparametro 00	- (oz)
         10078:	Au ROM Media Ley a Stockpile        -	09cparametro 00	- (oz)
