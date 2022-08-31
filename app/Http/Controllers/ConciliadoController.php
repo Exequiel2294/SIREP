@@ -1473,6 +1473,10 @@ class ConciliadoController extends Controller
         else
         {
             $this->date = date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01'));
+            $daypart = (int)date('z', strtotime($this->date)) + 1;
+            $year = (int)date('Y', strtotime($this->date));
+            $month = (int)date('m', strtotime($this->date)); 
+            $day = (int)date('d', strtotime($this->date)); 
             if ($request->get('area_id') == 1)
             {
                 $this->procpparray = 
@@ -1555,6 +1559,8 @@ class ConciliadoController extends Controller
                         [date('m', strtotime($this->date))]
                     ); 
                 //FIN CALCULOS REUTILIZABLES
+
+
             }
             else
             {
@@ -1566,10 +1572,6 @@ class ConciliadoController extends Controller
                 [10114,10115,10116];
 
                 //INICIO CALCULOS REUTILIZABLES
-                    $daypart = (int)date('z', strtotime($this->date)) + 1;
-                    $year = (int)date('Y', strtotime($this->date));
-                    $month = (int)date('m', strtotime($this->date)); 
-                    $day = (int)date('d', strtotime($this->date)); 
                     //INICIO DIA REAL
                         $this->leydiareal =
                         DB::select(
@@ -1966,6 +1968,19 @@ class ConciliadoController extends Controller
                                 $newvalue = $oldvalue + $conciliado;
                                 
                             } 
+                            else
+                            {
+                                if (in_array($variable['variable_id'], $this->procpromarray))
+                                {
+                                    $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
+                                    $data =
+                                    DB::table('data')
+                                        ->where($this->where)
+                                        ->first();
+                                    $oldvalue = $data->valor;
+                                    $newvalue = $oldvalue + $conciliado;
+                                } 
+                            }
                         }
                         else
                         {
