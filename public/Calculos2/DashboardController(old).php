@@ -22,15 +22,14 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     { 
-        $where = ['area_id' => 1, 'estado' => 1];
-        $areas = ComentarioArea::orderBy('nombre')->where($where)->pluck('nombre','id')->toArray();
+        $areas = ComentarioArea::orderBy('nombre')->pluck('nombre','id')->toArray();
         return view('dashboard_process', compact('areas'));
     }
 
     public function index2(Request $request)
     { 
-        $where = ['area_id' => 2, 'estado' => 1];
-        $areas = ComentarioArea::orderBy('nombre')->where($where)->pluck('nombre','id')->toArray();
+        $where = ['estado' => 1, 'area' => 1];
+        $areas = ComentarioArea::orderBy('nombre')->pluck('nombre','id')->toArray();
         return view('dashboard_mine', compact('areas'));
     }
 
@@ -5560,17 +5559,9 @@ class DashboardController extends Controller
         } 
     }
 
-    public function getpdfprocesostable($date)
+    public function getpdfprocesostable()
     {
-        if ($date == 1)
-        {         
-            $this->date = date('Y-m-d',strtotime("-1 days"));
-        }
-        else
-        {   
-            $this->date = $date;
-        }
-
+        $this->date = date('Y-m-d',strtotime("-1 days"));
         $this->pparray = 
             [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
             10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
@@ -11061,19 +11052,7 @@ class DashboardController extends Controller
 
 
         $registros= $tabla->getData()->data;
-        $tablacomentarios =
-        DB::select(
-            'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
-            INNER JOIN users u
-            ON c.user_id = u.id
-            INNER JOIN comentario_area ca
-            ON c.area_id = ca.id
-            WHERE c.fecha = ?
-            AND ca.area_id = 1',
-            [$this->date]
-        );
-        $date = $this->date;
-        $pdf = Pdf::loadView('pdf.procesos', compact('registros', 'tablacomentarios','date'));
+        $pdf = Pdf::loadView('pdf.procesos', compact('registros'));
         return $pdf->download('DailyReportProcesos'.$this->date.'.pdf');
     }
 
@@ -11091,12 +11070,42 @@ class DashboardController extends Controller
                 $day = (int)date('d', strtotime($this->date));
                 $daypart = (int)date('z', strtotime($this->date)) + 1;
                 //INICIO MES REAL
+                    /*$this->summesrealton = 
+                    DB::select(
+                        'SELECT v.id AS variable_id,
+                        CASE
+                            WHEN c.mes_conciliado IS NULL THEN d.mes_real
+                            ELSE c.mes_conciliado
+                        END AS mes_real FROM
+                        (SELECT variable_id, SUM(valor) AS mes_real
+                        FROM [dbo].[data] 
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        AND MONTH(fecha) = '.$month.'
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND YEAR(fecha) = '.$year.'
+                        GROUP BY variable_id) AS d
+                        LEFT JOIN
+                        (SELECT variable_id, valor AS mes_conciliado
+                        FROM [dbo].[conciliado_data]
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND MONTH(fecha) = '.$month.'
+                        AND YEAR(fecha) = '.$year.'
+                        ) AS c
+                        ON d.variable_id = c.variable_id
+                        RIGHT JOIN
+                        (SELECT id 
+                        FROM [dbo].[variable] 
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                        ON d.variable_id = v.id
+                        ORDER BY v.id ASC'
+                    );*/
                     $this->summesrealton = 
                     DB::select(
                         'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                         (SELECT variable_id, SUM(valor) AS mes_real
                         FROM [dbo].[data] 
-                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                         AND MONTH(fecha) = '.$month.'
                         AND DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
@@ -11104,10 +11113,182 @@ class DashboardController extends Controller
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                         ON d.variable_id = v.id
                         ORDER BY id ASC'
                     );
+                    /*$this->summesrealonz =
+                    DB::select(
+                        'SELECT d.variable_id as variable_id,
+                        CASE
+                            WHEN c.mes_conciliado IS NULL THEN d.mes_real
+                            ELSE c.mes_conciliado
+                        END AS mes_real FROM
+                        (SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10070) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10071) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10073) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10074) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10076) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10077) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10079) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10080) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10082) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10083) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10085) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10086) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10088) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10089) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10093) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10094) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10097) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10098) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10100) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10101) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10103) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10104) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        UNION 
+                        SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10106) as A
+                        INNER JOIN   
+                        (SELECT fecha, valor
+                        FROM [dbo].[data]
+                        where variable_id = 10107) as B
+                        ON A.fecha = B.fecha
+                        WHERE MONTH(A.fecha) = '.$month.'
+                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.') AS d
+                        LEFT JOIN
+                        (SELECT variable_id, valor AS mes_conciliado
+                        FROM [dbo].[conciliado_data]                        
+                        WHERE variable_id IN (10072, 10075, 10078, 10081, 10084, 10090, 10095, 10099, 10102, 10105, 10108)
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND MONTH(fecha) = '.$month.'
+                        AND YEAR(fecha) = '.$year.'
+                        ) AS c
+                        ON d.variable_id = c.variable_id'
+                    );*/
                     $this->summesrealonz =
                     DB::select(
                         'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
@@ -11265,7 +11446,6 @@ class DashboardController extends Controller
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.''
                     );
-
                     $this->avgmesrealpor =
                     DB::select(
                         'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
@@ -11280,11 +11460,10 @@ class DashboardController extends Controller
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10114,10115,10116)) AS v
+                        WHERE id IN (10114, 10115, 10116)) AS v
                         ON d.variable_id = v.id
                         ORDER BY id ASC'
-                    );
-                
+                    );                
                 //FIN MES REAL
                 //INICIO MES BUDGET                
                     $this->summesbudgetton = 
@@ -11467,25 +11646,45 @@ class DashboardController extends Controller
                 //INICIO TRIMESTRE REAL
                     $this->sumtrirealton = 
                     DB::select(
-                        'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
-                        (SELECT variable_id, SUM(valor) AS tri_real
+                        'SELECT v.id AS variable_id, t.tri_real AS tri_real FROM
+                        (SELECT d.variable_id AS variable_id,
+                        SUM(CASE
+                            WHEN c.mes_conciliado IS NULL THEN d.mes_real
+                            ELSE c.mes_conciliado
+                        END) AS tri_real FROM
+                        (SELECT variable_id, MONTH(fecha) AS mes, SUM(valor) AS mes_real
                         FROM [dbo].[data] 
-                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                         AND DATEPART(QUARTER, fecha) = '.$quarter.'
                         AND DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
-                        GROUP BY variable_id) AS d
+                        GROUP BY variable_id, MONTH(fecha)) AS d
+                        LEFT JOIN
+                        (SELECT variable_id, MONTH(fecha) AS mes, valor AS mes_conciliado
+                        FROM [dbo].[conciliado_data]
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND DATEPART(QUARTER, fecha) = '.$quarter.'
+                        AND YEAR(fecha) = '.$year.') AS c
+                        ON c.variable_id = d.variable_id
+                        AND c.mes = d.mes
+                        GROUP BY d.variable_id) AS t
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
-                        ON d.variable_id = v.id
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                        ON t.variable_id = v.id
                         ORDER BY id ASC'
                     );
 
                     $this->sumtrirealonz =
                     DB::select(
-                        'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as tri_real FROM
+                        'SELECT d.variable_id as variable_id,
+                        SUM(CASE
+                            WHEN c.mes_conciliado IS NULL THEN d.mes_real
+                            ELSE c.mes_conciliado
+                        END) AS tri_real FROM
+                        (SELECT 10072 as variable_id, MONTH(A.fecha) AS mes, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10070) as A
@@ -11494,11 +11693,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10071) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10075, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10073) as A
@@ -11507,11 +11707,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10074) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10078, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10076) as A
@@ -11520,11 +11721,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10077) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10081, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10079) as A
@@ -11533,10 +11735,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10080) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.'UNION 
-                        SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION 
+                        SELECT 10084, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10082) as A
@@ -11545,11 +11749,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10083) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10087, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10085) as A
@@ -11558,11 +11763,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10086) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10090, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10088) as A
@@ -11571,11 +11777,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10089) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10095, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10093) as A
@@ -11584,11 +11791,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10094) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10099, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10097) as A
@@ -11597,11 +11805,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10098) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10102, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10100) as A
@@ -11610,11 +11819,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10101) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10105, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10103) as A
@@ -11623,11 +11833,12 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10104) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
                         AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10108, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10106) as A
@@ -11636,15 +11847,26 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10107) as B
                         ON A.fecha = B.fecha
-                        WHERE DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                        WHERE DATEPART(QUARTER, A.fecha) =  '.$quarter.'
                         AND DATEPART(y, A.fecha) <= '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.''
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)) AS d
+                        LEFT JOIN
+                        (SELECT variable_id, MONTH(fecha) AS mes, valor AS mes_conciliado
+                        FROM [dbo].[conciliado_data]                        
+                        WHERE variable_id IN (10072, 10075, 10078, 10081, 10084, 10090, 10095, 10099, 10102, 10105, 10108)
+                        AND DATEPART(QUARTER, fecha) = '.$quarter.'
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND YEAR(fecha) = '.$year.') AS c
+                        ON c.variable_id = d.variable_id
+                        AND c.mes = d.mes
+                        GROUP BY d.variable_id'
                     );
 
                     $this->avgtrirealpor =
                         DB::select(
-                            'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
-                            (SELECT variable_id, AVG(valor) AS tri_real
+                            'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
+                            (SELECT variable_id, AVG(valor) AS mes_real
                             FROM [dbo].[data]
                             WHERE variable_id IN (10114,10115,10116)
                             AND  DATEPART(QUARTER, fecha) = '.$quarter.'
@@ -11931,24 +12153,43 @@ class DashboardController extends Controller
                 //INICIO ANIO REAL
                     $this->sumaniorealton = 
                     DB::select(
-                        'SELECT v.id AS variable_id, d.valor AS anio_real FROM
-                        (SELECT variable_id, SUM(valor) AS valor
+                        'SELECT v.id AS variable_id, t.anio_real AS anio_real FROM
+                        (SELECT d.variable_id AS variable_id,
+                        SUM(CASE
+                            WHEN c.mes_conciliado IS NULL THEN d.mes_real
+                            ELSE c.mes_conciliado
+                        END) AS anio_real FROM
+                        (SELECT variable_id, MONTH(fecha) AS mes, SUM(valor) AS mes_real
                         FROM [dbo].[data] 
-                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
-                        AND YEAR(fecha) = '.$year.'
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                         AND DATEPART(y, fecha) <= '.$daypart.'
-                        GROUP BY variable_id) AS d
+                        AND YEAR(fecha) = '.$year.'
+                        GROUP BY variable_id, MONTH(fecha)) AS d
+                        LEFT JOIN
+                        (SELECT variable_id, MONTH(fecha) AS mes, valor AS mes_conciliado
+                        FROM [dbo].[conciliado_data]
+                        WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND YEAR(fecha) = '.$year.') AS c
+                        ON c.variable_id = d.variable_id
+                        AND c.mes = d.mes
+                        GROUP BY d.variable_id) AS t
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
-                        ON d.variable_id = v.id
+                        WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                        ON t.variable_id = v.id
                         ORDER BY id ASC'
                     );
 
                     $this->sumaniorealonz =
                     DB::select(
-                        'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                        'SELECT d.variable_id as variable_id,
+                        SUM(CASE
+                            WHEN c.mes_conciliado IS NULL THEN d.mes_real
+                            ELSE c.mes_conciliado
+                        END) AS tri_real FROM
+                        (SELECT 10072 as variable_id, MONTH(A.fecha) AS mes, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10070) as A
@@ -11957,10 +12198,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10071) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10075, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10073) as A
@@ -11969,10 +12211,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10074) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10078, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10076) as A
@@ -11981,10 +12224,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10077) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10081, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10079) as A
@@ -11993,10 +12237,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10080) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10084, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10082) as A
@@ -12005,10 +12250,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10083) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10087, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10085) as A
@@ -12017,10 +12263,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10086) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10090, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10088) as A
@@ -12029,10 +12276,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10089) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10095, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10093) as A
@@ -12041,10 +12289,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10094) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10099, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10097) as A
@@ -12053,10 +12302,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10098) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10102, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10100) as A
@@ -12065,10 +12315,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10101) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10105, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10103) as A
@@ -12077,10 +12328,11 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10104) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.'
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
                         UNION 
-                        SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
+                        SELECT 10108, MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) FROM
                         (SELECT fecha, valor
                         FROM [dbo].[data]
                         where variable_id = 10106) as A
@@ -12089,14 +12341,24 @@ class DashboardController extends Controller
                         FROM [dbo].[data]
                         where variable_id = 10107) as B
                         ON A.fecha = B.fecha
-                        WHERE YEAR(A.fecha) = '.$year.'
-                        AND DATEPART(y, A.fecha) <= '.$daypart.''
+                        WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                        AND YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)) AS d
+                        LEFT JOIN
+                        (SELECT variable_id, MONTH(fecha) AS mes, valor AS mes_conciliado
+                        FROM [dbo].[conciliado_data]
+                        WHERE variable_id IN (10072, 10075, 10078, 10081, 10084, 10090, 10095, 10099, 10102, 10105, 10108)
+                        AND DATEPART(y, fecha) <= '.$daypart.'
+                        AND YEAR(fecha) = '.$year.') AS c
+                        ON c.variable_id = d.variable_id
+                        AND c.mes = d.mes
+                        GROUP BY d.variable_id;'
                     );
 
                     $this->avganiorealpor =
                     DB::select(
-                        'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
-                        (SELECT variable_id, AVG(valor) AS anio_real
+                        'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
+                        (SELECT variable_id, AVG(valor) AS mes_real
                         FROM [dbo].[data]
                         WHERE variable_id IN (10114,10115,10116)
                         AND  YEAR(fecha) = '.$year.'
@@ -12342,7 +12604,7 @@ class DashboardController extends Controller
                     );
                     $this->avganiobudgetpor =
                     DB::select(
-                        'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
+                        'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS trimestre_budget FROM
                         (SELECT variable_id, 
                         SUM(CASE	
                             WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
@@ -12365,6 +12627,8 @@ class DashboardController extends Controller
                         ORDER BY id ASC'
                     );
                 //FIN ANIO BUDGET
+                //INICIO DATA CONCILIADA
+                //FIN DATA CONC
             //FIN CALCULOS REUTILIZABLES
 
             $where = ['variable.estado' => 1, 'categoria.area_id' => 2, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];
@@ -12383,7 +12647,6 @@ class DashboardController extends Controller
                                 'subcategoria.nombre as subcat',
                                 'variable.id as variable_id',
                                 'variable.nombre as variable', 
-                                'variable.tipo as tipo',
                                 'variable.orden as var_orden',
                                 'variable.unidad as unidad',
                                 'variable.export as var_export',
@@ -12494,25 +12757,7 @@ class DashboardController extends Controller
                                     WHERE  DATEPART(y, A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1]
                                 ); 
-                            break;    
-                            case 10087:
-                                //Au ROM a Leach Pad                 
-                                //(10082*10083 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10085) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10086) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1]
-                                ); 
-                            break;                         
+                            break;                            
                             case 10090:
                                 //Total Au Minado oz                  
                                 //(10088*10089 / 31.1035                                     
@@ -13143,9 +13388,6 @@ class DashboardController extends Controller
                             case 10116:
                                 $mes_real = $this->avgmesrealpor[2];
                             break;
-                            case 10117: 
-                                $mes_real = $this->summesrealton[19];
-                            break;
                             default:
                                 return '-';
                             break;
@@ -13690,9 +13932,6 @@ class DashboardController extends Controller
                             case 10116:
                                 $tri_real = $this->avgtrirealpor[2];
                             break;
-                            case 10117: 
-                                $tri_real = $this->sumtrirealton[19];
-                            break;
                             default:
                                 return '-';
                             break;
@@ -13958,13 +14197,13 @@ class DashboardController extends Controller
                                 $trimestre_budget = $this->sumtribudgetton[18];
                             break;
                             case 10114:
-                                $trimestre_budget = $this->avgtribudgetpor[0];
+                                $trimestre_budget = $this->avgmesbudgetpor[0];
                             break;
                             case 10115:
-                                $trimestre_budget = $this->avgtribudgetpor[1];
+                                $trimestre_budget = $this->avgmesbudgetpor[1];
                             break;
                             case 10116:
-                                $trimestre_budget = $this->avgtribudgetpor[2];
+                                $trimestre_budget = $this->avgmesbudgetpor[2];
                             break;
                             default:
                                 return '-';
@@ -14244,9 +14483,6 @@ class DashboardController extends Controller
                             break;
                             case 10116:
                                 $anio_real = $this->avganiorealpor[2];
-                            break;
-                            case 10117: 
-                                $anio_real = $this->sumaniorealton[19];
                             break;
                             default:
                                 return '-';
@@ -14564,21 +14800,14 @@ class DashboardController extends Controller
                     ->addColumn('action', function($data)
                     {
                         $button = '';  
-                        if ($data->tipo == 4)
+                        if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
                         {
-                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Información Variable"><i style="color:#0F62AC;" class="fa-lg fas fa-info-circle"></i></a>';
-                        }
+                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                        }     
                         else
                         {
-                            if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin']))
-                            {
-                                $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
-                            }     
-                            else
-                            {
-                                $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
-                            }  
-                        }                 
+                            $button .= '<a href="javascript:void(0)" name="edit" class="btn-action-table edit2" title="No tiene los permisos necesarios"><i style="color:#0F62AC;" class="fa-lg fa fa-edit"></i></a>';
+                        }                   
                         return $button;
                     })
                     ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
@@ -14587,16 +14816,9 @@ class DashboardController extends Controller
         } 
     }
 
-    public function getpdfminatable($date)
+    public function getpdfminatable()
     {
-        if ($date == 1)
-        {         
-            $this->date = date('Y-m-d',strtotime("-1 days"));
-        }
-        else
-        {   
-            $this->date = $date;
-        }
+        $this->date = date('Y-m-d',strtotime("-1 days")); 
         $this->ley = 
             [10071, 10074, 10077, 10080, 10083, 10086, 10089, 10094, 10098, 10101, 10104, 10107]; 
         
@@ -14612,7 +14834,7 @@ class DashboardController extends Controller
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, SUM(valor) AS mes_real
                     FROM [dbo].[data] 
-                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
+                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND MONTH(fecha) = '.$month.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -14620,7 +14842,7 @@ class DashboardController extends Controller
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
+                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -14986,7 +15208,7 @@ class DashboardController extends Controller
                     'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                     (SELECT variable_id, SUM(valor) AS tri_real
                     FROM [dbo].[data] 
-                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
+                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND DATEPART(QUARTER, fecha) = '.$quarter.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -14994,7 +15216,7 @@ class DashboardController extends Controller
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
+                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -15159,8 +15381,8 @@ class DashboardController extends Controller
 
                 $this->avgtrirealpor =
                     DB::select(
-                        'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
-                        (SELECT variable_id, AVG(valor) AS tri_real
+                        'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
+                        (SELECT variable_id, AVG(valor) AS mes_real
                         FROM [dbo].[data]
                         WHERE variable_id IN (10114,10115,10116)
                         AND  DATEPART(QUARTER, fecha) = '.$quarter.'
@@ -15450,14 +15672,14 @@ class DashboardController extends Controller
                     'SELECT v.id AS variable_id, d.valor AS anio_real FROM
                     (SELECT variable_id, SUM(valor) AS valor
                     FROM [dbo].[data] 
-                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
+                    WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085,10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
                     AND YEAR(fecha) = '.$year.'
                     AND DATEPART(y, fecha) <= '.$daypart.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
+                    WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -15611,8 +15833,8 @@ class DashboardController extends Controller
 
                 $this->avganiorealpor =
                 DB::select(
-                    'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
-                    (SELECT variable_id, AVG(valor) AS anio_real
+                    'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
+                    (SELECT variable_id, AVG(valor) AS mes_real
                     FROM [dbo].[data]
                     WHERE variable_id IN (10114,10115,10116)
                     AND  YEAR(fecha) = '.$year.'
@@ -15858,7 +16080,7 @@ class DashboardController extends Controller
                 );
                 $this->avganiobudgetpor =
                 DB::select(
-                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
+                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS trimestre_budget FROM
                     (SELECT variable_id, 
                     SUM(CASE	
                         WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
@@ -16628,9 +16850,6 @@ class DashboardController extends Controller
                     case 10116:
                         $mes_real = $this->avgmesrealpor[2];
                     break;
-                    case 10117: 
-                        $mes_real = $this->summesrealton[19];
-                    break;
                     default:
                         return '-';
                     break;
@@ -17175,9 +17394,6 @@ class DashboardController extends Controller
                     case 10116:
                         $tri_real = $this->avgtrirealpor[2];
                     break;
-                    case 10117: 
-                        $tri_real = $this->sumtrirealton[19];
-                    break;
                     default:
                         return '-';
                     break;
@@ -17443,13 +17659,13 @@ class DashboardController extends Controller
                         $trimestre_budget = $this->sumtribudgetton[18];
                     break;
                     case 10114:
-                        $trimestre_budget = $this->avgtribudgetpor[0];
+                        $trimestre_budget = $this->avgmesbudgetpor[0];
                     break;
                     case 10115:
-                        $trimestre_budget = $this->avgtribudgetpor[1];
+                        $trimestre_budget = $this->avgmesbudgetpor[1];
                     break;
                     case 10116:
-                        $trimestre_budget = $this->avgtribudgetpor[2];
+                        $trimestre_budget = $this->avgmesbudgetpor[2];
                     break;
                     default:
                         return '-';
@@ -17729,9 +17945,6 @@ class DashboardController extends Controller
                     break;
                     case 10116:
                         $anio_real = $this->avganiorealpor[2];
-                    break;
-                    case 10117: 
-                        $anio_real = $this->sumaniorealton[19];
                     break;
                     default:
                         return '-';
@@ -18050,19 +18263,7 @@ class DashboardController extends Controller
             ->make(true);             
          
         $registros= $tabla->getData()->data;
-        $tablacomentarios =
-        DB::select(
-            'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
-            INNER JOIN users u
-            ON c.user_id = u.id
-            INNER JOIN comentario_area ca
-            ON c.area_id = ca.id
-            WHERE c.fecha = ?
-            AND ca.area_id = 2',
-            [$this->date]
-        );
-        $date = $this->date;
-        $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
+        $pdf = Pdf::loadView('pdf.mina', compact('registros'));
         return $pdf->download('DailyReportMina'.$this->date.'.pdf');
     }
 
@@ -18354,234 +18555,6 @@ class DashboardController extends Controller
                             <ol type="A">
                                 <li>LIXI_Solución PLS</li>
                                 <li>LIXI_Ley Au Solución PLS</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10072:	//Au ROM a Trituradora (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Mineral ROM a Trituradora</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10075:	//Au ROM Alta Ley a Stockpile (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Mineral ROM Alta Ley a Stockpile</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10078:	//Au ROM Media Ley a Stockpile (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Mineral ROM Media Ley a Stockpile</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10081:	//Au ROM Baja Ley a Stockpile (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Mineral ROM Baja Ley a Stockpile</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10084:	//Total Au ROM a Stockpiles (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Total Mineral ROM a Stockpiles</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10087:	//Au ROM a Leach Pad (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Mineral ROM a Leach Pad</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10090:	//Total Au Minado (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Total Mineral Minado</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10095:	//Au Alta Ley Stockpile a Trituradora (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Alta Ley Stockpile a Trituradora</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10099:	//Au Media Ley Stockpile a Trituradora (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Media Ley Stockpile a Trituradora</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10102:	//Au Baja Ley Stockpile a Trituradora (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Baja Ley Stockpile a Trituradora</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10105:	//Au de Stockpiles a Trituradora (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Total de Stockpiles a Trituradora</li>
-                                <li>Ley Au</li>
-                            </ol>
-                        </div>
-                        <div style="text-align:left;">
-                            <h3>Calculo Asociado:</h3>
-                            <ul>
-                                <li>( A * B )/31.1035</li>
-                            </ul>
-                        </div>
-                    </div>';
-                break;
-                case 10108:	//Au (ROM+Stockpiles) a Trituradora (oz)
-                    $data['html'] = 
-                    '<div>
-                        <h2 style="margin-bottom:1.5rem;">Esta Variable es Calculada</h2>  
-                        <div style="text-align:left;">
-                            <h3>Variables asociadas:</h3>
-                            <ol type="A">
-                                <li>Total Mineral (ROM+Stockpiles) a Trituradora</li>
-                                <li>Ley Au</li>
                             </ol>
                         </div>
                         <div style="text-align:left;">

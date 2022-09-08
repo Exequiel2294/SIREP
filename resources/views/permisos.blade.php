@@ -439,6 +439,7 @@
                 },
                 columns: [
                     {data:'id', name:'id'},
+                    {data:'area', name:'area'},
                     {data:'nombre', name:'nombre'},
                     {data:'descripcion', name:'descripcion'}
                 ],
@@ -482,12 +483,21 @@
                 },
                 columns: [
                     {data:'id', name:'id' , visible: false, orderable: false,searchable: false},
-                    {data:'descripcion', name:'descripcion'},
+                    {data:'area', name:'area'},
+                    {data:'descripcion', name:'descripcion', 
+                        render: function(data,type,row){
+                            if (row['area_id'] == 2)
+                            {
+                                return row['nombre'];
+                            }
+                            return data;
+                        }
+                    },
                     {data:'action', name: 'action', orderable: false,searchable: false, width:'50px'}
                 ],
                 columnDefs: [
                     {
-                        targets:2,
+                        targets:3,
                         className: 'dt-body-center',
                         width: 50
                     }
@@ -658,6 +668,7 @@
                             <thead>
                                 <tr>    
                                     <th>Id</th>
+                                    <th>Área</th>
                                     <th>Variable</th>
                                     <th>Descripción</th>           
                                 </tr>
@@ -688,6 +699,7 @@
                             <thead>
                                 <tr>  
                                     <th>Id</th>
+                                    <th>Área</th>
                                     <th>Descripción</th>   
                                     <th style="width:50px!important;"></th>          
                                 </tr>

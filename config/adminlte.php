@@ -228,15 +228,25 @@ return [
 
         ['header' => 'Menu'],
         [
-            'text' => 'dashboard',
+            'text' => 'dashboard_process',
             'url'  => 'dashboard',
-            'icon' => 'nav-icon fas fa-tachometer-alt',
+            'icon' => 'nav-icon fas fa-table',
+        ],
+        [
+            'text' => 'dashboard_mine',
+            'url'  => 'dashboard_mine',
+            'icon' => 'nav-icon fas fa-table',
         ],
         [
             'text' => 'historial',
             'url'  => 'historial',
             'icon' => 'nav-icon fas fa-book',
         ],
+        // [
+        //     'text' => 'conciliado',
+        //     'url'  => 'conciliado',
+        //     'icon' => 'nav-icon fas fa-sync-alt',
+        // ],
         [
             'text' => 'Control por Variable',
             'url'  => 'historial_por_variable',
