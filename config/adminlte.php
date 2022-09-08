@@ -242,11 +242,11 @@ return [
             'url'  => 'historial',
             'icon' => 'nav-icon fas fa-book',
         ],
-        [
-            'text' => 'conciliado',
-            'url'  => 'conciliado',
-            'icon' => 'nav-icon fas fa-sync-alt',
-        ],
+        // [
+        //     'text' => 'conciliado',
+        //     'url'  => 'conciliado',
+        //     'icon' => 'nav-icon fas fa-sync-alt',
+        // ],
         [
             'text' => 'Control por Variable',
             'url'  => 'historial_por_variable',
