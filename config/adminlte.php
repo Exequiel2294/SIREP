@@ -238,6 +238,11 @@ return [
             'icon' => 'nav-icon fas fa-book',
         ],
         [
+            'text' => 'Control por Variable',
+            'url'  => 'historial_por_variable',
+            'icon' => 'nav-icon fas fa-file-invoice',
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],
