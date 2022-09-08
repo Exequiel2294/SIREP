@@ -42,6 +42,7 @@ class SendDailyReportCombinado extends Command
     public function handle()
     {
         $this->date = date('Y-m-d',strtotime("-1 days"));
+        //$this->date = '2022-09-02';
         $this->pparray = 
             [10004, 10010, 10012, 10015, 10018, 10024, 10030, 10033, 10035, 10036, 
             10040, 10041, 10042, 10043, 10044, 10049, 10050, 10051, 10054, 10055, 
@@ -8994,6 +8995,7 @@ class SendDailyReportCombinado extends Command
                 [$this->date]
             );
             $date = $this->date;
+            //return view('pdf.combinado', compact('registros', 'date', 'tablacomentarios'));
             $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'date', 'tablacomentarios')); 
             if ( env('APP_ENV') == 'production')
             {
