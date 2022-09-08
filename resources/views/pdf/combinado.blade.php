@@ -274,7 +274,7 @@
                                         <td class="yellow_per text-center">{{$dia_por}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043)
+                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
                                         @if ($dia_por <= 100)
                                             <td class="green_per text-center">{{$dia_por}}%</td>
                                         @elseif ($dia_por >= 110)
@@ -311,7 +311,7 @@
                                          <td class="yellow_per text-center">{{$mes_por}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043)
+                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
                                         @if ($mes_por <= 100)
                                              <td class="green_per text-center">{{$mes_por}}%</td>
                                         @elseif ($mes_por >= 110)
@@ -358,7 +358,7 @@
                                          <td class="yellow_per text-center">{{$trimestre_por}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043)
+                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
                                         @if ($trimestre_por <= 100)
                                              <td class="green_per text-center">{{$trimestre_por}}%</td>
                                         @elseif ($trimestre_por >= 110)
@@ -407,7 +407,7 @@
                                          <td class="yellow_per text-center">{{$anio_por}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043)
+                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
                                         @if ($anio_por <= 100)
                                              <td class="green_per text-center">{{$anio_por}}%</td>
                                          @elseif ($anio_por >= 110)
