@@ -379,6 +379,35 @@
             });
         })
         
+        //Descarga PFD Completo
+        $(document).on('click','.expPdf', function(event) {   
+            event.preventDefault();
+            let date = moment(date_selected).format('YYYY-MM-DD');
+            let date2 = moment(date_selected).format('DD-MM-YYYY');
+            let url = '{{ route("getpdfcompleto", ":date" )}}';
+            url = url.replace(':date', date);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function(){
+                    $('#modal-overlay').modal({
+                        show: true,
+                        backdrop: 'static',
+                        keyboard:false,
+                    });
+                }
+            }).done(function(res){
+
+                const link = document.createElement('a');
+                link.href = res.ruta;
+                const nom = 'Daiy Report Completo ' + date2 + '.pdf';
+                link.setAttribute('download',nom);
+                document.body.appendChild(link);
+                link.click();
+                $('#modal-overlay').modal('hide')
+            }) 
+        });
 
         /* DATATABLES */
         $(document).ready(function(){            
@@ -463,13 +492,24 @@
                         }
                     }, 
                     {
-                        extend: 'pdfHtml5',
-                        action: function ( e, dt, button, config ) {
-                            let date = moment(date_selected).format('YYYY-MM-DD');
-                            let url = '{{ route("dashboard.getpdfminatable", ":date" )}}';
-                            url = url.replace(':date', date);
-                            window.location.href = url;
-                        }   
+                        //extend: 'pdfHtml5',
+                        extend: 'collection',
+                        text: 'PDF',
+                        buttons:[
+                            {   text: 'Daily Mina',
+                                action: function ( e, dt, button, config ) {
+                                    let date = moment(date_selected).format('YYYY-MM-DD');
+                                    let url = '{{ route("dashboard.getpdfminatable", ":date" )}}';
+                                    url = url.replace(':date', date);
+                                    window.location.href = url;
+                                } 
+                            },
+                            {
+                                text:'Daily Full Mina y Planta',
+                                className: 'expPdf',
+                            },
+                        ],
+                          
                     },
                     {
                         extend: 'print',
@@ -589,15 +629,15 @@
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
                                     switch(true)
                                     {
-                                        case $dia_porcentaje < 90:
+                                        case $dia_porcentaje <= 90:
                                             //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                             return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
                                         break;
-                                        case $dia_porcentaje > 89 && $dia_porcentaje <100 :
+                                        case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
                                             //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                             return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
                                         break;
-                                        case  $dia_porcentaje > 99 :
+                                        case  $dia_porcentaje >= 95 :
                                             //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                             return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
                                         break;
@@ -701,13 +741,13 @@
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
                                     switch(true)
                                     {
-                                        case $mes_porcentaje < 90:
+                                        case $mes_porcentaje <= 90:
                                             return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
                                         break;
-                                        case $mes_porcentaje > 89 && $mes_porcentaje <100 :
+                                        case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
                                             return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                         break;
-                                        case  $mes_porcentaje > 99 :
+                                        case  $mes_porcentaje >= 95 :
                                             return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                         break;
                                         default:
@@ -810,13 +850,13 @@
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
                                     switch(true)
                                     {
-                                        case $trimestre_porcentaje < 90:
+                                        case $trimestre_porcentaje <= 90:
                                             return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
                                         break;
-                                        case $trimestre_porcentaje > 89 && $trimestre_porcentaje <100 :
+                                        case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
                                             return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
                                         break;
-                                        case  $trimestre_porcentaje > 99 :
+                                        case  $trimestre_porcentaje >= 95 :
                                             return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                         break;
                                         default:
@@ -919,13 +959,13 @@
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
                                     switch(true)
                                     {
-                                        case $anio_porcentaje < 90:
+                                        case $anio_porcentaje <= 90:
                                             return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
                                         break;
-                                        case $anio_porcentaje > 89 && $anio_porcentaje <100 :
+                                        case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
                                             return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
                                         break;
-                                        case  $anio_porcentaje > 99 :
+                                        case  $anio_porcentaje >= 95 :
                                             return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
                                         break;
                                         default:
@@ -1634,5 +1674,25 @@
         </div>
     </div>
     {{-- MODAL --}}
+
+    {{-- Modal para descargar de PDF --}}
+    <div class="modal fade" id="modal-overlay" data-target="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync fa-spin"></i>
+                </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Descargando...</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Generando Daily Report...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @stop

@@ -23,6 +23,7 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/sl-1.3.4/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{asset("assets/DataTables/Select-1.3.4/css/select.dataTables.min.css")}}"/>
+    
     <style>
 
         /* Section content-header */
@@ -317,6 +318,7 @@
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script> 
     <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
+    
     <script>
         var idx = -1;        
 
@@ -332,6 +334,8 @@
             350);
         });
         /*PRESS NAV-LINK BUTTON*/
+
+        
 
         var date_selected = moment().subtract(1, "days");
         $(function () {
@@ -357,9 +361,41 @@
             });
         })
         
+        //Descarga PFD Completo
+        $(document).on('click','.expPdf', function(event) {
+                
+                event.preventDefault();
+                let date = moment(date_selected).format('YYYY-MM-DD');
+                let date2 = moment(date_selected).format('DD-MM-YYYY');
+                let url = '{{ route("getpdfcompleto", ":date" )}}';
+                url = url.replace(':date', date);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend: function(){
+                        $('#modal-overlay').modal({
+                            show: true,
+                            backdrop: 'static',
+                            keyboard:false,
+                        });
+                    }
+                }).done(function(res){
+
+                    const link = document.createElement('a');
+                    link.href = res.ruta;
+                    const nom = 'Daiy Report Completo ' + date2 + '.pdf';
+                    link.setAttribute('download',nom);
+                    document.body.appendChild(link);
+                    link.click();
+                    $('#modal-overlay').modal('hide')
+                })
+                
+        });
 
         /* DATATABLES */
-        $(document).ready(function(){            
+        $(document).ready(function(){   
+                  
             
             var collapsedGroups = {};
             if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().local().format('HH') < 11)
@@ -378,6 +414,9 @@
             {
                 return moment(date_selected).format('YYYY-MM-DD');
             }
+
+            
+
             var tabledata = $("#procesos-table").DataTable({
                 dom:    "<'datatables-p'<'datatables-button'B>>" + 
                         "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
@@ -441,13 +480,25 @@
                         }
                     }, 
                     {
-                        extend: 'pdfHtml5',
-                        action: function ( e, dt, button, config ) {
-                            let date = moment(date_selected).format('YYYY-MM-DD');
-                            let url = '{{ route("dashboard.getpdfprocesostable", ":date" )}}';
-                            url = url.replace(':date', date);
-                            window.location.href = url;
-                        }   
+                        //extend: 'pdfHtml5',
+                        extend: 'collection',
+                        text: 'PDF',
+                        buttons:[
+                            {
+                                text:'Daily Planta',
+                                action: function ( e, dt, button, config) {
+                                    let date = moment(date_selected).format('YYYY-MM-DD');
+                                    let url = '{{ route("dashboard.getpdfprocesostable", ":date" )}}';
+                                    url = url.replace(':date', date);
+                                    window.location.href = url;
+                                },
+                            },
+                            {
+                                text:'Daily Full Mina y Planta',
+                                className: 'expPdf',
+                            },
+                        ],
+                          
                     },
                     {
                         extend: 'print',
@@ -561,15 +612,15 @@
                                         
                                         switch(true)
                                         {
-                                            case $dia_porcentaje <= 100:
+                                            case $dia_porcentaje <= 90:
                                                 //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
-                                            case $dia_porcentaje > 100 && $dia_porcentaje <110 :
+                                            case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
                                                 //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
-                                            case  $dia_porcentaje >= 110 :
+                                            case  $dia_porcentaje >= 95 :
                                                 //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
@@ -606,15 +657,15 @@
                                         }else{
                                             switch(true)
                                             {
-                                                case $dia_porcentaje < 90:
+                                                case $dia_porcentaje <= 90:
                                                     //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                     return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
                                                 break;
-                                                case $dia_porcentaje > 89 && $dia_porcentaje <100 :
+                                                case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
                                                     //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                     return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
                                                 break;
-                                                case  $dia_porcentaje > 99 :
+                                                case  $dia_porcentaje >= 95 :
                                                     //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                     return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
                                                 break;
@@ -689,15 +740,15 @@
                                     if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
                                         switch(true)
                                         {
-                                            case $mes_porcentaje <= 100:
+                                            case $mes_porcentaje <= 90:
                                                 //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
-                                            case $mes_porcentaje > 100 && $mes_porcentaje <110 :
+                                            case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
                                                 //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
-                                            case  $mes_porcentaje >= 110 :
+                                            case  $mes_porcentaje >= 95 :
                                                 //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
@@ -730,13 +781,13 @@
                                             }else{
                                                 switch(true)
                                                 {
-                                                    case $mes_porcentaje < 90:
+                                                    case $mes_porcentaje <= 90:
                                                         return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
                                                     break;
-                                                    case $mes_porcentaje > 89 && $mes_porcentaje <100 :
+                                                    case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
                                                         return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                                     break;
-                                                    case  $mes_porcentaje > 99 :
+                                                    case  $mes_porcentaje >= 95 :
                                                         return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                                     break;
                                                     default:
@@ -810,15 +861,15 @@
                                     if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
                                         switch(true)
                                         {
-                                            case $trimestre_porcentaje <= 100:
+                                            case $trimestre_porcentaje <= 90:
                                                 //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
-                                            case $trimestre_porcentaje > 100 && $trimestre_porcentaje <110 :
+                                            case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
                                                 //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
-                                            case  $trimestre_porcentaje >= 110 :
+                                            case  $trimestre_porcentaje >= 95 :
                                                 //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
@@ -850,13 +901,13 @@
                                         }else{
                                             switch(true)
                                             {
-                                                case $trimestre_porcentaje < 90:
+                                                case $trimestre_porcentaje <= 90:
                                                     return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
                                                 break;
-                                                case $trimestre_porcentaje > 89 && $trimestre_porcentaje <100 :
+                                                case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
                                                     return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
                                                 break;
-                                                case  $trimestre_porcentaje > 99 :
+                                                case  $trimestre_porcentaje >= 95 :
                                                     return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                                 break;
                                                 default:
@@ -931,15 +982,15 @@
 
                                         switch(true)
                                         {
-                                            case $anio_porcentaje <= 100:
+                                            case $anio_porcentaje <= 90:
                                                 //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
-                                            case $anio_porcentaje > 100 && $anio_porcentaje <110 :
+                                            case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
                                                 //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
-                                            case  $anio_porcentaje >= 110 :
+                                            case  $anio_porcentaje >= 95 :
                                                 //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
@@ -973,13 +1024,13 @@
 
                                             switch(true)
                                             {
-                                                case $anio_porcentaje < 90:
+                                                case $anio_porcentaje <= 90:
                                                     return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
                                                 break;
-                                                case $anio_porcentaje > 89 && $anio_porcentaje <100 :
+                                                case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
                                                     return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
                                                 break;
-                                                case  $anio_porcentaje > 99 :
+                                                case  $anio_porcentaje >= 95 :
                                                     return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
                                                 break;
                                                 default:
@@ -1043,6 +1094,7 @@
                 tabledata.draw();
             });
             /** */
+             
             
             var tablecomentario = $("#comentarios-table").DataTable({
                 dom:     "<'datatables-s'<'datatables-title'l><'datatables-btn-cargar'f>>" +
@@ -1207,6 +1259,7 @@
         });
         /* EDIT2 BUTTON */
 
+         
 
         /* DELETE BUTTON */  
         $(document).on('click', '.delete-comentario', function() {
@@ -1498,7 +1551,7 @@
     <div class="row" style="justify-content: center; overflow:auto;">
         <div class="generic-card">
             <div class="card">
-                <div class="generic-body">   
+                <div class="card-body"> 
                     <div class="alert alert-light alert-dismissible fade show" style="display:none;" role="alert">
                         <p><strong>Advertencia!</strong>&nbsp;Es posible que algunos datos aún no se encuentren cargados.</p>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -1538,7 +1591,9 @@
                         </thead>  
                     </table>                
                 </div>
+                
             </div>
+            
         </div> 
         @csrf
     </div>
@@ -1675,5 +1730,25 @@
         </div>
     </div>
     {{-- MODAL --}}
+
+    {{-- Modal para descargar de PDF --}}
+    <div class="modal fade" id="modal-overlay" data-target="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync fa-spin"></i>
+                </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Descargando...</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Generando Daily Report...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @stop
