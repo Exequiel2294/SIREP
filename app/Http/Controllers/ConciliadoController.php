@@ -127,10 +127,8 @@ class ConciliadoController extends Controller
                                 })
                                 ->where($where)
                                 ->select(
-                                    'categoria.orden as cat_orden',
-                                    'categoria.nombre as cat',
                                     'subcategoria.orden as subcat_orden',
-                                    'subcategoria.nombre as subcat',
+                                    'subcategoria.descripcion as subcat',
                                     'variable.id as variable_id',
                                     'variable.nombre as variable', 
                                     'variable.orden as var_orden',
@@ -141,10 +139,6 @@ class ConciliadoController extends Controller
                                 ->get();
                                 
                 return datatables()->of($table)  
-                        ->addColumn('categoria', function($data)
-                        {         
-                            return '<span style="visibility: hidden">'.$data->cat_orden.'</span>'.$data->cat;
-                        })
                         ->addColumn('subcategoria', function($data)
                         {         
                             return '<span style="visibility: hidden">'.$data->subcat_orden.'</span>'.$data->subcat;
@@ -938,7 +932,7 @@ class ConciliadoController extends Controller
                                 }
                             } 
                         })
-                        ->rawColumns(['categoria','subcategoria','mes_real'])
+                        ->rawColumns(['subcategoria','mes_real'])
                         ->addIndexColumn()
                         ->make(true);
             }
@@ -957,7 +951,7 @@ class ConciliadoController extends Controller
                             'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                             (SELECT variable_id, SUM(valor) AS mes_real
                             FROM [dbo].[data] 
-                            WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                            WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)
                             AND MONTH(fecha) = '.$month.'
                             AND DATEPART(y, fecha) <= '.$daypart.'
                             AND YEAR(fecha) = '.$year.'
@@ -965,7 +959,7 @@ class ConciliadoController extends Controller
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                            WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117)) AS v
                             ON d.variable_id = v.id
                             ORDER BY id ASC'
                         );
@@ -1418,6 +1412,9 @@ class ConciliadoController extends Controller
                                 break;
                                 case 10116:
                                     $mes_real = $this->avgmesrealpor[2];
+                                break;                                
+                                case 10117:
+                                    $mes_real = $this->summesrealton[19];
                                 break;
                                 default:
                                     return '-';
@@ -1565,11 +1562,103 @@ class ConciliadoController extends Controller
             else
             {
                 $this->minasumarray = 
-                [10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113];
+                [10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117];
                 $this->minaleyarray = 
                 [10071, 10074, 10077, 10080, 10083, 10086, 10089, 10094, 10098, 10101, 10104, 10107]; 
                 $this->minapercarray =
                 [10114,10115,10116];
+
+                foreach($request->get('conciliado_load') as $variable)
+                {
+                    $this->load = 0;
+                    if ($variable['value'] != null && ( in_array($variable['variable_id'], $this->minasumarray) || in_array($variable['variable_id'], $this->minapercarray)))
+                    {
+                        $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
+                        $row = DB::table('conciliado_data')
+                            ->where($this->where)
+                            ->first();
+                        if (isset($row->id))
+                        {
+                            $conciliado_reg = ConciliadoData::findOrFail($row->id);
+                            $oldvalue=$conciliado_reg->valor;
+                            if (number_format($oldvalue, 6) !=  number_format($variable['value'], 6))
+                            {     
+                                $this->load = 1;    
+                                $conciliado_reg->update([
+                                    'valor' => $variable['value']
+                                ]);
+                                $transaccion ="EDIT";           
+                                ConciliadoHistorial::create([
+                                    'conciliado_data_id' => $conciliado_reg->id,
+                                    'fecha' => date('Y-m-d H:i:s'),
+                                    'transaccion' => $transaccion,
+                                    'valorviejo' => $oldvalue,
+                                    'valornuevo' => $variable['value'],
+                                    'usuario' => auth()->user()->name
+                                ]); 
+                            }
+                        }
+                        else
+                        {      
+                            $this->load = 1;              
+                            $conciliado_reg = ConciliadoData::create([
+                                'variable_id' => $variable['variable_id'],
+                                'fecha' => date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01')),
+                                'valor' => $variable['value']
+                            ]);
+                            $transaccion ="CREATE";
+                            $oldvalue= null;
+                            ConciliadoHistorial::create([
+                                'conciliado_data_id' => $conciliado_reg->id,
+                                'fecha' => date('Y-m-d H:i:s'),
+                                'transaccion' => $transaccion,
+                                'valorviejo' => $oldvalue,
+                                'valornuevo' => $variable['value'],
+                                'usuario' => auth()->user()->name
+                            ]);                   
+                        }   
+                        if ($this->load == 1)
+                        {
+                            if (in_array($variable['variable_id'], $this->minasumarray))
+                            {
+                                $conciliado = $variable['value'] - $variable['valuereal'];
+                                $data =
+                                DB::table('data')
+                                    ->where($this->where)
+                                    ->first();
+                                $oldvalue = $data->valor;
+                                $newvalue = $oldvalue + $conciliado;
+                                
+                            } 
+                            else
+                            {
+                                if (in_array($variable['variable_id'], $this->minapercarray))
+                                {
+                                    $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
+                                    $data =
+                                    DB::table('data')
+                                        ->where($this->where)
+                                        ->first();
+                                    $oldvalue = $data->valor;
+                                    $newvalue = $oldvalue + $conciliado;
+                                }
+                            }   
+                               
+                            DB::table('data')
+                            ->where($this->where)
+                            ->update(['valor' => $newvalue]);
+                                $id = $data->id;
+                            Historial::create([
+                                'data_id' => $id,
+                                'fecha' => date('Y-m-d H:i:s'),
+                                'transaccion' => 'CONCILIADO',
+                                'valorviejo' => $oldvalue,
+                                'valornuevo' => $newvalue,
+                                'usuario' => auth()->user()->name
+                            ]);
+                        } 
+                    }                     
+                } 
 
                 //INICIO CALCULOS REUTILIZABLES
                     //INICIO DIA REAL
@@ -1882,7 +1971,7 @@ class ConciliadoController extends Controller
                             WHERE MONTH(A.fecha) = '.$month.'
                             AND YEAR(A.fecha) = '.$year.''
                         );
-    
+
                         $this->avgmesrealpor =
                         DB::select(
                             'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
@@ -1902,12 +1991,263 @@ class ConciliadoController extends Controller
                         );                
                     //FIN MES REAL
                 //FIN CALCULOS REUTILIZABLES
+
+                foreach($request->get('conciliado_load') as $variable)
+                {
+                    $this->load = 0;
+                    if ($variable['value'] != null && in_array($variable['variable_id'], $this->minaleyarray))
+                    {
+                        $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
+                        $row = DB::table('conciliado_data')
+                            ->where($this->where)
+                            ->first();
+                        if (isset($row->id))
+                        {
+                            $conciliado_reg = ConciliadoData::findOrFail($row->id);
+                            $oldvalue=$conciliado_reg->valor;
+                            if (number_format($oldvalue, 6) !=  number_format($variable['value'], 6))
+                            {     
+                                $this->load = 1;    
+                                $conciliado_reg->update([
+                                    'valor' => $variable['value']
+                                ]);
+                                $transaccion ="EDIT";           
+                                ConciliadoHistorial::create([
+                                    'conciliado_data_id' => $conciliado_reg->id,
+                                    'fecha' => date('Y-m-d H:i:s'),
+                                    'transaccion' => $transaccion,
+                                    'valorviejo' => $oldvalue,
+                                    'valornuevo' => $variable['value'],
+                                    'usuario' => auth()->user()->name
+                                ]); 
+                            }
+                        }
+                        else
+                        {      
+                            $this->load = 1;              
+                            $conciliado_reg = ConciliadoData::create([
+                                'variable_id' => $variable['variable_id'],
+                                'fecha' => date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01')),
+                                'valor' => $variable['value']
+                            ]);
+                            $transaccion ="CREATE";
+                            $oldvalue= null;
+                            ConciliadoHistorial::create([
+                                'conciliado_data_id' => $conciliado_reg->id,
+                                'fecha' => date('Y-m-d H:i:s'),
+                                'transaccion' => $transaccion,
+                                'valorviejo' => $oldvalue,
+                                'valornuevo' => $variable['value'],
+                                'usuario' => auth()->user()->name
+                            ]);                   
+                        }   
+                        if ($this->load == 1)
+                        {
+                            if (in_array($variable['variable_id'], $this->minaleyarray))
+                            {
+                                switch ($variable['variable_id'])
+                                {
+                                    case 10071:
+                                        if(isset($this->summesrealonz[0]->mes_real) && isset($this->summesrealton[0]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[0]->mes_real;
+                                            $min_mes = $this->summesrealton[0]->mes_real;
+                                            $au_dia = $this->leydiareal[0]->au_dia;
+                                            $min_dia = $this->leydiareal[0]->min_dia;
+                                        }   
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        }                             
+                                    break;
+                                    case 10074:
+                                        if(isset($this->summesrealonz[1]->mes_real) && isset($this->summesrealton[1]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[1]->mes_real;
+                                            $min_mes = $this->summesrealton[1]->mes_real;                                                
+                                            $au_dia = $this->leydiareal[1]->au_dia;
+                                            $min_dia = $this->leydiareal[1]->min_dia;
+                                        }     
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        }                              
+                                    break;
+                                    case 10077:
+                                        if(isset($this->summesrealonz[2]->mes_real) && isset($this->summesrealton[2]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[2]->mes_real;
+                                            $min_mes = $this->summesrealton[2]->mes_real;
+                                            $au_dia = $this->leydiareal[2]->au_dia;
+                                            $min_dia = $this->leydiareal[2]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10080:
+                                        if(isset($this->summesrealonz[3]->mes_real) && isset($this->summesrealton[3]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[3]->mes_real;
+                                            $min_mes = $this->summesrealton[3]->mes_real;
+                                            $au_dia = $this->leydiareal[3]->au_dia;
+                                            $min_dia = $this->leydiareal[3]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10083:
+                                        if(isset($this->summesrealonz[4]->mes_real) && isset($this->summesrealton[4]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[4]->mes_real;
+                                            $min_mes = $this->summesrealton[4]->mes_real;
+                                            $au_dia = $this->leydiareal[4]->au_dia;
+                                            $min_dia = $this->leydiareal[4]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10086:
+                                        if(isset($this->summesrealonz[5]->mes_real) && isset($this->summesrealton[5]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[5]->mes_real;
+                                            $min_mes = $this->summesrealton[5]->mes_real;
+                                            $au_dia = $this->leydiareal[5]->au_dia;
+                                            $min_dia = $this->leydiareal[5]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10089:
+                                        if(isset($this->summesrealonz[6]->mes_real) && isset($this->summesrealton[6]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[6]->mes_real;
+                                            $min_mes = $this->summesrealton[6]->mes_real;
+                                            $au_dia = $this->leydiareal[6]->au_dia;
+                                            $min_dia = $this->leydiareal[6]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10094:
+                                        if(isset($this->summesrealonz[7]->mes_real) && isset($this->summesrealton[9]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[7]->mes_real;
+                                            $min_mes = $this->summesrealton[9]->mes_real;
+                                            $au_dia = $this->leydiareal[7]->au_dia;
+                                            $min_dia = $this->leydiareal[7]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10098:
+                                        if(isset($this->summesrealonz[8]->mes_real) && isset($this->summesrealton[10]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[8]->mes_real;
+                                            $min_mes = $this->summesrealton[10]->mes_real;
+                                            $au_dia = $this->leydiareal[8]->au_dia;
+                                            $min_dia = $this->leydiareal[8]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10101:
+                                        if(isset($this->summesrealonz[9]->mes_real) && isset($this->summesrealton[11]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[9]->mes_real;
+                                            $min_mes = $this->summesrealton[11]->mes_real;
+                                            $au_dia = $this->leydiareal[9]->au_dia;
+                                            $min_dia = $this->leydiareal[9]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10104:
+                                        if(isset($this->summesrealonz[10]->mes_real) && isset($this->summesrealton[12]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[10]->mes_real;
+                                            $min_mes = $this->summesrealton[12]->mes_real;
+                                            $au_dia = $this->leydiareal[10]->au_dia;
+                                            $min_dia = $this->leydiareal[10]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;
+                                    case 10107:
+                                        if(isset($this->summesrealonz[11]->mes_real) && isset($this->summesrealton[13]->mes_real))
+                                        {
+                                            $au_mes = $this->summesrealonz[11]->mes_real;
+                                            $min_mes = $this->summesrealton[13]->mes_real;                                                
+                                            $au_dia = $this->leydiareal[11]->au_dia;
+                                            $min_dia = $this->leydiareal[11]->min_dia;
+                                        }  
+                                        else
+                                        {
+                                            $min_mes = 0;
+                                        } 
+                                    break;                                        
+                                }
+                                if ($min_mes > 0)
+                                {
+                                    $ley_mes = ($au_mes*31.1035)/$min_mes;
+                                    //$variable['value'] = ($au*31.1035)/$min;
+                                    $auMesConc = ($variable['value'] * $min_mes) / 31.1035;
+                                    $leyConc = ((($auMesConc - $au_mes) + $au_dia) * 31.1035 ) / $min_dia;
+
+                                    $data =
+                                    DB::table('data')
+                                        ->where($this->where)
+                                        ->first();
+                                    $oldvalue = $data->valor;
+                                    $newvalue = $leyConc;
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                            } 
+                               
+                            DB::table('data')
+                            ->where($this->where)
+                            ->update(['valor' => $newvalue]);
+                                $id = $data->id;
+                            Historial::create([
+                                'data_id' => $id,
+                                'fecha' => date('Y-m-d H:i:s'),
+                                'transaccion' => 'CONCILIADO',
+                                'valorviejo' => $oldvalue,
+                                'valornuevo' => $newvalue,
+                                'usuario' => auth()->user()->name
+                            ]);
+                        } 
+                    }                     
+                } 
                 
             } 
-            foreach($request->get('conciliado_load') as $variable)
+
+
+
+            /*foreach($request->get('conciliado_load') as $variable)
             {
                 $this->load = 0;
-                if ($variable['value'] != null)
+                if ($variable['value'] != null )
                 {
                     $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
                     $row = DB::table('conciliado_data')
@@ -2207,7 +2547,7 @@ class ConciliadoController extends Controller
                     } 
                 } 
                 
-            }               
+            }  */             
         }                
     } 
 }

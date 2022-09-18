@@ -214,7 +214,7 @@
         }
         @media(min-width:750px) {
             .datatables-t {
-                width: 95%;
+                width: 100%;
             }
         }
 

@@ -7040,7 +7040,7 @@ class SendDailyReportCombinado extends Command
                         if(isset($data->dia_real)) 
                         { 
                             $d_real = $data->dia_real;
-                            if($d_real > 100)
+                            if($d_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                             {
                                 return number_format(round($d_real), 0, '.', ',');
                             }
@@ -7305,7 +7305,7 @@ class SendDailyReportCombinado extends Command
                 if(isset($dia_budget[0]->dia_budget)) 
                 { 
                     $d_budget = $dia_budget[0]->dia_budget;
-                    if($d_budget > 100)
+                    if($d_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                     {
                         return number_format(round($d_budget), 0, '.', ',');
                     }
@@ -7580,7 +7580,7 @@ class SendDailyReportCombinado extends Command
                 if(isset($mes_real->mes_real))
                 {
                     $m_real = $mes_real->mes_real;
-                    if($m_real > 100)
+                    if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                     {
                         return number_format(round($m_real), 0, '.', ',');
                     }
@@ -7852,7 +7852,7 @@ class SendDailyReportCombinado extends Command
                 if(isset($mes_budget->mes_budget))
                 {
                     $m_budget = $mes_budget->mes_budget;
-                    if($m_budget > 100)
+                    if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                     {
                         return number_format(round($m_budget), 0, '.', ',');
                     }
@@ -8128,7 +8128,7 @@ class SendDailyReportCombinado extends Command
                 if(isset($tri_real->tri_real))
                 {
                     $m_real = $tri_real->tri_real;
-                    if($m_real > 100)
+                    if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                     {
                         return number_format(round($m_real), 0, '.', ',');
                     }
@@ -8402,7 +8402,7 @@ class SendDailyReportCombinado extends Command
                     if ($trimestre_budget->trimestre_budget > 0)
                     {
                         $m_budget = $trimestre_budget->trimestre_budget;
-                        if($m_budget > 100)
+                        if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                         {
                             return number_format(round($m_budget), 0, '.', ',');
                         }
@@ -8683,7 +8683,7 @@ class SendDailyReportCombinado extends Command
                 if(isset($anio_real->anio_real))
                 {
                     $m_real = $anio_real->anio_real;
-                    if($m_real > 100)
+                    if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                     {
                         return number_format(round($m_real), 0, '.', ',');
                     }
@@ -8957,7 +8957,7 @@ class SendDailyReportCombinado extends Command
                     if ($anio_budget->anio_budget > 0)
                     {
                         $m_budget = $anio_budget->anio_budget;
-                        if($m_budget > 100)
+                        if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
                         {
                             return number_format(round($m_budget), 0, '.', ',');
                         }

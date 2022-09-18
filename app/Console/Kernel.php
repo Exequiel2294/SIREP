@@ -29,8 +29,8 @@ class Kernel extends ConsoleKernel
     {
         //HORARIO UTC
         $schedule->command('send:dailyreport')->between('17:55', '18:05');
-        $schedule->command('send:dailyreportmina')->between('11:10', '11:20');
-        $schedule->command('send:dailyreportcombinado')->between('17:55', '18:05');
+        $schedule->command('send:dailyreportmina')->between('11:10', '11:40');
+        //$schedule->command('send:dailyreportcombinado')->between('17:55', '18:05');
         //$schedule->command('send:dailyreportcombinado')->between('00:00', '01:00');
         /*$schedule->command('send:dailyreport')->between('10:00', '22:00');
         $schedule->command('send:dailyreportmina')->between('10:00', '22:00');
