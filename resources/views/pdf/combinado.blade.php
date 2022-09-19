@@ -79,7 +79,6 @@
                 background-color: #a09b9b;
                 font-weight: bold!important;
             }
-            
 
             footer .page-number:after { content: counter(page); }
 
@@ -98,7 +97,6 @@
         </header>
         <footer>
             <p class="left">Fecha Creación: <?php echo date("Y-m-d");?></p>
-            {{-- <p class="left">Fecha Creación: 2022-09-03 </p> --}}
             <p class="right page-number">Página </p>
         </footer>
         <main>
@@ -146,45 +144,103 @@
                     @foreach($registros as $registro)
                         @if ($registro->subcategoria_id == 1 && $sub1 == 1)
                             {{ $sub1 = 0 }}
-                            <tr><td colspan="14" class="header-area">PROCESOS</td><tr>
-                            <tr><td colspan="14" class="header-categoria">TRITURACIÓN PRIMARIA Y SECUNDARIA</td><tr>
+                                </tbody>
+                            </table>
+                            <div style="page-break-after: always"></div>
+                            <table style="border-collapse: collapse; border-spacing: 0;" class="table table-bordered table-sm table-striped">
+                                <thead>
+                                    <tr>                    
+                                        <th rowspan="2">NOMBRE</th>
+                                        <th rowspan="2">U.</th>
+                                        <th colspan="3">DIA</th>
+                                        <th colspan="3">MES</th>
+                                        <th colspan="3">TRIMESTRE</th>
+                                        <th colspan="3">AÑO</th>   
+                                    </tr>
+                                    <tr>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="14" class="header-area page_break">PROCESOS</td><tr>
+                                    <tr><td colspan="14" class="header-categoria">TRITURACIÓN PRIMARIA Y SECUNDARIA</td></tr>
                         @elseif ($registro->subcategoria_id == 2 && $sub2 == 1)
                             {{ $sub2 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">HPGR</td><tr>
+                            <tr><td colspan="14"  class="header-categoria">HPGR</td></tr>
                         @elseif ($registro->subcategoria_id == 3 && $sub3 == 1)
                             {{ $sub3 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">AGLOMERACIÓN</td><tr>
+                            <tr><td colspan="14"  class="header-categoria">AGLOMERACIÓN</td></tr>
                         @elseif ($registro->subcategoria_id == 4 && $sub4 == 1)
                             {{ $sub4 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">APILAMIENTO - STACKER</td><tr>                        
+                            <tr><td colspan="14"  class="header-categoria">APILAMIENTO - STACKER</td></tr>                        
                         @elseif ($registro->subcategoria_id == 5 && $sub5 == 1)
                             {{ $sub5 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">APILAMIENTO - PRIMARIA Y SECUNDARIA</td><tr>                      
+                            <tr><td colspan="14"  class="header-categoria">APILAMIENTO - PRIMARIA Y SECUNDARIA</td></tr>                      
                         @elseif ($registro->subcategoria_id == 6 && $sub6 == 1)
                             {{ $sub6 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">APILAMIENTO - TOTAL APILAMIENTO</td><tr>                     
+                            <tr><td colspan="14"  class="header-categoria">APILAMIENTO - TOTAL APILAMIENTO</td></tr>                     
                         @elseif ($registro->subcategoria_id == 10002 && $sub10002 == 1)
                             {{ $sub10002 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">LIXIVIACIÓN</td><tr>                      
+                                </tbody>
+                            </table>
+                            <div style="page-break-after: always"></div>
+                            <table style="border-collapse: collapse; border-spacing: 0;" class="table table-bordered table-sm table-striped">
+                                <thead>
+                                    <tr>                    
+                                        <th rowspan="2">NOMBRE</th>
+                                        <th rowspan="2">U.</th>
+                                        <th colspan="3">DIA</th>
+                                        <th colspan="3">MES</th>
+                                        <th colspan="3">TRIMESTRE</th>
+                                        <th colspan="3">AÑO</th>   
+                                    </tr>
+                                    <tr>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                        <th>Real</th>
+                                        <th>Budget</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="14"  class="header-categoria">LIXIVIACIÓN</td></tr>                      
                         @elseif ($registro->subcategoria_id == 10003 && $sub10003 == 1)
                             {{ $sub10003 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">PLANTA SART</td><tr>                   
+                            <tr><td colspan="14"  class="header-categoria">PLANTA SART</td></tr>                   
                         @elseif ($registro->subcategoria_id == 10004 && $sub10004 == 1)
                             {{ $sub10004 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">PLANTA ADR</td><tr>
+                            <tr><td colspan="14"  class="header-categoria">PLANTA ADR</td></tr>
                         @elseif ($registro->subcategoria_id == 10005 && $sub10005 == 1)
                             {{ $sub10005 = 0 }}
                             <tr><td colspan="14" class="header-area">MINA</td><tr>
-                            <tr><td colspan="14" class="header-categoria">MATERIAL MINADO</td><tr>
+                            <tr><td colspan="14" class="header-categoria">MATERIAL MINADO</td></tr>
                         @elseif ($registro->subcategoria_id == 10006 && $sub10006 == 1)
                             {{ $sub10006 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">REMANEJO</td><tr>
+                            <tr><td colspan="14"  class="header-categoria">REMANEJO</td></tr>
                         @elseif ($registro->subcategoria_id == 10007 && $sub10007 == 1)
                             {{ $sub10007 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">MOVIMIENTO TOTAL</td><tr>
+                            <tr><td colspan="14"  class="header-categoria">MOVIMIENTO TOTAL</td></tr>
                         @elseif ($registro->subcategoria_id == 10008 && $sub10008 == 1)
                             {{ $sub10008 = 0 }}
-                            <tr><td colspan="14"  class="header-categoria">DISPONIBILIDAD MECANICA</td><tr>
+                            <tr><td colspan="14"  class="header-categoria">DISPONIBILIDAD MECANICA</td></tr>
                         @endif
                         <tr>
                             @php          
@@ -285,9 +341,9 @@
                                             <td class="yellow_per text-center">{{$dia_por}}%</td>
                                         @endif
                                     @else
-                                        @if($dia_por <= 90)
+                                        @if($dia_por < 90)
                                             <td class="red_per text-center">{{$dia_por}}%</td>
-                                        @elseif ($dia_por > 90  && $dia_por < 95)
+                                        @elseif ($dia_por >= 90  && $dia_por < 95)
                                             <td class="yellow_per text-center">{{$dia_por}}%</td>
                                         @elseif ($dia_por >= 95)
                                             <td class="green_per text-center">{{$dia_por}}%</td>
@@ -295,9 +351,6 @@
                                     @endif
                                 @endif
                             @endif
-
-
-
 
                             <td class="text-center">{{$registro->mes_real}}</td>
                             <td class="text-center">{{$registro->mes_budget}}</td>
@@ -322,9 +375,9 @@
                                              <td class="yellow_per text-center">{{$mes_por}}%</td>
                                         @endif
                                     @else
-                                        @if($mes_por <= 90)
+                                        @if($mes_por < 90)
                                              <td class="red_per text-center">{{$mes_por}}%</td>
-                                        @elseif ($mes_por > 90  && $mes_por < 95)
+                                        @elseif ($mes_por >= 90  && $mes_por < 95)
                                              <td class="yellow_per text-center">{{$mes_por}}%</td>
                                         @elseif ($mes_por >= 95)
                                              <td class="green_per text-center">{{$mes_por}}%</td>
@@ -332,19 +385,6 @@
                                      @endif
                                  @endif
                             @endif
-
-                            
-                            {{-- @if ($mes_por <= 90)
-                                <td class="red_per text-center">{{$mes_por}}%</td>
-                            @elseif ($mes_por > 90 && $mes_por < 95)
-                                <td class="yellow_per text-center">{{$mes_por}}%</td>
-                            @elseif ($mes_por >= 95)
-                                <td class="green_per text-center">{{$mes_por}}%</td>
-                            @endif --}}
-
-
-
-
 
                             <td class="text-center">{{$registro->trimestre_real}}</td>
                             <td class="text-center">{{$registro->trimestre_budget}}</td>
@@ -369,9 +409,9 @@
                                              <td class="yellow_per text-center">{{$trimestre_por}}%</td>
                                         @endif
                                     @else
-                                        @if($trimestre_por <= 90)
+                                        @if($trimestre_por < 90)
                                              <td class="red_per text-center">{{$trimestre_por}}%</td>
-                                        @elseif ($trimestre_por > 90  && $trimestre_por < 95)
+                                        @elseif ($trimestre_por >= 90  && $trimestre_por < 95)
                                              <td class="yellow_per text-center">{{$trimestre_por}}%</td>
                                         @elseif ($trimestre_por >= 95)
                                              <td class="green_per text-center">{{$trimestre_por}}%</td>
@@ -379,20 +419,6 @@
                                     @endif
                                 @endif
                             @endif
-                            
-                            
-                            
-                            
-                            
-                            {{-- @if ($trimestre_por <= 90)
-                                <td class="red_per text-center">{{$trimestre_por}}%</td>
-                            @elseif ($trimestre_por > 90 && $trimestre_por < 95)
-                                <td class="yellow_per text-center">{{$trimestre_por}}%</td>
-                            @elseif ($trimestre_por >= 95)
-                                <td class="green_per text-center">{{$trimestre_por}}%</td>
-                            @endif --}}
-
-
 
 
                             <td class="text-center">{{$registro->anio_real}}</td>
@@ -418,9 +444,9 @@
                                              <td class="yellow_per text-center">{{$anio_por}}%</td>
                                         @endif
                                      @else
-                                         @if($anio_por <= 90)
+                                         @if($anio_por < 90)
                                              <td class="red_per text-center">{{$anio_por}}%</td>
-                                         @elseif ($anio_por > 90  && $anio_por < 95)
+                                         @elseif ($anio_por >= 90  && $anio_por < 95)
                                              <td class="yellow_per text-center">{{$anio_por}}%</td>
                                          @elseif ($anio_por >= 95)
                                              <td class="green_per text-center">{{$anio_por}}%</td>
@@ -428,22 +454,11 @@
                                      @endif
                                  @endif
                             @endif
-                            
-                            
-                            
-                            
-                            
-                            {{-- @if ($anio_por <= 90)
-                                <td class="red_per text-center">{{$anio_por}}%</td>
-                            @elseif ($anio_por > 90 && $anio_por < 95)
-                                <td class="yellow_per text-center">{{$anio_por}}%</td>
-                            @elseif ($anio_por >= 95)
-                                <td class="green_per text-center">{{$anio_por}}%</td>
-                            @endif --}}
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+
             <div style="margin-top: 2rem; margin-bottom: 2rem;">
                 <p class="left" style="margin-left:-125px; font-size: 18px;"> Comentarios</p>
             </div>

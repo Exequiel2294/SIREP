@@ -200,25 +200,7 @@
                 max-width: 968px!important;
             }
 
-            #fieldset-permisos > legend
-            {
-                font-size: 1rem!important;
-            }
 
-            .fieldset-div
-            {
-                display: flex;
-                flex-direction: column!important;
-                width: 90%;
-                margin: 0 auto;
-                margin-top: 1rem;
-            }
-
-            .fieldset-div > div
-            {
-                display: grid;
-                margin: .5rem 0 1rem 0;
-            }
         }
 
         @media(min-width:768px) {
@@ -241,28 +223,8 @@
 
             #fieldset-permisos
             {
-                width: 80%;
-            }
-
-            #fieldset-permisos > legend
-            {
-                font-size: 1rem!important;
-            }
-
-            .fieldset-div
-            {
-                justify-content: space-around!important;
-                flex-direction: row!important;
-                padding-bottom: .75rem;
-            }
-
-            .fieldset-div > div{
-                display: flow-root!important;
-            }
-
-            .fieldset-div > div:first-child{
-                flex:0 1 80%;
-            }
+                width: 90%;
+            }  
 
             .user-select{
                 margin-top: 2.5rem!important;
@@ -270,13 +232,6 @@
             }
         }
 
-        @media(min-width:1100px) {
-            #fieldset-permisos > legend
-            {
-                font-size: 1.1rem!important;
-            }
-
-        }
 
         @media(min-width:960px) {
             .user-select{
@@ -323,6 +278,7 @@
 @section('js')
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
+
         const conciliado_load = [];
         const var_calc = [10072, 10075, 10078, 10081, 10084, 10087, 10090, 10095, 10099, 10102, 10105, 10108, 10002, 10006, 10008, 10013, 10015, 10020, 10027, 10028, 10032, 10037, 10038, 10040, 10046, 10049, 10053];
         $('.nav-link').click(function (){ 
@@ -346,9 +302,7 @@
                 serverSide: true,
                 responsive: true,
                 scrollX : true,
-                select: true,
-                scrollY: '65vh',                
-                scrollCollapse: true,
+                select: true,        
                 ajax:{    
                     url: "{{route('conciliado.getvariables') }}",
                     type: 'POST',
@@ -374,22 +328,21 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [  
-                    {data:'categoria', name:'categoria', visible:false},
-                    {data:'subcategoria', name:'subcategoria', visible:false},  
-                    {data:'var_orden', name:'var_orden', visible:false},  
-                    {data:'variable', name:'variable', orderable: false}, 
-                    {data:'unidad', name:'unidad', orderable: false, searchable: false, width:'25px'}, 
-                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false,
+                    {data:'subcategoria', title:'subcategoria', name:'subcategoria', visible:false},  
+                    {data:'var_orden', title:'var_orden', name:'var_orden', visible:false},  
+                    {data:'variable', title:'Variable', name:'variable', orderable: false, width:'40%'}, 
+                    {data:'unidad', title:'U.', name:'unidad', orderable: false, searchable: false, width:'4%'}, 
+                    {data:'mes_real', title:'Mensual Real', name:'mes_real', orderable: false,searchable: false, width:'28%',
                         render:function(data, type, row){
                             if (data != '-')
                             {
                                 let val = parseFloat(data);
-                                return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="'+data+'" readonly hidden>'+val.toLocaleString('en-US');
+                                return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="'+data+'" readonly hidden>'+val.toLocaleString('en-US', { minimumFractionDigits: 6 });
                             }
                             return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="" readonly hidden>'+data;
                         }
                     },  
-                    {data:'conciliado_data', name:'conciliado_data', orderable: false, searchable: false,
+                    {data:'conciliado_data', title:'Conciliado', name:'conciliado_data', orderable: false, searchable: false, width:'28%',
                         render: function (data,type,row){
                             if(var_calc.indexOf(parseInt(row['variable_id'])) != -1)
                             {                                  
@@ -398,25 +351,24 @@
                             else
                             {
                                 let val = (data == null) ? '' : parseFloat(data);
-                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US')+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
+                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US', { minimumFractionDigits: 6 })+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
                             }
                         }
                     },
-                    {data:'variable_id', name:'variable_id', visible: false}    
+                    {data:'variable_id', title:'variable_id', name:'variable_id', visible: false}    
                 ],  
                 rowGroup: {
-                    dataSrc: ['categoria', 'subcategoria']
+                    dataSrc: ['subcategoria']
                 },
                 columnDefs: [
                     {
-                        targets: [4, 5, 6, 7],
+                        targets: [3, 4, 5, 6],
                         className: "dt-center"
                     }
                 ],
                 orderFixed: [
                     [0, 'asc'],
                     [1, 'asc'],
-                    [2, 'asc']
                 ]  
             });
             $("div.datatables-length").html('');    
@@ -514,7 +466,7 @@
                                 $('#form-button').html('Guardando..');    
                                 conciliado_load.length = 0;                
                                 var table = $('#conciliado-table').DataTable();
-                                var arrayid = table.column(7).data().toArray();  
+                                var arrayid = table.column(6).data().toArray();  
                                 for (var i=0; i < arrayid.length; i++)
                                 {
                                     index = conciliado_load.findIndex(x => x.variable_id === parseInt(arrayid[i]));
@@ -661,23 +613,33 @@
                         import_data.pop();
                     }
                     var table = $('#conciliado-table').DataTable();
-                    var arrayid = table.column(7).data().toArray();  
+                    var arrayid = table.column(6).data().toArray();  
                     if ($("#decimalseparator").val() == 0)
                     {
+                        let j = 0;
                         for (let i=0; i < import_data.length; i++)
                         {
                             let val = import_data[i].replaceAll(' ','').replaceAll(',','');
                             let val2 = (isNumeric(val)) ? parseFloat(val).toLocaleString('en-US') : val.replaceAll('-','');
-                            $("#"+arrayid[i]).val(val2);
+                            if (var_calc.indexOf(parseInt(arrayid[i+j])) != -1)
+                            {
+                                j=j+1;
+                            }
+                            $("#"+arrayid[i+j]).val(val2);
                         }  
                     }
                     else
                     {
+                        let j = 0;
                         for (let i=0; i < import_data.length; i++)
                         {
                             let val = import_data[i].replaceAll(' ','').replaceAll('.','').replaceAll(',','.');
                             let val2 = (isNumeric(val)) ? parseFloat(val).toLocaleString('en-US') : val.replaceAll('-','');
-                            $("#"+arrayid[i]).val(val2);
+                            if (var_calc.indexOf(parseInt(arrayid[i+j])) != -1)
+                            {
+                                j=j+1;
+                            }
+                            $("#"+arrayid[i+j]).val(val2);
                         } 
                     }       
                     for (var i=import_data.length; i < arrayid.length; i++)
@@ -703,13 +665,13 @@
         <div class="generic-card">
             <div class="card">
                 <div class="generic-body"> 
-                    <fieldset id="fieldset-permisos" class="form-group border" style="padding: 1rem 3rem;"> 
+                    <fieldset id="fieldset-permisos" class="form-group border" style="padding: 1rem 2rem;"> 
                         <form action="post" id="modal-form-loadvbles" name="modal-form-loadvbles" autocomplete="off">                            
                                 <!-- <legend class="w-auto">Seleccionar Área y Mes</legend> -->
-                                <div style="width:80%; margin:auto;">
-                                    <div class="form-group row" style="margin-top:2.5rem;">
-                                        <label for="area" class="col-sm-3 col-form-label">Área</label>
-                                        <div class="col-sm-9">
+                                <div class="row" style="justify-content: space-around;">
+                                    <div class="form-group col-md-4">
+                                        <label for="area" class="col-form-label">Área</label>
+                                        <div>
                                             <select class="form-control" name="area_id" id="area_id">
                                                 <option value="" selected disabled>Seleccione Área</option>
                                                 <option value=2>Mina</option>
@@ -717,9 +679,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="categoria" class="col-sm-3 col-form-label">Mes</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group col-md-4">
+                                        <label for="categoria" class="col-form-label">Mes</label>
+                                        <div>
                                             <select class="form-control" name="month" id="month">
                                                 <option value=0 selected="selected">Seleccione Mes</option>
                                                 @foreach ($months as $num => $name)
@@ -727,17 +689,14 @@
                                                 @endforeach                                       
                                             </select> 
                                         </div>
+                                    </div>                                     
+                                    <div class="form-group col-md-3" style="align-self:self-end">                                    
+                                        <button type="button" class="btn btn-primary" id="btn-select">Cargar Variables</button>
                                     </div> 
-                                </div>
-                                        
+                                </div>                                        
                             @csrf
                         </form> 
-                        <div class="form-group row" style="margin-top:2.5rem;">                                    
-                            <button type="button" class="btn btn-primary" id="btn-select" style="margin:auto">Cargar Variables</button>
-                        </div> 
-                    </fieldset>
-                    
-
+                    </fieldset>              
 
                     <div class="card-body">
                         <div class="datatables-s">
@@ -748,20 +707,7 @@
                                 <button type="button" class="btn btn-success" id="form-button">Cargar</button>   
                             </div>
                         </div>
-                        <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="conciliado-table">
-                            <thead>
-                                <tr>   
-                                    <th>CATEGORIA</th>
-                                    <th>SUBCATEGORIA</th>
-                                    <th>orden</th>
-                                    <th class="thcenter" style="min-width:15vw!important;">Variable</th>
-                                    <th class="thcenter">U.</th>
-                                    <th class="thcenter" style="min-width:15vw!important;">Mensual Real</th>  
-                                    <th class="thcenter" style="min-width:15vw!important;">Conciliado</th>  
-                                    <th>variable_id</th>  
-                                </tr>
-                            </thead>      
-                        </table>  
+                        <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="conciliado-table"></table>  
                     </div>                    
                 </div>
             </div>
@@ -793,7 +739,7 @@
                             <div class="col-sm-12">
                                 <select class="form-control" name="decimalseparator" id="decimalseparator">
                                     <option value=0 selected="selected">Punto</option> 
-                                    <option value=1 selected="selected">Coma</option>                                    
+                                    <option value=1>Coma</option>                                    
                                 </select> 
                             </div>
                         </div>  

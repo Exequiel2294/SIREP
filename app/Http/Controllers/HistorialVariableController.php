@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
 use App\Models\Data;
 use App\Http\Controllers\Controller;
 use App\Models\Variable;
@@ -49,15 +48,15 @@ class HistorialVariableController extends Controller
         }
                 
         return datatables()->of($datos)
-                    ->addColumn('action', function($data)
-                       {
-                           $button = ''; 
-                           $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
-                           return $button;
-                       })
-                       ->rawColumns(['action'])
-                       ->addIndexColumn()
-                       ->make(true);          
+                ->addColumn('action', function($data)
+                    {
+                        $button = ''; 
+                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
+                        return $button;
+                    })
+                    ->rawColumns(['action'])
+                    ->addIndexColumn()
+                    ->make(true);          
     } 
 
     public function edit($id)
@@ -69,10 +68,4 @@ class HistorialVariableController extends Controller
         return response()->json($generic);
     }
 
-    public function delete($id)
-    {
-        $generic = Area::findOrFail($id);   
-        $generic->delete(); 
-        return;
-    }
 }

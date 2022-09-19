@@ -241,75 +241,98 @@
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
     <script>
 
+        /*PRESS NAV-LINK BUTTON*/
+        $('.nav-link').click(function (){ 
+            setTimeout(
+                function() {
+                    var oTable = $('#data-table').dataTable();
+                    oTable.fnAdjustColumnSizing();
+                }, 
+            350);
+        });
+        /*PRESS NAV-LINK BUTTON*/
+
+        var date_fd = moment().startOf('year');
+        var date_fh = moment().subtract(1, "days");
         $(function () {
             /* Calendario Fecha desde*/
             $('#fechadesde').datetimepicker({
                 format: 'DD/MM/YYYY',
-                defaultDate: moment().startOf('year'),
+                defaultDate: date_fd,
                 maxDate: moment().subtract(2, "days"),
                 minDate: moment().startOf('year'),
                 useCurrent: false
             });
-
-            /* Calendario Fecha hastq*/
-            $('#fechahasta').datetimepicker({
-                format: 'DD/MM/YYYY',
-                maxDate: moment().subtract(1, "days")
+            $("#fechadesde").on("change.datetimepicker", function (e) {
+                date_fd = e.date;
             });
 
-            /*DATATABLE*/
-            let table = $('#data-table').DataTable( {
-                        destroy:true,
-                        dom: "<'datatables-p'<'datatables-button'B>>" +
-                                "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
-                                "<'datatables-t'<'datatables-table'tr>>" + 
-                                "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
-                        
-                        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-                        processing: true,
-                        //bInfo: true,
-                        //serverSide: true,
-                        responsive: true,
-                        scrollX : true,
-                        
-                        "language": {
-                            "lengthMenu": "Mostrar _MENU_ registros",
-                            "zeroRecords": "No se encontraron resultados",
-                            "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-                            "sSearch": "Buscar:",
-                            "oPaginate": {
-                                "sFirst": "Primero",
-                                "sLast":"Último",
-                                "sNext":"Siguiente",
-                                "sPrevious": "Anterior"
-                            },
-                            "sProcessing":"Procesando...",
-                        },
-                        columns: [
-                            {title:'id' , orderable: false, searchable: false},
-                            {title:'area' , orderable: false, searchable: false},
-                            {title:'nombre' , orderable: false, searchable: false},
-                            {title:'unidad' , orderable: false, searchable: false},
-                            {title:'fecha' , orderable: false, searchable: false},
-                            {title:'valor', orderable: false,searchable: false},
-                            {data:'action', title:'acciones',name:'action'},
-                        ],
-                        order: [[0, 'asc']],
-                        
-                    } );
+            /* Calendario Fecha hasta*/
+            $('#fechahasta').datetimepicker({
+                format: 'DD/MM/YYYY',
+                defaultDate: date_fh,
+                maxDate: moment().subtract(1, "days"),
+            });
+            $("#fechahasta").on("change.datetimepicker", function (e) {
+                date_fh = e.date;
+            });
         })
-        
 
+        $(document).ready(function(){ 
+            var table = $('#data-table').DataTable({
+                dom: "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
+                        "<'datatables-t'<'datatables-table'tr>>" + 
+                        "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",              
+                lengthMenu: [[25, 50, 100], [25, 50, 100]],
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                scrollX : true,
+                ajax:{                
+                    url: "{{route('valores.variables')}}",
+                    type: 'POST',
+                    data: function(d){
+                        d.id = $("#variables").val();
+                        d.fh = moment(date_fh).format('YYYY-MM-DD');
+                        d.fd = moment(date_fd).format('YYYY-MM-DD');
+                        d._token = $('input[name="_token"]').val();
+                    }
+                },
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast":"Último",
+                        "sNext":"Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "sProcessing":"Procesando...",
+                },
+                columns: [
+                    {data:'id', title:'id', name:'id', visible: false},
+                    {data:'area', title:'Area', name:'area', orderable: false, searchable: false, width:'30%'},
+                    {data:'nombre', title:'Nombre', name:'nombre', orderable: false, searchable: false, width:'30%'},
+                    {data:'unidad', title:'Unidad', name:'unidad', orderable: false, searchable: false, width:'5%'},
+                    {data:'fecha', title:'Fecha', name:'fecha', orderable: false, searchable: false},
+                    {data:'valor', title:'Valor', name:'valor', orderable: false,searchable: false},
+                    {data:'action', title:'', name:'action', orderable: false,searchable: false, width:'25px'},
+                ],
+                order: [[0, 'asc']],
+                
+            } );
+        }); 
         
- 
-
         /* FORM BUTTON */        
         $("#form-his").validate({
             rules: {
                 variables: {
                     required: true,
+                    min: 0
                 },
                 fechadesde: {
                     required: false,
@@ -320,7 +343,9 @@
                 
             },
             messages: {  
-         
+                variables: {
+                    min: "Este campo es obligatorio."
+                }
             },
             errorElement: 'span', 
             errorClass: 'help-block help-block-error', 
@@ -357,95 +382,10 @@
 
         $("#button-his").click(function(e){
             e.preventDefault();
-            if( $("#form-his").valid() ){
-                
-                    
-                    let id = $("#variables").val();
-                    let fd = $('#fechadesde').val();
-                    let fh = $('#fechahasta').val();
-                    
-                        
-                    // $('#data-table').DataTable().destroy();
-                    let table = $('#data-table').DataTable( {
-                        destroy:true,
-                        dom: "<'datatables-p'<'datatables-button'B>>" +
-                                "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
-                                "<'datatables-t'<'datatables-table'tr>>" + 
-                                "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
-                        
-                        lengthMenu: [[25, 50, 100], [25, 50, 100]],
-                        processing: true,
-                        //bInfo: true,
-                        serverSide: true,
-                        responsive: true,
-                        scrollX : true,
-                        ajax:{                
-                            url: "{{route('valores.variables')}}",
-                            type: 'POST',
-                            data: function(d){
-                                d.id = id;
-                                d.fh = fh;
-                                d.fd = fd;
-                                d._token = $('input[name="_token"]').val();
-                            }
-                        },
-                        "language": {
-                            "lengthMenu": "Mostrar _MENU_ registros",
-                            "zeroRecords": "No se encontraron resultados",
-                            "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-                            "sSearch": "Buscar:",
-                            "oPaginate": {
-                                "sFirst": "Primero",
-                                "sLast":"Último",
-                                "sNext":"Siguiente",
-                                "sPrevious": "Anterior"
-                            },
-                            "sProcessing":"Procesando...",
-                        },
-                        columns: [
-                            {data:'id',title:'id' ,name:'id', orderable: false, searchable: false},
-                            {data:'area',title:'area' ,name:'area', orderable: false, searchable: false},
-                            {data:'nombre',title:'nombre' ,name:'nombre', orderable: false, searchable: false},
-                            {data:'unidad',title:'unidad' ,name:'unidad', orderable: false, searchable: false},
-                            {data:'fecha',title:'fecha' ,name:'fecha', orderable: false, searchable: false},
-                            {data:'valor', title:'valor',name:'valor', orderable: false,searchable: false},
-                            {data:'action', title:'action',name:'action'},
-                        ],
-                        order: [[0, 'asc']],
-                        
-                    } );
-                    // $('#modal').scrollTop(0);
-                    // if($.isEmptyObject(data.error)){
-                    //     $('#modal').modal('hide');
-                    //     $(".alert-error").css('display','none');
-                    //     $('#modal-form').trigger("reset");
-                    //     $('#form-button').html('Guardar Cambios');
-                    //     var oTable = $('#data-table').dataTable();
-                    //     oTable.fnDraw(false);
-                    //     if($('#form-button').val() == 1){
-                    //         MansfieldRep.notification('Area cargada con exito', 'MansfieldRep', 'success');
-                    //     }   
-                    //     else{
-                    //         MansfieldRep.notification('Area actualizada con exito', 'MansfieldRep', 'success');
-                    //     } 
-                    // }else{
-                    //     $('#form-button').html('Guardar Cambios');
-                    //     printErrorMsg(data.error);
-                    // } 
-                    
-            }
-                        
+            if( $("#form-his").valid() ){   
+                $('#data-table').DataTable().ajax.reload(null, false);                 
+            }                        
         });
-
-        function printErrorMsg(msg) {
-            $(".alert-error").css('display','flex');
-            $(".print-error-msg").find("ul").html('');
-            $.each( msg, function( key, value ) {
-                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-            });
-        }
         /* FORM BUTTON */
 
 
@@ -474,7 +414,6 @@
                 $('#id').val(data.id);                          
                 $('#fecha').val(data.fecha);                   
                 $('#valor').val(data.valor);                   
-                $("#nuevovalor").val(data.nvalor).attr("selected", "selected");
             })
         });      
         /* EDIT BUTTON */
@@ -545,12 +484,8 @@
                             $('#form-button').html('Guardar Cambios');
                             var oTable = $('#data-table').dataTable();
                             oTable.fnDraw(false);
-                            if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Registro cargado con exito', 'MansfieldRep', 'success');
-                            }   
-                            else{
-                                MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
-                            }                          
+                            MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                                                      
                         }else{
                             $('#form-button').html('Guardar Cambios');
                             printErrorMsg(data.error);
@@ -578,45 +513,40 @@
         <div class="generic-card">
             <div class="card">
                 <div class="modal-body" >
-                    <form  id="form-his" name="form-his" autocomplete="off">
-                                              
-                        <div class="form-row">
-                            <div class="form-group col-sm-4">
+                    <form  id="form-his" name="form-his" autocomplete="off">                                              
+                        <div class="row" style="padding: 0.5rem 0 0 0.3rem; margin: auto; max-width: 80rem; justify-content: space-around;">
+                            <div class="form-group col-md-4">
                                 <label>Variables:</label>
                                 <select class="form-control" name="variables" id="variables">
-                                    <option></option>
+                                <option value=-1 selected disabled>Seleccione Variable</option>
                                     @foreach ($variables as $variable)
                                         <option value="{{$variable->id}}">{{$variable->area . " - " .$variable->nombre}}</option>
                                     @endforeach
                                 </select> 
                             </div>
-
-                            <div class="form-group date col-sm-"  data-target-input="nearest">
+                            <div class="form-group date col-md-3"  data-target-input="nearest">
                                 <label>Fecha desde:</label>
                                 <div class="input-group-append " data-target="#fechadesde" data-toggle="datetimepicker">
                                     <input type="text" class="form-control datetimepicker-input" data-target="#fechadesde" id="fechadesde" id="fechadesde"/>
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
-
-                            <div class="form-group date col-sm-4"  data-target-input="nearest">
+                            <div class="form-group date col-md-3"  data-target-input="nearest">
                                 <label>Fecha hasta:</label>
                                 <div class="input-group-append" data-target="#fechahasta" data-toggle="datetimepicker">
                                     <input type="text" class="form-control datetimepicker-input" data-target="#fechahasta" id="fechahasta" name="fechahasta"/>
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    <button  class="btn btn-success ml-2" id="button-his">Buscar</button>
-                                </div>
-                                
+                                </div>                                
                             </div>
-                            
+                            <div class="form-group col-md-1" style="align-self:self-end">
+                                <button  class="btn btn-success" id="button-his">Buscar</button>
+                            </div>                            
                         </div>              
                         @csrf
                     </form>
                 </div>
                 <div class="generic-body">        
-                    <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="data-table">
-                        
-                    </table>                
+                    <table style="width:100%" class="table-striped table-bordered table-hover table-sm nowrap" id="data-table"></table>                
                 </div>
             </div>
         </div> 

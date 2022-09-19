@@ -215,7 +215,7 @@
         }
         @media(min-width:750px) {
             .datatables-t {
-                width: 95%;
+                width: 100%;
             }
         }
 
@@ -310,6 +310,7 @@
         .dataTables_scrollBody::-webkit-scrollbar { 
             display: none;  
         }
+        
 
     </style> 
 @stop
@@ -1560,7 +1561,7 @@
                     </div>
                     <!-- <table style="width:100%;" class="table table-striped table-sm table-bordered table-hover datatable" id="procesos-table"> -->
                     <table style="width:100%; border-collapse: collapse !important;" class="table-sm table-bord table-hover nowrap" id="procesos-table">
-                        <thead style=" border-collapse: collapse !important;">
+                        <thead style="border-collapse: collapse !important;">
                             <tr>
                                 <th rowspan="2">CATEGORIA</th>
                                 <th rowspan="2">SUBCATEGORIA</th>
