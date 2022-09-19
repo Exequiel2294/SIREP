@@ -405,7 +405,7 @@
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
-                $('#modal-overlay').modal('hide')
+                $('#modal-overlay').modal('hide');
             }) 
         });
 
@@ -586,39 +586,6 @@
                         }
                     },
                     {data: null, orderable: false,searchable: false,
-                        /*createdCell: function(td, cellData, rowData, row, col){
-                            if(rowData['dia_budget'] != '-' && rowData['dia_real'] != '-')
-                            {
-                                $d_budget = parseFloat(rowData['dia_budget'].replaceAll(',',''));
-                                $d_real = parseFloat(rowData['dia_real'].replaceAll(',',''));
-                                if($d_budget != 0.00 )
-                                {
-                                    $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
-                                    switch(true)
-                                    {
-                                        case $dia_porcentaje < 90:
-                                            $class = 'red_percentage';
-                                        break;
-                                        case $dia_porcentaje > 89 && $dia_porcentaje <100 :
-                                            $class = 'yellow_percentage';
-                                        break;
-                                        case  $dia_porcentaje > 99 :
-                                            $class = 'green_percentage';
-                                        break;                                            
-                                    }  
-                                    $(td).addClass($class);
-                                    $(td).text($dia_porcentaje+'%');
-                                }
-                                else
-                                {
-                                    $(td).text('-');
-                                }
-                            }
-                            else
-                            {
-                                $(td).text('-');
-                            }  
-                        }*/
                         render: function (data,type,row){
                             if(row['dia_budget'] != '-' && row['dia_real'] != '-')
                             {
@@ -629,11 +596,11 @@
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
                                     switch(true)
                                     {
-                                        case $dia_porcentaje <= 90:
+                                        case $dia_porcentaje < 90:
                                             //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                             return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
                                         break;
-                                        case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
+                                        case $dia_porcentaje >= 90 && $dia_porcentaje < 95 :
                                             //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                             return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
                                         break;
@@ -698,39 +665,6 @@
                         }
                     },
                     {data: null, orderable: false,searchable: false,
-                        /*createdCell: function(td, cellData, rowData, row, col){
-                            if(rowData['mes_budget'] != '-' && rowData['mes_real'] != '-')
-                            {
-                                $m_budget = parseFloat(rowData['mes_budget'].replaceAll(',',''));
-                                $m_real = parseFloat(rowData['mes_real'].replaceAll(',',''));
-                                if($m_budget != 0.00 )
-                                {
-                                    $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
-                                    switch(true)
-                                    {
-                                        case $mes_porcentaje < 90:
-                                            $class = 'red_percentage';
-                                        break;
-                                        case $mes_porcentaje > 89 && $mes_porcentaje <100 :
-                                            $class = 'yellow_percentage';
-                                        break;
-                                        case  $mes_porcentaje > 99 :
-                                            $class = 'green_percentage';
-                                        break;                                            
-                                    }  
-                                    $(td).addClass($class);
-                                    $(td).text($mes_porcentaje+'%');
-                                }
-                                else
-                                {
-                                    $(td).text('-');
-                                }
-                            }
-                            else
-                            {
-                                $(td).text('-');
-                            }  
-                        }*/
                         render: function (data,type,row){
                             if(row['mes_budget'] != '-' && row['mes_real'] != '-')
                             {
@@ -741,10 +675,10 @@
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
                                     switch(true)
                                     {
-                                        case $mes_porcentaje <= 90:
+                                        case $mes_porcentaje < 90:
                                             return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
                                         break;
-                                        case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
+                                        case $mes_porcentaje >= 90 && $mes_porcentaje < 95 :
                                             return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                         break;
                                         case  $mes_porcentaje >= 95 :
@@ -807,39 +741,6 @@
                         }
                     },
                     {data:null, orderable: false,searchable: false,
-                        /*createdCell: function(td, cellData, rowData, row, col){
-                            if(rowData['trimestre_budget'] != '-' && rowData['trimestre_real'] != '-')
-                            {
-                                $t_budget = parseFloat(rowData['trimestre_budget'].replaceAll(',',''));
-                                $t_real = parseFloat(rowData['trimestre_real'].replaceAll(',',''));
-                                if($t_budget != 0.00 )
-                                {
-                                    $trimestre_porcentaje = Math.round(($t_real / $t_budget)*100);
-                                    switch(true)
-                                    {
-                                        case $trimestre_porcentaje < 90:
-                                            $class = 'red_percentage';
-                                        break;
-                                        case $trimestre_porcentaje > 89 && $trimestre_porcentaje <100 :
-                                            $class = 'yellow_percentage';
-                                        break;
-                                        case  $trimestre_porcentaje > 99 :
-                                            $class = 'green_percentage';
-                                        break;                                            
-                                    }  
-                                    $(td).addClass($class);
-                                    $(td).text($trimestre_porcentaje+'%');
-                                }
-                                else
-                                {
-                                    $(td).text('-');
-                                }
-                            }
-                            else
-                            {
-                                $(td).text('-');
-                            }  
-                        }*/
                         render: function (data,type,row){
                             if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
                             {                                
@@ -850,10 +751,10 @@
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
                                     switch(true)
                                     {
-                                        case $trimestre_porcentaje <= 90:
+                                        case $trimestre_porcentaje < 90:
                                             return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
                                         break;
-                                        case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
+                                        case $trimestre_porcentaje >= 90 && $trimestre_porcentaje < 95 :
                                             return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
                                         break;
                                         case  $trimestre_porcentaje >= 95 :
@@ -861,8 +762,7 @@
                                         break;
                                         default:
                                             return $trimestre_porcentaje+'%';
-                                        break;
-                                            
+                                        break;                                            
                                     }   
                                 }
                                 else
@@ -916,39 +816,6 @@
                         }
                     },
                     {data:null, orderable: false,searchable: false,
-                        /*createdCell: function(td, cellData, rowData, row, col){
-                            if(rowData['anio_budget'] != '-' && rowData['anio_real'] != '-')
-                            {
-                                $a_budget = parseFloat(rowData['anio_budget'].replaceAll(',',''));
-                                $a_real = parseFloat(rowData['anio_real'].replaceAll(',',''));
-                                if($a_budget != 0.00 )
-                                {
-                                    $anio_porcentaje = Math.round(($a_real / $a_budget)*100);
-                                    switch(true)
-                                    {
-                                        case $anio_porcentaje < 90:
-                                            $class = 'red_percentage';
-                                        break;
-                                        case $anio_porcentaje > 89 && $anio_porcentaje <100 :
-                                            $class = 'yellow_percentage';
-                                        break;
-                                        case  $anio_porcentaje > 99 :
-                                            $class = 'green_percentage';
-                                        break;                                            
-                                    }  
-                                    $(td).addClass($class);
-                                    $(td).text($anio_porcentaje+'%');
-                                }
-                                else
-                                {
-                                    $(td).text('-');
-                                }
-                            }
-                            else
-                            {
-                                $(td).text('-');
-                            }  
-                        }*/
                         render: function (data,type,row){
                             if(row['anio_budget'] != '-' && row['anio_real'] != '-')
                             {                               
@@ -959,10 +826,10 @@
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
                                     switch(true)
                                     {
-                                        case $anio_porcentaje <= 90:
+                                        case $anio_porcentaje < 90:
                                             return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
                                         break;
-                                        case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
+                                        case $anio_porcentaje >= 90 && $anio_porcentaje < 95 :
                                             return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
                                         break;
                                         case  $anio_porcentaje >= 95 :

@@ -223,9 +223,9 @@
                                 <td class="text-center">{{$dia_por}}</td>
                             @elseif ($dia_por < 90)
                                 <td class="red_per text-center">{{$dia_por}}%</td>
-                            @elseif ($dia_por > 89 && $dia_por < 100)
+                            @elseif ($dia_por >= 90 && $dia_por < 95)
                                 <td class="yellow_per text-center">{{$dia_por}}%</td>
-                            @elseif ($dia_por > 99)
+                            @elseif ($dia_por >= 95)
                                 <td class="green_per text-center">{{$dia_por}}%</td>
                             @endif
                             <td class="text-center">{{$registro->mes_real}}</td>
@@ -234,9 +234,9 @@
                                 <td class="text-center">{{$mes_por}}</td>
                             @elseif ($mes_por < 90)
                                 <td class="red_per text-center">{{$mes_por}}%</td>
-                            @elseif ($mes_por > 89 && $mes_por < 100)
+                            @elseif ($mes_por >= 90 && $mes_por < 95)
                                 <td class="yellow_per text-center">{{$mes_por}}%</td>
-                            @elseif ($mes_por > 99)
+                            @elseif ($mes_por >= 95)
                                 <td class="green_per text-center">{{$mes_por}}%</td>
                             @endif
                             <td class="text-center">{{$registro->trimestre_real}}</td>
@@ -245,9 +245,9 @@
                                 <td class="text-center">{{$trimestre_por}}</td>
                             @elseif ($trimestre_por < 90)
                                 <td class="red_per text-center">{{$trimestre_por}}%</td>
-                            @elseif ($trimestre_por > 89 && $trimestre_por < 100)
+                            @elseif ($trimestre_por >= 90 && $trimestre_por < 95)
                                 <td class="yellow_per text-center">{{$trimestre_por}}%</td>
-                            @elseif ($trimestre_por > 99)
+                            @elseif ($trimestre_por >= 95)
                                 <td class="green_per text-center">{{$trimestre_por}}%</td>
                             @endif
                             <td class="text-center">{{$registro->anio_real}}</td>
@@ -256,9 +256,9 @@
                                 <td class="text-center">{{$anio_por}}</td>
                             @elseif ($anio_por < 90)
                                 <td class="red_per text-center">{{$anio_por}}%</td>
-                            @elseif ($anio_por > 89 && $anio_por < 100)
+                            @elseif ($anio_por >= 90 && $anio_por < 95)
                                 <td class="yellow_per text-center">{{$anio_por}}%</td>
-                            @elseif ($anio_por > 99)
+                            @elseif ($anio_por >= 95)
                                 <td class="green_per text-center">{{$anio_por}}%</td>
                             @endif
                         </tr>
