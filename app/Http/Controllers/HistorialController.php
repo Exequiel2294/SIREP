@@ -15,7 +15,9 @@ class HistorialController extends Controller
             $list = DB::table('historial')
                         ->join('data', 'historial.data_id', '=', 'data.id')
                         ->join('variable', 'data.variable_id', '=', 'variable.id')
-                        ->select('variable.descripcion as variable','data.fecha as fecha_data','historial.*')
+                        ->join('subcategoria', 'variable.subcategoria_id', '=', 'subcategoria.id')
+                        ->where('historial.transaccion', 'EDIT')
+                        ->select('subcategoria.id as subcategoria_id','variable.nombre as nombre', 'variable.descripcion as variable','data.fecha as fecha_data','historial.*')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('valorviejo', function($data)

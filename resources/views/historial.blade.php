@@ -262,9 +262,27 @@
                         }
                     },
                     {data:'variable', name:'variable',
-                        render: function(data){
-                            return data.substring(5);
-                    }},
+                        render: function(data,type,row){
+                            switch (true)
+                            {
+                                case row['subcategoria_id'] == 10005:
+                                    return 'MatMin_'+row['nombre'];
+                                break;
+                                case row['subcategoria_id'] == 10006:
+                                    return 'Rem_'+row['nombre'];
+                                break;
+                                case row['subcategoria_id'] == 10007:
+                                    return 'MovTot_'+row['nombre'];
+                                break;
+                                case row['subcategoria_id'] == 10008:
+                                    return 'DispMec_'+row['nombre'];
+                                break;
+                                default:
+                                    return data.substring(5);
+                                break;
+                            }                                
+                        }
+                    },
                     {data:'fecha_data', name:'fecha_data',
                         render: function(data){
                             if(data != null)
