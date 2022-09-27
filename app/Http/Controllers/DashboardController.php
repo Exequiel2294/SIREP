@@ -654,6 +654,7 @@ class DashboardController extends Controller
         }  
         else
         {
+
             $where = ['user_id' => Auth::user()->id, 'variable_id' => $request->variable_id];    
             $uservbles = DB::table('permisos_variables')
                         ->where($where)
@@ -666,38 +667,54 @@ class DashboardController extends Controller
            }
            else
            {
-                if (date('Y-m-d', strtotime($selecteddate)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
-                {  
-                    $vbles_11h = DB::table('variable')->where('tipo',2)->pluck('id')->toArray();
-                    $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();
-                    if (in_array($request->variable_id,$vbles_11h) && (int)date('H') < 14)
-                    {
-                        $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
-                        $data['val'] = -1;
-                        return response()->json($data);
-                    }
-                    else
-                    {
-                        if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H') < 24)
+                if ((date('m', strtotime($selecteddate)) == date('m') && date('Y', strtotime($selecteddate)) == date('Y')) || 
+                (date('m', strtotime($selecteddate))-1 == date('m') && date('Y', strtotime($selecteddate)) == date('Y') && date('d') <= 5))
+                {
+                    if (date('Y-m-d', strtotime($selecteddate)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
+                    {  
+                        $vbles_11h = DB::table('variable')->where('tipo',2)->pluck('id')->toArray();
+                        $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();
+                        if (in_array($request->variable_id,$vbles_11h) && (int)date('H') < 14)
                         {
-                            $data['msg'] = 'No puede modificar esta variable hasta su ultima carga a las 21hs.';
+                            $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
                             $data['val'] = -1;
                             return response()->json($data);
                         }
-                        
+                        else
+                        {
+                            if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H') < 24)
+                            {
+                                $data['msg'] = 'No puede modificar esta variable hasta su ultima carga a las 21hs.';
+                                $data['val'] = -1;
+                                return response()->json($data);
+                            }
+                            
+                        }
+                    }  
+                    else
+                    {
+                        $where = array('data.id' => $request->id);
+                        $data['val'] = 1;
+                        $data['generic'] =  DB::table('area')
+                                    ->join('categoria', 'categoria.area_id', '=','area.id')
+                                    ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
+                                    ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
+                                    ->join('data', 'data.variable_id', '=','variable.id')
+                                    ->where($where)
+                                    ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                                    ->first();
+                        return response()->json($data);  
                     }
-                }                  
-                $where = array('data.id' => $request->id);
-                $data['val'] = 1;
-                $data['generic'] =  DB::table('area')
-                            ->join('categoria', 'categoria.area_id', '=','area.id')
-                            ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
-                            ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
-                            ->join('data', 'data.variable_id', '=','variable.id')
-                            ->where($where)
-                            ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
-                            ->first();
-                return response()->json($data);              
+
+                }
+                else
+                {
+                    $data['msg'] = 'No puede modificar data que ya fue conciliada.';
+                    $data['val'] = -1;
+                    return response()->json($data);   
+                }
+                
+            
            }
         }
     }

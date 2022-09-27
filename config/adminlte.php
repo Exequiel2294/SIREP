@@ -243,11 +243,6 @@ return [
             'icon' => 'nav-icon fas fa-book',
         ],
         [
-            'text' => 'conciliado',
-            'url'  => 'conciliado',
-            'icon' => 'nav-icon fas fa-sync-alt',
-        ],
-        [
             'text' => 'Control por Variable',
             'url'  => 'historial_por_variable',
             'icon' => 'nav-icon fas fa-file-invoice',
@@ -263,6 +258,11 @@ return [
             'can'  => 'Admin',
             'submenu' => 
             [
+                [
+                    'text' => 'conciliado',
+                    'url'  => 'conciliado',
+                    'icon' => 'nav-icon fas fa-sync-alt',
+                ],
                 [
                     'text' => 'area',
                     'url'  => 'area',

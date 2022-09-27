@@ -280,7 +280,7 @@
     <script>
 
         const conciliado_load = [];
-        const var_calc = [10072, 10075, 10078, 10081, 10084, 10087, 10090, 10095, 10099, 10102, 10105, 10108, 10002, 10006, 10008, 10013, 10015, 10020, 10027, 10028, 10032, 10037, 10038, 10040, 10046, 10049, 10053];
+        const var_calc = [10072, 10075, 10078, 10081, 10084, 10087, 10090, 10095, 10099, 10102, 10105, 10108, 10002, 10006, 10008, 10013, 10015, 10020, 10027, 10028, 10030, 10032, 10037, 10038, 10040, 10046, 10049, 10053];
         $('.nav-link').click(function (){ 
             setTimeout(
                 function() {
@@ -612,8 +612,10 @@
                     {
                         import_data.pop();
                     }
+                    console.log(import_data);
                     var table = $('#conciliado-table').DataTable();
                     var arrayid = table.column(6).data().toArray();  
+                    var z;
                     if ($("#decimalseparator").val() == 0)
                     {
                         let j = 0;
@@ -626,6 +628,8 @@
                                 j=j+1;
                             }
                             $("#"+arrayid[i+j]).val(val2);
+                            z = i+j;
+                            console.log(i, i+j, val2, $("#"+arrayid[i+j]).val());
                         }  
                     }
                     else
@@ -640,12 +644,14 @@
                                 j=j+1;
                             }
                             $("#"+arrayid[i+j]).val(val2);
+                            z = i+j;
                         } 
-                    }       
-                    for (var i=import_data.length; i < arrayid.length; i++)
+                    }     
+                    console.log('z',z);
+                    for (let i = z+1; i < arrayid.length; i++)
                     {
                         $("#"+arrayid[i]).val(null);
-                    } 
+                    }
                     $('#modal-import').modal('hide');
                     $('#modal-form-import').trigger("reset");
                     
