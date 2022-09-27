@@ -690,21 +690,20 @@ class DashboardController extends Controller
                             }
                             
                         }
-                    }  
-                    else
-                    {
-                        $where = array('data.id' => $request->id);
-                        $data['val'] = 1;
-                        $data['generic'] =  DB::table('area')
-                                    ->join('categoria', 'categoria.area_id', '=','area.id')
-                                    ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
-                                    ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
-                                    ->join('data', 'data.variable_id', '=','variable.id')
-                                    ->where($where)
-                                    ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
-                                    ->first();
-                        return response()->json($data);  
-                    }
+                    }                     
+                    
+                    $where = array('data.id' => $request->id);
+                    $data['val'] = 1;
+                    $data['generic'] =  DB::table('area')
+                                ->join('categoria', 'categoria.area_id', '=','area.id')
+                                ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
+                                ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
+                                ->join('data', 'data.variable_id', '=','variable.id')
+                                ->where($where)
+                                ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                                ->first();
+                    return response()->json($data);  
+                    
 
                 }
                 else
