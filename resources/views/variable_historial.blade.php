@@ -239,6 +239,8 @@
 
 @section('js')
     <script src="{{asset("vendor/moment/moment-with-locales.min.js")}}"></script>
+    <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
+    <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
 
         /*PRESS NAV-LINK BUTTON*/
@@ -251,7 +253,7 @@
             350);
         });
         /*PRESS NAV-LINK BUTTON*/
-
+        var date_selected = moment().subtract(1, "days");
         var date_fd = moment().startOf('year');
         var date_fh = moment().subtract(1, "days");
         $(function () {
@@ -279,11 +281,51 @@
         })
 
         $(document).ready(function(){ 
+            function getExportTitle()
+            {
+                return 'Daily Report: '+moment(date_selected).format('YYYY-MM-DD');
+            }
+            function getDateSelected()
+            {
+                return moment(date_selected).format('YYYY-MM-DD');
+            }
+
             var table = $('#data-table').DataTable({
-                dom: "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
-                        "<'datatables-t'<'datatables-table'tr>>" + 
-                        "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",              
-                lengthMenu: [[25, 50, 100], [25, 50, 100]],
+                // dom: "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
+                //         "<'datatables-t'<'datatables-table'tr>>" + 
+                //         "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",              
+                dom:    "<'datatables-p'<'datatables-button'B>>" + 
+                        "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
+                         "<'datatables-t'<'datatables-table'tr>>" + 
+                         "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
+                buttons:[
+                    {
+                        extend: 'copyHtml5', 
+                        text: 'Copiar',
+                        className: 'buttonclass',
+                        exportOptions: {
+                            columns: [1,2,3,4,5],
+                            
+                        },
+                    }, 
+                    {
+                        extend: 'excelHtml5',
+                        className: 'buttonclass',
+                        filename: 'Historial de Variable '+getDateSelected(),
+                        exportOptions: {
+                            columns: [1,2,3,4,5],
+                        }
+                    }, 
+                    {
+                        extend: 'print',
+                        className: 'buttonclass',
+                        text: 'Imprimir',
+                        exportOptions: {
+                            columns: [1,2,3,4,5]
+                        }
+                    },
+                ],         
+                lengthMenu: [[35, 65, 95, 125, 155,365], [35, 65, 95, 125, 155,365]],
                 processing: true,
                 serverSide: true,
                 responsive: true,
