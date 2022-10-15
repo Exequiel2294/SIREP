@@ -8,6 +8,7 @@ use App\Models\Variable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 
 class HistorialVariableController extends Controller
@@ -23,7 +24,8 @@ class HistorialVariableController extends Controller
             ->select('v.id as id', 's.nombre as area', 'v.nombre as nombre')
             ->where('v.tipo','<>',4)
             ->where('p.user_id','=',$usuario)
-            ->orderBy('v.orden')
+            ->orderBy('s.nombre', 'asc')
+            ->orderBy('v.orden', 'asc')
             ->get();
         
         return view('variable_historial',['variables'=>$variables]);
@@ -60,12 +62,64 @@ class HistorialVariableController extends Controller
     } 
 
     public function edit($id)
-    {        
-        $where = array('id' => $id);
-        $generic =  DB::table('data')
-        ->where($where)
-        ->first();
-        return response()->json($generic);
+    { 
+        $data_register = Data::findOrFail($id);
+
+        $where = ['user_id' => Auth::user()->id, 'variable_id' => $data_register->variable_id];    
+        $uservbles = DB::table('permisos_variables')
+                    ->where($where)
+                    ->get();
+        if ($uservbles->count() == 0)
+        {
+            $data['msg'] = 'No cuenta con los permisos necesarios para editar esta variable.';
+            $data['val'] = -1;
+            return response()->json($data);
+        }
+        else
+        {
+            if ((date('m', strtotime($data_register->fecha)) == date('m') && date('Y', strtotime($data_register->fecha)) == date('Y')) || 
+            (date('m', strtotime($data_register->fecha)) == date('m') - 1 && date('Y', strtotime($data_register->fecha)) == date('Y') && date('d') <= 5))
+            {
+                if (date('Y-m-d', strtotime($data_register->fecha)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
+                {  
+                    $vbles_11h = DB::table('variable')->where('tipo',2)->pluck('id')->toArray();
+                    $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();
+                    if (in_array($data_register->variable_id,$vbles_11h) && (int)date('H') < 14)
+                    {
+                        $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
+                        $data['val'] = -1;
+                        return response()->json($data);
+                    }
+                    else
+                    {
+                        if (in_array($data_register->variable_id,$vbles_11_21h) && (int)date('H') < 24)
+                        {
+                            $data['msg'] = 'No puede modificar esta variable hasta su ultima carga a las 21hs.';
+                            $data['val'] = -1;
+                            return response()->json($data);
+                        }
+                        
+                    }
+                }                     
+                
+
+                
+                $data['val'] = 1;
+                $data['generic'] =  $data_register;
+                return response()->json($data);    
+                
+
+            }
+            else
+            {
+                $data['msg'] = 'No puede modificar data que ya fue conciliada.';
+                $data['val'] = -1;
+                return response()->json($data);   
+            }
+            
+        
+        }
+        
     }
 
 }

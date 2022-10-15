@@ -441,7 +441,15 @@
                     {data:'id', name:'id'},
                     {data:'area', name:'area'},
                     {data:'nombre', name:'nombre'},
-                    {data:'descripcion', name:'descripcion'}
+                    {data:'descripcion', name:'descripcion', 
+                        render: function(data,type,row){
+                            if (row['area_id'] == 2)
+                            {
+                                return row['nombre'];
+                            }
+                            return data;
+                        }
+                    },
                 ],
                 order: [[0, 'asc'],[1, 'asc'],[2, 'asc']]            
             });

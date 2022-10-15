@@ -449,13 +449,23 @@
          $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
             $.get('historial/'+id+'/edit', function(data){
-                $('#form-button').val(0); 
-                $('#modal-title').html('Editar Campo'); 
-                $('#modal-form').trigger("reset"); 
-                $('#modal').modal('show');
-                $('#id').val(data.id);                          
-                $('#fecha').val(data.fecha);                   
-                $('#valor').val(data.valor);                   
+                if (data['val'] == 1)
+                {
+                    $('#form-button').val(0); 
+                    $('#modal-title').html('Editar Campo'); 
+                    $('#modal-form').trigger("reset"); 
+                    $('#modal').modal('show');
+                    $('#id').val(data['generic'].id);                          
+                    $('#fecha').val(data['generic'].fecha);                   
+                    $('#valor').val(data['generic'].valor);     
+                }   
+                else
+                {    
+                    Swal.fire({
+                        title: data['msg'],
+                        icon: 'warning',
+                    })                        
+                }                          
             })
         });      
         /* EDIT BUTTON */
@@ -508,6 +518,7 @@
         $("#form-button").click(function(){
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
+                console.log($('#nvalor').val());
                 $.ajax({
                     url:"{{route('dashboard.load') }}",
                     method:"POST",
