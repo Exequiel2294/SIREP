@@ -42,8 +42,9 @@ class PermisosController extends Controller
                     ->join('subcategoria','variable.subcategoria_id', '=', 'subcategoria.id')
                     ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                     ->join('area', 'categoria.area_id', '=', 'area.id')
-                    ->select('permisos_variables.variable_id as id', 'area.nombre as area','variable.nombre as nombre','variable.descripcion as descripcion')
-                    ->where('permisos_variables.user_id','=',$id)
+                    ->select('permisos_variables.variable_id as id', 'area.nombre as area','variable.nombre as nombre','variable.descripcion as descripcion','area.id as area_id')
+                    ->where('permisos_variables.user_id','=',$id)                    
+                    ->orderBy('variable.orden','asc')
                     ->get();
 
         return datatables()->of($variables)
@@ -62,9 +63,11 @@ class PermisosController extends Controller
                         ->join('subcategoria','variable.subcategoria_id', '=', 'subcategoria.id')
                         ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                         ->join('area', 'categoria.area_id', '=', 'area.id')
-                        ->select('area.id as area_id', 'area.nombre as area', 'variable.id as id', 'variable.nombre as nombre', 'variable.descripcion as descripcion')
+                        ->select('subcategoria.nombre as subcategoria','area.id as area_id', 'area.nombre as area', 'variable.id as id', 'variable.nombre as nombre', 'variable.descripcion as descripcion')
                         ->where('variable.tipo','<>',4)
                         ->where('variable.estado',1)
+                        ->orderBy('area','asc')
+                        ->orderBy('subcategoria','asc')
                         ->orderBy('variable.orden','asc')
                         ->get();
         return datatables()->of($variables)

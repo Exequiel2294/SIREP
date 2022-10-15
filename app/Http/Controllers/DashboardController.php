@@ -667,8 +667,6 @@ class DashboardController extends Controller
            }
            else
            {
-                // if ((date('m', strtotime($selecteddate)) == date('m') && date('Y', strtotime($selecteddate)) == date('Y')) || 
-                // (date('m', strtotime($selecteddate))-1 == date('m') && date('Y', strtotime($selecteddate)) == date('Y') && date('d') <= 5))
                 if ((date('m', strtotime($selecteddate)) == date('m') && date('Y', strtotime($selecteddate)) == date('Y')) || 
                 (date('m', strtotime($selecteddate)) == date('m') - 1 && date('Y', strtotime($selecteddate)) == date('Y') && date('d') <= 5))
                 {
