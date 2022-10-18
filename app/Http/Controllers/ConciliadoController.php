@@ -1582,534 +1582,366 @@ class ConciliadoController extends Controller
                     }                     
                 } 
 
-                //INICIO CALCULOS REUTILIZABLES
-                    //DIA REAL
-                    /*$this->leyprocdiareal =
-                    DB::select(
-                        'SELECT 10002 as variable_id, A.valor AS min_dia, (A.valor * B.valor)/31.1035 as au_dia FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10005) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10004) as B
-                        ON A.fecha = B.fecha
-                        AND DATEPART(y, A.fecha) = '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION
-                        SELECT 10008, A.valor, (A.valor * B.valor)/31.1035 FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10011) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10010) as B
-                        ON A.fecha = B.fecha
-                        AND DATEPART(y, A.fecha) = '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION
-                        SELECT 10037, A.valor, (A.valor * B.valor)/31.1035 FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10011) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10010) as B
-                        ON A.fecha = B.fecha
-                        AND DATEPART(y, A.fecha) = '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION
-                        SELECT 10023, A.valor, (A.valor * B.valor)/31.1035 FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10025) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10024) as B
-                        ON A.fecha = B.fecha
-                        AND DATEPART(y, A.fecha) = '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION
-                        SELECT 10027, A.valor, (A.valor * B.valor)/31.1035 FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10031) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10030) as B
-                        ON A.fecha = B.fecha
-                        AND DATEPART(y, A.fecha) = '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION
-                        SELECT 10053, A.valor, (A.valor * B.valor)/31.1035 FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10057) as B
-                        ON A.fecha = B.fecha
-                        AND DATEPART(y, A.fecha) = '.$daypart.'
-                        AND YEAR(A.fecha) = '.$year.''
-                    );*/
-                    //DIAREAL
-                    //MES REAL
-                        /*$this->sumprocmesrealton = 
-                        DB::select(
-                            'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                            (SELECT variable_id, SUM(valor) AS mes_real
-                            FROM [dbo].[data] 
-                            WHERE variable_id IN (10005, 10011, 10025, 10031, 10061)
-                            AND MONTH(fecha) = '.$month.'
-                            AND YEAR(fecha) = '.$year.'
-                            GROUP BY variable_id) AS d
-                            RIGHT JOIN
-                            (SELECT id 
-                            FROM [dbo].[variable] 
-                            WHERE id IN (10005, 10011, 10025, 10031, 10061)) AS v
-                            ON d.variable_id = v.id
-                            ORDER BY id ASC'
-                        );*/
-                        $this->ppprocmesreal =
-                        DB::select(
-                            'SELECT 
-                            T.variable_id AS variable_id,
-                            (T.sumAxB + (T.lastA*T.lastB))/T.sumB AS mesReal,
-                            T.sumAxB AS sumAxB,
-                            T.lastB AS lastB,
-                            T.sumB AS sumB
-                            FROM
-                            (
-                            SELECT 10004 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10004) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10005) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10010 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10010) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10011) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10030 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10010) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10011) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10012 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10012) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10011) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10018 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10018) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10019) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10024 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10024) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10025) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10033 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10033) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10011) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10035 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10035) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10039) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10036 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10036) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10039) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10041 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10041) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10045) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10042 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10042) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10045) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10043 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10043) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10045) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10044 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10044) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10045) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10050 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10050) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10052) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10051 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10051) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10052) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10054 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10054) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10061) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10055 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10055) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10059) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10056 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10056) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10060) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10057 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10057) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10061) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            UNION
-                            SELECT 10058 AS variable_id,
-                            SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
-                            SUM(B.valor) AS sumB,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
-                            SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10058) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10061) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                            ) AS T
-                            RIGHT JOIN 
-                            (SELECT id 
-                            FROM [dbo].[variable] 
-                            WHERE id IN (10004,10010,10012,10018,10030,10033,10035,10036,10041,10042,10043,10044,10050,10051,10054,10055,10056,10057,10058)) AS V
-                            ON T.variable_id = V.id
-                            ORDER BY id ASC'
-                        );
-                        /*$this->sumprocmesrealonz =
-                        DB::select(
-                            'SELECT 10002 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10005) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10004) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10008 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10011) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10010) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10037 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10011) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10010) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10023 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10025) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10024) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10027 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10031) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10030) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10053, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10061) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10057) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.''
-                        );*/
-
+                //INICIO CALCULOS REUTILIZABLES                    
                         
-                    //MES REAL
+                    $this->ppprocmesreal =
+                    DB::select(
+                        'SELECT 
+                        T.variable_id AS variable_id,
+                        (T.sumAxB + (T.lastA*T.lastB))/T.sumB AS mesReal,
+                        T.sumAxB AS sumAxB,
+                        T.lastB AS lastB,
+                        T.sumB AS sumB
+                        FROM
+                        (
+                        SELECT 10004 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10004) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10005) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10010 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10010) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10011) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10030 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10010) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10011) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10012 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10012) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10011) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10018 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10018) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10019) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10024 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10024) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10025) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10033 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10033) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10011) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10035 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10035) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10039) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10036 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10036) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10039) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10041 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10041) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10045) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10042 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10042) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10045) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10043 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10043) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10045) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10044 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10044) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10045) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10050 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10050) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10052) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10051 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10051) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10052) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10054 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10054) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10061) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10055 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10055) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10059) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10056 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10056) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10060) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10057 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10057) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10061) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        UNION
+                        SELECT 10058 AS variable_id,
+                        SUM(CASE WHEN DAY(A.fecha) < '.$lastdayMonth.' THEN (A.valor*B.valor) ELSE 0 END) AS sumAxB,
+                        SUM(B.valor) AS sumB,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN A.valor ELSE 0 END) AS lastA,
+                        SUM(CASE WHEN DAY(A.fecha) = '.$lastdayMonth.' THEN B.valor ELSE 0 END) AS lastB FROM
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10058) AS A
+                        INNER JOIN   
+                        (SELECT fecha, variable_id, [valor]
+                        FROM [dbo].[data]
+                        where variable_id = 10061) AS B
+                        ON A.fecha = B.fecha
+                        AND  MONTH(A.fecha) = '.$month.'
+                        AND  YEAR(A.fecha) = '.$year.'
+                        GROUP BY MONTH(A.fecha)
+                        ) AS T
+                        RIGHT JOIN 
+                        (SELECT id 
+                        FROM [dbo].[variable] 
+                        WHERE id IN (10004,10010,10012,10018,10030,10033,10035,10036,10041,10042,10043,10044,10050,10051,10054,10055,10056,10057,10058)) AS V
+                        ON T.variable_id = V.id
+                        ORDER BY id ASC'
+                    );
+
                 //FIN CALCULOS REUTILIZABLES
 
                 foreach($request->get('conciliado_load') as $variable)
