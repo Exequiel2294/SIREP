@@ -23,6 +23,7 @@ class HistorialVariableController extends Controller
             ->join('permisos_variables as p', 'v.id', '=', 'p.variable_id')
             ->select('v.id as id', 's.nombre as area', 'v.nombre as nombre')
             ->where('v.tipo','<>',4)
+            ->where('v.estado', '=', 1)
             ->where('p.user_id','=',$usuario)
             ->orderBy('s.nombre', 'asc')
             ->orderBy('v.orden', 'asc')
