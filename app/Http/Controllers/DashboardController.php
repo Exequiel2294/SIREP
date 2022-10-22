@@ -745,23 +745,14 @@ class DashboardController extends Controller
                 $newvalue = $request->get('valor');
                 switch($data->variable_id)
                 {
-                    case 10011: 
                     case 10019:
                     case 10031: 
                     case 10039:
                         DB::table('data')
-                            ->whereIn('variable_id',[10011,10019,10031,10039])
+                            ->whereIn('variable_id',[10019,10031,10039])
                             ->where('fecha', $data->fecha)
                             ->update(['valor' =>$newvalue]);                    
                     break;  
-                    case 10010: 
-                    case 10030:
-                    case 10035: 
-                        DB::table('data')
-                            ->whereIn('variable_id',[10010,10030,10035])
-                            ->where('fecha', $data->fecha)
-                            ->update(['valor' =>$newvalue]);                    
-                    break;   
                     case 10064: 
                     case 10065:
                         DB::table('data')
@@ -769,13 +760,6 @@ class DashboardController extends Controller
                             ->where('fecha', $data->fecha)
                             ->update(['valor' =>$newvalue]);                    
                     break;  
-                    case 10051: 
-                    case 10057:
-                        DB::table('data')
-                            ->whereIn('variable_id',[10051,10057])
-                            ->where('fecha', $data->fecha)
-                            ->update(['valor' =>$newvalue]);                    
-                    break;
                     default:
                         $data->update(
                         [
