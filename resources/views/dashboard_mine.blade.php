@@ -572,7 +572,15 @@
                     {data:'var_export', name:'var_export', visible:false}, 
                     {data:'variable', name:'variable', orderable: false}, 
                     {data:'unidad', name:'unidad', orderable: false, searchable: false, width:'25px'}, 
-                    {data:'dia_real', name:'dia_real', orderable: false,searchable: false,},
+                    {data:'dia_real', name:'dia_real', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            if (data != '-')
+                            {
+                                return '<span class="complete_value" data-id="'+row['id']+'">'+data+'</span>';
+                            }
+                            return data;
+                        }
+                    },
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false,
                         render: function(data,type,row){
                             if (data != '-')
@@ -885,7 +893,7 @@
                 ]
             });     
          
-         /** */
+            /** */
             $('#mina-table tbody').on('click', 'tr.dtrg-level-1', function () {
                 var name = $(this).data('name');
                 collapsedGroups[name] = !collapsedGroups[name];
@@ -1038,6 +1046,18 @@
             });
         });      
         /* EDIT BUTTON */
+
+        /* COMPLETE VALUE */
+        $(document).on('click', '.complete_value', function(){ 
+            var id=$(this).data('id');
+            $.get('dashboard/'+id+'/complete_value', function(data){  
+                console.log(data);    
+                $('#modal-form-complete_value').trigger("reset"); 
+                $('#modal-complete_value').modal('show');                        
+                $('#complete_value').val(data);                                   
+            })
+        });      
+        /* COMPLETE VALUE */
         
         /* EDIT BUTTON COMENTARIO*/
         $(document).on('click', '.edit-comentario', function(){ 
@@ -1342,7 +1362,7 @@
         /* ACTION TO CLOSE MODAL */
 
         /* ACTION TO CLOSE MODAL COMENTARIO */
-        $('#modal').on('hidden.bs.modal', function () {
+        $('#modal-comentario').on('hidden.bs.modal', function () {
             $("#modal-form-comentario").validate().resetForm();
             $(".alert-error").css('display','none');
         });
@@ -1536,6 +1556,26 @@
                 </div>
                 <div class="modal-foot">
                     <button type="button" class="btn btn-primary" id="form-button-comentario">Cargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-complete_value" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-head">
+                    <h5 id="modal-title-complete_value">Valor Real</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-bod">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control" id="complete_value" name="complete_value" disabled>
+                        </div>
+                    </div>       
                 </div>
             </div>
         </div>
