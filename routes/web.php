@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('dashboard/{date}/getpdfminatable', 'DashboardController@getpdfminatable')->name('dashboard.getpdfminatable'); 
     Route::post('dashboard/load', 'DashboardController@load')->name('dashboard.load');
     Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit'); 
+    Route::get('dashboard/{id}/complete_value','DashboardController@complete_value')->name('dashboard.complete_value');
     //PDF Full
     Route::get('{date}/getpdfcompleto', 'ReportesController@getpdfcompleto')->name('getpdfcompleto');
     
