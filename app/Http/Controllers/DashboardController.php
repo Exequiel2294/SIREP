@@ -745,11 +745,12 @@ class DashboardController extends Controller
                 $newvalue = $request->get('valor');
                 switch($data->variable_id)
                 {
+                    case 10011:
                     case 10019:
                     case 10031: 
                     case 10039:
                         DB::table('data')
-                            ->whereIn('variable_id',[10019,10031,10039])
+                            ->whereIn('variable_id',[10011,10019,10031,10039])
                             ->where('fecha', $data->fecha)
                             ->update(['valor' =>$newvalue]);                    
                     break;  
