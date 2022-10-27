@@ -682,7 +682,7 @@ class DashboardController extends Controller
                         }
                         else
                         {
-                            if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H') < 24)
+                            if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H', time() - 3600 * 3) < 21)
                             {
                                 $data['msg'] = 'No puede modificar esta variable hasta su ultima carga a las 21hs.';
                                 $data['val'] = -1;
