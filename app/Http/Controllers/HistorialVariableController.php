@@ -79,7 +79,7 @@ class HistorialVariableController extends Controller
         else
         {
             if ((date('m', strtotime($data_register->fecha)) == date('m') && date('Y', strtotime($data_register->fecha)) == date('Y')) || 
-            (date('m', strtotime($data_register->fecha)) == date('m') - 1 && date('Y', strtotime($data_register->fecha)) == date('Y') && date('d') <= 5))
+            (date('m', strtotime($data_register->fecha)) == date('m') - 1 && date('Y', strtotime($data_register->fecha)) == date('Y') && date('d') <= 10))
             {
                 if (date('Y-m-d', strtotime($data_register->fecha)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
                 {  
