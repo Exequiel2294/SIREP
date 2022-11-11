@@ -206,7 +206,6 @@ trait MinaTrait {
                     AND  MONTH(fecha) = '.$month.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
-                    AND valor <> 0
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
@@ -581,7 +580,6 @@ trait MinaTrait {
                         AND  DATEPART(QUARTER, fecha) = '.$quarter.'
                         AND  DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
-                        AND valor <> 0
                         GROUP BY variable_id) AS d
                         RIGHT JOIN
                         (SELECT id 
@@ -1032,7 +1030,6 @@ trait MinaTrait {
                     WHERE variable_id IN (10114,10115,10116)
                     AND  YEAR(fecha) = '.$year.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
-                    AND valor <> 0
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
