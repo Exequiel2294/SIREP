@@ -125,7 +125,7 @@ class DashboardController extends Controller
 
     public function edit(Request $request)
     { 
-        $vbles_c = DB::table('variable')->where('tipo',4)->pluck('id')->toArray();
+        $vbles_c = DB::table('variable')->whereIn('tipo',[4, 8])->pluck('id')->toArray();
         $selecteddate = $request->selecteddate;   
         if (in_array($request->variable_id,$vbles_c))
         {

@@ -5659,7 +5659,7 @@ trait MinaTrait {
                 ->addColumn('action', function($data)
                 {
                     $button = '';  
-                    if ($data->tipo == 4)
+                    if ($data->tipo == 8)
                     {
                         $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" data-vbleid="'.$data->variable_id.'" class="btn-action-table edit" title="Información Variable"><i style="color:#0F62AC;" class="fa-lg fas fa-info-circle"></i></a>';
                     }
