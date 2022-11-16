@@ -78,24 +78,32 @@
             justify-content: space-between;
             display: none;
         }
+        .alert-warning {
+            color: #fff;
+            border-color: #d32535;
+            padding: 1rem 1rem .5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            display: none;
+        }
         @media(min-width:760px) {
-            .alert-error {
+            .alert-error, .alert-warning {
                 padding: 2rem 1rem .5rem 3rem;
             }
         }
-        .alert-error .print-error-msg h4 {
+        .alert-error .print-error-msg h4, .alert-warning .print-warning-msg h4  {
             font-size: 1.25rem;
         }
         @media(min-width:760px) {
-        .alert-error .print-error-msg h4 {
+        .alert-error .print-error-msg h4, .alert-warning .print-warning-msg h4 {
                 font-size: 1.5rem;
             }
         }
-        .alert-error .print-error-msg ul {
+        .alert-error .print-error-msg ul, .alert-warning .print-warning-msg ul {
             margin-left: .6rem;
         }
         @media(min-width:760px) {
-            .alert-error .print-error-msg ul {
+            .alert-error .print-error-msg ul, .alert-warning .print-warning-msg ul {
                 font-size: 1.1rem;
             }
         }
@@ -357,12 +365,18 @@
                 },
                 columns: [
                     {data:'id', title:'id', name:'id', visible: false},
-                    {data:'area', title:'Area', name:'area', orderable: false, searchable: false, width:'30%'},
-                    {data:'nombre', title:'Nombre', name:'nombre', orderable: false, searchable: false, width:'30%'},
+                    {data:'area', title:'Area', name:'area', orderable: false, searchable: false, width:'29%'},
+                    {data:'nombre', title:'Nombre', name:'nombre', orderable: false, searchable: false, width:'29%'},
                     {data:'unidad', title:'Unidad', name:'unidad', orderable: false, searchable: false, width:'5%'},
                     {data:'fecha', title:'Fecha', name:'fecha', orderable: false, searchable: false},
                     {data:'valor', title:'Valor', name:'valor', orderable: false,searchable: false},
                     {data:'action', title:'', name:'action', orderable: false,searchable: false, width:'25px'},
+                ],
+                columnDefs: [
+                    {
+                        targets: [3,4,5],
+                        className: "dt-center"
+                    }
                 ],
                 order: [[0, 'asc']],
                 
@@ -439,17 +453,17 @@
         /* CLOSE ALERT */
 
         /* ACTION TO CLOSE MODAL */
-        // $('#modal').on('hidden.bs.modal', function () {
-        //     $("#modal-form").validate().resetForm();
-        //     $(".alert-error").css('display','none');
-        // });
+        $('#modal').on('hidden.bs.modal', function () {
+            $("#modal-form").validate().resetForm();
+            $(".alert-warning").css('display','none');
+        });
         /* ACTION TO CLOSE MODAL */
 
          /* EDIT BUTTON */
          $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
             $.get('historial/'+id+'/edit', function(data){
-                if (data['val'] == 1)
+                if (data['val'] == 1 || data['val'] == 2)
                 {
                     $('#form-button').val(0); 
                     $('#modal-title').html('Editar Campo'); 
@@ -457,7 +471,12 @@
                     $('#modal').modal('show');
                     $('#id').val(data['generic'].id);                          
                     $('#fecha').val(data['generic'].fecha);                   
-                    $('#valor').val(data['generic'].valor);     
+                    $('#valor').val(data['generic'].valor);   
+                    
+                    if (data['val'] == 2)
+                    {
+                        printWarningMsg(data['msg']);
+                    }
                 }   
                 else
                 {    
@@ -467,7 +486,12 @@
                     })                        
                 }                          
             })
-        });      
+        });  
+        
+        function printWarningMsg(msg) {
+            $(".alert-warning").css('display','flex');
+            $(".print-warning-msg").find("span").html(msg);
+        }
         /* EDIT BUTTON */
 
 
@@ -615,6 +639,12 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                </div>                
+                <div class="alert-warning">
+                    <div class="print-warning-msg">
+                        <h4><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h4>
+                        <span>Warning alert preview. This alert is dismissable.</span>
+                    </div>         
                 </div>
                 <div class="alert-error">
                     <div class="print-error-msg">

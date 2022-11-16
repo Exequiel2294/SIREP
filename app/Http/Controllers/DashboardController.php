@@ -682,22 +682,33 @@ class DashboardController extends Controller
                         }
                         else
                         {
-                            if (in_array($request->variable_id,$vbles_11_21h) && (int)date('H', time() - 3600 * 3) < 21)
+                            if (in_array($request->variable_id,$vbles_11_21h))
                             {
-                                $where = array('data.id' => $request->id);
-                                $data['msg'] = 'El valor de esta variable se sobreescribirá a 21hs. del dia corriente.';
-                                $data['val'] = 2;
-                                $data['generic'] =  DB::table('area')
-                                            ->join('categoria', 'categoria.area_id', '=','area.id')
-                                            ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
-                                            ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
-                                            ->join('data', 'data.variable_id', '=','variable.id')
-                                            ->where($where)
-                                            ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
-                                            ->first();
-                                return response()->json($data);  
-                            }
-                            
+                                if ((int)date('H', time() - 3600 * 3) < 11)
+                                {
+                                    $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
+                                    $data['val'] = -1;
+                                    return response()->json($data);
+                                }
+                                else
+                                {
+                                    if ((int)date('H', time() - 3600 * 3) < 21)
+                                    {
+                                        $where = array('data.id' => $request->id);
+                                        $data['msg'] = 'El valor de esta variable se sobreescribirá a 21hs. del dia corriente.';
+                                        $data['val'] = 2;
+                                        $data['generic'] =  DB::table('area')
+                                                    ->join('categoria', 'categoria.area_id', '=','area.id')
+                                                    ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
+                                                    ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
+                                                    ->join('data', 'data.variable_id', '=','variable.id')
+                                                    ->where($where)
+                                                    ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                                                    ->first();
+                                        return response()->json($data);      
+                                    }
+                                }
+                            }                            
                         }
                     }                     
                     
