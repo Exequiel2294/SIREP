@@ -43,7 +43,8 @@ class PermisosController extends Controller
                     ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                     ->join('area', 'categoria.area_id', '=', 'area.id')
                     ->select('permisos_variables.variable_id as id', 'area.nombre as area','variable.nombre as nombre','variable.descripcion as descripcion','area.id as area_id')
-                    ->where('permisos_variables.user_id','=',$id)                    
+                    ->where('permisos_variables.user_id','=',$id)  
+                    ->where('variable.estado',1)             
                     ->orderBy('variable.orden','asc')
                     ->get();
 
@@ -65,6 +66,7 @@ class PermisosController extends Controller
                         ->join('area', 'categoria.area_id', '=', 'area.id')
                         ->select('subcategoria.nombre as subcategoria','area.id as area_id', 'area.nombre as area', 'variable.id as id', 'variable.nombre as nombre', 'variable.descripcion as descripcion')
                         ->where('variable.tipo','<>',4)
+                        ->where('variable.tipo','<>',8)
                         ->where('variable.estado',1)
                         ->orderBy('area','asc')
                         ->orderBy('subcategoria','asc')
