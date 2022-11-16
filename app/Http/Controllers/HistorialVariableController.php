@@ -95,7 +95,6 @@ class HistorialVariableController extends Controller
                 if (date('Y-m-d', strtotime($data_register->fecha)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
                 {  
                     $vbles_11h = DB::table('variable')->where('tipo',2)->pluck('id')->toArray();
-                    $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();
                     if (in_array($data_register->variable_id,$vbles_11h) && (int)date('H') < 14)
                     {
                         $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
@@ -103,26 +102,37 @@ class HistorialVariableController extends Controller
                         return response()->json($data);
                     }
                     else
-                    {                        
-                        if (in_array($data_register->variable_id,$vbles_11_21h))
+                    {     
+                        $vbles_10h = DB::table('variable')->where('tipo',9)->pluck('id')->toArray();
+                        if (in_array($data_register->variable_id,$vbles_10h) && (int)date('H', time() - 3600 * 3) < 10)
                         {
-                            if ((int)date('H', time() - 3600 * 3) < 11)
+                            $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 10hs';
+                            $data['val'] = -1;
+                            return response()->json($data);
+                        }
+                        else
+                        {       
+                            $vbles_11_21h = DB::table('variable')->where('tipo',5)->pluck('id')->toArray();            
+                            if (in_array($data_register->variable_id,$vbles_11_21h))
                             {
-                                $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
-                                $data['val'] = -1;
-                                return response()->json($data);
-                            }
-                            else
-                            {
-                                if ((int)date('H', time() - 3600 * 3) < 21)
+                                if ((int)date('H', time() - 3600 * 3) < 11)
                                 {
-                                    $data['msg'] = 'El valor de esta variable se sobreescribirá a 21hs. del dia corriente.';
-                                    $data['val'] = 2;
-                                    $data['generic'] =  $data_register;
-                                    return response()->json($data);      
+                                    $data['msg'] = 'No puede modificar esta variable hasta que la misma sea cargada a las 11hs';
+                                    $data['val'] = -1;
+                                    return response()->json($data);
                                 }
-                            }
-                        }                         
+                                else
+                                {
+                                    if ((int)date('H', time() - 3600 * 3) < 21)
+                                    {
+                                        $data['msg'] = 'El valor de esta variable se sobreescribirá a 21hs. del dia corriente.';
+                                        $data['val'] = 2;
+                                        $data['generic'] =  $data_register;
+                                        return response()->json($data);      
+                                    }
+                                }
+                            }    
+                        }                     
                     }
                 }                     
                 
