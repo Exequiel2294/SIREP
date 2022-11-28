@@ -384,6 +384,9 @@
                     required: true,
                     min: 1,
                     max:12
+                },
+                dias_conciliacion: {
+                    required: true
                 }
             },
             messages: {  
@@ -496,7 +499,6 @@
                                         }
                                     } 
                                 }  
-                                console.log(conciliado_load);
                                 if (!(i < arrayid.length)) 
                                 {
                                     console.log(conciliado_load);
@@ -507,6 +509,7 @@
                                             area_id: $( "#area_id" ).val(),
                                             month: $( "#month" ).val(),
                                             conciliado_load:conciliado_load,
+                                            dias_conciliacion: $("#dias_conciliacion" ).val(),
                                             _token: $('input[name="_token"]').val()
                                         },
                                         success:function(data)
@@ -675,7 +678,7 @@
                         <form action="post" id="modal-form-loadvbles" name="modal-form-loadvbles" autocomplete="off">                            
                                 <!-- <legend class="w-auto">Seleccionar Área y Mes</legend> -->
                                 <div class="row" style="justify-content: space-around;">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="area" class="col-form-label">Área</label>
                                         <div>
                                             <select class="form-control" name="area_id" id="area_id">
@@ -685,7 +688,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="categoria" class="col-form-label">Mes</label>
                                         <div>
                                             <select class="form-control" name="month" id="month">
@@ -695,7 +698,24 @@
                                                 @endforeach                                       
                                             </select> 
                                         </div>
-                                    </div>                                     
+                                    </div>       
+                                    <div class="form-group col-md-2">
+                                        <label for="dias" class="col-form-label">Días a Conciliar</label>
+                                        <div>                                            
+                                            <select class="form-control" name="dias_conciliacion" id="dias_conciliacion">
+                                                <option value=1>1</option>
+                                                <option value=2>2</option>
+                                                <option value=3>3</option>
+                                                <option value=4>4</option>
+                                                <option value=5 selected="selected">5</option>
+                                                <option value=6>6</option>
+                                                <option value=7>7</option>
+                                                <option value=8>8</option>
+                                                <option value=9>9</option> 
+                                                <option value=10>10</option>                                                                                     
+                                            </select>  
+                                        </div>
+                                    </div>                              
                                     <div class="form-group col-md-3" style="align-self:self-end">                                    
                                         <button type="button" class="btn btn-primary" id="btn-select">Cargar Variables</button>
                                     </div> 

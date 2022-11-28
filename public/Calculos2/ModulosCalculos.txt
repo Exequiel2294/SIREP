@@ -266,11 +266,24 @@ VARIABLE TIPO PROCESOS
         10031: Mineral Apilado Stacker 	- MMSA_APILAM_STACKER_Mineral Apilado Stacker (t) IDEM MMSA_HPGR_Mineral Triturado
         10039: Total Mineral Apilado 	- MMSA_APILAM_TA_Total Mineral Apilado (t) IDEM MMSA_HPGR_Mineral Triturado
         10045: PLS a SART 				- MMSA_SART_PLS a SART (m3)
+        10052: PLS a Carbones 			- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
         10059: Solución Barren 			- MMSA_LIXI_Solución Barren (m3)
         10060: Solución ILS 			- MMSA_LIXI_Solución ILS (m3)
+        10061: Solución PLS 			- MMSA_LIXI_Solución PLS (m3)
         10066: Flujo 					- MMSA_AGLOM_Flujo
         10067: Cemento 					- MMSA_AGLOM_Cemento
         
+    Variables 10h: -> TIPO 9        
+        10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
+        10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
+        10055: CN Solución Barren 		                - MMSA_LIXI_CN Solución Barren (ppm)
+        10056: CN Solución ILS 			                - MMSA_LIXI_CN Solución ILS (ppm)
+        10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
+        10041: Ley Au Alimentada 						- MMSA_SART_Ley Au Alimentada (ppm)
+        10042: Ley Au Salida 							- MMSA_SART_Ley Au Salida (ppm)
+        10043: Ley Cu Alimentada 						- MMSA_SART_Ley Cu Alimentada (ppm)
+        10044: Ley Cu Salida 							- MMSA_SART_Ley Cu Salida (ppm)
+
     Variables 11h: -> TIPO 2
         10003: Disponibilidad 							- MMSA_TP_Disponibilidad (%)
         10007: Utilización 								- MMSA_TP_Utilización (%)
@@ -280,17 +293,6 @@ VARIABLE TIPO PROCESOS
         10021: Utilización 								- MMSA_AGLOM_Utilización (%)
         10029: Disponibilidad 							- MMSA_APILAM_STACKER_Disponibilidad %
         10034: Utilización 								- MMSA_APILAM_STACKER_Utilización (%)
-        10041: Ley Au Alimentada 						- MMSA_SART_Ley Au Alimentada (ppm)
-        10042: Ley Au Salida 							- MMSA_SART_Ley Au Salida (ppm)
-        10043: Ley Cu Alimentada 						- MMSA_SART_Ley Cu Alimentada (ppm)
-        10044: Ley Cu Salida 							- MMSA_SART_Ley Cu Salida (ppm)
-        10050: Ley de Au BLS 							- MMSA_ADR_Ley de Au BLS (ppm)
-        10051: Ley de Au PLS 							- MMSA_ADR_Ley de Au PLS (ppm) IDEM: MMSA_LIXI_Ley Au Solución PLS
-        10052: PLS a Carbones 							- MMSA_ADR_PLS a Carbones (m3) IDEM: MMSA_LIXI_Solución PLS
-        10055: CN Solución Barren 		                - MMSA_LIXI_CN Solución Barren (ppm)
-        10056: CN Solución ILS 			                - MMSA_LIXI_CN Solución ILS (ppm)
-        10057: Ley Au Solución PLS 						- MMSA_LIXI_Ley Au Solución PLS (ppm)
-        10061: Solución PLS 							- MMSA_LIXI_Solución PLS (m3)
         10062: Horas operativas 						- MMSA_TP_Horas Operativas Trituración Primaria
         10063: Horas Operativas Trituración Terciaria 	- MMSA_HPGR_Horas Operativas Trituración Terciaria -> 11h
         10064: Horas Operativas Aglomeración 			- MMSA_AGLOM_Horas Operativas Aglomeración

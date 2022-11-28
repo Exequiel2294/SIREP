@@ -117,7 +117,7 @@ class ConciliadoController extends Controller
                     ); 
                 //FIN CALCULOS REUTILIZABLES
                 
-                $where = ['variable.estado' => 1, 'subcategoria.estado' => 1, 'categoria.area_id' => $this->area_id];
+                $where = ['variable.estado' => 1, 'subcategoria.estado' => 1, 'categoria.area_id' => $this->area_id, 'variable.conciliado' => 1];
                 $table = DB::table('variable')
                                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
@@ -1142,7 +1142,7 @@ class ConciliadoController extends Controller
                     //FIN MES REAL
                 //FIN CALCULOS REUTILIZABLES
 
-                $where = ['variable.estado' => 1, 'categoria.area_id' => $this->area_id];
+                $where = ['variable.estado' => 1, 'categoria.area_id' => $this->area_id, 'variable.conciliado' => 1];
                 $table = DB::table('variable')
                                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
@@ -1475,6 +1475,7 @@ class ConciliadoController extends Controller
             $month = (int)date('m', strtotime($this->date)); 
             $day = (int)date('d', strtotime($this->date)); 
             $lastdayMonth = (int)date('t', strtotime($this->date)); 
+            $this->dias_conciliacion = $request->get('dias_conciliacion');
             if ($request->get('area_id') == 1)
             {
                 $this->procsumarray = 
@@ -1544,44 +1545,60 @@ class ConciliadoController extends Controller
                             if (in_array($variable['variable_id'], $this->procsumarray))
                             {
                                 $conciliado = $variable['value'] - $variable['valuereal'];
-                                $data =
-                                DB::table('data')
-                                    ->where($this->where)
-                                    ->first();
-                                $oldvalue = $data->valor;
-                                $newvalue = $oldvalue + $conciliado;
-                                
+
                             } 
                             else
                             {
                                 if (in_array($variable['variable_id'], $this->procpromarray))
                                 {
                                     $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
-                                    $data =
-                                    DB::table('data')
-                                        ->where($this->where)
-                                        ->first();
-                                    $oldvalue = $data->valor;
-                                    $newvalue = $oldvalue + $conciliado;
                                 } 
-                            }   
-                               
-                            DB::table('data')
-                            ->where($this->where)
-                            ->update(['valor' => $newvalue]);
-                                $id = $data->id;
-                            Historial::create([
-                                'data_id' => $id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => 'CONCILIADO',
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $newvalue,
-                                'usuario' => auth()->user()->name
-                            ]);
+                            }                                  
+                            $j=$this->dias_conciliacion-1;
+                            $conciliar = 0;
+                            for ($i=$this->dias_conciliacion; $i>0; $i--)
+                            {
+                                $vars_conciliar = 
+                                DB::select(
+                                    'SELECT id, valor
+                                    FROM [mansfield2].[dbo].[data]
+                                    WHERE variable_id = ?
+                                    AND (valor + ?/?) >= 0
+                                    AND fecha BETWEEN ? AND ?',
+                                    [$variable['variable_id'], (int)$conciliado, $i, date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date]
+                                ); 
+                                if (sizeof($vars_conciliar) == $i)
+                                {
+                                    $conciliar = 1;
+                                    break;
+                                }
+                            }
+                            
+                            if ($conciliar == 1)
+                            {
+                                foreach ($vars_conciliar as $var)
+                                {                               
+                                    DB::table('data')
+                                    ->where('id', $var->id)
+                                    ->update(['valor' => $var->valor+(float)$conciliado/sizeof($vars_conciliar)]);                                        
+                                    Historial::create([
+                                        'data_id' => $var->id,
+                                        'fecha' => date('Y-m-d H:i:s'),
+                                        'transaccion' => 'CONCILIADO',
+                                        'valorviejo' => $var->valor,
+                                        'valornuevo' => $var->valor+(float)$conciliado/sizeof($vars_conciliar),
+                                        'usuario' => auth()->user()->name
+                                    ]);
+                                }
+                            }
+                            else
+                            {
+                                //NO SE PUEDE CONCILIAR
+                            }
                         } 
                     }                     
                 } 
-
+                
                 //INICIO CALCULOS REUTILIZABLES                    
                         
                     $this->ppprocmesreal =
