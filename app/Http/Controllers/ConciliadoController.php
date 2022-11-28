@@ -645,7 +645,6 @@ class ConciliadoController extends Controller
                                             ); 
                                         break;
                                         case 10008:
-                                        case 10037:
                                             //10008: MMSA_TP_Au Triturado                  
                                             //SUMATORIA MENSUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                     
                                             $mes_real = 
@@ -663,7 +662,7 @@ class ConciliadoController extends Controller
                                                 GROUP BY MONTH(A.fecha)', 
                                                 [date('m', strtotime($this->date))]
                                             ); 
-                                        break;                   
+                                        break;               
                                         case 10022:
                                             //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                             //SUMAMENSUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
@@ -727,8 +726,7 @@ class ConciliadoController extends Controller
                                             ); 
                                         break;
                                         case 10028:
-                                        case 10038:
-                                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                            //10028 MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                             //SUMAMENSUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)* 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                             $mes_real = 
                                             DB::select(
@@ -745,6 +743,49 @@ class ConciliadoController extends Controller
                                                 (SELECT fecha, variable_id, [valor]
                                                 FROM [dbo].[data]
                                                 where variable_id = 10030) as C
+                                                ON A.fecha = C.fecha
+                                                WHERE MONTH(A.fecha) =  ?
+                                                GROUP BY MONTH(A.fecha)', 
+                                                [date('m', strtotime($this->date))]
+                                            ); 
+                                        break;                                            
+                                        case 10037:
+                                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                            //SUMATORIA MENSUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)                                     
+                                            $mes_real = 
+                                            DB::select(
+                                                'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10035) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE MONTH(A.fecha) =  ?
+                                                GROUP BY MONTH(A.fecha)', 
+                                                [date('m', strtotime($this->date))]
+                                            ); 
+                                        break;                                           
+                                        case 10038:
+                                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                            //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                               
+                                            $mes_real = 
+                                            DB::select(
+                                                'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10036) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as B
+                                                ON A.fecha = B.fecha
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10035) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE MONTH(A.fecha) =  ?
                                                 GROUP BY MONTH(A.fecha)', 

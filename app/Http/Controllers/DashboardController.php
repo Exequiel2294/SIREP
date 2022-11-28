@@ -778,9 +778,8 @@ class DashboardController extends Controller
                     case 10011:
                     case 10019:
                     case 10031: 
-                    case 10039:
                         DB::table('data')
-                            ->whereIn('variable_id',[10011,10019,10031,10039])
+                            ->whereIn('variable_id',[10011,10019,10031])
                             ->where('fecha', $data->fecha)
                             ->update(['valor' =>$newvalue]);                    
                     break;  
@@ -857,7 +856,6 @@ class DashboardController extends Controller
                 ); 
             break;                   
             case 10008:
-            case 10037:
                 //MMSA_TP_Au Triturado oz                  
                 //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                 $d_real = 
@@ -992,7 +990,6 @@ class DashboardController extends Controller
                 ); 
             break;                   
             case 10028:
-            case 10038:
                 //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                 //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
                 $d_real = 
@@ -1033,7 +1030,48 @@ class DashboardController extends Controller
                     WHERE  DATEPART(y, A.fecha) = ?',
                     [(int)date('z', strtotime($data->fecha)) + 1]
                 ); 
-            break;               
+            break;                                                                   
+            case 10037:
+                //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                //((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                    
+                $d_real = 
+                DB::select(
+                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10039) as A
+                    INNER JOIN   
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10035) as B
+                    ON A.fecha = B.fecha
+                    WHERE  DATEPART(y, A.fecha) = ?',
+                    [(int)date('z', strtotime($data->fecha)) + 1]
+                ); 
+            break;              
+            case 10038:
+                //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                //(((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                     
+                $d_real = 
+                DB::select(
+                    'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10036) as A
+                    INNER JOIN   
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10039) as B
+                    ON A.fecha = B.fecha
+                    INNER JOIN   
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10035) as C
+                    ON A.fecha = C.fecha
+                    WHERE  DATEPART(y, A.fecha) = ?',
+                    [(int)date('z', strtotime($data->fecha)) + 1]
+                ); 
+            break;             
             case 10040:
                 //10040 MMSA_SART_Eficiencia (%)
                 //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100) / (10043 MMSA_SART_Ley Cu Alimentada ppm)                               
