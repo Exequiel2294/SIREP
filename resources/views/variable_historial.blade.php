@@ -378,7 +378,7 @@
                         className: "dt-center"
                     }
                 ],
-                order: [[0, 'asc']],
+                order: [[4, 'asc']],
                 
             } );
         }); 

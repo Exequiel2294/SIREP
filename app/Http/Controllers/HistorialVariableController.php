@@ -44,6 +44,7 @@ class HistorialVariableController extends Controller
                     ->select('d.id as id', 'v.unidad as unidad', 'v.nombre as nombre','s.nombre as area','d.valor as valor','d.fecha as fecha')
                     ->where('d.variable_id','=',$id)
                     ->whereBetween('d.fecha', [$fd, $fh])
+                    ->orderBy('d.fecha', 'asc')
                     ->get();
 
         /*foreach ($datos as $key => $d) {
@@ -55,7 +56,7 @@ class HistorialVariableController extends Controller
                 {
                     if(isset($data->valor)) 
                     { 
-                        return number_format($data->valor, 8, '.', ',');                        
+                        return number_format($data->valor, 12, '.', ',');                        
                     }        
                     else
                     {
