@@ -401,7 +401,7 @@
 
                 const link = document.createElement('a');
                 link.href = res.ruta;
-                const nom = 'Daiy Report Completo ' + date2 + '.pdf';
+                const nom = 'Daily Report Completo ' + date2 + '.pdf';
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
