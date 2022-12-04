@@ -1976,8 +1976,7 @@ class ConciliadoController extends Controller
                         if (isset($row->id))
                         {
                             $conciliado_reg = ConciliadoData::findOrFail($row->id);
-                            $oldvalue=$conciliado_reg->valor;
-                            //if (number_format($oldvalue, 6) !=  number_format($variable['value'], 6)){}                                
+                            $oldvalue=$conciliado_reg->valor;                               
                             $this->load = 1;    
                             $conciliado_reg->update([
                                 'valor' => $variable['value']
@@ -2016,13 +2015,6 @@ class ConciliadoController extends Controller
                             if (in_array($variable['variable_id'], $this->minasumarray))
                             {
                                 $conciliado = $variable['value'] - $variable['valuereal'];
-                                $conciliado = $variable['value'] - $variable['valuereal'];
-                                $data =
-                                DB::table('data')
-                                    ->where($this->where)
-                                    ->first();
-                                $oldvalue = $data->valor;
-                                $newvalue = $oldvalue + $conciliado;
                                 
                             } 
                             else
@@ -2030,27 +2022,51 @@ class ConciliadoController extends Controller
                                 if (in_array($variable['variable_id'], $this->minapercarray))
                                 {
                                     $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
-                                    $data =
-                                    DB::table('data')
-                                        ->where($this->where)
-                                        ->first();
-                                    $oldvalue = $data->valor;
-                                    $newvalue = $oldvalue + $conciliado;
                                 }
                             }   
                                
-                            DB::table('data')
-                            ->where($this->where)
-                            ->update(['valor' => $newvalue]);
-                                $id = $data->id;
-                            Historial::create([
-                                'data_id' => $id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => 'CONCILIADO',
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $newvalue,
-                                'usuario' => auth()->user()->name
-                            ]);
+                            $j=$this->dias_conciliacion-1;
+                            $conciliar = 0;
+                            for ($i=$this->dias_conciliacion; $i>0; $i--)
+                            {
+                                $vars_conciliar = 
+                                DB::select(
+                                    'SELECT id, valor
+                                    FROM [mansfield2].[dbo].[data]
+                                    WHERE variable_id = ?
+                                    AND (valor + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
+                                    AND fecha BETWEEN ? AND ?',
+                                    [$variable['variable_id'], $conciliado/$i, date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date]
+                                ); 
+                                if (sizeof($vars_conciliar) == $i)
+                                {
+                                    $conciliar = 1;
+                                    break;
+                                }
+                            }
+                            
+                            if ($conciliar == 1)
+                            {
+                                foreach ($vars_conciliar as $var)
+                                {                
+                                    DB::update(
+                                        'UPDATE [mansfield2].[dbo].[data]
+                                        SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
+                                        WHERE id = ?',
+                                        [$var->valor+$conciliado/sizeof($vars_conciliar), $var->id]
+                                    );         
+                                    DB::insert(
+                                        'INSERT into [mansfield2].[dbo].[historial]
+                                        ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
+                                        VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
+                                        [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->valor, $var->valor+$conciliado/sizeof($vars_conciliar), auth()->user()->name]
+                                    );     
+                                }
+                            }
+                            else
+                            {
+                                //NO SE PUEDE CONCILIAR
+                            }
                         } 
                     }                     
                 } 
@@ -2210,162 +2226,138 @@ class ConciliadoController extends Controller
                             'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                             (SELECT variable_id, SUM(valor) AS mes_real
                             FROM [dbo].[data] 
-                            WHERE variable_id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)
+                            WHERE variable_id IN (10070, 10073, 10076, 10079, 10088, 10093, 10097, 10100, 10103, 10106)
                             AND MONTH(fecha) = '.$month.'
                             AND YEAR(fecha) = '.$year.'
                             GROUP BY variable_id) AS d
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113)) AS v
+                            WHERE id IN (10070, 10073, 10076, 10079, 10088, 10093, 10097, 10100, 10103, 10106)) AS v
                             ON d.variable_id = v.id
                             ORDER BY id ASC'
                         );
                         $this->summesrealonz =
                         DB::select(
                             'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10070) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10071) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10070) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10071) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
-                            SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10073) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10074) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                            SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM 
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10073) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10074) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10076) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10077) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10076) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10077) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10079) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10080) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10082) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10083) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10085) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10086) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10079) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10080) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10088) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10089) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10088) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10089) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10093) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10094) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10093) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10094) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10097) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10098) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10097) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10098) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10100) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10101) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10100) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10101) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10103) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10104) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.'
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10103) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10104) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.'
                             UNION 
                             SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10106) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10107) as B
-                            ON A.fecha = B.fecha
-                            WHERE MONTH(A.fecha) = '.$month.'
-                            AND YEAR(A.fecha) = '.$year.''
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10106) as A
+                                INNER JOIN   
+                                (SELECT fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = 10107) as B
+                                ON A.fecha = B.fecha
+                                WHERE MONTH(A.fecha) = '.$month.'
+                                AND YEAR(A.fecha) = '.$year.''
                         );
 
                         $this->avgmesrealpor =
@@ -2400,23 +2392,21 @@ class ConciliadoController extends Controller
                         if (isset($row->id))
                         {
                             $conciliado_reg = ConciliadoData::findOrFail($row->id);
-                            $oldvalue=$conciliado_reg->valor;
-                            if (number_format($oldvalue, 6) !=  number_format($variable['value'], 6))
-                            {     
-                                $this->load = 1;    
-                                $conciliado_reg->update([
-                                    'valor' => $variable['value']
-                                ]);
-                                $transaccion ="EDIT";           
-                                ConciliadoHistorial::create([
-                                    'conciliado_data_id' => $conciliado_reg->id,
-                                    'fecha' => date('Y-m-d H:i:s'),
-                                    'transaccion' => $transaccion,
-                                    'valorviejo' => $oldvalue,
-                                    'valornuevo' => $variable['value'],
-                                    'usuario' => auth()->user()->name
-                                ]); 
-                            }
+                            $oldvalue=$conciliado_reg->valor;                                 
+                            $this->load = 1;    
+                            $conciliado_reg->update([
+                                'valor' => $variable['value']
+                            ]);
+                            $transaccion ="EDIT";           
+                            ConciliadoHistorial::create([
+                                'conciliado_data_id' => $conciliado_reg->id,
+                                'fecha' => date('Y-m-d H:i:s'),
+                                'transaccion' => $transaccion,
+                                'valorviejo' => $oldvalue,
+                                'valornuevo' => $variable['value'],
+                                'usuario' => auth()->user()->name
+                            ]); 
+                            
                         }
                         else
                         {      
@@ -2438,200 +2428,104 @@ class ConciliadoController extends Controller
                             ]);                   
                         }   
                         if ($this->load == 1)
-                        {
-                            if (in_array($variable['variable_id'], $this->minaleyarray))
+                        {     
+                            switch ($variable['variable_id'])
                             {
-                                switch ($variable['variable_id'])
+                                case 10071:
+                                    //AuConciliado = ($this->summesrealton[0]->mes_real * $variable['value']) / 31.1035;
+                                    //AuReal = $this->summesrealonz[0]->mes_real; 
+                                    $conciliado = (($this->summesrealton[0]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[0]->mes_real);
+                                    $VarA = 10070;            
+                                break; 
+                                case 10074:
+                                    $conciliado = (($this->summesrealton[1]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[1]->mes_real);
+                                    $VarA = 10073;            
+                                break; 
+                                case 10077:
+                                    $conciliado = (($this->summesrealton[2]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[2]->mes_real);
+                                    $VarA = 10076;            
+                                break; 
+                                case 10080:
+                                    $conciliado = (($this->summesrealton[3]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[3]->mes_real);
+                                    $VarA = 10079;            
+                                break; 
+                                case 10089:
+                                    $conciliado = (($this->summesrealton[4]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[4]->mes_real);
+                                    $VarA = 10088;            
+                                break; 
+                                case 10094:
+                                    $conciliado = (($this->summesrealton[5]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[5]->mes_real);
+                                    $VarA = 10093;            
+                                break; 
+                                case 10098:
+                                    $conciliado = (($this->summesrealton[6]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[6]->mes_real);
+                                    $VarA = 10097;            
+                                break; 
+                                case 10101:
+                                    $conciliado = (($this->summesrealton[7]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[7]->mes_real);
+                                    $VarA = 10100;
+                                break; 
+                                case 10104:
+                                    $conciliado = (($this->summesrealton[8]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[8]->mes_real);
+                                    $VarA = 10103;            
+                                break; 
+                                case 10107:
+                                    $conciliado = (($this->summesrealton[9]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[9]->mes_real);
+                                    $VarA = 10106;            
+                                break;          
+                                default:
+                                    $conciliado = 0;                                                        
+                            }
+                            if ($conciliado <> 0)
+                            {
+                                $j=$this->dias_conciliacion-1;
+                                $conciliar = 0;
+                                for ($i=$this->dias_conciliacion; $i>0; $i--)
                                 {
-                                    case 10071:
-                                        if(isset($this->summesrealonz[0]->mes_real) && isset($this->summesrealton[0]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[0]->mes_real;
-                                            $min_mes = $this->summesrealton[0]->mes_real;
-                                            $au_dia = $this->leydiareal[0]->au_dia;
-                                            $min_dia = $this->leydiareal[0]->min_dia;
-                                        }   
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        }                             
-                                    break;
-                                    case 10074:
-                                        if(isset($this->summesrealonz[1]->mes_real) && isset($this->summesrealton[1]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[1]->mes_real;
-                                            $min_mes = $this->summesrealton[1]->mes_real;                                                
-                                            $au_dia = $this->leydiareal[1]->au_dia;
-                                            $min_dia = $this->leydiareal[1]->min_dia;
-                                        }     
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        }                              
-                                    break;
-                                    case 10077:
-                                        if(isset($this->summesrealonz[2]->mes_real) && isset($this->summesrealton[2]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[2]->mes_real;
-                                            $min_mes = $this->summesrealton[2]->mes_real;
-                                            $au_dia = $this->leydiareal[2]->au_dia;
-                                            $min_dia = $this->leydiareal[2]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10080:
-                                        if(isset($this->summesrealonz[3]->mes_real) && isset($this->summesrealton[3]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[3]->mes_real;
-                                            $min_mes = $this->summesrealton[3]->mes_real;
-                                            $au_dia = $this->leydiareal[3]->au_dia;
-                                            $min_dia = $this->leydiareal[3]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10083:
-                                        if(isset($this->summesrealonz[4]->mes_real) && isset($this->summesrealton[4]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[4]->mes_real;
-                                            $min_mes = $this->summesrealton[4]->mes_real;
-                                            $au_dia = $this->leydiareal[4]->au_dia;
-                                            $min_dia = $this->leydiareal[4]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10086:
-                                        if(isset($this->summesrealonz[5]->mes_real) && isset($this->summesrealton[5]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[5]->mes_real;
-                                            $min_mes = $this->summesrealton[5]->mes_real;
-                                            $au_dia = $this->leydiareal[5]->au_dia;
-                                            $min_dia = $this->leydiareal[5]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10089:
-                                        if(isset($this->summesrealonz[6]->mes_real) && isset($this->summesrealton[6]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[6]->mes_real;
-                                            $min_mes = $this->summesrealton[6]->mes_real;
-                                            $au_dia = $this->leydiareal[6]->au_dia;
-                                            $min_dia = $this->leydiareal[6]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10094:
-                                        if(isset($this->summesrealonz[7]->mes_real) && isset($this->summesrealton[9]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[7]->mes_real;
-                                            $min_mes = $this->summesrealton[9]->mes_real;
-                                            $au_dia = $this->leydiareal[7]->au_dia;
-                                            $min_dia = $this->leydiareal[7]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10098:
-                                        if(isset($this->summesrealonz[8]->mes_real) && isset($this->summesrealton[10]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[8]->mes_real;
-                                            $min_mes = $this->summesrealton[10]->mes_real;
-                                            $au_dia = $this->leydiareal[8]->au_dia;
-                                            $min_dia = $this->leydiareal[8]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10101:
-                                        if(isset($this->summesrealonz[9]->mes_real) && isset($this->summesrealton[11]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[9]->mes_real;
-                                            $min_mes = $this->summesrealton[11]->mes_real;
-                                            $au_dia = $this->leydiareal[9]->au_dia;
-                                            $min_dia = $this->leydiareal[9]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10104:
-                                        if(isset($this->summesrealonz[10]->mes_real) && isset($this->summesrealton[12]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[10]->mes_real;
-                                            $min_mes = $this->summesrealton[12]->mes_real;
-                                            $au_dia = $this->leydiareal[10]->au_dia;
-                                            $min_dia = $this->leydiareal[10]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;
-                                    case 10107:
-                                        if(isset($this->summesrealonz[11]->mes_real) && isset($this->summesrealton[13]->mes_real))
-                                        {
-                                            $au_mes = $this->summesrealonz[11]->mes_real;
-                                            $min_mes = $this->summesrealton[13]->mes_real;                                                
-                                            $au_dia = $this->leydiareal[11]->au_dia;
-                                            $min_dia = $this->leydiareal[11]->min_dia;
-                                        }  
-                                        else
-                                        {
-                                            $min_mes = 0;
-                                        } 
-                                    break;                                        
-                                }
-                                if ($min_dia != 0)
+                                    $vars_conciliar =                                 
+                                    DB::select(
+                                        'SELECT B.id, A.valor mineral, B.valor ley, ((((A.valor*B.valor)/31.1035)+CONVERT(numeric(20,8), CAST(? AS FLOAT)))*31.1035)/A.valor leyconc FROM
+                                        (SELECT fecha, valor 
+                                        FROM [dbo].[data]
+                                        where variable_id = ?) AS A
+                                        INNER JOIN   
+                                        (SELECT id,fecha, valor
+                                        FROM [dbo].[data]
+                                        where variable_id = ?) AS B
+                                        ON A.fecha = B.fecha
+                                        WHERE A.fecha BETWEEN ? AND ?
+                                        AND A.valor > 0
+                                        AND ((((A.valor*B.valor)/31.1035)+CONVERT(numeric(20,8), CAST(? AS FLOAT)))*31.1035)/A.valor > 0',
+                                        [$conciliado/$i, $VarA, $variable['variable_id'], date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date, $conciliado/$i]
+                                    ); 
+                                    if (sizeof($vars_conciliar) == $i)
+                                    {
+                                        $conciliar = 1;
+                                        break;
+                                    }
+                                }                            
+                                if ($conciliar == 1)
                                 {
-                                    //$ley_mes = ($au_mes*31.1035)/$min_mes;
-                                    //$variable['value'] = ($au*31.1035)/$min;
-                                    $auMesConc = ($variable['value'] * $min_mes) / 31.1035;
-                                    $leyConc = ((($auMesConc - $au_mes) + $au_dia) * 31.1035 ) / $min_dia;
-
-                                    $data =
-                                    DB::table('data')
-                                        ->where($this->where)
-                                        ->first();
-                                    $oldvalue = $data->valor;
-                                    $newvalue = $leyConc;
+                                    foreach ($vars_conciliar as $var)
+                                    {                               
+                                        DB::table('data')
+                                        ->where('id', $var->id)
+                                        ->update(['valor' => $var->leyconc]);                                        
+                                        Historial::create([
+                                            'data_id' => $var->id,
+                                            'fecha' => date('Y-m-d H:i:s'),
+                                            'transaccion' => 'CONCILIADO',
+                                            'valorviejo' => $var->ley,
+                                            'valornuevo' => $var->leyconc,
+                                            'usuario' => auth()->user()->name
+                                        ]);
+                                    }
                                 }
                                 else
                                 {
-                                    return;
+                                    //NO SE PUEDE CONCILIAR
                                 }
-                            } 
-                               
-                            DB::table('data')
-                            ->where($this->where)
-                            ->update(['valor' => $newvalue]);
-                                $id = $data->id;
-                            Historial::create([
-                                'data_id' => $id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => 'CONCILIADO',
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $newvalue,
-                                'usuario' => auth()->user()->name
-                            ]);
+                            }
                         } 
                     }                     
                 } 
