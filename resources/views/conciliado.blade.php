@@ -337,7 +337,7 @@
                             if (data != '-')
                             {
                                 let val = parseFloat(data);
-                                return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="'+data+'" readonly hidden>'+val.toLocaleString('en-US', { minimumFractionDigits: 6 });
+                                return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="'+data+'" readonly hidden>'+val.toLocaleString('en-US', { minimumFractionDigits: 12 });
                             }
                             return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="" readonly hidden>'+data;
                         }

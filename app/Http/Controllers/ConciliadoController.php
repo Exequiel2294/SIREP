@@ -689,26 +689,7 @@ class ConciliadoController extends Controller
                                                 GROUP BY MONTH(A.fecha)', 
                                                 [date('m', strtotime($this->date))]
                                             ); 
-                                        break;   
-                                        case 10037:
-                                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
-                                            //SUMATORIA MENSUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                                     
-                                            $mes_real = 
-                                            DB::select(
-                                                'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10039) as A
-                                                INNER JOIN   
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10035) as B
-                                                ON A.fecha = B.fecha
-                                                WHERE MONTH(A.fecha) =  ?
-                                                GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
-                                            ); 
-                                        break;                 
+                                        break;
                                         case 10022:
                                             //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                             //SUMAMENSUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
@@ -772,7 +753,7 @@ class ConciliadoController extends Controller
                                             ); 
                                         break;
                                         case 10028:
-                                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                            //10028 MMSA_APILAM_STACKER_Au Extraible Apilado
                                             //SUMAMENSUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)* 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                             $mes_real = 
                                             DB::select(
@@ -794,10 +775,31 @@ class ConciliadoController extends Controller
                                                 GROUP BY MONTH(A.fecha)', 
                                                 [date('m', strtotime($this->date))]
                                             ); 
-                                        break;    
+
+                                        break;                                            
+                                        case 10037:
+                                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                            //SUMATORIA MENSUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)                                     
+                                            $mes_real = 
+                                            DB::select(
+                                                'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10035) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE MONTH(A.fecha) =  ?
+                                                GROUP BY MONTH(A.fecha)', 
+                                                [date('m', strtotime($this->date))]
+                                            ); 
+                                        break;                                           
                                         case 10038:
-                                            //MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
-                                            //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                  
+                                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                            //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                               
+
                                             $mes_real = 
                                             DB::select(
                                                 'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
@@ -818,7 +820,7 @@ class ConciliadoController extends Controller
                                                 GROUP BY MONTH(A.fecha)', 
                                                 [date('m', strtotime($this->date))]
                                             ); 
-                                        break;                 
+                                        break; 
                                         case 10046:
                                             //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                             //SUMAMENSUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               

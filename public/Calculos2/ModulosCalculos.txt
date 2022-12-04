@@ -167,17 +167,15 @@ VARIABLE PROCESOS POR AREA
             IDEM MMSA_HPGR_Ley Au
 
         10037: Total Au Apilado - MMSA_APILAM_TA_Total Au Apilado (oz):
-            Calculo: (Mineral Apilado Stacker * Ley Au)/31.1035
+            Calculo: ((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035
             NO SE TENDRIA QUE PODER MODIFICAR
-            IDEM MMSA_HPGR_Au Triturado
 
         10036: Recuperación - MMSA_APILAM_TA_Recuperación (%):
             IDEM MMSA_APILAM_STACKER_Recuperación
             Se carga manual
 
         10038: Total Au Extraible Apilado - MMSA_APILAM_TA_Total Au Extraible Apilado (oz):
-            IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker:
-            Calculo: ((Recuperacion/100) * Mineral Apilado Stacker * Ley Au) / 31.1035
+            Calculo: (((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035
             NO SE TENDRIA QUE PODER MODIFICAR
 
     LIXIVIACION
@@ -319,8 +317,8 @@ VARIABLE TIPO PROCESOS
         10027: Au Apilado Stacker 			- MMSA_APILAM_STACKER_Au Apilado Stacker (oz)
         10028: Au Extraible Apilado Stacker - MMSA_APILAM_STACKER_Au Extraible Apilado Stacker 
         10032: Productividad 				- MMSA_APILAM_STACKER_Productividad (t/h)
-        10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) IDEM MMSA_HPGR_Au Triturado
-        10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) IDEM MMSA_APILAM_STACKER_Au Extraible Apilado Stacker
+        10037: Total Au Apilado             - MMSA_APILAM_TA_Total Au Apilado (oz) 
+        10038: Total Au Extraible Apilado 	- MMSA_APILAM_TA_Total Au Extraible Apilado (oz) 
         10040: Eficiencia 					- MMSA_SART_Eficiencia (%)
         10046: Au Adsorbido 				- MMSA_ADR_Au Adsorbido (oz)
         10049: Eficiencia 					- MMSA_ADR_Eficiencia (%)
@@ -629,125 +627,117 @@ VISTA CORPORATIVO DAILY:
     GO
 
 
-    ALTER VIEW [dbo].[SIREP_DIA] AS
-    /*Vista para el DIA anterior a la fecha actual*/
-    SELECT v.id, v.orden, v.nombre, v.descripcion, d.fecha, v.unidad, d.valor
+ALTER VIEW [dbo].[MMSA_SIREP_DATA] AS
+    SELECT v.id as variable_id, d.fecha, CONVERT(DECIMAL(20, 8), d.valor) as valor
     FROM data d 
     INNER JOIN variable v
     ON d.variable_id = v.id
-    WHERE d.fecha = CONVERT(DATE,DATEADD(d,-1,GETDATE()))
-    AND v.id NOT IN (10002, 10006, 10008, 10013, 10015, 10020, 10027, 10028, 10032, 10037, 10038, 10040, 10046, 10049, 10053,10066)
+	WHERE v.id IN (10003, 10004, 10005, 10007, 10009, 10010, 10011, 10012, 10014, 10017, 10019, 10021, 10029, 10030, 10031, 10033, 10034, 10035, 10036, 10039, 10041, 10042, 10043, 10044, 10045, 10047, 10048, 10050, 10051, 10052, 10055, 10056, 10057, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067)
+	AND v.estado = 1
 
     UNION /*10002 -> MMSA_TP_Au Triturado oz*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
-    (SELECT fecha, variable_id, valor
+    SELECT 10002, A.fecha, CONVERT(DECIMAL(20, 2), (A.valor * B.valor)/31.1035) as valor FROM
+	(SELECT fecha, variable_id, valor
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10005) as A
     INNER JOIN   
     (SELECT fecha, variable_id, valor
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10004
-    AND valor <> 0) as B
+    where variable_id = 10004) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10002) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10006 -> MMSA_TP_Productividad t/h*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    SELECT 10006, A.fecha,
+	CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), A.valor/B.valor) 
+	END as valor 		
+	FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10005) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10062
-    AND valor <> 0) as B
+    where variable_id = 10062) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10006) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
-    UNION /*10008 -> MMSA_HPGR_Au Triturado (oz); 10037 -> MMSA_APILAM_TA_Total Au Apilado (oz)*/
-    SELECT V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    UNION /*10008 -> MMSA_HPGR_Au Triturado (oz)*/
+    SELECT 10008, A.fecha, CONVERT(DECIMAL(20, 2), (A.valor * B.valor)/31.1035) as valor FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10011) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10010
-    AND valor <> 0) as B
+    where variable_id = 10010) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID in (10008,10037)) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+	UNION /*10037 -> MMSA_APILAM_TA_Total Au Apilado (oz)*/
+    SELECT 10037, A.fecha, CONVERT(DECIMAL(20, 2), (A.valor * B.valor)/31.1035) as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10039) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10035) as B
+    ON A.fecha = B.fecha
 
     UNION /*10013 -> MMSA_HPGR_Productividad*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    SELECT 10013, A.fecha,
+		CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), A.valor/B.valor) 
+	END as valor
+	FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10011) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10063
-    AND valor <> 0) as B
+    where variable_id = 10063) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10013) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10015 -> MMSA_AGLOM_Adición de Cemento kg/t*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * 1000) / B.valor as valor FROM
+    SELECT 10015, A.fecha,
+		CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), (A.valor * 1000) / B.valor) 
+	END as valor
+	FROM  
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10067) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10019
-    AND valor <> 0) as B
+    where variable_id = 10019) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10015) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10020 -> MMSA_AGLOM_Productividad kg/t*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    SELECT 10020, A.fecha,
+		CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), A.valor/B.valor)
+	END as valor
+	FROM  
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10019) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10064
-    AND valor <> 0) as B
+    where variable_id = 10064) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10020) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10027 -> MMSA_APILAM_STACKER_Au Apilado Stacker oz*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    SELECT 10027, A.fecha, CONVERT(DECIMAL(20, 2), (A.valor * B.valor)/31.1035) as valor FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10031) as A
@@ -756,15 +746,9 @@ VISTA CORPORATIVO DAILY:
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10030) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10027) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
-    UNION /*10028 -> MMSA_APILAM_STACKER_Au Extraible Apilado Stacker oz; 10038 MMSA_APILAM_TA_Total Au Extraible Apilado oz*/
-    SELECT V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, ((A.valor/100) * B.valor * C.valor)/31.1035 as valor FROM
+    UNION /*10028 -> MMSA_APILAM_STACKER_Au Extraible Apilado Stacker oz*/
+    SELECT 10028, A.fecha, CONVERT(DECIMAL(20, 2), ((A.valor/100) * B.valor * C.valor)/31.1035) as valor FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10033) as A
@@ -778,51 +762,59 @@ VISTA CORPORATIVO DAILY:
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10030) as C
     ON A.fecha = C.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID IN (10028,10038)) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
+
+	UNION /*10038 MMSA_APILAM_TA_Total Au Extraible Apilado oz*/
+    SELECT 10038, A.fecha, CONVERT(DECIMAL(20, 2), ((A.valor/100) * B.valor * C.valor)/31.1035) as valor FROM
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10036) as A
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10039) as B
+    ON A.fecha = B.fecha
+    INNER JOIN   
+    (SELECT fecha, variable_id, [valor]
+    FROM [mansfield2].[dbo].[data]
+    where variable_id = 10035) as C
+    ON A.fecha = C.fecha
 
     UNION /*10032 -> MMSA_APILAM_STACKER_Productividad t/h*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, A.valor/B.valor as valor FROM
+    SELECT 10032, A.fecha,
+		CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), A.valor/B.valor)
+	END as valor
+	FROM  
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10031) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10065
-    AND valor <> 0) as B
+    where variable_id = 10065) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10032) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10040 -> MMSA_SART_Eficiencia %*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, ((A.valor-B.valor) * 100) / A.valor as valor FROM
+    SELECT 10040, A.fecha,
+		CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), ((A.valor-B.valor) * 100) / A.valor)
+	END as valor
+	FROM  
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10043
-    AND valor <> 0) as A
+    where variable_id = 10043) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10044) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10040) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10046 -> MMSA_ADR_Au Adsorbido oz*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * (B.valor-C.valor))/31.1035 as valor FROM
+    SELECT 10046, A.fecha, CONVERT(DECIMAL(20, 2), (A.valor * (B.valor-C.valor))/31.1035) as valor FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10052) as A
@@ -836,33 +828,26 @@ VISTA CORPORATIVO DAILY:
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10050) as C
     ON A.fecha = C.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10046) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10049 -> MMSA_ADR_Eficiencia %*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, ((A.valor-B.valor) * 100) / A.valor as valor FROM
+    SELECT 10049, A.fecha,
+		CASE 
+		WHEN B.valor = 0 
+		THEN null
+		ELSE CONVERT(DECIMAL(20, 2), ((A.valor-B.valor) * 100) / A.valor)
+	END as valor
+	FROM   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
-    where variable_id = 10051
-    AND valor <> 0) as A
+    where variable_id = 10051) as A
     INNER JOIN   
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10050) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10049) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
 
     UNION /*10053 -> MMSA_LIXI_Au Lixiviado oz%*/
-    SELECT TOP 1 V.id, V.orden, V.nombre, V.descripcion, A.fecha, V.unidad, (A.valor * B.valor)/31.1035 as valor FROM
+    SELECT 10053, A.fecha, CONVERT(DECIMAL(20, 2), (A.valor * B.valor)/31.1035) as valor FROM
     (SELECT fecha, variable_id, [valor]
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10061) as A
@@ -871,14 +856,7 @@ VISTA CORPORATIVO DAILY:
     FROM [mansfield2].[dbo].[data]
     where variable_id = 10057) as B
     ON A.fecha = B.fecha
-    INNER JOIN
-    (SELECT id, nombre, descripcion, unidad, orden 
-    FROM [mansfield2].[dbo].[variable]
-    WHERE ID = 10053) as V
-    ON 1 = 1
-    WHERE  DATEPART(y, A.fecha) = DATEPART(y, CONVERT(DATE,DATEADD(d,-1,GETDATE())))
-    order by orden asc
-    GO
+GO
 
 
 

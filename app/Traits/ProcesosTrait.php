@@ -529,7 +529,6 @@ trait ProcesosTrait {
                             ); 
                         break;                   
                         case 10008:
-                        case 10037:
                             //MMSA_TP_Au Triturado oz                  
                             //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
@@ -542,6 +541,25 @@ trait ProcesosTrait {
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
                                 where variable_id = 10010
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1]
+                            ); 
+                        break;                        
+                        case 10037:
+                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                            //((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                   
+                            $d_real = 
+                            DB::select(
+                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035
                                 AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
@@ -665,7 +683,6 @@ trait ProcesosTrait {
                             ); 
                         break;                   
                         case 10028:
-                        case 10038:
                             //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                             //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
@@ -683,6 +700,29 @@ trait ProcesosTrait {
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
                                 where variable_id = 10030) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1]
+                            ); 
+                        break;
+                        case 10038:
+                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                            //(((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10036) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035) as C
                                 ON A.fecha = C.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1]
@@ -1376,7 +1416,6 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10008:
-                                case 10037:
                                     //10008: MMSA_TP_Au Triturado                  
                                     //SUMATORIA MENSUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                     
                                     $mes_real = 
@@ -1395,7 +1434,27 @@ trait ProcesosTrait {
                                         GROUP BY MONTH(A.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                   
+                                break;   
+                                case 10037:
+                                    //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                    //SUMATORIA MENSUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)                                   
+                                    $mes_real = 
+                                    DB::select(
+                                        'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;                 
                                 case 10022:
                                     //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                     //SUMAMENSUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
@@ -1462,7 +1521,6 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10028:
-                                case 10038:
                                     //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                     //SUMAMENSUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)* 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                     $mes_real = 
@@ -1486,7 +1544,32 @@ trait ProcesosTrait {
                                         GROUP BY MONTH(A.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                    
+                                break;   
+                                case 10038:
+                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                    //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                              
+                                    $mes_real = 
+                                    DB::select(
+                                        'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10036) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as B
+                                        ON A.fecha = B.fecha
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as C
+                                        ON A.fecha = C.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;                  
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAMENSUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
@@ -2935,8 +3018,7 @@ trait ProcesosTrait {
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );
                                 break;
-                                case 10008:   
-                                case 10037:
+                                case 10008: 
                                     //10008: MMSA_TP_Au Triturado                  
                                     //SUMATORIA TRIMESTRAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
                                     $trimestre_real= DB::select(
@@ -2954,7 +3036,26 @@ trait ProcesosTrait {
                                         GROUP BY DATEPART(QUARTER, A.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );
-                                break;                   
+                                break;     
+                                case 10037:
+                                    //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                    //SUMATORIA TRIMESTRAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)                                    
+                                    $trimestre_real= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );
+                                break;                  
                                 case 10022:
                                     //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                     //SUMATRIMESTRAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
@@ -3018,7 +3119,6 @@ trait ProcesosTrait {
                                     );
                                 break;
                                 case 10028:
-                                case 10038:
                                     //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                     //SUMATRIMESTRAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                     $trimestre_real= DB::select(
@@ -3041,7 +3141,31 @@ trait ProcesosTrait {
                                         GROUP BY DATEPART(QUARTER, A.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );
-                                break;                  
+                                break;   
+                                case 10038:
+                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                    //SUMATRIMESTRAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                                 
+                                    $trimestre_real= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10036) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as B
+                                        ON A.fecha = B.fecha
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as C
+                                        ON A.fecha = C.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );
+                                break;               
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMATRIMESTRAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
@@ -4487,8 +4611,7 @@ trait ProcesosTrait {
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
                                 break;
-                                case 10008: 
-                                case 10037:  
+                                case 10008:  
                                     //10008: MMSA_TP_Au Triturado                  
                                     //SUMATORIA ANUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)    
                                     $anio_real= DB::select(
@@ -4506,7 +4629,26 @@ trait ProcesosTrait {
                                         GROUP BY YEAR(A.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                 
+                                break;  
+                                case 10037:
+                                    //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                    //SUMATORIA MENSUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)  
+                                    $anio_real= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;               
                                 case 10022:
                                     //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                     //SUMAANUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)     
@@ -4569,8 +4711,7 @@ trait ProcesosTrait {
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
                                 break;
-                                case 10028: 
-                                case 10038:  
+                                case 10028:  
                                     //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                     //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
                                     $anio_real= DB::select(
@@ -4593,7 +4734,31 @@ trait ProcesosTrait {
                                         GROUP BY YEAR(A.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                
+                                break; 
+                                case 10038: 
+                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                    //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
+                                    $anio_real= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10036) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as B
+                                        ON A.fecha = B.fecha
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as C
+                                        ON A.fecha = C.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;               
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
@@ -5587,7 +5752,6 @@ trait ProcesosTrait {
                             ); 
                         break;                   
                         case 10008:
-                        case 10037:
                             //MMSA_TP_Au Triturado oz                  
                             //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
@@ -5600,6 +5764,24 @@ trait ProcesosTrait {
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
                                 where variable_id = 10010) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1]
+                            ); 
+                        break;
+                        case 10037:
+                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                            //((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1]
@@ -5722,7 +5904,6 @@ trait ProcesosTrait {
                             ); 
                         break;                   
                         case 10028:
-                        case 10038:
                             //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                             //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
@@ -5740,6 +5921,29 @@ trait ProcesosTrait {
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
                                 where variable_id = 10030) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1]
+                            ); 
+                        break;
+                        case 10038:
+                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                            //(((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10036) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035) as C
                                 ON A.fecha = C.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1]
@@ -6433,7 +6637,6 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10008:
-                                case 10037:
                                     //10008: MMSA_TP_Au Triturado                  
                                     //SUMATORIA MENSUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                     
                                     $mes_real = 
@@ -6446,6 +6649,26 @@ trait ProcesosTrait {
                                         (SELECT fecha, variable_id, [valor]
                                         FROM [dbo].[data]
                                         where variable_id = 10010) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;                                 
+                                case 10037:
+                                    //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                    //SUMATORIA MENSUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)                                    
+                                    $mes_real = 
+                                    DB::select(
+                                        'SELECT MONTH(A.fecha), SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as B
                                         ON A.fecha = B.fecha
                                         WHERE MONTH(A.fecha) =  ?
                                         AND  DATEPART(y, A.fecha) <=  ?
@@ -6519,7 +6742,6 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10028:
-                                case 10038:
                                     //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                     //SUMAMENSUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)* 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                     $mes_real = 
@@ -6543,7 +6765,32 @@ trait ProcesosTrait {
                                         GROUP BY MONTH(A.fecha)', 
                                         [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                    
+                                break;                                     
+                                case 10038:
+                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                    //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                              
+                                    $mes_real = 
+                                    DB::select(
+                                        'SELECT MONTH(A.fecha), SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10036) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as B
+                                        ON A.fecha = B.fecha
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as C
+                                        ON A.fecha = C.fecha
+                                        WHERE MONTH(A.fecha) =  ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY MONTH(A.fecha)', 
+                                        [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;                 
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAMENSUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
@@ -7992,8 +8239,7 @@ trait ProcesosTrait {
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );
                                 break;
-                                case 10008:   
-                                case 10037:
+                                case 10008:  
                                     //10008: MMSA_TP_Au Triturado                  
                                     //SUMATORIA TRIMESTRAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)                                 
                                     $trimestre_real= DB::select(
@@ -8011,7 +8257,26 @@ trait ProcesosTrait {
                                         GROUP BY DATEPART(QUARTER, A.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );
-                                break;                   
+                                break;     
+                                case 10037:
+                                    //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                    //SUMATORIA TRIMESTRAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)                              
+                                    $trimestre_real= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );
+                                break;                
                                 case 10022:
                                     //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                     //SUMATRIMESTRAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)                               
@@ -8075,7 +8340,6 @@ trait ProcesosTrait {
                                     );
                                 break;
                                 case 10028:
-                                case 10038:
                                     //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                     //SUMATRIMESTRAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                               
                                     $trimestre_real= DB::select(
@@ -8098,7 +8362,31 @@ trait ProcesosTrait {
                                         GROUP BY DATEPART(QUARTER, A.fecha)', 
                                         [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
                                     );
-                                break;                  
+                                break;   
+                                case 10038:
+                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                    //SUMATRIMESTRAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)                                 
+                                    $trimestre_real= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as trimestre_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10036) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as B
+                                        ON A.fecha = B.fecha
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as C
+                                        ON A.fecha = C.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                                    );
+                                break;                
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMATRIMESTRAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
@@ -9545,7 +9833,6 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10008: 
-                                case 10037:  
                                     //10008: MMSA_TP_Au Triturado                  
                                     //SUMATORIA ANUAL(((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035)    
                                     $anio_real= DB::select(
@@ -9563,7 +9850,26 @@ trait ProcesosTrait {
                                         GROUP BY YEAR(A.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                 
+                                break;     
+                                case 10037: 
+                                    //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                                    //SUMATORIA ANUAL(((10039 MMSA_APILAM_TA_Total Mineral Apilado (t))*(10035 MMSA_APILAM_TA_Ley Au (g/t))) / 31.1035)   
+                                    $anio_real= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM((A.valor * B.valor)/31.1035) as anio_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;              
                                 case 10022:
                                     //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
                                     //SUMAANUAL((((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035)     
@@ -9626,8 +9932,7 @@ trait ProcesosTrait {
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
                                 break;
-                                case 10028: 
-                                case 10038:  
+                                case 10028:  
                                     //MMSA_APILAM_STACKER_Au Extraible Apilado                  
                                     //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
                                     $anio_real= DB::select(
@@ -9650,7 +9955,31 @@ trait ProcesosTrait {
                                         GROUP BY YEAR(A.fecha)',
                                         [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                     ); 
-                                break;                
+                                break; 
+                                case 10038: 
+                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                    //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
+                                    $anio_real= DB::select(
+                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10036) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10039) as B
+                                        ON A.fecha = B.fecha
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10035) as C
+                                        ON A.fecha = C.fecha
+                                        WHERE YEAR(A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        GROUP BY YEAR(A.fecha)',
+                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                    ); 
+                                break;               
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
