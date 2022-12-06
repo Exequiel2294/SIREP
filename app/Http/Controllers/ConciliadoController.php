@@ -1631,7 +1631,7 @@ class ConciliadoController extends Controller
                                 $vars_conciliar = 
                                 DB::select(
                                     'SELECT id, valor
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM data
                                     WHERE variable_id = ?
                                     AND (valor + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
                                     AND fecha BETWEEN ? AND ?',
@@ -1649,25 +1649,17 @@ class ConciliadoController extends Controller
                                 foreach ($vars_conciliar as $var)
                                 {                
                                     DB::update(
-                                        'UPDATE [mansfield2].[dbo].[data]
+                                        'UPDATE data
                                         SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
                                         WHERE id = ?',
                                         [$var->valor+$conciliado/sizeof($vars_conciliar), $var->id]
                                     );         
                                     DB::insert(
-                                        'INSERT into [mansfield2].[dbo].[historial]
+                                        'INSERT into historial
                                         ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
                                         VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
                                         [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->valor, $var->valor+$conciliado/sizeof($vars_conciliar), auth()->user()->name]
-                                    );                         
-                                    /*Historial::create([
-                                        'data_id' => $var->id,
-                                        'fecha' => date('Y-m-d H:i:s'),
-                                        'transaccion' => 'CONCILIADO',
-                                        'valorviejo' => $var->valor,
-                                        'valornuevo' => $var->valor+$conciliado/sizeof($vars_conciliar),
-                                        'usuario' => auth()->user()->name
-                                    ]);*/
+                                    );   
                                 }
                             }
                             else
@@ -2034,7 +2026,7 @@ class ConciliadoController extends Controller
                                 $vars_conciliar = 
                                 DB::select(
                                     'SELECT id, valor
-                                    FROM [mansfield2].[dbo].[data]
+                                    FROM data
                                     WHERE variable_id = ?
                                     AND (valor + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
                                     AND fecha BETWEEN ? AND ?',
@@ -2052,13 +2044,13 @@ class ConciliadoController extends Controller
                                 foreach ($vars_conciliar as $var)
                                 {                
                                     DB::update(
-                                        'UPDATE [mansfield2].[dbo].[data]
+                                        'UPDATE data
                                         SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
                                         WHERE id = ?',
                                         [$var->valor+$conciliado/sizeof($vars_conciliar), $var->id]
                                     );         
                                     DB::insert(
-                                        'INSERT into [mansfield2].[dbo].[historial]
+                                        'INSERT into historial
                                         ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
                                         VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
                                         [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->valor, $var->valor+$conciliado/sizeof($vars_conciliar), auth()->user()->name]
