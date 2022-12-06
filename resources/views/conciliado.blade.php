@@ -351,7 +351,7 @@
                             else
                             {
                                 let val = (data == null) ? '' : parseFloat(data);
-                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US', { minimumFractionDigits: 6 })+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
+                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US', { minimumFractionDigits: 12 })+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
                             }
                         }
                     },
