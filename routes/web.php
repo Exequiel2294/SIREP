@@ -66,6 +66,12 @@ Route::group(['middleware' => ['auth']], function() {
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {
 
+    Route::get('budget', 'BudgetController@index')->name('budget');
+    Route::post('budget/getvariables', 'BudgetController@getvariables')->name('budget.getvariables');
+    Route::post('budget.getvalores', 'BudgetController@getValores')->name('budget.getvalores');
+    Route::get('budget/{id}/edit','BudgetController@edit')->name('budget.edit');
+    Route::post('budget/load', 'BudgetController@load')->name('budget.load');
+
     Route::get('area', 'AreaController@index')->name('area');
     Route::post('area/load', 'AreaController@load')->name('area.load');
     Route::get('area/{id}/edit','AreaController@edit')->name('area.edit');

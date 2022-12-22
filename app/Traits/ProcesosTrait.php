@@ -30,431 +30,431 @@ trait ProcesosTrait {
         
         //INICIO CALCULOS REUTILIZABLES
             //MES REAL
-            $this->summesreal10005 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10005
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10011 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10011
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesreal10019 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10019
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesreal10039 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10039
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10045 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10045
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10052 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10052
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesreal10061 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10061
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
+                $this->summesreal10005 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10005
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10011 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10011
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesreal10019 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10019
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesreal10039 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10039
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10045 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10045
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10052 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10052
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesreal10061 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10061
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
             //MES BUDGET
-            $this->summesbudget10005 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10005
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesbudget10011 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10011
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->summesbudget10019 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10019
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10039 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10039
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10045 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10045
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10052 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10052
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->summesbudget10061 =
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10061
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
+                $this->summesbudget10005 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10005
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesbudget10011 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10011
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->summesbudget10019 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10019
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10039 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10039
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10045 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10045
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10052 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10052
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->summesbudget10061 =
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10061
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
             //Trimestre Real
-            $this->sumtrireal10005 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10005
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtrireal10011 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10011
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtrireal10019 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10019
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtrireal10039 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10039
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtrireal10045 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10045
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtrireal10052 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10052
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtrireal10061 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10061
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
+                $this->sumtrireal10005 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10005
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtrireal10011 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10011
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtrireal10019 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10019
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtrireal10039 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10039
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtrireal10045 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10045
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtrireal10052 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10052
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtrireal10061 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10061
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
             //Trimestre Budget
-            $this->sumtribudget10005 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10005
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtribudget10011 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10011
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtribudget10019 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10019
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumtribudget10039 = 
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10039
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtribudget10045 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10045
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtribudget10052 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10052
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumtribudget10061 =
-            DB::select(
-                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10061
-                AND  DATEPART(QUARTER, fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY DATEPART(QUARTER, fecha)', 
-                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
-            );
+                $this->sumtribudget10005 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10005
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtribudget10011 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10011
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtribudget10019 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10019
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumtribudget10039 = 
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10039
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtribudget10045 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10045
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtribudget10052 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10052
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumtribudget10061 =
+                DB::select(
+                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10061
+                    AND  DATEPART(QUARTER, fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY DATEPART(QUARTER, fecha)', 
+                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1]
+                );
             //Anio Real
-            $this->sumanioreal10005 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10005
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioreal10011 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10011
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioreal10019 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10019
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioreal10039 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10039
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumanioreal10045 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10045
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumanioreal10052 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10052
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumanioreal10061 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[data]
-                WHERE variable_id = 10061
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
+                $this->sumanioreal10005 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10005
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumanioreal10011 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10011
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumanioreal10019 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10019
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumanioreal10039 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10039
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumanioreal10045 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10045
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumanioreal10052 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10052
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumanioreal10061 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[data]
+                    WHERE variable_id = 10061
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
             //Anio Budget
-            $this->sumaniobudget10005 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10005
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumaniobudget10011 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10011
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumaniobudget10019 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10019
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10039 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10039
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10045 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10045
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10052 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10052
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
-            $this->sumaniobudget10061 =
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[budget]
-                WHERE variable_id = 10061
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
+                $this->sumaniobudget10005 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10005
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumaniobudget10011 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10011
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                ); 
+                $this->sumaniobudget10019 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10019
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10039 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10039
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10045 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10045
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10052 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10052
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+                $this->sumaniobudget10061 =
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[budget]
+                    WHERE variable_id = 10061
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
         //FIN CALCULOS REUTILIZABLES
 
         $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];

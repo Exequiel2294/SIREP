@@ -16,7 +16,6 @@ class HistorialVariableController extends Controller
 
     public function index()
     {
-        //$variables = Variable::where('descripcion','like','%MMSA%')->get();
         $usuario = auth()->id();
         $variables =  DB::table('variable as v')
             ->join('subcategoria as s', 'v.subcategoria_id', '=', 's.id')
