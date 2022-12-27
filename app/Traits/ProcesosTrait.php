@@ -1372,7 +1372,7 @@ trait ProcesosTrait {
                                         FROM [dbo].[budget]
                                         WHERE variable_id = ?
                                         AND MONTH(fecha) = ?
-                                        AND YEAR(A.fecha) = ?',
+                                        AND YEAR(fecha) = ?',
                                         [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );                                    
                                     if(isset($dia_budget[0]->dia_budget)) 
@@ -1391,7 +1391,7 @@ trait ProcesosTrait {
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND MONTH(fecha) = ?
-                                AND YEAR(A.fecha) = ?',
+                                AND YEAR(fecha) = ?',
                                 [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                             ); 
                         break;
@@ -1406,7 +1406,7 @@ trait ProcesosTrait {
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND MONTH(fecha) = ?
-                                AND YEAR(A.fecha) = ?',
+                                AND YEAR(fecha) = ?',
                                 [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
 
                             );
@@ -7448,7 +7448,7 @@ trait ProcesosTrait {
                                         FROM [dbo].[budget]
                                         WHERE variable_id = ?
                                         AND MONTH(fecha) = ?
-                                        AND YEAR(A.fecha) = ?',
+                                        AND YEAR(fecha) = ?',
                                         [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );                                    
                                     if(isset($dia_budget[0]->dia_budget)) 
@@ -7467,7 +7467,7 @@ trait ProcesosTrait {
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND MONTH(fecha) = ?
-                                AND YEAR(A.fecha) = ?',
+                                AND YEAR(fecha) = ?',
                                 [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                             ); 
                         break;
@@ -7482,7 +7482,7 @@ trait ProcesosTrait {
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
                                 AND MONTH(fecha) = ?
-                                AND YEAR(A.fecha) = ?',
+                                AND YEAR(fecha) = ?',
                                 [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
 
                             );
