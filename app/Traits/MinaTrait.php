@@ -1336,8 +1336,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10071) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10075:
@@ -1354,8 +1355,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10074) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10078:
@@ -1372,8 +1374,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10077) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10081:
@@ -1390,8 +1393,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10080) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10084:
@@ -1408,8 +1412,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10083) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10090:
@@ -1426,8 +1431,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10089) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10095:
@@ -1444,8 +1450,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10094) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10099:
@@ -1462,8 +1469,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10098) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10102:
@@ -1480,8 +1488,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10101) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10105:
@@ -1498,8 +1507,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10104) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10108:
@@ -1516,8 +1526,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10107) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;   
                         default:                        
@@ -1566,9 +1577,10 @@ trait MinaTrait {
                                 'SELECT valor/DAY(fecha) as dia_budget
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
-                                AND MONTH(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date))]
-
+                                AND MONTH(fecha) = ?
+                                AND YEAR(fecha) = ?',
+                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
+    
                             ); 
                         break;
                         case 'g/t':
@@ -1577,9 +1589,10 @@ trait MinaTrait {
                                 'SELECT valor as dia_budget
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
-                                AND MONTH(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date))]
-
+                                AND MONTH(fecha) = ?                                
+                                AND YEAR(fecha) = ?',
+                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
+    
                             );
                         break;
                         case 'oz':
@@ -1598,9 +1611,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10071) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     ); 
                                 break;
                                 case 10075:
@@ -1616,9 +1630,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10074) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;
                                 case 10078:
@@ -1634,9 +1649,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10077) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;
                                 case 10081:
@@ -1652,9 +1668,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10080) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;
                                 case 10084:
@@ -1670,9 +1687,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10083) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10090:
@@ -1688,9 +1706,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10089) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10095:
@@ -1706,9 +1725,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10094) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10099:
@@ -1724,9 +1744,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10098) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10102:
@@ -1742,9 +1763,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10101) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10105:
@@ -1760,9 +1782,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10104) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10108:
@@ -1778,9 +1801,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10107) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;   
                             } 
@@ -3515,8 +3539,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10071) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10075:
@@ -3533,8 +3558,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10074) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10078:
@@ -3551,8 +3577,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10077) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10081:
@@ -3569,8 +3596,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10080) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
                         case 10084:
@@ -3587,28 +3615,11 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10083) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;    
-                        case 10087:
-                            //Au ROM a Leach Pad                 
-                            //(10082*10083 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10085) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10086) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
-                            ); 
-                        break;                         
+                        break;                            
                         case 10090:
                             //Total Au Minado oz                  
                             //(10088*10089 / 31.1035                                     
@@ -3623,8 +3634,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10089) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10095:
@@ -3641,8 +3653,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10094) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10099:
@@ -3659,8 +3672,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10098) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10102:
@@ -3677,8 +3691,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10101) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10105:
@@ -3695,8 +3710,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10104) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;                            
                         case 10108:
@@ -3713,8 +3729,9 @@ trait MinaTrait {
                                 FROM [dbo].[data]
                                 where variable_id = 10107) as B
                                 ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1]
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;   
                         default:                        
@@ -3763,8 +3780,9 @@ trait MinaTrait {
                                 'SELECT valor/DAY(fecha) as dia_budget
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
-                                AND MONTH(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date))]
+                                AND MONTH(fecha) = ?
+                                AND YEAR(fecha) = ?',
+                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
     
                             ); 
                         break;
@@ -3774,8 +3792,9 @@ trait MinaTrait {
                                 'SELECT valor as dia_budget
                                 FROM [dbo].[budget]
                                 WHERE variable_id = ?
-                                AND MONTH(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date))]
+                                AND MONTH(fecha) = ?                                
+                                AND YEAR(fecha) = ?',
+                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
     
                             );
                         break;
@@ -3795,9 +3814,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10071) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     ); 
                                 break;
                                 case 10075:
@@ -3813,9 +3833,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10074) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;
                                 case 10078:
@@ -3831,9 +3852,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10077) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;
                                 case 10081:
@@ -3849,9 +3871,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10080) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;
                                 case 10084:
@@ -3867,9 +3890,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10083) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10090:
@@ -3885,9 +3909,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10089) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10095:
@@ -3903,9 +3928,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10094) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10099:
@@ -3921,9 +3947,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10098) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10102:
@@ -3939,9 +3966,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10101) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10105:
@@ -3957,9 +3985,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10104) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;                            
                                 case 10108:
@@ -3975,9 +4004,10 @@ trait MinaTrait {
                                         (SELECT fecha, valor
                                         FROM [dbo].[budget]
                                         where variable_id = 10107) as B
-                                        ON MONTH(A.fecha) = MONTH(B.fecha)
-                                        WHERE MONTH(A.fecha) = ?',
-                                        [date('m', strtotime($this->date))]
+                                        ON A.fecha = B.fecha
+                                        WHERE MONTH(A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
                                     );
                                 break;   
                             } 
