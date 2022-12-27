@@ -831,6 +831,7 @@ trait MinaTrait {
                     AND MONTH(A.fecha) <= '.$month.'
                     AND YEAR(A.fecha) = '.$year.''
                 );
+                
                 $this->avgtribudgetpor =
                 DB::select(
                     'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS trimestre_budget FROM

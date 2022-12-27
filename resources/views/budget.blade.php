@@ -458,7 +458,6 @@
         $("#form-button").click(function(){
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
-                console.log($('#nvalor').val());
                 $.ajax({
                     url:"{{route('budget.load') }}",
                     method:"POST",

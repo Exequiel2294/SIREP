@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
+use App\Models\BudgetHistorial;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Budget;
@@ -25,7 +26,7 @@ class BudgetController extends Controller
     public function getvariables(Request $request)
     {      
         $query = DB::table('variable as v')
-                ->select('v.id','v.nombre as variable', 'c.nombre as categoria')
+                ->select('v.id','v.nombre as variable', 'sb.nombre as subcategoria')
                 ->join('subcategoria as sb','v.subcategoria_id', '=', 'sb.id')
                 ->join('categoria as c','sb.categoria_id', '=', 'c.id')
                 ->where(['c.area_id' => $request->area_id, 'v.estado' => 1])
@@ -35,7 +36,7 @@ class BudgetController extends Controller
         $output .= '<option value="" selected disabled>Seleccione Variable</option>';
         foreach($query as $row)
         {
-            $output .= '<option value="'.$row->id.'">'.$row->categoria.' - '.$row->variable.'</option>';       
+            $output .= '<option value="'.$row->id.'">'.$row->subcategoria.' - '.$row->variable.'</option>';       
         }
         $data['result']=$output;
         echo json_encode($data);
@@ -91,11 +92,24 @@ class BudgetController extends Controller
             }
             else
             {
-                Budget::where('id',$id)
-                    ->update(
-                    [
-                        'valor' => $request->get('valor')
+                $data = Budget::findOrFail($id);
+                $oldvalue = $data->valor;
+                $newvalue = $request->get('valor');
+                $data->update(
+                [
+                    'valor' => $newvalue
+                ]);
+                if($oldvalue != $newvalue)
+                {
+                    BudgetHistorial::create([
+                        'budget_id' => $id,
+                        'fecha' => date('Y-m-d H:i:s'),
+                        'transaccion' => '',
+                        'valorviejo' => $oldvalue,
+                        'valornuevo' => $newvalue,
+                        'usuario' => auth()->user()->name
                     ]);
+                }
                 return;                
             }
         }        
