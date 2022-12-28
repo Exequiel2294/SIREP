@@ -1110,220 +1110,375 @@ trait ProcesosTrait {
                 {        
                     switch($data->variable_id)
                     {                                    
-                        case 10072:
-                            //Au ROM a Trituradora oz                  
-                            //(10070*10071 / 31.1035                                     
+                        case 10002:
+                            //MMSA_TP_Au Triturado oz                  
+                            //((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10070) as A
+                                where variable_id = 10005) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10071) as B
+                                where variable_id = 10004
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10075:
-                            //Au ROM Alta Ley a Stockpile oz                  
-                            //(10073*10074 / 31.1035                                     
+                        case 10006:
+                            //MMSA_TP_Productividad t/h
+                            //(10005 MMSA_TP_Mineral Triturado t)/ (10062 MMSA_TP_Horas Operativas Trituración Primaria h)                                    
+                            $d_real = 
+                            DB::select(
+                                'SELECT A.valor/B.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10005) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10062
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                   
+                        case 10008:
+                            //MMSA_TP_Au Triturado oz                  
+                            //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10073) as A
+                                where variable_id = 10011) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10074) as B
+                                where variable_id = 10010
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                        
+                        case 10037:
+                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                            //((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                   
+                            $d_real = 
+                            DB::select(
+                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10078:
-                            //Au ROM Media Ley a Stockpile oz                  
-                            //(10076*10077 / 31.1035                                     
+                        case 10013:
+                            //MMSA_HPGR_Productividad (t/h) t/h
+                            //(10011 MMSA_HPGR_Mineral Triturado t)/ (10063 Horas Operativas Trituración Terciaria h)                                    
                             $d_real = 
                             DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10076) as A
+                                where variable_id = 10011) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10077) as B
+                                where variable_id = 10063
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10081:
-                            //Au ROM Baja Ley a Stockpile oz                  
-                            //(10079*10080 / 31.1035                                     
+                        case 10015:
+                            //MMSA_AGLOM_Adición de Cemento kg/t
+                            //((10067 MMSA_AGLOM_Cemento) * 1000) / (10019 MMSA_AGLOM_Mineral Aglomerado)                              
                             $d_real = 
                             DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                'SELECT (A.valor * 1000) / B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10079) as A
+                                where variable_id = 10067) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10080) as B
+                                where variable_id = 10019
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10084:
-                            //Total Au ROM a Stockpiles oz                  
-                            //(10082*10083 / 31.1035                                     
+                        case 10020:
+                            //10020 MMSA_AGLOM_Productividad t/h
+                            //(10019 MMSA_AGLOM_Mineral Aglomerado t)/ (10064 MMSA_AGLOM_Horas Operativas Aglomeración)                                    
                             $d_real = 
                             DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10082) as A
+                                where variable_id = 10019) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10083) as B
+                                where variable_id = 10064
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10090:
-                            //Total Au Minado oz                  
-                            //(10088*10089 / 31.1035                                     
+                        break;                   
+                        case 10022:
+                            //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
+                            //(((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10026) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10025) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10024) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                
+                        case 10023:
+                            //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
+                            //((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10088) as A
+                                where variable_id = 10025) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10089) as B
+                                where variable_id = 10024) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10095:
-                            //Au Alta Ley Stockpile a Trituradora oz                  
-                            //(10093*10094 / 31.1035                                     
+                        break;                  
+                        case 10027:
+                            //MMSA_APILAM_STACKER_Au Apilado Stacker (oz)                  
+                            //((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker (t))*(10030 MMSA_APILAM_STACKER_Ley Au (g/t)) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10093) as A
+                                where variable_id = 10031) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10094) as B
+                                where variable_id = 10030) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10099:
-                            //Au Media Ley Stockpile a Trituradora oz                  
-                            //(10097*10098 / 31.1035                                     
+                        break;                   
+                        case 10028:
+                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                            //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10033) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10031) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10030) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;
+                        case 10038:
+                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                            //(((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10036) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;
+                        case 10032:
+                            //10032 MMSA_APILAM_STACKER_Productividad t/h
+                            //(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ (10065 MMSA_APILAM_STACKER_Tiempo Operativo)                                    
+                            $d_real = 
+                            DB::select(
+                                'SELECT A.valor/B.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10031) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10065
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;               
+                        case 10040:
+                            //10040 MMSA_SART_Eficiencia (%)
+                            //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100) / (10043 MMSA_SART_Ley Cu Alimentada ppm)                               
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10043
+                                AND valor <> 0) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10044) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                
+                        case 10046:
+                            //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                 
+                            //((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035                           
+                            $d_real = 
+                            DB::select(
+                                'SELECT (A.valor * (B.valor-C.valor))/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10052) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10051) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10050) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;  
+                        case 10048:
+                            if(isset($data->dia_real)) 
+                            { 
+                                $d_real = $data->dia_real;
+                                return number_format($d_real, 2, '.', ',');                                
+                            }        
+                            else
+                            {
+                                return '-';
+                            } 
+                        break;               
+                        case 10049:
+                            //MMSA_ADR_Eficiencia (%)
+                            //(((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS)                               
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10051
+                                AND valor <> 0) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10050) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                 
+                        case 10053:
+                            //MMSA_LIXI_Au Lixiviado (oz)                  
+                            //((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10097) as A
+                                where variable_id = 10061) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10098) as B
+                                where variable_id = 10057) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10102:
-                            //Au Baja Ley Stockpile a Trituradora oz                  
-                            //(10100*10101 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10100) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10101) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10105:
-                            //Au de Stockpiles a Trituradora oz                  
-                            //(10103*10104 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10103) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10104) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10108:
-                            //Au (ROM+Stockpiles) a Trituradora oz                  
-                            //(10106*10107 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10106) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10107) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;   
+                        break;
                         default:                        
                             if(isset($data->dia_real)) 
                             { 
                                 $d_real = $data->dia_real;
-                                if($d_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($d_real > 100)
                                 {
                                     return number_format(round($d_real), 0, '.', ',');
                                 }
@@ -1354,7 +1509,7 @@ trait ProcesosTrait {
                     {
                         return '-';
                     }                                           
-                
+
                 })
                 ->addColumn('dia_budget', function($data)
                 {    
@@ -7656,10 +7811,6 @@ trait ProcesosTrait {
                 ->join('variable','data.variable_id','=','variable.id')
                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
-                ->leftJoin('budget', function($join){
-                    $join->on('data.variable_id', '=', 'budget.variable_id');
-                    $join->on('data.fecha', '=', 'budget.fecha');
-                })
                 ->where($where)
                 ->select(
                     'data.id as id',
@@ -7676,7 +7827,6 @@ trait ProcesosTrait {
                     'variable.export as var_export',
                     'variable.tipo as tipo',
                     'data.valor as dia_real',
-                    'budget.valor as dia_budget',
                     'data.valor as anio_budget'
                     )
                 ->get();
@@ -7694,220 +7844,375 @@ trait ProcesosTrait {
                 {        
                     switch($data->variable_id)
                     {                                    
-                        case 10072:
-                            //Au ROM a Trituradora oz                  
-                            //(10070*10071 / 31.1035                                     
+                        case 10002:
+                            //MMSA_TP_Au Triturado oz                  
+                            //((10005 MMSA_TP_Mineral Triturado t)*(10004 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10070) as A
+                                where variable_id = 10005) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10071) as B
+                                where variable_id = 10004
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10075:
-                            //Au ROM Alta Ley a Stockpile oz                  
-                            //(10073*10074 / 31.1035                                     
+                        case 10006:
+                            //MMSA_TP_Productividad t/h
+                            //(10005 MMSA_TP_Mineral Triturado t)/ (10062 MMSA_TP_Horas Operativas Trituración Primaria h)                                    
+                            $d_real = 
+                            DB::select(
+                                'SELECT A.valor/B.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10005) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10062
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                   
+                        case 10008:
+                            //MMSA_TP_Au Triturado oz                  
+                            //((10011 MMSA_TP_Mineral Triturado t)*(10010 MMSA_TP_Ley Au g/t)) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10073) as A
+                                where variable_id = 10011) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10074) as B
+                                where variable_id = 10010
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                        
+                        case 10037:
+                            //10037: MMSA_APILAM_TA_Total Au Apilado (oz)                  
+                            //((10039 MMSA_APILAM_TA_Total Mineral Apilado t)*(10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                   
+                            $d_real = 
+                            DB::select(
+                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10078:
-                            //Au ROM Media Ley a Stockpile oz                  
-                            //(10076*10077 / 31.1035                                     
+                        case 10013:
+                            //MMSA_HPGR_Productividad (t/h) t/h
+                            //(10011 MMSA_HPGR_Mineral Triturado t)/ (10063 Horas Operativas Trituración Terciaria h)                                    
                             $d_real = 
                             DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10076) as A
+                                where variable_id = 10011) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10077) as B
+                                where variable_id = 10063
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10081:
-                            //Au ROM Baja Ley a Stockpile oz                  
-                            //(10079*10080 / 31.1035                                     
+                        case 10015:
+                            //MMSA_AGLOM_Adición de Cemento kg/t
+                            //((10067 MMSA_AGLOM_Cemento) * 1000) / (10019 MMSA_AGLOM_Mineral Aglomerado)                              
                             $d_real = 
                             DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                'SELECT (A.valor * 1000) / B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10079) as A
+                                where variable_id = 10067) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10080) as B
+                                where variable_id = 10019
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
                         break;
-                        case 10084:
-                            //Total Au ROM a Stockpiles oz                  
-                            //(10082*10083 / 31.1035                                     
+                        case 10020:
+                            //10020 MMSA_AGLOM_Productividad t/h
+                            //(10019 MMSA_AGLOM_Mineral Aglomerado t)/ (10064 MMSA_AGLOM_Horas Operativas Aglomeración)                                    
                             $d_real = 
                             DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                'SELECT A.valor/B.valor as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10082) as A
+                                where variable_id = 10019) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10083) as B
+                                where variable_id = 10064
+                                AND valor <> 0) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10090:
-                            //Total Au Minado oz                  
-                            //(10088*10089 / 31.1035                                     
+                        break;                   
+                        case 10022:
+                            //10022 MMSA_APILAM_PYS_Au Extraible Trituración Secundaria Apilado Camiones (oz)                  
+                            //(((10026 MMSA_APILAM_PYS_Recuperación %)/ 100) * (10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t) * (10024 MMSA_APILAM_PYS_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10026) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10025) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10024) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                
+                        case 10023:
+                            //MMSA_APILAM_PYS_Au Trituración Secundaria Apilado Camiones oz                  
+                            //((10025 MMSA_APILAM_PYS_Mineral Trituración Secundaria Apilado Camiones t)*(10024 MMSA_APILAM_PYS_Ley Au g/t) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10088) as A
+                                where variable_id = 10025) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10089) as B
+                                where variable_id = 10024) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10095:
-                            //Au Alta Ley Stockpile a Trituradora oz                  
-                            //(10093*10094 / 31.1035                                     
+                        break;                  
+                        case 10027:
+                            //MMSA_APILAM_STACKER_Au Apilado Stacker (oz)                  
+                            //((10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker (t))*(10030 MMSA_APILAM_STACKER_Ley Au (g/t)) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10093) as A
+                                where variable_id = 10031) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10094) as B
+                                where variable_id = 10030) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10099:
-                            //Au Media Ley Stockpile a Trituradora oz                  
-                            //(10097*10098 / 31.1035                                     
+                        break;                   
+                        case 10028:
+                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                            //(((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10033) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10031) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10030) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;
+                        case 10038:
+                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                            //(((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035                                     
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor/100) * B.valor * C.valor)/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10036) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10039) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10035) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;
+                        case 10032:
+                            //10032 MMSA_APILAM_STACKER_Productividad t/h
+                            //(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ (10065 MMSA_APILAM_STACKER_Tiempo Operativo)                                    
+                            $d_real = 
+                            DB::select(
+                                'SELECT A.valor/B.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10031) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10065
+                                AND valor <> 0) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;               
+                        case 10040:
+                            //10040 MMSA_SART_Eficiencia (%)
+                            //(((10043 MMSA_SART_Ley Cu Alimentada ppm) - (10044 MMSA_SART_Ley Cu Salida ppm)) * 100) / (10043 MMSA_SART_Ley Cu Alimentada ppm)                               
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10043
+                                AND valor <> 0) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10044) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                
+                        case 10046:
+                            //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                 
+                            //((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035                           
+                            $d_real = 
+                            DB::select(
+                                'SELECT (A.valor * (B.valor-C.valor))/31.1035 as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10052) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10051) as B
+                                ON A.fecha = B.fecha
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10050) as C
+                                ON A.fecha = C.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;  
+                        case 10048:
+                            if(isset($data->dia_real)) 
+                            { 
+                                $d_real = $data->dia_real;
+                                return number_format($d_real, 2, '.', ',');                                
+                            }        
+                            else
+                            {
+                                return '-';
+                            } 
+                        break;               
+                        case 10049:
+                            //MMSA_ADR_Eficiencia (%)
+                            //(((10051 MMSA_ADR_Ley de Au PLS) - (10050 MMSA_ADR_Ley de Au BLS)) * 100) / (10051 MMSA_ADR_Ley de Au PLS)                               
+                            $d_real = 
+                            DB::select(
+                                'SELECT ((A.valor-B.valor) * 100) / A.valor as dia_real FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10051
+                                AND valor <> 0) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[data]
+                                where variable_id = 10050) as B
+                                ON A.fecha = B.fecha
+                                WHERE  DATEPART(y, A.fecha) = ?
+                                AND YEAR(A.fecha) = ?',
+                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                            ); 
+                        break;                 
+                        case 10053:
+                            //MMSA_LIXI_Au Lixiviado (oz)                  
+                            //((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035                                     
                             $d_real = 
                             DB::select(
                                 'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10097) as A
+                                where variable_id = 10061) as A
                                 INNER JOIN   
                                 (SELECT fecha, variable_id, [valor]
                                 FROM [dbo].[data]
-                                where variable_id = 10098) as B
+                                where variable_id = 10057) as B
                                 ON A.fecha = B.fecha
                                 WHERE  DATEPART(y, A.fecha) = ?
                                 AND YEAR(A.fecha) = ?',
                                 [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                             ); 
-                        break;                            
-                        case 10102:
-                            //Au Baja Ley Stockpile a Trituradora oz                  
-                            //(10100*10101 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10100) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10101) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10105:
-                            //Au de Stockpiles a Trituradora oz                  
-                            //(10103*10104 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10103) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10104) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10108:
-                            //Au (ROM+Stockpiles) a Trituradora oz                  
-                            //(10106*10107 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10106) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10107) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;   
+                        break;
                         default:                        
                             if(isset($data->dia_real)) 
                             { 
                                 $d_real = $data->dia_real;
-                                if($d_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($d_real > 100)
                                 {
                                     return number_format(round($d_real), 0, '.', ',');
                                 }
@@ -7938,7 +8243,7 @@ trait ProcesosTrait {
                     {
                         return '-';
                     }                                           
-                
+
                 })
                 ->addColumn('dia_budget', function($data)
                 {    
