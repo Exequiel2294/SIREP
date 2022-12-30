@@ -231,9 +231,14 @@
                     {data:'id', title:'id', name:'id', visible: false},
                     {data:'nombre', title:'Nombre', name:'nombre', orderable: false, searchable: false, width:'auto'},
                     {data:'unidad', title:'U.', name:'unidad', orderable: false, searchable: false, width:'25px'},
-                    {data:'fecha', title:'Año', name:'fecha', orderable: false, searchable: false, width:'25%',
+                    {data:'fecha', title:'Mes', name:'fecha', orderable: false, searchable: false, width:'18%',
                         render: function(data){
                             return moment(data, 'YYYY-MM-DD').locale('es').format('MMMM').toUpperCase();
+                        }
+                    },
+                    {data:'fecha', title:'Año', name:'fecha', orderable: false, searchable: false, width:'18%',
+                        render: function(data){
+                            return moment(data, 'YYYY-MM-DD').locale('es').format('YYYY');
                         }
                     },
                     {data:'valor', title:'Valor', name:'valor', orderable: false, searchable: false, width:'25%',
@@ -245,7 +250,7 @@
                 ],
                 columnDefs: [
                     {
-                        targets: [2,3,4],
+                        targets: [2,3,4,5],
                         className: "dt-center"
                     }
                 ],
