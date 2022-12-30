@@ -610,7 +610,7 @@
             $("#form-button-import").click(function(){
                 if($("#modal-form-import").valid()){  
                     var import_data = $("#import").val();
-                    import_data = import_data.split(/\r?\n/);
+                    import_data = import_data.split(/\r\n|\r|\n|\t/);
                     if (import_data[import_data.length-1] == '')
                     {
                         import_data.pop();
@@ -730,7 +730,7 @@
                             </div> 
                             <div class="datatables-filter"> 
                                 <button type="button" class="btn btn-primary" id="btn-import">Importar</button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-success" id="form-button">Cargar</button>   
+                                <button type="button" class="btn btn-success" id="form-button">Guardar</button>   
                             </div>
                         </div>
                         <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="conciliado-table"></table>  

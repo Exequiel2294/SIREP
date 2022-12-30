@@ -47,7 +47,7 @@ class BudgetController extends Controller
         $datos = DB::table('budget as b')
                     ->join('variable as v', 'b.variable_id', '=', 'v.id')
                     ->join('subcategoria as s', 'v.subcategoria_id', '=', 's.id')
-                    ->select('b.id', 'v.nombre', 'b.fecha', 'b.valor')
+                    ->select('b.id', 'v.nombre', 'b.fecha', 'b.valor','v.unidad')
                     ->where('v.id',$request->variable_id)
                     ->whereYear('b.fecha','=',$request->anio)
                     ->orderBy('b.fecha', 'asc')
@@ -69,40 +69,35 @@ class BudgetController extends Controller
                 ->make(true);          
     } 
 
-    public function edit($id)
-    {        
-        $generic = Budget::findOrFail($id);
-        return response()->json($generic);
-    }
-
     public function load(Request $request)
-    {       
-        $id = $request->get('id');        
-        if($id != '' && $id != null)
+    {      
+        
+        $validator = Validator::make(
+            $request->all(),
+            [   
+                'budget_load' => 'required|array',
+                'budget_load.*.budget_id' => 'required|exists:budget,id',
+                'budget_load.*.value' => 'nullable|numeric|between:0,100000000',
+            ]            
+        );
+        if ($validator->fails()) 
         {
-            $validator = Validator::make(
-                $request->all(),
-                [   
-                    'valor' => 'required|numeric|between:0,10000000'
-                ]            
-            );
-            if ($validator->fails()) 
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
+        else
+        {
+            foreach($request->get('budget_load') as $registro)
             {
-                return response()->json(['error'=>$validator->errors()->all()]);
-            }
-            else
-            {
-                $data = Budget::findOrFail($id);
-                $oldvalue = $data->valor;
-                $newvalue = $request->get('valor');
-                $data->update(
-                [
+                $budget = Budget::findOrFail($registro['budget_id']);
+                $oldvalue = $budget->valor;
+                $newvalue = $registro['value'];                
+                $budget->update([
                     'valor' => $newvalue
                 ]);
                 if($oldvalue != $newvalue)
                 {
                     BudgetHistorial::create([
-                        'budget_id' => $id,
+                        'budget_id' => $budget->id,
                         'fecha' => date('Y-m-d H:i:s'),
                         'transaccion' => '',
                         'valorviejo' => $oldvalue,
@@ -110,9 +105,11 @@ class BudgetController extends Controller
                         'usuario' => auth()->user()->name
                     ]);
                 }
-                return;                
+                
             }
-        }        
+
+        }
+        return;
     } 
 
 }

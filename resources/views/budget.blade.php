@@ -161,81 +161,16 @@
             flex-direction: column;
         }
         @media(min-width:750px) {
-            .datatables-s {        
-                margin-top: 1rem;
+            .datatables-s {                
+                margin-top: .5rem;
+                margin-bottom: .5rem;
                 flex-direction: row;
                 justify-content: space-between;
             }
         }
-        .datatables-s .datatables-length {
-            display: flex;
-            justify-content: center;
-            margin-top: .5rem;
-        }
 
-        .datatables-s .datatables-filter {
-            display: flex;
-            justify-content: center;
-            margin-top: .5rem;
-        }
-        @media(min-width:750px) {
-            .datatables-s .datatables-filter {
-                margin-right: 2rem;
-            }
-        }
-        .datatables-t {
-            padding: .5rem 0 0 .3rem;
-            margin: auto;
-            max-width: 80rem;
-        }
-        @media(min-width:750px) {
-            .datatables-t {
-                width: 95%;
-            }
-        }
-
-        .datatables-c {        
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-        @media(min-width:750px) {
-            .datatables-c {        
-                margin-top: 1rem;
-                justify-content: space-between;
-                flex-direction: row; 
-            }
-        }
-        .datatables-c .datatables-information {
-            justify-content: center;
-            margin-top: .5rem;
-            display: none;
-        }
-        @media(min-width:450px) {
-            .datatables-c .datatables-information {
-                display: flex;
-            }
-        }
-        @media(min-width:750px) {
-            .datatables-c .datatables-information {
-                margin-left: 2rem;
-            }
-        }
-        .datatables-c .datatables-processing {
-            margin-top: .5rem;
-            display: flex;
-            justify-content: center;
-        }
-        @media(min-width:450px) {
-            .datatables-c .datatables-processing {
-                margin: 1rem 0 0 0;
-            }
-        }
-        @media(min-width:750px) {
-            .datatables-c .datatables-processing {
-                margin: .5rem 2rem 0 0;
-            }
+        .datatables-s .datatables-length{
+            padding-top: 0.4rem;
         }
 
     </style> 
@@ -246,7 +181,7 @@
     <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
-
+        const budget_load = [];
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
             setTimeout(
@@ -260,6 +195,7 @@
 
 
         $(document).ready(function(){ 
+            $("#select-button").val(0);
             var table = $('#data-table').DataTable({             
                 dom:    "<'row'<'col-sm-12'tr>>",     
                 lengthMenu: [[365], [365]],
@@ -294,27 +230,22 @@
                 columns: [
                     {data:'id', title:'id', name:'id', visible: false},
                     {data:'nombre', title:'Nombre', name:'nombre', orderable: false, searchable: false, width:'auto'},
-                    {data:'fecha', title:'Año', name:'fecha', orderable: false, searchable: false, width:'20%',
+                    {data:'unidad', title:'U.', name:'unidad', orderable: false, searchable: false, width:'25px'},
+                    {data:'fecha', title:'Año', name:'fecha', orderable: false, searchable: false, width:'25%',
                         render: function(data){
                             return moment(data, 'YYYY-MM-DD').locale('es').format('MMMM').toUpperCase();
                         }
                     },
-                    {data:'valor', title:'Valor', name:'valor', orderable: false, searchable: false, width:'20%',
-                        render: function(data){
-                            if (data == null){
-                                return '-';
-                            }
-                            else{
-                                return data;
-                            }
-
+                    {data:'valor', title:'Valor', name:'valor', orderable: false, searchable: false, width:'25%',
+                        render: function (data,type,row){
+                            let val = (data == null) ? '' : parseFloat(data).toFixed(8);
+                            return '<input type="number" class="form-control" id="'+row['id']+'" value="'+val+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
                         }
                     },
-                    {data:'action', title:'', name:'action', orderable: false,searchable: false, width:'25px'},
                 ],
                 columnDefs: [
                     {
-                        targets: [3],
+                        targets: [2,3,4],
                         className: "dt-center"
                     }
                 ],
@@ -372,6 +303,8 @@
 
         $("#select-button").click(function(){
             if($("#select-form").valid()){  
+                budget_load.length = 0;
+                $("#select-button").val(1);
                 $("div.datatables-length").html('<b>' + $('#variable_id option:selected').text() + '</b>&nbspcorrespondientes al año &nbsp<b>' + $('#anio option:selected').text()+'</b>.');  
                 $('#data-table').DataTable().ajax.reload(null, false); 
             } 
@@ -412,89 +345,104 @@
 
 
 
-        /* FORM BUTTON DASHBOARD*/        
-        $("#modal-form").validate({
-            rules: {
-                valor: {
-                    required: true
-                }
-            },
-            messages: {  
-         
-            },
-            errorElement: 'span', 
-            errorClass: 'help-block help-block-error', 
-            focusInvalid: false, 
-            ignore: "", 
-            highlight: function (element, errorClass, validClass) { 
-                $(element).closest('.form-group').addClass('text-danger'); 
-                $(element).closest('.form-control').addClass('is-invalid');
-            },
-            unhighlight: function (element) { 
-                $(element).closest('.form-group').removeClass('text-danger'); 
-                $(element).closest('.form-control').removeClass('is-invalid');
-            },
-            success: function (label) {
-                label.closest('.form-group').removeClass('text-danger');
-            },
-            errorPlacement: function (error, element) {
-                if ($(element).is('select') && element.hasClass('bs-select')) {
-                    error.insertAfter(element);
-                } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
-                    element.next().after(error);
-                } else if (element.attr("data-error-container")) {
-                    error.appendTo(element.attr("data-error-container"));
-                } else {
-                    error.insertAfter(element); 
-                }
-            },
-            invalidHandler: function (event, validator) {                 
-            },
-            submitHandler: function (form) {
-                return true; 
+        /* INICIO LOAD DATA */
+            function isNumeric(str) {
+                if (typeof str != "string") return false // we only process strings!  
+                return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
             }
-        });
 
-        $("#form-button").click(function(){
-            if($("#modal-form").valid()){
-                $('#form-button').html('Guardando..');
-                $.ajax({
-                    url:"{{route('budget.load') }}",
-                    method:"POST",
-                    data:{
-                        id: $("#id").val(),
-                        valor:$('#valor').val(),
-                        _token: $('input[name="_token"]').val()
-                    },
-                    success:function(data)
-                    {  
-                        $('#modal').scrollTop(0);
-                        if($.isEmptyObject(data.error)){
-                            $('#modal').modal('hide');
-                            $(".alert-error").css('display','none');
-                            $('#modal-form').trigger("reset");
-                            $('#form-button').html('Guardar Cambios');
-                            var oTable = $('#data-table').dataTable();
-                            oTable.fnDraw(false);
-                            MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
-                                                      
-                        }else{
-                            $('#form-button').html('Guardar Cambios');
-                            printErrorMsg(data.error);
-                        } 
+            $("#form-button").click(function(){ 
+                if($("#select-form").valid())
+                {     
+                    if ($("#select-button").val() == 1)
+                    {
+                        const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: true
+                        })
+
+                        swalWithBootstrapButtons.fire({
+                        title: 'Estas seguro?',
+                        text: "De existir budget cargado para la variable seleccionada, el mismo se suplantara por los registros actuales.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Aceptar',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {       
+                                $('#form-button').html('Guardando..');    
+                                budget_load.length = 0;                
+                                var table = $('#data-table').DataTable();
+                                var arrayid = table.column(0).data().toArray();  
+                                for (var i=0; i < arrayid.length; i++)
+                                {
+                                    index = budget_load.findIndex(x => x.budget_id === parseInt(arrayid[i]));
+                                    if (index == -1) {
+                                        let val = $("#"+arrayid[i]).val();
+                                        if ((!isNumeric(val) && val !='') || parseFloat(val) < 0)
+                                        {
+                                            var row_data = table.row(i).data();
+                                            budget_load.length = 0;
+                                            MansfieldRep.notification('Error en variable:<br>' + row_data['variable'] + '<br>Los Datos No Fueron Cargados','MansfieldRep', 'error');
+                                            $('#form-button').html('Guardar');
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            val = (val != '') ? parseFloat(val).toFixed(8) : null;
+                                            var budget =
+                                            {
+                                                budget_id:parseInt(arrayid[i]),
+                                                value:val
+                                            }
+                                            budget_load.push(budget);                                
+                                        }
+                                    } 
+                                }  
+                                console.log(budget_load);
+                                if (!(i < arrayid.length)) 
+                                {
+                                    $.ajax({
+                                        url:"{{ route('budget.load') }}",
+                                        method:"POST",
+                                        data:{
+                                            budget_load:budget_load,
+                                            _token: $('input[name="_token"]').val()
+                                        },
+                                        success:function(data)
+                                        {  
+                                            if($.isEmptyObject(data.error)){
+                                                $('#data-table').DataTable().ajax.reload(null, false); 
+                                                $('#form-button').html('Guardar');
+                                                if($('#form-button').val() == 1){
+                                                    MansfieldRep.notification('Registros cargados con exito', 'MansfieldRep', 'success');
+                                                }   
+                                                else{
+                                                    MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
+                                                }                          
+                                            }else{
+                                                $('#form-button').html('Guardar');
+                                                console.log(data.error);
+                                            } 
+                                        }
+                                    });
+                                }                         
+                            
+                            } 
+                        }) 
                     }
-                });
-            }            
-        });
-
-        function printErrorMsg(msg) {
-            $(".alert-error").css('display','flex');
-            $(".print-error-msg").find("ul").html('');
-            $.each( msg, function( key, value ) {
-                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                    else
+                    {
+                        $("div.datatables-length").html('<div style="color:red;">Primero debe Cargar las <b>Variables</b></div>');
+                    }
+                }                             
             });
-        }
-        /* FORM BUTTON DASHCOARD*/
+        /* FIN LOAD DATA*/
 
         /* CHANGE AREA */
         $(document).on('change','.area',function(){
@@ -516,6 +464,118 @@
             });
         });
         /* END CHANGE AREA */
+
+        /* INICIO MODAL IMPORT DATA */
+            $("#btn-import").click(function(){ 
+                console.log(1);
+                if($("#select-form").valid())
+                {
+                    if ($("#select-button").val() == 1)
+                    {
+                        $('#form-button-import').val(1);     
+                        $('#modal-title-import').html('Importar Datos'); 
+                        $('#modal-form-import').trigger("reset"); 
+                        $('#modal-import').modal('show');  
+                    }
+                    else
+                    {
+                        $("div.datatables-length").html('<div style="color:red;">Primero debe Cargar la <b>Variable</b></div>');
+                    }
+                }
+            });
+
+            $("#modal-form-import").validate({
+                rules: {
+                    import: {
+                        required: true
+                    },
+                    decimalseparator: {
+                        required: true,
+                        number: true,
+                        range: [0,1]
+                    }
+                },
+                messages: {  
+            
+                },
+                errorElement: 'span', 
+                errorClass: 'help-block help-block-error', 
+                focusInvalid: false, 
+                ignore: "", 
+                highlight: function (element, errorClass, validClass) { 
+                    $(element).closest('.form-group').addClass('text-danger'); 
+                    $(element).closest('.form-control').addClass('is-invalid');
+                },
+                unhighlight: function (element) { 
+                    $(element).closest('.form-group').removeClass('text-danger'); 
+                    $(element).closest('.form-control').removeClass('is-invalid');
+                },
+                success: function (label) {
+                    label.closest('.form-group').removeClass('text-danger');
+                },
+                errorPlacement: function (error, element) {
+                    if ($(element).is('select') && element.hasClass('bs-select')) {
+                        error.insertAfter(element);
+                    } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
+                        element.next().after(error);
+                    } else if (element.attr("data-error-container")) {
+                        error.appendTo(element.attr("data-error-container"));
+                    } else {
+                        error.insertAfter(element); 
+                    }
+                },
+                invalidHandler: function (event, validator) {                 
+                },
+                submitHandler: function (form) {
+                    return true; 
+                }
+            });
+
+            $("#form-button-import").click(function(){
+                if($("#modal-form-import").valid()){  
+                    var import_data = $("#import").val();
+                    import_data = import_data.split(/\r\n|\r|\n|\t/);
+                    if (import_data[import_data.length-1] == '')
+                    {
+                        import_data.pop();
+                    }
+                    console.log(import_data);
+                    var table = $('#data-table').DataTable();
+                    var arrayid = table.column(0).data().toArray(); 
+                    console.log(arrayid);
+                    if ($("#decimalseparator").val() == 0)
+                    {
+                        for (var i=0; i < import_data.length; i++)
+                        {
+                            let val = import_data[i].replaceAll(' ','').replaceAll(',','');
+                            let val2 = (isNumeric(val)) ? parseFloat(val).toFixed(8) : val.replaceAll('-','');
+                            $("#"+arrayid[i]).val(val2);
+                        }  
+                    }
+                    else
+                    {
+                        for (var i=0; i < import_data.length; i++)
+                        {
+                            let val = import_data[i].replaceAll(' ','').replaceAll('.','').replaceAll(',','.');
+                            let val2 = (isNumeric(val)) ? parseFloat(val).toFixed(8) : val.replaceAll('-','');
+                            $("#"+arrayid[i]).val(val2);
+                        } 
+                    }     
+                    for (let j = i; j < arrayid.length; j++)
+                    {
+                        $("#"+arrayid[j]).val(null);
+                    }
+                    $('#modal-import').modal('hide');
+                    $('#modal-form-import').trigger("reset");
+                    
+                    
+                }
+            });
+
+            $('#modal-import').on('hidden.bs.modal', function () {
+                $("#modal-form-import").validate().resetForm();
+            });
+        /* FIN MODAL IMPORT DATA */
 
 
     </script>
@@ -559,8 +619,8 @@
                                             </select>  
                                         </div>
                                     </div>                              
-                                    <div class="form-group col-md-2" style="align-self:self-end">                                    
-                                        <button type="button" class="btn btn-primary" id="select-button">Cargar</button>
+                                    <div class="form-group col-md-2" style="align-self:self-end">  
+                                        <button type="button" class="btn btn-primary" id="select-button">Cargar Variable</button>                                        
                                     </div> 
                                 </div>                                        
                             @csrf
@@ -569,8 +629,11 @@
                     <div class="card-body" style="margin:auto; width:95%">
                         <div class="datatables-s">
                             <div class="datatables-length">
-                            </div> 
-                            <div class="datatables-filter"></div>
+                            </div>  
+                            <div class="datatables-filter"> 
+                                <button type="button" class="btn btn-primary" id="btn-import">Importar</button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-success" id="form-button">Guardar</button>   
+                            </div>
                         </div>
                         <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="data-table"></table>  
                     </div>           
@@ -582,20 +645,14 @@
     </div> 
 
     {{-- MODAL --}}
-    <div class="modal fade" id="modal" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="modal-import" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-head">
-                    <h5 id="modal-title"></h5>
+                    <h5 id="modal-title-import"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>                
-                <div class="alert-warning">
-                    <div class="print-warning-msg">
-                        <h4><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h4>
-                        <span>Warning alert preview. This alert is dismissable.</span>
-                    </div>         
                 </div>
                 <div class="alert-error">
                     <div class="print-error-msg">
@@ -605,19 +662,27 @@
                     <button type="button" id="close-alert" class="close" aria-hidden="true">×</button>          
                 </div>
                 <div class="modal-bod">
-                    <form action="post" id="modal-form" name="modal-form" autocomplete="off">
-                        <input type="hidden" name="id" id="id">
-                        <div class="form-group row">
-                            <label for="valor" class="col-sm-2 col-form-label">Valor</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="valor" name="valor">
+                    <form action="post" id="modal-form-import" name="modal-form-import" autocomplete="off">
+                        <div class="form-group">
+                            <label for="decimalseparator" class="col-sm-12 col-form-label">Seleccione Separador Decimal</label>
+                            <div class="col-sm-12">
+                                <select class="form-control" name="decimalseparator" id="decimalseparator">
+                                    <option value=0 selected="selected">Punto</option> 
+                                    <option value=1>Coma</option>                                    
+                                </select> 
                             </div>
-                        </div>                
+                        </div>  
+                        <div class="form-group">
+                            <label for="separadordecimal" class="col-sm-12 col-form-label">Pegue Columna de Datos</label>
+                            <div class="col-sm-12">
+                                <textarea type="text" class="form-control" id="import" name="import" rows="10"></textarea>
+                            </div>
+                        </div>              
                         @csrf
                     </form>
                 </div>
                 <div class="modal-foot">
-                    <button type="button" class="btn btn-primary" id="form-button">Guardar Cambios</button>
+                    <button type="button" class="btn btn-primary" id="form-button-import">Cargar Datos</button>
                 </div>
             </div>
         </div>
