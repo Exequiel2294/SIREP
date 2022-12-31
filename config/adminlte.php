@@ -264,6 +264,11 @@ return [
                     'icon' => 'nav-icon fas fa-sync-alt',
                 ],
                 [
+                    'text' => 'budget',
+                    'url'  => 'budget',
+                    'icon' => 'nav-icon fas fa-bookmark',
+                ],
+                [
                     'text' => 'area',
                     'url'  => 'area',
                     'icon' => 'nav-icon fas fa-font',
