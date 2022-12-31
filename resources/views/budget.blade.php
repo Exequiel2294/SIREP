@@ -678,7 +678,7 @@
                             </div>
                         </div>  
                         <div class="form-group">
-                            <label for="separadordecimal" class="col-sm-12 col-form-label">Pegue Columna de Datos</label>
+                            <label for="separadordecimal" class="col-sm-12 col-form-label">Pegue Columna o Fila de Datos</label>
                             <div class="col-sm-12">
                                 <textarea type="text" class="form-control" id="import" name="import" rows="10"></textarea>
                             </div>

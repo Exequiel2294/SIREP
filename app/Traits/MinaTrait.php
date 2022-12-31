@@ -1580,7 +1580,7 @@ trait MinaTrait {
                                 AND MONTH(fecha) = ?
                                 AND YEAR(fecha) = ?',
                                 [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-    
+
                             ); 
                         break;
                         case 'g/t':
@@ -1592,7 +1592,7 @@ trait MinaTrait {
                                 AND MONTH(fecha) = ?                                
                                 AND YEAR(fecha) = ?',
                                 [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-    
+
                             );
                         break;
                         case 'oz':

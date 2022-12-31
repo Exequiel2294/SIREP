@@ -29,7 +29,7 @@ class BudgetController extends Controller
                 ->select('v.id','v.nombre as variable', 'sb.nombre as subcategoria')
                 ->join('subcategoria as sb','v.subcategoria_id', '=', 'sb.id')
                 ->join('categoria as c','sb.categoria_id', '=', 'c.id')
-                ->where(['c.area_id' => $request->area_id, 'v.estado' => 1])
+                ->where(['c.area_id' => $request->area_id])
                 ->orderBy('v.orden', 'asc')
                 ->get();
         $output = '';
