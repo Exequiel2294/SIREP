@@ -262,7 +262,7 @@
         });
         /*PRESS NAV-LINK BUTTON*/
         var date_selected = moment().subtract(1, "days");
-        var date_fd = moment().startOf('year');
+        var date_fd = moment("2021-01-01").format('YYYY-MM-DD');
         var date_fh = moment().subtract(1, "days");
         $(function () {
             /* Calendario Fecha desde*/
@@ -270,7 +270,7 @@
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fd,
                 maxDate: moment().subtract(2, "days"),
-                minDate: moment().startOf('year'),
+                minDate: moment("2021-01-01").format('YYYY-MM-DD'),
                 useCurrent: false
             });
             $("#fechadesde").on("change.datetimepicker", function (e) {
