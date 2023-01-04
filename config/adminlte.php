@@ -248,6 +248,11 @@ return [
             'icon' => 'nav-icon fas fa-file-invoice',
         ],
         [
+            'text' => 'Historial Variables',
+            'url'  => 'historialvariables',
+            'icon' => 'nav-icon fas fa-file-invoice',
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],

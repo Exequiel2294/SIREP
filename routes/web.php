@@ -62,6 +62,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('valores.variables', 'HistorialVariableController@getValores')->name('valores.variables');
     Route::get('historial/{id}/edit','HistorialVariableController@edit')->name('historial.edit');
 
+    Route::get('historialvariables', 'HistorialVariablesController@index')->name('historialvariables');
+    Route::post('historialvariables/getvariables', 'HistorialVariablesController@getvariables')->name('historialvariables.getvariables');
+    Route::post('historialvariables/getvalores', 'HistorialVariablesController@getvalores')->name('historialvariables.getvalores');
+    Route::post('historialvariables/getcolumnas','HistorialVariablesController@getcolumnas')->name('historialvariables.getcolumnas');
+
 });
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {
