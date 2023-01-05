@@ -293,7 +293,7 @@
                 defaultDate: date_fd,
                 maxDate: moment().subtract(2, "days"),
                 minDate: moment("2022-01-01").format('YYYY-MM-DD'),
-                useCurrent: false
+                useCurrent: false,
             });
             $("#fechadesde").on("change.datetimepicker", function (e) {
                 date_fd = e.date;
@@ -303,7 +303,7 @@
             $('#fechahasta').datetimepicker({
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fh,
-                maxDate: moment().subtract(1, "days"),
+                maxDate: moment().subtract(1, "days")
             });
             $("#fechahasta").on("change.datetimepicker", function (e) {
                 date_fh = e.date;
@@ -401,7 +401,19 @@
                         columnas.push({data: 'fecha', name: 'fecha'});
                         for (var i=0; i < data.columnass.length; i++)
                         {   
-                            columnas.push({data: data.columnass[i]['variable_id'], name: data.columnass[i]['variable'], searchable: false, orderable:false});
+                            columnas.push({data: data.columnass[i]['variable_id'], name: data.columnass[i]['variable'], searchable: false, orderable:false,
+                            render:function(data, type, row){
+                                if (data != null)
+                                {
+                                    let val = parseFloat(data);
+                                    return val.toLocaleString('en-US', { minimumFractionDigits: 3 });
+                                }
+                                else{
+                                    return '-';
+                                }
+                                return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="" readonly hidden>'+data;
+                            }
+                            });
                             vs_id += data.columnass[i]['variable_id'];
                             vsc_id += '['+data.columnass[i]['variable_id']+']';
                             headers += '<th class="thcenter" style="width:120px!important;">'+data.columnass[i]['variable']+'</th>';
@@ -433,12 +445,13 @@
                                     filename: 'ListadoVariables'+moment().local().format('DD/MM/YYYY')            
                                 }
                             ],
-                            lengthMenu: [[10, 25, 50, 100, 360], [10, 25, 50, 100, 360]],
+                            pageLength: 10,
+                            lengthMenu: [[10, 20, 25], [10, 20, 25]],
                             processing: true,
-                            serverSide: true,
+                            serverSide: false,
                             bInfo: true,
-                            responsive: true,
                             scrollX : true,
+                            scrollY:true,
                             destroy: true,
                             fixedColumns:   {
                                 left: 1
@@ -479,6 +492,7 @@
                             ],
                             
                         } );
+                        table.fnAdjustColumnSizing();
                     }
                 }); 
             } 
@@ -501,7 +515,7 @@
         /* ACTION TO CLOSE MODAL */
 
         /* EDIT BUTTON */
-         $(document).on('click', '.edit', function(){ 
+        $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
             $.get('budget/'+id+'/edit', function(data){
                 $('#modal-title').html('Editar Budget'); 
@@ -648,7 +662,7 @@
 @section('content')
     <div class="row " style="justify-content: center; overflow:auto;">
         <div class="generic-card">
-            <div class="card">
+            <div class="card" style="min-height: 35rem;">
                 <div class="generic-body">  
                     <div class="card-body" style="margin:auto; width:95%"> 
                         <form action="post" id="select-form" name="select-form" autocomplete="off">                            
@@ -710,10 +724,7 @@
                             @csrf
                         </form> 
                     </div>      
-                    <div class="card-body div_table" style="margin:auto; width:95%">
-                          
-                    </div>           
-              
+                    <div class="card-body div_table" style="margin:auto; width:95%"></div>
                 </div>
             </div>
         </div> 
