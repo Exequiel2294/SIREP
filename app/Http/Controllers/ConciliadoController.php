@@ -20,12 +20,12 @@ class ConciliadoController extends Controller
     {
         $months = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
         $actmonth = date("m");
-        $months = array_filter($months,
+        /*$months = array_filter($months,
             function ($key) use ($actmonth) {
                 return $key < (int)$actmonth;
             },
             ARRAY_FILTER_USE_KEY
-        );        
+        );    */    
         return view('conciliado', compact('months'));
     }
 
@@ -33,7 +33,9 @@ class ConciliadoController extends Controller
     {
         if(request()->ajax()) {
             $this->area_id = $request->get('area_id');
-            $this->date = date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01'));
+            $this->anio = 2022;
+            $this->date = date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01'));
+            
             if ($this->area_id == 1)
             {
                 $this->pparray = 
@@ -58,8 +60,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10005
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     );
                     $this->summesreal10011 = 
                     DB::select(
@@ -67,8 +70,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10011
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     ); 
                     $this->summesreal10019 = 
                     DB::select(
@@ -76,8 +80,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10019
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     );
                     $this->summesreal10031 = 
                     DB::select(
@@ -85,8 +90,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10031
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     ); 
                     $this->summesreal10039 = 
                     DB::select(
@@ -94,8 +100,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10039
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     );
                     $this->summesreal10045 =
                     DB::select(
@@ -103,8 +110,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10045
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     );
                     $this->summesreal10052 =
                     DB::select(
@@ -112,8 +120,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10052
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     );
                     $this->summesreal10061 =
                     DB::select(
@@ -121,8 +130,9 @@ class ConciliadoController extends Controller
                         FROM [dbo].[data]
                         WHERE variable_id = 10061
                         AND  MONTH(fecha) = ?
+                        AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date))]
+                        [date('m', strtotime($this->date)), $this->anio]
                     ); 
                 //FIN CALCULOS REUTILIZABLES
                 
@@ -173,8 +183,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10005) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10005; 
                                     break;
@@ -211,8 +222,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10031) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma = $this->summesreal10031;
                                     break;
@@ -230,8 +242,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10011) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma = $this->summesreal10011;
                                     break;
@@ -243,8 +256,9 @@ class ConciliadoController extends Controller
                                             FROM [dbo].[data]
                                             WHERE variable_id = 10067
                                             AND  MONTH(fecha) = ?
+                                            AND YEAR(fecha) = ?
                                             GROUP BY MONTH(fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10019; 
                                     break;
@@ -262,8 +276,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10019) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma = $this->summesreal10019;
                                     break;
@@ -307,8 +322,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10031) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma = $this->summesreal10031; 
                                     break;
@@ -326,8 +342,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10039) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10039; 
                                     break;
@@ -345,8 +362,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10039) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10039; 
                                     break;
@@ -372,8 +390,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10045) as B
                                             ON A2.fecha = B.fecha
                                             WHERE MONTH(A1.fecha) =  ?
+                                            AND YEAR(A1.fecha) = ?
                                             GROUP BY MONTH(A1.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10045; 
                                     break;
@@ -391,8 +410,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -410,8 +430,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -429,8 +450,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -448,8 +470,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -475,8 +498,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10052) as B
                                             ON A2.fecha = B.fecha
                                             WHERE MONTH(A1.fecha) =  ?
+                                            AND YEAR(A1.fecha) = ?
                                             GROUP BY MONTH(A1.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                       
                                         $suma= $this->summesreal10052; 
                                     break;
@@ -494,8 +518,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10052) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10052; 
                                     break;
@@ -513,8 +538,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10052) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10052; 
                                     break;
@@ -532,8 +558,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10061) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10061; 
                                     break;
@@ -551,16 +578,18 @@ class ConciliadoController extends Controller
                                             where variable_id = 10059) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT MONTH(fecha) as month, SUM(valor) as suma
                                             FROM [dbo].[data]
                                             WHERE variable_id = 10059
                                             AND  MONTH(fecha) = ?
+                                            AND YEAR(fecha) = ?
                                             GROUP BY MONTH(fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         ); 
                                     break;
                                     case 10056:                                         
@@ -577,16 +606,18 @@ class ConciliadoController extends Controller
                                             where variable_id = 10060) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT MONTH(fecha) as month, SUM(valor) as suma
                                             FROM [dbo].[data]
                                             WHERE variable_id = 10060
                                             AND  MONTH(fecha) = ?
+                                            AND YEAR(fecha) = ?
                                             GROUP BY MONTH(fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         ); 
                                     break;
                                     case 10057:                                         
@@ -603,8 +634,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10061) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10061; 
                                     break;
@@ -622,8 +654,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10061) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma= $this->summesreal10061; 
                                     break;
@@ -667,8 +700,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10004) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break;
                                         case 10008:
@@ -686,8 +720,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10010) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break;
                                         case 10022:
@@ -710,8 +745,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10024) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             );
                                         break;               
                                         case 10023:
@@ -729,8 +765,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10024) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break;  
                                         case 10027:
@@ -748,8 +785,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10030) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break;
                                         case 10028:
@@ -772,8 +810,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10030) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
 
                                         break;                                            
@@ -792,8 +831,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10035) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break;                                           
                                         case 10038:
@@ -817,8 +857,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10035) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break; 
                                         case 10046:
@@ -841,8 +882,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10050) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             );
                                         break; 
                                         case 10053:
@@ -860,8 +902,9 @@ class ConciliadoController extends Controller
                                                 where variable_id = 10057) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE MONTH(A.fecha) =  ?
+                                                AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date))]
+                                                [date('m', strtotime($this->date)), $this->anio]
                                             ); 
                                         break;
                                         default:
@@ -870,8 +913,9 @@ class ConciliadoController extends Controller
                                                 FROM [dbo].[data]
                                                 WHERE variable_id = ?
                                                 AND  MONTH(fecha) = ?
+                                                AND YEAR(fecha) = ?
                                                 GROUP BY MONTH(fecha)', 
-                                                [$data->variable_id, date('m', strtotime($this->date))]
+                                                [$data->variable_id, date('m', strtotime($this->date)), $this->anio]
                                             );                               
                                         break; 
                                     }
@@ -895,9 +939,10 @@ class ConciliadoController extends Controller
                                             FROM [dbo].[data]
                                             WHERE variable_id = ?
                                             AND  MONTH(fecha) = ?
+                                            AND YEAR(fecha) = ?
                                             AND valor <> 0 
                                             GROUP BY MONTH(fecha)', 
-                                            [$data->variable_id, date('m', strtotime($this->date))]
+                                            [$data->variable_id, date('m', strtotime($this->date)), $this->anio]
                                         );  
                                         if(isset($mes_real[0]->mes_real))
                                         {
@@ -925,8 +970,9 @@ class ConciliadoController extends Controller
                                                         FROM [dbo].[data]
                                                         WHERE variable_id = 10062
                                                         AND  MONTH(fecha) = ?
+                                                        AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date))]
+                                                        [date('m', strtotime($this->date)), $this->anio]
                                                     ); 
                                                 break;
                                                 case 10013:                                       
@@ -938,8 +984,9 @@ class ConciliadoController extends Controller
                                                         FROM [dbo].[data]
                                                         WHERE variable_id = 10063
                                                         AND  MONTH(fecha) = ?
+                                                        AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date))]
+                                                        [date('m', strtotime($this->date)), $this->anio]
                                                     ); 
                                                 break;
                                                 case 10020:                                       
@@ -951,8 +998,9 @@ class ConciliadoController extends Controller
                                                         FROM [dbo].[data]
                                                         WHERE variable_id = 10064
                                                         AND  MONTH(fecha) = ?
+                                                        AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date))]
+                                                        [date('m', strtotime($this->date)), $this->anio]
                                                     ); 
                                                 break;
                                                 case 10032:                                       
@@ -963,16 +1011,18 @@ class ConciliadoController extends Controller
                                                         FROM [dbo].[data]
                                                         WHERE variable_id = 10031
                                                         AND  MONTH(fecha) = ?
+                                                        AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date))]
+                                                        [date('m', strtotime($this->date)), $this->anio]
                                                     );                                     
                                                     $suma2= DB::select(
                                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
                                                         FROM [dbo].[data]
                                                         WHERE variable_id = 10065
                                                         AND  MONTH(fecha) = ?
+                                                        AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date))]
+                                                        [date('m', strtotime($this->date)), $this->anio]
                                                     ); 
                                                 break;
                                             }                            
@@ -1539,7 +1589,8 @@ class ConciliadoController extends Controller
         }
         else
         {
-            $this->date = date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01'));
+            $this->anio = 2022;
+            $this->date = date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01'));
             $daypart = (int)date('z', strtotime($this->date)) + 1;
             $year = (int)date('Y', strtotime($this->date));
             $month = (int)date('m', strtotime($this->date)); 
@@ -1595,7 +1646,7 @@ class ConciliadoController extends Controller
                             $this->load = 1;              
                             $conciliado_reg = ConciliadoData::create([
                                 'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01')),
+                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
                                 'valor' => $variable['value']
                             ]);
                             $transaccion ="CREATE";
@@ -1839,7 +1890,7 @@ class ConciliadoController extends Controller
                             $this->load = 1;              
                             $conciliado_reg = ConciliadoData::create([
                                 'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01')),
+                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
                                 'valor' => $variable['value']
                             ]);
                             $transaccion ="CREATE";
@@ -1990,7 +2041,7 @@ class ConciliadoController extends Controller
                             $this->load = 1;              
                             $conciliado_reg = ConciliadoData::create([
                                 'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01')),
+                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
                                 'valor' => $variable['value']
                             ]);
                             $transaccion ="CREATE";
@@ -2407,7 +2458,7 @@ class ConciliadoController extends Controller
                             $this->load = 1;              
                             $conciliado_reg = ConciliadoData::create([
                                 'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime(date('Y').'-'.$request->get('month').'-01')),
+                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
                                 'valor' => $variable['value']
                             ]);
                             $transaccion ="CREATE";

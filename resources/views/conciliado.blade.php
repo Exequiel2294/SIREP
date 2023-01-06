@@ -514,6 +514,7 @@
                                         },
                                         success:function(data)
                                         {  
+                                            console.log(data);
                                             if($.isEmptyObject(data.error)){
                                                 $('#conciliado-table').DataTable().ajax.reload(null, false); 
                                                 $('#form-button').html('Guardar');
