@@ -203,8 +203,9 @@ class ConciliadoController extends Controller
                                             where variable_id = 10011) as B
                                             ON A.fecha = B.fecha
                                             WHERE MONTH(A.fecha) =  ?
+                                            AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date))]
+                                            [date('m', strtotime($this->date)), $this->anio]
                                         );                                     
                                         $suma = $this->summesreal10011;
                                     break;
@@ -1977,18 +1978,20 @@ class ConciliadoController extends Controller
                                 if ($conciliar == 1)
                                 {
                                     foreach ($vars_conciliar as $var)
-                                    {                               
-                                        DB::table('data')
-                                        ->where('id', $var->id)
-                                        ->update(['valor' => $var->leyconc]);                                        
-                                        Historial::create([
-                                            'data_id' => $var->id,
-                                            'fecha' => date('Y-m-d H:i:s'),
-                                            'transaccion' => 'CONCILIADO',
-                                            'valorviejo' => $var->ley,
-                                            'valornuevo' => $var->leyconc,
-                                            'usuario' => auth()->user()->name
-                                        ]);
+                                    {      
+                                        
+                                        DB::update(
+                                            'UPDATE data
+                                            SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
+                                            WHERE id = ?',
+                                            [$var->leyconc, $var->id]
+                                        );         
+                                        DB::insert(
+                                            'INSERT into historial
+                                            ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
+                                            VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
+                                            [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->ley, $var->leyconc, auth()->user()->name]
+                                        ); 
                                     }
                                 }
                                 else
@@ -2552,18 +2555,21 @@ class ConciliadoController extends Controller
                                 if ($conciliar == 1)
                                 {
                                     foreach ($vars_conciliar as $var)
-                                    {                               
-                                        DB::table('data')
-                                        ->where('id', $var->id)
-                                        ->update(['valor' => $var->leyconc]);                                        
-                                        Historial::create([
-                                            'data_id' => $var->id,
-                                            'fecha' => date('Y-m-d H:i:s'),
-                                            'transaccion' => 'CONCILIADO',
-                                            'valorviejo' => $var->ley,
-                                            'valornuevo' => $var->leyconc,
-                                            'usuario' => auth()->user()->name
-                                        ]);
+                                    {     
+                                        DB::update(
+                                            'UPDATE data
+                                            SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
+                                            WHERE id = ?',
+                                            [$var->leyconc, $var->id]
+                                        );         
+                                        DB::insert(
+                                            'INSERT into historial
+                                            ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
+                                            VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
+                                            [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->ley, $var->leyconc, auth()->user()->name]
+                                        );   
+                                                                  
+                                       
                                     }
                                 }
                                 else
