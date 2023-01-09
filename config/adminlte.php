@@ -245,12 +245,12 @@ return [
         [
             'text' => 'Control por Variable',
             'url'  => 'historial_por_variable',
-            'icon' => 'nav-icon fas fa-file-invoice',
+            'icon' => 'nav-icon fas fa-clipboard-list',
         ],
         /*[
             'text' => 'Historial Variables',
             'url'  => 'historialvariables',
-            'icon' => 'nav-icon fas fa-file-invoice',
+            'icon' => 'nav-icon far fa-newspaper',
         ],*/
         [
             'header' => 'Administración',

@@ -136,7 +136,7 @@ class ConciliadoController extends Controller
                     ); 
                 //FIN CALCULOS REUTILIZABLES
                 
-                $where = ['variable.estado' => 1, 'subcategoria.estado' => 1, 'categoria.area_id' => $this->area_id, 'variable.conciliado' => 1];
+                $where = ['subcategoria.estado' => 1, 'categoria.area_id' => $this->area_id, 'variable.conciliado' => 1];
                 $table = DB::table('variable')
                                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
@@ -1263,7 +1263,7 @@ class ConciliadoController extends Controller
                     //FIN MES REAL
                 //FIN CALCULOS REUTILIZABLES
 
-                $where = ['variable.estado' => 1, 'categoria.area_id' => $this->area_id, 'variable.conciliado' => 1];
+                $where = ['categoria.area_id' => $this->area_id, 'variable.conciliado' => 1];
                 $table = DB::table('variable')
                                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
@@ -2079,10 +2079,10 @@ class ConciliadoController extends Controller
                             {
                                 $vars_conciliar = 
                                 DB::select(
-                                    'SELECT id, valor
+                                    'SELECT id, ISNULL(valor, 0) AS valor
                                     FROM data
                                     WHERE variable_id = ?
-                                    AND (valor + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
+                                    AND (ISNULL(valor, 0) + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
                                     AND fecha BETWEEN ? AND ?',
                                     [$variable['variable_id'], $conciliado/$i, date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date]
                                 ); 

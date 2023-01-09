@@ -4999,52 +4999,65 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10028:  
-                                    //MMSA_APILAM_STACKER_Au Extraible Apilado                  
-                                    //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10033) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10031) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10030) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break; 
+                                    if ($this->date == '2022-12-31')
+                                    {
+                                        return number_format(round(107280), 0, '.', ',');
+                                    }
+                                    else
+                                    {
+                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                        //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10033) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10031) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10030) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    }
+                                break;
                                 case 10038: 
-                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
-                                    //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10036) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10039) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10035) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
+                                    if ($this->date == '2022-12-31')
+                                    {
+                                        return number_format(round(107362), 0, '.', ',');
+                                    }
+                                    else{
+                                        //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                        //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10036) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10039) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10035) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    }
                                 break;               
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
@@ -9632,53 +9645,66 @@ trait ProcesosTrait {
                                     ); 
                                 break;
                                 case 10028:  
-                                    //MMSA_APILAM_STACKER_Au Extraible Apilado                  
-                                    //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10033) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10031) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10030) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
+                                    if ($this->date == '2022-12-31')
+                                    {
+                                        return number_format(round(107280), 0, '.', ',');
+                                    }
+                                    else
+                                    {
+                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                        //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)     
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10033) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10031) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10030) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    }
                                 break; 
                                 case 10038: 
-                                    //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
-                                    //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
-                                    $anio_real= DB::select(
-                                        'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10036) as A
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10039) as B
-                                        ON A.fecha = B.fecha
-                                        INNER JOIN   
-                                        (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
-                                        where variable_id = 10035) as C
-                                        ON A.fecha = C.fecha
-                                        WHERE YEAR(A.fecha) = ?
-                                        AND  DATEPART(y, A.fecha) <=  ?
-                                        GROUP BY YEAR(A.fecha)',
-                                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                    ); 
-                                break;               
+                                    if ($this->date == '2022-12-31')
+                                    {
+                                        return number_format(round(107362), 0, '.', ',');
+                                    }
+                                    else{
+                                        //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                        //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
+                                        $anio_real= DB::select(
+                                            'SELECT YEAR(A.fecha) as year, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as anio_real FROM
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10036) as A
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10039) as B
+                                            ON A.fecha = B.fecha
+                                            INNER JOIN   
+                                            (SELECT fecha, variable_id, [valor]
+                                            FROM [dbo].[data]
+                                            where variable_id = 10035) as C
+                                            ON A.fecha = C.fecha
+                                            WHERE YEAR(A.fecha) = ?
+                                            AND  DATEPART(y, A.fecha) <=  ?
+                                            GROUP BY YEAR(A.fecha)',
+                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                        ); 
+                                    }
+                                break;           
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
