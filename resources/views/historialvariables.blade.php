@@ -366,13 +366,6 @@
             if($("#select-form").valid()){   
                 if ( $.fn.dataTable.isDataTable( '#data-table' ) ) {
                     table.destroy();
-                    console.log('destroy');
-                    if ( $.fn.dataTable.isDataTable( '#data-table' ) ) {
-                        console.log('si');
-                    }
-                    else{
-                        console.log('no');
-                    }
                 }
                 $( ".div_table" ).empty();                
                 columnas.length = 0; 
@@ -426,7 +419,7 @@
                         vs_id += ')';
                         vsc_id += ')';
                         headers += '</tr>';
-                        console.log(vs_id, vsc_id, columnas, headerp, headers);
+                        //console.log(vs_id, vsc_id, columnas, headerp, headers);
                         
                         $( ".div_table" ).append( '<table class="table table-striped table-bordered table-hover datatable table-sm" id="data-table"><thead style="border-collapse: collapse !important;">'+headerp+headers+'</thead></table>' );
                         table = $('#data-table').DataTable({             
@@ -492,7 +485,6 @@
                             ],
                             
                         } );
-                        table.fnAdjustColumnSizing();
                     }
                 }); 
             } 
@@ -531,106 +523,6 @@
         }
         /* EDIT BUTTON */
 
-
-
-        /* INICIO LOAD DATA */
-            function isNumeric(str) {
-                if (typeof str != "string") return false // we only process strings!  
-                return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-                        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-            }
-
-            $("#form-button").click(function(){ 
-                if($("#select-form").valid())
-                {     
-                    if ($("#select-button").val() == 1)
-                    {
-                        const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                            confirmButton: 'btn btn-success',
-                            cancelButton: 'btn btn-danger'
-                        },
-                        buttonsStyling: true
-                        })
-
-                        swalWithBootstrapButtons.fire({
-                        title: 'Estas seguro?',
-                        text: "De existir budget cargado para la variable seleccionada, el mismo se suplantara por los registros actuales.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Aceptar',
-                        cancelButtonText: 'Cancelar',
-                        reverseButtons: true
-                        }).then((result) => {
-                            if (result.value) {       
-                                $('#form-button').html('Guardando..');    
-                                budget_load.length = 0;                
-                                var table = $('#data-table').DataTable();
-                                var arrayid = table.column(0).data().toArray();  
-                                for (var i=0; i < arrayid.length; i++)
-                                {
-                                    index = budget_load.findIndex(x => x.budget_id === parseInt(arrayid[i]));
-                                    if (index == -1) {
-                                        let val = $("#"+arrayid[i]).val();
-                                        if ((!isNumeric(val) && val !='') || parseFloat(val) < 0)
-                                        {
-                                            var row_data = table.row(i).data();
-                                            budget_load.length = 0;
-                                            MansfieldRep.notification('Error en variable:<br>' + row_data['variable'] + '<br>Los Datos No Fueron Cargados','MansfieldRep', 'error');
-                                            $('#form-button').html('Guardar');
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            val = (val != '') ? parseFloat(val).toFixed(8) : null;
-                                            var budget =
-                                            {
-                                                budget_id:parseInt(arrayid[i]),
-                                                value:val
-                                            }
-                                            budget_load.push(budget);                                
-                                        }
-                                    } 
-                                }  
-                                console.log(budget_load);
-                                if (!(i < arrayid.length)) 
-                                {
-                                    $.ajax({
-                                        url:"{{ route('budget.load') }}",
-                                        method:"POST",
-                                        data:{
-                                            budget_load:budget_load,
-                                            _token: $('input[name="_token"]').val()
-                                        },
-                                        success:function(data)
-                                        {  
-                                            if($.isEmptyObject(data.error)){
-                                                $('#data-table').DataTable().ajax.reload(null, false); 
-                                                $('#form-button').html('Guardar');
-                                                if($('#form-button').val() == 1){
-                                                    MansfieldRep.notification('Registros cargados con exito', 'MansfieldRep', 'success');
-                                                }   
-                                                else{
-                                                    MansfieldRep.notification('Registro actualizado con exito', 'MansfieldRep', 'success');
-                                                }                          
-                                            }else{
-                                                $('#form-button').html('Guardar');
-                                                console.log(data.error);
-                                            } 
-                                        }
-                                    });
-                                }                         
-                            
-                            } 
-                        }) 
-                    }
-                    else
-                    {
-                        $("div.datatables-length").html('<div style="color:red;">Primero debe Cargar las <b>Variables</b></div>');
-                    }
-                }                             
-            });
-        /* FIN LOAD DATA*/
 
         /* CHANGE AREA */
         $(document).on('change','.area',function(){

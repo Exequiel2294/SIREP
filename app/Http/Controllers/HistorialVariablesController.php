@@ -75,7 +75,8 @@ class HistorialVariablesController extends Controller
                 ->join('subcategoria as s', 'v.subcategoria_id', '=', 's.id')
                 ->select('v.id as variable_id', 'v.nombre as variable', 's.nombre as subcategoria')
                 ->whereIn('v.id', $vs_id)
-                ->orderby('s.orden')                    
+                ->orderBy('s.orden', 'asc')   
+                ->orderBy('v.orden', 'asc')                
                 ->get()
                 ->toArray();
 
@@ -85,7 +86,7 @@ class HistorialVariablesController extends Controller
                 ->selectRaw('count(s.id) as cantidad')
                 ->whereIn('v.id', $vs_id)
                 ->groupBy('s.id','s.nombre', 's.orden')
-                ->orderby('s.orden')
+                ->orderBy('s.orden', 'asc')   
                 ->get()
                 ->toArray();
 

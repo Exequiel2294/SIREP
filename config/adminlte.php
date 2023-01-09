@@ -247,11 +247,11 @@ return [
             'url'  => 'historial_por_variable',
             'icon' => 'nav-icon fas fa-clipboard-list',
         ],
-        /*[
+        [
             'text' => 'Historial Variables',
             'url'  => 'historialvariables',
             'icon' => 'nav-icon far fa-newspaper',
-        ],*/
+        ],
         [
             'header' => 'Administración',
             'can'   => 'Admin'
