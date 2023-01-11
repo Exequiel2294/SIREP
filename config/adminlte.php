@@ -253,6 +253,12 @@ return [
             'icon' => 'nav-icon far fa-newspaper',
         ],
         [
+            'text' => 'budget',
+            'url'  => 'budget',
+            'icon' => 'nav-icon fas fa-bookmark',
+            'can'  => 'budget module'
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],
@@ -267,11 +273,6 @@ return [
                     'text' => 'conciliado',
                     'url'  => 'conciliado',
                     'icon' => 'nav-icon fas fa-sync-alt',
-                ],
-                [
-                    'text' => 'budget',
-                    'url'  => 'budget',
-                    'icon' => 'nav-icon fas fa-bookmark',
                 ],
                 [
                     'text' => 'area',

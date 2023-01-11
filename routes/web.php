@@ -69,12 +69,16 @@ Route::group(['middleware' => ['auth']], function() {
 
 });
 
-Route::group(['middleware' => ['auth', 'role:Admin']], function() {
+Route::group(['middleware' => ['auth', 'permission:budget module']], function() {
 
     Route::get('budget', 'BudgetController@index')->name('budget');
     Route::post('budget/getvariables', 'BudgetController@getvariables')->name('budget.getvariables');
     Route::post('budget.getvalores', 'BudgetController@getValores')->name('budget.getvalores');
     Route::post('budget/load', 'BudgetController@load')->name('budget.load');
+
+});
+
+Route::group(['middleware' => ['auth', 'role:Admin']], function() {
 
     Route::get('area', 'AreaController@index')->name('area');
     Route::post('area/load', 'AreaController@load')->name('area.load');
