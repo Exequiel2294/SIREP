@@ -27,6 +27,8 @@ class RestrictedAccess extends Rule
         {
             return $this->user->groups()->recursive()->contains(
             [
+                Group::find('CN=Reportes_E,CN=Users,DC=argentina,DC=FSM,DC=CORP'),
+                Group::find('CN=Reportes_L,CN=Users,DC=argentina,DC=FSM,DC=CORP'),
                 Group::find('CN=Reportes_A,CN=Users,DC=argentina,DC=FSM,DC=CORP'),
             ]);
         }

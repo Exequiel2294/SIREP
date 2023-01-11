@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Auth;
 
 class BudgetController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:budget module']);
+    }
 
     public function index()
     {
@@ -104,13 +108,10 @@ class BudgetController extends Controller
                         'valornuevo' => $newvalue,
                         'usuario' => auth()->user()->name
                     ]);
-                }
-                
+                }                
             }
-
         }
         return;
     } 
 
 }
-//512383.00000000
