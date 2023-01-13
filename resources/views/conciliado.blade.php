@@ -309,6 +309,7 @@
                     data: function(d){
                         d.area_id = $( "#area_id" ).val(),
                         d.month = $( "#month" ).val(),
+                        d.year = $( "#year" ).val(),
                         d._token = $('input[name="_token"]').val();
                     }
                 },
@@ -330,9 +331,9 @@
                 columns: [  
                     {data:'subcategoria', title:'subcategoria', name:'subcategoria', visible:false},  
                     {data:'var_orden', title:'var_orden', name:'var_orden', visible:false},  
-                    {data:'variable', title:'Variable', name:'variable', orderable: false, width:'40%'}, 
+                    {data:'variable', title:'Variable', name:'variable', orderable: false, width:'35%'}, 
                     {data:'unidad', title:'U.', name:'unidad', orderable: false, searchable: false, width:'4%'}, 
-                    {data:'mes_real', title:'Mensual Real', name:'mes_real', orderable: false,searchable: false, width:'28%',
+                    {data:'mes_real', title:'Mensual Real', name:'mes_real', orderable: false,searchable: false, width:'25%',
                         render:function(data, type, row){
                             if (data != '-')
                             {
@@ -342,7 +343,7 @@
                             return '<input type="number" class="form-control" id="r'+row['variable_id']+'" value="" readonly hidden>'+data;
                         }
                     },  
-                    {data:'conciliado_data', title:'Conciliado', name:'conciliado_data', orderable: false, searchable: false, width:'28%',
+                    {data:'conciliado_data', title:'Conciliado', name:'conciliado_data', orderable: false, searchable: false, width:'25%',
                         render: function (data,type,row){
                             if(var_calc.indexOf(parseInt(row['variable_id'])) != -1)
                             {                                  
@@ -355,14 +356,21 @@
                             }
                         }
                     },
-                    {data:'variable_id', title:'variable_id', name:'variable_id', visible: false}    
+                    {data:'variable_id', title:'variable_id', name:'variable_id', visible: false}, 
+                    {data: null, title:'Dias', name:'dias', orderable: false, searchable: false, width:'8%',
+                        render: function (){
+                            return '<div style="padding-left: 0.25rem; padding-right: 0.25rem;">'
+                                    +'<div> <select class="form-control" name="dias_conciliacion" id="dias_conciliacion">   <option value=1>1</option>  <option value=2>2</option>    <option value=3>3</option>  <option value=4>4</option>    <option value=5 selected="selected">5</option>  <option value=6>6</option>    <option value=7>7</option>  <option value=8>8</option>    <option value=9>9</option>  <option value=10>10</option>    </select>   </div>'
+                            +'</div>';
+                        }
+                    },
                 ],  
                 rowGroup: {
                     dataSrc: ['subcategoria']
                 },
                 columnDefs: [
                     {
-                        targets: [3, 4, 5, 6],
+                        targets: [3, 4, 5, 6, 7],
                         className: "dt-center"
                     }
                 ],
@@ -384,6 +392,9 @@
                     required: true,
                     min: 1,
                     max:12
+                },                
+                year: {
+                    required: true,
                 },
                 dias_conciliacion: {
                     required: true
@@ -476,8 +487,8 @@
                                     if (index == -1) {
                                         let val = $("#"+arrayid[i]).val();
                                         let val2 = $("#r"+arrayid[i]).val();
-                                        val3 =  (val2 == '') ? null : parseFloat(val2);
                                         val = val.replaceAll(',','');
+                                        val2 =  (val2 == '') ? null : parseFloat(val2);
                                         if ((!isNumeric(val) && val !='') || parseFloat(val) < 0)
                                         {
                                             var row_data = table.row(i).data();
@@ -493,7 +504,7 @@
                                             {
                                                 variable_id:parseInt(arrayid[i]),
                                                 value:val,
-                                                valuereal:val3
+                                                valuereal:val2
                                             }
                                             conciliado_load.push(variable);                                
                                         }
@@ -508,6 +519,7 @@
                                         data:{
                                             area_id: $( "#area_id" ).val(),
                                             month: $( "#month" ).val(),
+                                            year: $( "#year" ).val(),
                                             conciliado_load:conciliado_load,
                                             dias_conciliacion: $("#dias_conciliacion" ).val(),
                                             _token: $('input[name="_token"]').val()
@@ -689,36 +701,29 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="categoria" class="col-form-label">Mes</label>
+                                    <div class="form-group col-md-2">
+                                        <label for="year" class="col-form-label">Año</label>
+                                        <div>
+                                            <select class="form-control" name="year" id="year">
+                                                <option value='' selected="selected" disabled>Año</option>
+                                                <option value=2022>2022</option>
+                                                <option value=2023>2023</option>                                                                                      
+                                            </select> 
+                                        </div>
+                                    </div>  
+                                    <div class="form-group col-md-2">
+                                        <label for="month" class="col-form-label">Mes</label>
                                         <div>
                                             <select class="form-control" name="month" id="month">
-                                                <option value=0 selected="selected">Seleccione Mes</option>
+                                                <option value='' selected="selected" disabled>Mes</option>
                                                 @foreach ($months as $num => $name)
                                                     <option value="{{ $num }}">{{ $name }}</option>
                                                 @endforeach                                       
                                             </select> 
-                                        </div>
-                                    </div>       
-                                    <div class="form-group col-md-2">
-                                        <label for="dias" class="col-form-label">Días a Conciliar</label>
-                                        <div>                                            
-                                            <select class="form-control" name="dias_conciliacion" id="dias_conciliacion">
-                                                <option value=1>1</option>
-                                                <option value=2>2</option>
-                                                <option value=3>3</option>
-                                                <option value=4>4</option>
-                                                <option value=5 selected="selected">5</option>
-                                                <option value=6>6</option>
-                                                <option value=7>7</option>
-                                                <option value=8>8</option>
-                                                <option value=9>9</option> 
-                                                <option value=10>10</option>                                                                                     
-                                            </select>  
-                                        </div>
-                                    </div>                              
-                                    <div class="form-group col-md-3" style="align-self:self-end">                                    
-                                        <button type="button" class="btn btn-primary" id="btn-select">Cargar Variables</button>
+                                        </div>       
+                                    </div>                             
+                                    <div class="form-group col-md-2" style="align-self:self-end">                                    
+                                        <button type="button" class="btn btn-primary" id="btn-select">Cargar</button>
                                     </div> 
                                 </div>                                        
                             @csrf

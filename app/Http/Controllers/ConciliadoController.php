@@ -1590,23 +1590,21 @@ class ConciliadoController extends Controller
         }
         else
         {
-            $this->anio = 2022;
+            $this->anio = $request->get('year');;
             $this->date = date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01'));
+            $this->dias_conciliacion = $request->get('dias_conciliacion');
+            $this->erorrs = [];
             $daypart = (int)date('z', strtotime($this->date)) + 1;
             $year = (int)date('Y', strtotime($this->date));
             $month = (int)date('m', strtotime($this->date)); 
             $day = (int)date('d', strtotime($this->date)); 
-            $this->dias_conciliacion = $request->get('dias_conciliacion');
-            $this->erorrs = [];
             if ($request->get('area_id') == 1)
             {
                 $this->procsumarray = 
                 [10005, 10011, 10019, 10025, 10031, 10039, 10045, 10047, 10048, 10052, 
                 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067];
                 $this->procpromarray = 
-                [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];
-                      
-
+                [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];                     
                 $this->procpparray = 
                 [10004, 10010, 10012, 10018, 10030, 10033, 10035, 10036, 
                 10041, 10042, 10043, 10044, 10050, 10051, 10054, 10055, 
