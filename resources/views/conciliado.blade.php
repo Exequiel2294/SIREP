@@ -331,7 +331,7 @@
                 columns: [  
                     {data:'subcategoria', title:'subcategoria', name:'subcategoria', visible:false},  
                     {data:'var_orden', title:'var_orden', name:'var_orden', visible:false},  
-                    {data:'variable', title:'Variable', name:'variable', orderable: false, width:'35%'}, 
+                    {data:'variable', title:'Variable', name:'variable', orderable: false, width:'30%'}, 
                     {data:'unidad', title:'U.', name:'unidad', orderable: false, searchable: false, width:'4%'}, 
                     {data:'mes_real', title:'Mensual Real', name:'mes_real', orderable: false,searchable: false, width:'25%',
                         render:function(data, type, row){
@@ -347,23 +347,33 @@
                         render: function (data,type,row){
                             if(var_calc.indexOf(parseInt(row['variable_id'])) != -1)
                             {                                  
-                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;" readonly>';
+                                return '<input type="text" class="form-control" id="c'+row['variable_id']+'" value="" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;" readonly>';
                             }
                             else
                             {
                                 let val = (data == null) ? '' : parseFloat(data);
-                                return '<input type="text" class="form-control" id="'+row['variable_id']+'" value="'+val.toLocaleString('en-US', { minimumFractionDigits: 12 })+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
+                                return '<input type="text" class="form-control" id="c'+row['variable_id']+'" value="'+val.toLocaleString('en-US', { minimumFractionDigits: 12 })+'" style="width: 80%!important; margin: auto; height: calc(1.8rem + 2px)!important; text-align:center;">';
                             }
                         }
                     },
                     {data:'variable_id', title:'variable_id', name:'variable_id', visible: false}, 
-                    {data: null, title:'Dias', name:'dias', orderable: false, searchable: false, width:'8%',
-                        render: function (){
-                            return '<div style="padding-left: 0.25rem; padding-right: 0.25rem;">'
-                                    +'<div> <select class="form-control" name="dias_conciliacion" id="dias_conciliacion">   <option value=1>1</option>  <option value=2>2</option>    <option value=3>3</option>  <option value=4>4</option>    <option value=5 selected="selected">5</option>  <option value=6>6</option>    <option value=7>7</option>  <option value=8>8</option>    <option value=9>9</option>  <option value=10>10</option>    </select>   </div>'
-                            +'</div>';
+                    {data: null, title:'Dias', name:'dias', orderable: false, searchable: false, width:'9%',
+                        render: function (data,type,row){
+                            var daysInMonth = '<div style="padding-left: 0.25rem; padding-right: 0.25rem;"><div> <select class="form-control" name="dias_conciliacion" id="d'+row['variable_id']+'">'
+                            for( let i=1; i<=moment($("#year").val()+"-"+$("#month").val(), "YYYY-MM").daysInMonth(); i++)
+                            {
+                                if(i == 5)
+                                {
+                                    daysInMonth+='<option selected value="'+i+'">'+i+'</option>';
+                                    i++;
+                                }
+                                daysInMonth+='<option value="'+i+'">'+i+'</option>';
+                            }
+                            daysInMonth+= '</select></div></div>';
+                            return daysInMonth;
                         }
-                    },
+                    }, 
+                    {data: 'action', title:'', name:'action', orderable: false, searchable: false, width:'6%'}
                 ],  
                 rowGroup: {
                     dataSrc: ['subcategoria']
@@ -387,15 +397,15 @@
             rules: {
                 area_id: {
                     required: true
-                },                
+                },                     
+                year: {
+                    required: true,
+                },         
                 month: {
                     required: true,
                     min: 1,
                     max:12
-                },                
-                year: {
-                    required: true,
-                },
+                },  
                 dias_conciliacion: {
                     required: true
                 }
@@ -453,6 +463,60 @@
                 return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
                         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
             }
+
+            $(document).on('click', '.btn-conciliado', function(){ 
+                if($("#modal-form-loadvbles").valid())
+                {
+                    var id = $(this).attr('id');                    
+                    var cvalue = $('#c'+id).val().replaceAll(',','');
+                    var variable = $(this).data('name');
+                    var subcategoria = $(this).data('subcategoria');
+
+                    console.log($(this).attr('id'));
+                    console.log($(this).data('name'));
+                    console.log($(this).data('subcategoria'));
+                    console.log($('#r'+id).val());
+                    console.log($('#c'+id).val().replaceAll(',',''));
+                    console.log($('#d'+id).val());
+                    console.log($('#year').val());
+                    console.log($('#month').val());
+
+                    if (isNumeric(cvalue) && cvalue !='' && parseFloat(cvalue) > 0)
+                    {
+                        $.ajax({
+                            url:"{{route('conciliado.load') }}",
+                            method:"POST",
+                            data:{
+                                variable_id: id,
+                                year: $( "#year" ).val(),
+                                month: $( "#month" ).val(),
+                                valor_real:$('#r'+id).val(),
+                                valor_conciliado:cvalue,
+                                dias_conciliacion: $('#d'+id).val(),
+                                _token: $('input[name="_token"]').val()
+                            },
+                            success:function(data)
+                            {  
+                                console.log(data);
+                                if($.isEmptyObject(data.error)){
+                                    $('#conciliado-table').DataTable().ajax.reload(null, false); 
+                                    MansfieldRep.notification('Variable conciliada con exito', 'SIREP', 'success');
+                                                             
+                                }else{
+                                    $('#form-button').html('Guardar');
+                                    MansfieldRep.notification(data.error,'SIREP', 'error');
+                                } 
+                            }
+                        });
+                    }
+                    else
+                    {         
+                        MansfieldRep.notification(subcategoria + ' - ' + variable + '<br>El valor ingresado debe ser numerico y mayor a 0','SIREP', 'error');                 
+                    }
+             
+                    
+                }
+            });
 
             $("#form-button").click(function(){ 
                 if($("#modal-form-loadvbles").valid())
@@ -735,8 +799,7 @@
                             <div class="datatables-length">
                             </div> 
                             <div class="datatables-filter"> 
-                                <button type="button" class="btn btn-primary" id="btn-import">Importar</button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-success" id="form-button">Guardar</button>   
+                                <button type="button" class="btn btn-primary" id="btn-import">Importar</button>&nbsp;&nbsp;                                   
                             </div>
                         </div>
                         <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="conciliado-table"></table>  
