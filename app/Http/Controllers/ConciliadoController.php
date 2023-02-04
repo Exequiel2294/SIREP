@@ -33,8 +33,8 @@ class ConciliadoController extends Controller
     {
         if(request()->ajax()) {
             $this->area_id = $request->get('area_id');
-            $this->anio = 2022;
-            $this->date = date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01'));
+            $this->year = $request->get('year');
+            $this->date = date('Y-m-t',strtotime($this->year.'-'.$request->get('month').'-01'));
             
             if ($this->area_id == 1)
             {
@@ -62,7 +62,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     );
                     $this->summesreal10011 = 
                     DB::select(
@@ -72,7 +72,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     ); 
                     $this->summesreal10019 = 
                     DB::select(
@@ -82,7 +82,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     );
                     $this->summesreal10031 = 
                     DB::select(
@@ -92,7 +92,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     ); 
                     $this->summesreal10039 = 
                     DB::select(
@@ -102,7 +102,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     );
                     $this->summesreal10045 =
                     DB::select(
@@ -112,7 +112,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     );
                     $this->summesreal10052 =
                     DB::select(
@@ -122,7 +122,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     );
                     $this->summesreal10061 =
                     DB::select(
@@ -132,7 +132,7 @@ class ConciliadoController extends Controller
                         AND  MONTH(fecha) = ?
                         AND  YEAR(fecha) = ?
                         GROUP BY MONTH(fecha)', 
-                        [date('m', strtotime($this->date)), $this->anio]
+                        [date('m', strtotime($this->date)), $this->year]
                     ); 
                 //FIN CALCULOS REUTILIZABLES
                 
@@ -185,7 +185,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10005; 
                                     break;
@@ -205,7 +205,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma = $this->summesreal10011;
                                     break;
@@ -225,7 +225,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma = $this->summesreal10031;
                                     break;
@@ -245,7 +245,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma = $this->summesreal10011;
                                     break;
@@ -259,7 +259,7 @@ class ConciliadoController extends Controller
                                             AND  MONTH(fecha) = ?
                                             AND YEAR(fecha) = ?
                                             GROUP BY MONTH(fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10019; 
                                     break;
@@ -279,7 +279,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma = $this->summesreal10019;
                                     break;
@@ -325,7 +325,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma = $this->summesreal10031; 
                                     break;
@@ -345,7 +345,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10039; 
                                     break;
@@ -365,7 +365,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10039; 
                                     break;
@@ -393,7 +393,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A1.fecha) =  ?
                                             AND YEAR(A1.fecha) = ?
                                             GROUP BY MONTH(A1.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10045; 
                                     break;
@@ -413,7 +413,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -433,7 +433,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -453,7 +453,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -473,7 +473,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10045;  
                                     break;
@@ -501,7 +501,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A1.fecha) =  ?
                                             AND YEAR(A1.fecha) = ?
                                             GROUP BY MONTH(A1.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                       
                                         $suma= $this->summesreal10052; 
                                     break;
@@ -521,7 +521,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10052; 
                                     break;
@@ -541,7 +541,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10052; 
                                     break;
@@ -561,7 +561,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10061; 
                                     break;
@@ -581,7 +581,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT MONTH(fecha) as month, SUM(valor) as suma
@@ -590,7 +590,7 @@ class ConciliadoController extends Controller
                                             AND  MONTH(fecha) = ?
                                             AND YEAR(fecha) = ?
                                             GROUP BY MONTH(fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         ); 
                                     break;
                                     case 10056:                                         
@@ -609,7 +609,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT MONTH(fecha) as month, SUM(valor) as suma
@@ -618,7 +618,7 @@ class ConciliadoController extends Controller
                                             AND  MONTH(fecha) = ?
                                             AND YEAR(fecha) = ?
                                             GROUP BY MONTH(fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         ); 
                                     break;
                                     case 10057:                                         
@@ -637,7 +637,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10061; 
                                     break;
@@ -657,7 +657,7 @@ class ConciliadoController extends Controller
                                             WHERE MONTH(A.fecha) =  ?
                                             AND YEAR(A.fecha) = ?
                                             GROUP BY MONTH(A.fecha)', 
-                                            [date('m', strtotime($this->date)), $this->anio]
+                                            [date('m', strtotime($this->date)), $this->year]
                                         );                                     
                                         $suma= $this->summesreal10061; 
                                     break;
@@ -703,7 +703,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break;
                                         case 10008:
@@ -723,7 +723,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break;
                                         case 10022:
@@ -748,7 +748,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             );
                                         break;               
                                         case 10023:
@@ -768,7 +768,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break;  
                                         case 10027:
@@ -788,7 +788,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break;
                                         case 10028:
@@ -813,7 +813,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
 
                                         break;                                            
@@ -834,7 +834,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break;                                           
                                         case 10038:
@@ -860,7 +860,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break; 
                                         case 10046:
@@ -885,7 +885,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             );
                                         break; 
                                         case 10053:
@@ -905,7 +905,7 @@ class ConciliadoController extends Controller
                                                 WHERE MONTH(A.fecha) =  ?
                                                 AND YEAR(A.fecha) = ?
                                                 GROUP BY MONTH(A.fecha)', 
-                                                [date('m', strtotime($this->date)), $this->anio]
+                                                [date('m', strtotime($this->date)), $this->year]
                                             ); 
                                         break;
                                         default:
@@ -916,7 +916,7 @@ class ConciliadoController extends Controller
                                                 AND  MONTH(fecha) = ?
                                                 AND YEAR(fecha) = ?
                                                 GROUP BY MONTH(fecha)', 
-                                                [$data->variable_id, date('m', strtotime($this->date)), $this->anio]
+                                                [$data->variable_id, date('m', strtotime($this->date)), $this->year]
                                             );                               
                                         break; 
                                     }
@@ -943,7 +943,7 @@ class ConciliadoController extends Controller
                                             AND YEAR(fecha) = ?
                                             AND valor <> 0 
                                             GROUP BY MONTH(fecha)', 
-                                            [$data->variable_id, date('m', strtotime($this->date)), $this->anio]
+                                            [$data->variable_id, date('m', strtotime($this->date)), $this->year]
                                         );  
                                         if(isset($mes_real[0]->mes_real))
                                         {
@@ -973,7 +973,7 @@ class ConciliadoController extends Controller
                                                         AND  MONTH(fecha) = ?
                                                         AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date)), $this->anio]
+                                                        [date('m', strtotime($this->date)), $this->year]
                                                     ); 
                                                 break;
                                                 case 10013:                                       
@@ -987,7 +987,7 @@ class ConciliadoController extends Controller
                                                         AND  MONTH(fecha) = ?
                                                         AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date)), $this->anio]
+                                                        [date('m', strtotime($this->date)), $this->year]
                                                     ); 
                                                 break;
                                                 case 10020:                                       
@@ -1001,7 +1001,7 @@ class ConciliadoController extends Controller
                                                         AND  MONTH(fecha) = ?
                                                         AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date)), $this->anio]
+                                                        [date('m', strtotime($this->date)), $this->year]
                                                     ); 
                                                 break;
                                                 case 10032:                                       
@@ -1014,7 +1014,7 @@ class ConciliadoController extends Controller
                                                         AND  MONTH(fecha) = ?
                                                         AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date)), $this->anio]
+                                                        [date('m', strtotime($this->date)), $this->year]
                                                     );                                     
                                                     $suma2= DB::select(
                                                         'SELECT MONTH(fecha) as month, SUM(valor) as suma
@@ -1023,7 +1023,7 @@ class ConciliadoController extends Controller
                                                         AND  MONTH(fecha) = ?
                                                         AND YEAR(fecha) = ?
                                                         GROUP BY MONTH(fecha)', 
-                                                        [date('m', strtotime($this->date)), $this->anio]
+                                                        [date('m', strtotime($this->date)), $this->year]
                                                     ); 
                                                 break;
                                             }                            
@@ -1053,7 +1053,12 @@ class ConciliadoController extends Controller
                                 }
                             } 
                         })
-                        ->rawColumns(['subcategoria','mes_real'])
+                        ->addColumn('action', function($data)
+                        {
+                            $button = '<a href="javascript:void(0)" name="load" id="'.$data->variable_id.'" data-name="'.$data->variable.'" data-subcategoria="'.$data->subcat.'" class="btn-action-table btn-conciliado" title="Conciliar"><i style="color:#218838;" class="fas fa-check fa-2x"></i></a>';
+                            return $button;
+                        })
+                        ->rawColumns(['subcategoria','mes_real', 'action'])
                         ->addIndexColumn()
                         ->make(true);
             }
@@ -1563,7 +1568,12 @@ class ConciliadoController extends Controller
                                 return '-';
                             }
                         })
-                        ->rawColumns(['categoria','subcategoria','mes_real'])
+                        ->addColumn('action', function($data)
+                        {
+                            $button = '<a href="javascript:void(0)" name="load" id="'.$data->variable_id.'" data-name="'.$data->variable.'" data-subcategoria="'.$data->subcat.'" class="btn-action-table btn-conciliado" title="Conciliar"><i style="color:#218838;" class="fas fa-check fa-2x"></i></a>';
+                            return $button;
+                        })
+                        ->rawColumns(['categoria','subcategoria','mes_real', 'action'])
                         ->addIndexColumn()
                         ->make(true);
 
@@ -1576,12 +1586,12 @@ class ConciliadoController extends Controller
         $validator = Validator::make(
             $request->all(),
             [   
-                'area_id' => 'required|exists:area,id',
+                'variable_id' => 'required|exists:variable,id',
+                'year' => 'required|numeric',
                 'month'    => 'required|numeric',
-                'conciliado_load' => 'required|array',
-                'conciliado_load.*.variable_id' => 'required|exists:variable,id',
-                'conciliado_load.*.value' => 'nullable',
-                'conciliado_load.*.valuereal' => 'nullable',
+                'valor_real' => 'required|numeric',
+                'valor_conciliado' => 'required|numeric',
+                'dias_conciliacion' => 'required|numeric'
             ]            
         );
         if ($validator->fails()) 
@@ -1589,999 +1599,258 @@ class ConciliadoController extends Controller
             return response()->json(['error'=>$validator->errors()->all()]);
         }
         else
-        {
-            $this->anio = 2022;
-            $this->date = date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01'));
-            $daypart = (int)date('z', strtotime($this->date)) + 1;
-            $year = (int)date('Y', strtotime($this->date));
-            $month = (int)date('m', strtotime($this->date)); 
-            $day = (int)date('d', strtotime($this->date)); 
-            $this->dias_conciliacion = $request->get('dias_conciliacion');
-            $this->erorrs = [];
-            if ($request->get('area_id') == 1)
+        {            
+            $value_real = $request->get('valor_real');
+            $value_conciliado = $request->get('valor_conciliado'); 
+            if ($value_conciliado - $value_real == 0)
             {
-                $this->procsumarray = 
-                [10005, 10011, 10019, 10025, 10031, 10039, 10045, 10047, 10048, 10052, 
-                10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067];
-                $this->procpromarray = 
-                [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];
-                      
-
-                $this->procpparray = 
-                [10004, 10010, 10012, 10018, 10030, 10033, 10035, 10036, 
-                10041, 10042, 10043, 10044, 10050, 10051, 10054, 10055, 
-                10056, 10057, 10058];//se coloca 10015 en pparray por el budget
-                //10036
-        
-     
-                foreach($request->get('conciliado_load') as $variable)
-                {
-                    $this->load = 0;
-                    if ($variable['value'] != null && ( in_array($variable['variable_id'], $this->procsumarray) || in_array($variable['variable_id'], $this->procpromarray)))
-                    {
-                        $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
-                        $row = DB::table('conciliado_data')
-                            ->where($this->where)
-                            ->first();
-                        if (isset($row->id))
-                        {
-                            $conciliado_reg = ConciliadoData::findOrFail($row->id);
-                            $oldvalue=$conciliado_reg->valor;                                
-                            $this->load = 1;    
-                            $conciliado_reg->update([
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="EDIT";           
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]); 
-                            
-                        }
-                        else
-                        {      
-                            $this->load = 1;              
-                            $conciliado_reg = ConciliadoData::create([
-                                'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="CREATE";
-                            $oldvalue= null;
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]);                   
-                        }  
-
-                        if ($this->load == 1)
-                        {
-                            if (in_array($variable['variable_id'], $this->procsumarray))
-                            {
-                                $conciliado = $variable['value'] - $variable['valuereal'];
-
-                            } 
-                            else
-                            {
-                                if (in_array($variable['variable_id'], $this->procpromarray))
-                                {
-                                    $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
-                                } 
-                            }                                  
-                            $j=$this->dias_conciliacion-1;
-                            $conciliar = 0;
-                            for ($i=$this->dias_conciliacion; $i>0; $i--)
-                            {
-                                $vars_conciliar = 
-                                DB::select(
-                                    'SELECT id, valor
-                                    FROM data
-                                    WHERE variable_id = ?
-                                    AND (valor + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
-                                    AND fecha BETWEEN ? AND ?',
-                                    [$variable['variable_id'], $conciliado/$i, date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date]
-                                ); 
-                                if (sizeof($vars_conciliar) == $i)
-                                {
-                                    $conciliar = 1;
-                                    break;
-                                }
-                            }
-                            
-                            if ($conciliar == 1)
-                            {
-                                foreach ($vars_conciliar as $var)
-                                {                
-                                    DB::update(
-                                        'UPDATE data
-                                        SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
-                                        WHERE id = ?',
-                                        [$var->valor+$conciliado/sizeof($vars_conciliar), $var->id]
-                                    );         
-                                    DB::insert(
-                                        'INSERT into historial
-                                        ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
-                                        VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
-                                        [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->valor, $var->valor+$conciliado/sizeof($vars_conciliar), auth()->user()->name]
-                                    );   
-                                }
-                            }
-                            else
-                            {
-                                //NO SE PUEDE CONCILIAR
-                            }
-                        } 
-                    }                     
-                } 
-                
-                //INICIO CALCULOS REUTILIZABLES                    
-                    $this->summesrealton = 
-                    DB::select(
-                        'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                        (SELECT variable_id, SUM(valor) AS mes_real
-                        FROM [dbo].[data] 
-                        WHERE variable_id IN (10005, 10011, 10019, 10031, 10039, 10045, 10052, 10061, 10059, 10060 )
-                        AND MONTH(fecha) = '.$month.'
-                        AND DATEPART(y, fecha) <= '.$daypart.'
-                        AND YEAR(fecha) = '.$year.'
-                        GROUP BY variable_id) AS d
-                        RIGHT JOIN
-                        (SELECT id 
-                        FROM [dbo].[variable] 
-                        WHERE id IN (10005, 10011, 10019, 10031, 10039, 10045, 10052, 10061, 10059, 10060 )) AS v
-                        ON d.variable_id = v.id
-                        ORDER BY id ASC'
-                    );
-                    $this->au =
-                    //Se tomará 10033(MMSA_APILAM_STACKER_Recuperación), 10036(MMSA_APILAM_TA_Recuperación), 10050(MMSA_ADR_Ley de Au BLS), 10051(MMSA_ADR_Ley de Au PLS) como si fueran Au Triturado(oz) para facilitar el proceso de conciliacion de dichas variable.
-                    DB::select(
-                        'SELECT V.id AS variable_id, T.Au AS mes_real FROM
-                        (
-                        SELECT 10004 AS variable_id, SUM((A.valor*B.valor)/31.1035) AS Au FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10004) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10005) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION
-                        SELECT 10010, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10010) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10011) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION                     
-                        SELECT 10030, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10030) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10031) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION
-                        SELECT 10033, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10033) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10031) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION
-                        SELECT 10035, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10035) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10039) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION
-                        SELECT 10036, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10036) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10039) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION
-                        SELECT 10050, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10050) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10052) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        UNION
-                        SELECT 10051, SUM((A.valor*B.valor)/31.1035) FROM
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10051) AS A
-                            INNER JOIN   
-                            (SELECT fecha, variable_id, [valor]
-                            FROM [dbo].[data]
-                            where variable_id = 10052) AS B
-                            ON A.fecha = B.fecha
-                            AND  MONTH(A.fecha) = '.$month.'
-                            AND  YEAR(A.fecha) = '.$year.'
-                            GROUP BY MONTH(A.fecha)
-                        ) AS T
-                        RIGHT JOIN 
-                        (SELECT id 
-                        FROM [dbo].[variable] 
-                        WHERE id IN (10004, 10010, 10030, 10033, 10035, 10036, 10050, 10051)) AS V
-                        ON T.variable_id = V.id
-                        ORDER BY id ASC'
-                        );
-                //FIN CALCULOS REUTILIZABLES
-
-                foreach($request->get('conciliado_load') as $variable)
-                {
-                    $this->load = 0;
-                    if ($variable['value'] != null && in_array($variable['variable_id'], $this->procpparray))
-                    {
-                        $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
-                        $row = DB::table('conciliado_data')
-                            ->where($this->where)
-                            ->first();
-                        if (isset($row->id))
-                        {
-                            $conciliado_reg = ConciliadoData::findOrFail($row->id);
-                            $oldvalue=$conciliado_reg->valor;                                
-                            $this->load = 1;    
-                            $conciliado_reg->update([
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="EDIT";           
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]); 
-                            
-                        }
-                        else
-                        {      
-                            $this->load = 1;              
-                            $conciliado_reg = ConciliadoData::create([
-                                'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="CREATE";
-                            $oldvalue= null;
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]);                   
-                        }  
-                        if ($this->load == 1)
-                        {
-                            switch ($variable['variable_id'])
-                            {
-                                case 10004:
-                                    //AuConciliado = ($this->summesrealton[0]->mes_real * $variable['value']) / 31.1035;
-                                    //AuReal = $this->au[0]->mes_real; 
-                                    $conciliado = (($this->summesrealton[0]->mes_real * $variable['value']) / 31.1035) - ($this->au[0]->mes_real);
-                                    $VarA = 10005;            
-                                break; 
-                                case 10010:  
-                                    $conciliado = (($this->summesrealton[1]->mes_real * $variable['value']) / 31.1035) - ($this->au[1]->mes_real);
-                                    $VarA = 10011;                   
-                                break;   
-                                case 10030:  
-                                    $conciliado = (($this->summesrealton[3]->mes_real * $variable['value']) / 31.1035) - ($this->au[2]->mes_real);
-                                    $VarA = 10031;                       
-                                break;   
-                                case 10033:
-                                    $conciliado = (($this->summesrealton[3]->mes_real * $variable['value']) / 31.1035) - ($this->au[3]->mes_real);
-                                    $VarA = 10031;                       
-                                break;  
-                                case 10035:  
-                                    $conciliado = (($this->summesrealton[4]->mes_real * $variable['value']) / 31.1035) - ($this->au[4]->mes_real);
-                                    $VarA = 10039;                   
-                                break; 
-                                case 10036:   
-                                    $conciliado = (($this->summesrealton[4]->mes_real * $variable['value']) / 31.1035) - ($this->au[5]->mes_real);
-                                    $VarA = 10039;                   
-                                break;    
-                                case 10050:   
-                                    $conciliado = (($this->summesrealton[6]->mes_real * $variable['value']) / 31.1035) - ($this->au[6]->mes_real);
-                                    $VarA = 10052;                    
-                                break;   
-                                case 10051:   
-                                    $conciliado = (($this->summesrealton[6]->mes_real * $variable['value']) / 31.1035) - ($this->au[7]->mes_real);
-                                    $VarA = 10052;                    
-                                break;          
-                                default:
-                                    $conciliado = 0;
-                                                        
-                            }
-                            if ($conciliado <> 0)
-                            {
-                                $j=$this->dias_conciliacion-1;
-                                $conciliar = 0;
-                                for ($i=$this->dias_conciliacion; $i>0; $i--)
-                                {
-                                    $vars_conciliar =                                 
-                                    DB::select(
-                                        'SELECT B.id, A.valor mineral, B.valor ley, ((((A.valor*B.valor)/31.1035)+CONVERT(numeric(20,8), CAST(? AS FLOAT)))*31.1035)/A.valor leyconc FROM
-                                        (SELECT fecha, valor 
-                                        FROM [dbo].[data]
-                                        where variable_id = ?) AS A
-                                        INNER JOIN   
-                                        (SELECT id,fecha, valor
-                                        FROM [dbo].[data]
-                                        where variable_id = ?) AS B
-                                        ON A.fecha = B.fecha
-                                        WHERE A.fecha BETWEEN ? AND ?
-                                        AND A.valor > 0
-                                        AND ((((A.valor*B.valor)/31.1035)+CONVERT(numeric(20,8), CAST(? AS FLOAT)))*31.1035)/A.valor > 0',
-                                        [$conciliado/$i, $VarA, $variable['variable_id'], date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date, $conciliado/$i]
-                                    ); 
-                                    if (sizeof($vars_conciliar) == $i)
-                                    {
-                                        $conciliar = 1;
-                                        break;
-                                    }
-                                }                            
-                                if ($conciliar == 1)
-                                {
-                                    foreach ($vars_conciliar as $var)
-                                    {      
-                                        
-                                        DB::update(
-                                            'UPDATE data
-                                            SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
-                                            WHERE id = ?',
-                                            [$var->leyconc, $var->id]
-                                        );         
-                                        DB::insert(
-                                            'INSERT into historial
-                                            ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
-                                            VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
-                                            [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->ley, $var->leyconc, auth()->user()->name]
-                                        ); 
-                                    }
-                                }
-                                else
-                                {
-                                    //NO SE PUEDE CONCILIAR
-                                }
-                            }
-                        } 
-                    }                     
-                } 
+                return response()->json(['error'=>'El valor actual es igual al conciliado']);
             }
             else
             {
-                $this->minasumarray = 
-                [10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117];
-                $this->minaleyarray = 
-                [10071, 10074, 10077, 10080, 10083, 10086, 10089, 10094, 10098, 10101, 10104, 10107]; 
-                $this->minapercarray =
-                [10114,10115,10116];
-
-                foreach($request->get('conciliado_load') as $variable)
+                $variable_id = $request->get('variable_id');
+                $year = $request->get('year');
+                $month = $request->get('month');
+                $dateEndMonth = date('Y-m-t',strtotime($year.'-'.$month.'-01'));
+                $day = (int)date('d', strtotime($dateEndMonth)); 
+                $days_conciliado = $request->get('dias_conciliacion');
+    
+                $arraysum = [10005, 10011, 10019, 10025, 10031, 10039, 10045, 10047, 10048, 10052, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117];
+                $arraypercentage = [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034, 10114, 10115, 10116];
+                $arrayley = [10004, 10010, 10012, 10018, 10030, 10033, 10035, 10036, 10041, 10042, 10043, 10044, 10050, 10051, 10054, 10055, 10056, 10057, 10058, 10071, 10074, 10077, 10080, 10083, 10086, 10089, 10094, 10098, 10101, 10104, 10107];
+    
+                if ( in_array($variable_id, $arraysum) || in_array($variable_id, $arraypercentage))
                 {
-                    $this->load = 0;
-                    if ($variable['value'] != null && ( in_array($variable['variable_id'], $this->minasumarray) || in_array($variable['variable_id'], $this->minapercarray)))
+                    if (in_array($variable_id, $arraysum))
                     {
-                        $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
-                        $row = DB::table('conciliado_data')
-                            ->where($this->where)
-                            ->first();
-                        if (isset($row->id))
+                        $conciliado = $value_conciliado - $value_real;                    
+                    } 
+                    else
+                    {
+                        $conciliado = ($value_conciliado * $day) - ($value_real * $day);                    
+                    }   
+                       
+                    $j=$days_conciliado-1;
+                    $conciliar = 0;
+                    for ($i=$days_conciliado; $i>0; $i--)
+                    {
+                        $vars_conciliar = 
+                        DB::select(
+                            'SELECT id, ISNULL(valor, 0) AS valor
+                            FROM data
+                            WHERE variable_id = ?
+                            AND (ISNULL(valor, 0) + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
+                            AND fecha BETWEEN ? AND ?',
+                            [$variable_id, $conciliado/$i, date('Y-m-d', strtotime($dateEndMonth. ' - '. $j.' days')), $dateEndMonth]
+                        ); 
+                        if (sizeof($vars_conciliar) == $i)
                         {
-                            $conciliado_reg = ConciliadoData::findOrFail($row->id);
-                            $oldvalue=$conciliado_reg->valor;                               
-                            $this->load = 1;    
-                            $conciliado_reg->update([
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="EDIT";           
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]);                             
+                            $conciliar = 1;
+                            break;
                         }
-                        else
-                        {      
-                            $this->load = 1;              
-                            $conciliado_reg = ConciliadoData::create([
-                                'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="CREATE";
-                            $oldvalue= null;
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]);                   
-                        }   
-                        if ($this->load == 1)
+                    }
+    
+                    if ($conciliar == 1)
+                    {
+                        foreach ($vars_conciliar as $var)
+                        {                
+                            DB::update(
+                                'UPDATE data
+                                SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
+                                WHERE id = ?',
+                                [$var->valor+$conciliado/sizeof($vars_conciliar), $var->id]
+                            );         
+                            DB::insert(
+                                'INSERT into historial
+                                ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
+                                VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
+                                [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->valor, $var->valor+$conciliado/sizeof($vars_conciliar), auth()->user()->name]
+                            );   
+                        }
+                    }
+                    else
+                    {
+                        return response()->json(['error'=>'No se puede conciliar esta variable en '.$days_conciliado.' días.']);
+                    }
+    
+                }
+                else
+                {
+                    if (in_array($variable_id, $arrayley))
+                    {
+                        switch ($variable_id)
                         {
-                            if (in_array($variable['variable_id'], $this->minasumarray))
-                            {
-                                $conciliado = $variable['value'] - $variable['valuereal'];
-                                
-                            } 
-                            else
-                            {
-                                if (in_array($variable['variable_id'], $this->minapercarray))
-                                {
-                                    $conciliado = ($variable['value'] * $day) - ($variable['valuereal'] * $day);
-                                }
-                            }   
-                               
-                            $j=$this->dias_conciliacion-1;
-                            $conciliar = 0;
-                            for ($i=$this->dias_conciliacion; $i>0; $i--)
-                            {
-                                $vars_conciliar = 
-                                DB::select(
-                                    'SELECT id, ISNULL(valor, 0) AS valor
-                                    FROM data
-                                    WHERE variable_id = ?
-                                    AND (ISNULL(valor, 0) + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
-                                    AND fecha BETWEEN ? AND ?',
-                                    [$variable['variable_id'], $conciliado/$i, date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date]
-                                ); 
-                                if (sizeof($vars_conciliar) == $i)
-                                {
-                                    $conciliar = 1;
-                                    break;
-                                }
-                            }
-                            
-                            if ($conciliar == 1)
-                            {
-                                foreach ($vars_conciliar as $var)
-                                {                
-                                    DB::update(
-                                        'UPDATE data
-                                        SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
-                                        WHERE id = ?',
-                                        [$var->valor+$conciliado/sizeof($vars_conciliar), $var->id]
-                                    );         
-                                    DB::insert(
-                                        'INSERT into historial
-                                        ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
-                                        VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
-                                        [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->valor, $var->valor+$conciliado/sizeof($vars_conciliar), auth()->user()->name]
-                                    );     
-                                }
-                            }
-                            else
-                            {
-                                //NO SE PUEDE CONCILIAR
-                            }
-                        } 
-                    }                     
-                } 
-
-                //INICIO CALCULOS REUTILIZABLES
-                    //INICIO DIA REAL
-                        $this->leydiareal =
-                        DB::select(
-                            'SELECT 10071 as variable_id, A.valor AS min_dia, (A.valor * B.valor)/31.1035 as au_dia FROM
-                            (SELECT fecha, valor
+                            case 10004:
+                                $varA = 10005;                           
+                            break;
+                            case 10010:
+                                $varA = 10011;                           
+                            break;   
+                            case 10030:  
+                                $varA = 10031;                                                                      
+                            break;   
+                            case 10033:
+                                $varA = 10031;                                       
+                            break;  
+                            case 10035:
+                                $varA = 10039;                                       
+                            break; 
+                            case 10036:
+                                $varA = 10039;                                        
+                            break;    
+                            case 10050:
+                                $varA = 10052;                                         
+                            break;   
+                            case 10051:
+                                $varA = 10052;                                          
+                            break;                          
+                            case 10071:
+                                $varA = 10070;                                                  
+                            break; 
+                            case 10074:
+                                $varA = 10073;                                                  
+                            break; 
+                            case 10077:
+                                $varA = 10076;                                                  
+                            break; 
+                            case 10080:
+                                $varA = 10079;                                                  
+                            break; 
+                            case 10089:
+                                $varA = 10088;                                                  
+                            break; 
+                            case 10094:
+                                $varA = 10093;                                                  
+                            break; 
+                            case 10098:
+                                $varA = 10097;                                                  
+                            break; 
+                            case 10101:
+                                $varA = 10100;                                                               
+                            break; 
+                            case 10104:
+                                $varA = 10103;                                                  
+                            break; 
+                            case 10107:
+                                $varA = 10106;                                                  
+                            break; 
+                        }                    
+                        $data = DB::select(
+                            'SELECT SUM(valor) AS mineral 
                             FROM [dbo].[data]
-                            where variable_id = 10070) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10071) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10074, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10073) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10074) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10077, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10076) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10077) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10080, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10079) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10080) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10083, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10082) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10083) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10086, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10085) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10086) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10089, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10088) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10089) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10094, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10093) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10094) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10098, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10097) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10098) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10101, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10100) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10101) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10104, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10103) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10104) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.'
-                            UNION
-                            SELECT 10107, A.valor, (A.valor * B.valor)/31.1035 FROM
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10106) as A
-                            INNER JOIN   
-                            (SELECT fecha, valor
-                            FROM [dbo].[data]
-                            where variable_id = 10107) as B
-                            ON A.fecha = B.fecha
-                            AND DATEPART(y, A.fecha) = '.$daypart.'
-                            AND YEAR(A.fecha) = '.$year.''
-                        );
-                    //FIN DIA REAL
-                    //INICIO MES REAL
-                        $this->summesrealton = 
-                        DB::select(
-                            'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                            (SELECT variable_id, SUM(valor) AS mes_real
-                            FROM [dbo].[data] 
-                            WHERE variable_id IN (10070, 10073, 10076, 10079, 10088, 10093, 10097, 10100, 10103, 10106)
-                            AND MONTH(fecha) = '.$month.'
-                            AND YEAR(fecha) = '.$year.'
-                            GROUP BY variable_id) AS d
-                            RIGHT JOIN
-                            (SELECT id 
-                            FROM [dbo].[variable] 
-                            WHERE id IN (10070, 10073, 10076, 10079, 10088, 10093, 10097, 10100, 10103, 10106)) AS v
-                            ON d.variable_id = v.id
-                            ORDER BY id ASC'
-                        );
-                        $this->summesrealonz =
-                        DB::select(
-                            'SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10070) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10071) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM 
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10073) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10074) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10076) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10077) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10079) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10080) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10088) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10089) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10093) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10094) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10097) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10098) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10100) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10101) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10103) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10104) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.'
-                            UNION 
-                            SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10106) as A
-                                INNER JOIN   
-                                (SELECT fecha, valor
-                                FROM [dbo].[data]
-                                where variable_id = 10107) as B
-                                ON A.fecha = B.fecha
-                                WHERE MONTH(A.fecha) = '.$month.'
-                                AND YEAR(A.fecha) = '.$year.''
-                        );
-
-                        $this->avgmesrealpor =
-                        DB::select(
-                            'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
-                            (SELECT variable_id, SUM(valor) AS mes_real
-                            FROM [dbo].[data]
-                            WHERE variable_id IN (10114,10115,10116)
+                            where variable_id = '.$varA.'
                             AND  MONTH(fecha) = '.$month.'
-                            AND YEAR(fecha) = '.$year.'
-                            AND valor <> 0
-                            GROUP BY variable_id) AS d
-                            RIGHT JOIN
-                            (SELECT id 
-                            FROM [dbo].[variable] 
-                            WHERE id IN (10114,10115,10116)) AS v
-                            ON d.variable_id = v.id
-                            ORDER BY id ASC'
-                        );                
-                    //FIN MES REAL
-                //FIN CALCULOS REUTILIZABLES
-
-                foreach($request->get('conciliado_load') as $variable)
-                {
-                    $this->load = 0;
-                    if ($variable['value'] != null && in_array($variable['variable_id'], $this->minaleyarray))
-                    {
-                        $this->where = ['variable_id' => $variable['variable_id'], 'fecha' => $this->date];
-                        $row = DB::table('conciliado_data')
-                            ->where($this->where)
-                            ->first();
-                        if (isset($row->id))
+                            AND  YEAR(fecha) = '.$year.'
+                            GROUP BY YEAR(fecha), MONTH(fecha)'
+                        ); 
+                        
+                        if ($data[0]->mineral != null && $data[0]->mineral > 0)
                         {
-                            $conciliado_reg = ConciliadoData::findOrFail($row->id);
-                            $oldvalue=$conciliado_reg->valor;                                 
-                            $this->load = 1;    
-                            $conciliado_reg->update([
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="EDIT";           
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]); 
-                            
+                            //$AuReal = ($data[0]->mineral * $value_real)/31.1035;
+                            //$AuConciliado = ($data[0]->mineral * $value_conciliado)/31.1035;
+                            $conciliado = (($data[0]->mineral * $value_conciliado)/31.1035) - (($data[0]->mineral * $value_real)/31.1035);
+                            //return response()->json(['error'=>'conciliado: '.$conciliado.' mineral: '. $data[0]->mineral.' value_conciliado: '.$value_conciliado.' value_Real: '.$value_real]);
+                        }
+                        
+                        
+                        $j=$days_conciliado-1;
+                        $conciliar = 0;
+                        for ($i=$days_conciliado; $i>0; $i--)
+                        {
+                            $vars_conciliar =                                 
+                            DB::select(
+                                'SELECT B.id, A.valor mineral, B.valor ley, (( ISNULL(((A.valor*B.valor)/31.1035), 0) + ('.$conciliado.'/'.$i.'))*31.1035)/A.valor leyconc FROM
+                                (SELECT fecha, valor 
+                                FROM [dbo].[data]
+                                where variable_id = '.$varA.') AS A
+                                INNER JOIN   
+                                (SELECT id,fecha, valor
+                                FROM [dbo].[data]
+                                where variable_id = '.$variable_id.') AS B
+                                ON A.fecha = B.fecha
+                                WHERE A.fecha BETWEEN ? AND ?
+                                AND A.valor > 0
+                                AND ((( ISNULL(((A.valor*B.valor)/31.1035), 0) + ('.$conciliado.'/'.$i.'))*31.1035)/A.valor) > 0',
+                                [date('Y-m-d', strtotime($dateEndMonth. ' - '. $j.' days')), $dateEndMonth]
+                            ); 
+                            if (sizeof($vars_conciliar) == $i)
+                            {
+                                $conciliar = 1;
+                                break;
+                            }
+                        }     
+                                              
+                        if ($conciliar == 1)
+                        {
+                            foreach ($vars_conciliar as $var)
+                            {     
+                                DB::update(
+                                    'UPDATE data
+                                    SET valor = ?
+                                    WHERE id = ?',
+                                    [$var->leyconc, $var->id]
+                                );         
+                                DB::insert(
+                                    'INSERT into historial
+                                    ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
+                                    VALUES(?, ?, ?, ?, ?, ?)',
+                                    [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->ley, $var->leyconc, auth()->user()->name]
+                                ); 
+                            }
                         }
                         else
-                        {      
-                            $this->load = 1;              
-                            $conciliado_reg = ConciliadoData::create([
-                                'variable_id' => $variable['variable_id'],
-                                'fecha' => date('Y-m-t',strtotime($this->anio.'-'.$request->get('month').'-01')),
-                                'valor' => $variable['value']
-                            ]);
-                            $transaccion ="CREATE";
-                            $oldvalue= null;
-                            ConciliadoHistorial::create([
-                                'conciliado_data_id' => $conciliado_reg->id,
-                                'fecha' => date('Y-m-d H:i:s'),
-                                'transaccion' => $transaccion,
-                                'valorviejo' => $oldvalue,
-                                'valornuevo' => $variable['value'],
-                                'usuario' => auth()->user()->name
-                            ]);                   
-                        }   
-                        if ($this->load == 1)
-                        {     
-                            switch ($variable['variable_id'])
-                            {
-                                case 10071:
-                                    //AuConciliado = ($this->summesrealton[0]->mes_real * $variable['value']) / 31.1035;
-                                    //AuReal = $this->summesrealonz[0]->mes_real; 
-                                    $conciliado = (($this->summesrealton[0]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[0]->mes_real);
-                                    $VarA = 10070;            
-                                break; 
-                                case 10074:
-                                    $conciliado = (($this->summesrealton[1]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[1]->mes_real);
-                                    $VarA = 10073;            
-                                break; 
-                                case 10077:
-                                    $conciliado = (($this->summesrealton[2]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[2]->mes_real);
-                                    $VarA = 10076;            
-                                break; 
-                                case 10080:
-                                    $conciliado = (($this->summesrealton[3]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[3]->mes_real);
-                                    $VarA = 10079;            
-                                break; 
-                                case 10089:
-                                    $conciliado = (($this->summesrealton[4]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[4]->mes_real);
-                                    $VarA = 10088;            
-                                break; 
-                                case 10094:
-                                    $conciliado = (($this->summesrealton[5]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[5]->mes_real);
-                                    $VarA = 10093;            
-                                break; 
-                                case 10098:
-                                    $conciliado = (($this->summesrealton[6]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[6]->mes_real);
-                                    $VarA = 10097;            
-                                break; 
-                                case 10101:
-                                    $conciliado = (($this->summesrealton[7]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[7]->mes_real);
-                                    $VarA = 10100;
-                                break; 
-                                case 10104:
-                                    $conciliado = (($this->summesrealton[8]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[8]->mes_real);
-                                    $VarA = 10103;            
-                                break; 
-                                case 10107:
-                                    $conciliado = (($this->summesrealton[9]->mes_real * $variable['value']) / 31.1035) - ($this->summesrealonz[9]->mes_real);
-                                    $VarA = 10106;            
-                                break;          
-                                default:
-                                    $conciliado = 0;                                                        
-                            }
-                            if ($conciliado <> 0)
-                            {
-                                $j=$this->dias_conciliacion-1;
-                                $conciliar = 0;
-                                for ($i=$this->dias_conciliacion; $i>0; $i--)
-                                {
-                                    $vars_conciliar =                                 
-                                    DB::select(
-                                        'SELECT B.id, A.valor mineral, B.valor ley, ((((A.valor*B.valor)/31.1035)+CONVERT(numeric(20,8), CAST(? AS FLOAT)))*31.1035)/A.valor leyconc FROM
-                                        (SELECT fecha, valor 
-                                        FROM [dbo].[data]
-                                        where variable_id = ?) AS A
-                                        INNER JOIN   
-                                        (SELECT id,fecha, valor
-                                        FROM [dbo].[data]
-                                        where variable_id = ?) AS B
-                                        ON A.fecha = B.fecha
-                                        WHERE A.fecha BETWEEN ? AND ?
-                                        AND A.valor > 0
-                                        AND ((((A.valor*B.valor)/31.1035)+CONVERT(numeric(20,8), CAST(? AS FLOAT)))*31.1035)/A.valor > 0',
-                                        [$conciliado/$i, $VarA, $variable['variable_id'], date('Y-m-d', strtotime($this->date. ' - '. $j.' days')), $this->date, $conciliado/$i]
-                                    ); 
-                                    if (sizeof($vars_conciliar) == $i)
-                                    {
-                                        $conciliar = 1;
-                                        break;
-                                    }
-                                }                            
-                                if ($conciliar == 1)
-                                {
-                                    foreach ($vars_conciliar as $var)
-                                    {     
-                                        DB::update(
-                                            'UPDATE data
-                                            SET valor = CONVERT(numeric(20,8), CAST(? AS FLOAT))
-                                            WHERE id = ?',
-                                            [$var->leyconc, $var->id]
-                                        );         
-                                        DB::insert(
-                                            'INSERT into historial
-                                            ([data_id], [fecha], [transaccion], [valorviejo], [valornuevo], [usuario])
-                                            VALUES(?, ?, ?, ?, CONVERT(numeric(20,8), CAST(? AS FLOAT)), ?)',
-                                            [$var->id, date('Y-m-d H:i:s'), 'CONCILIADO', $var->ley, $var->leyconc, auth()->user()->name]
-                                        );   
-                                                                  
-                                       
-                                    }
-                                }
-                                else
-                                {
-                                    //NO SE PUEDE CONCILIAR
-                                }
-                            }
-                        } 
-                    }                     
-                } 
+                        {
+                            return response()->json(['error'=>'No se puede conciliar esta variable en '.$days_conciliado.' días.']);
+                        }
+                        
+                    }
+                }                 
                 
-            }             
+                if ($conciliar == 1)
+                {
+                    $where = ['variable_id' => $variable_id, 'fecha' => $dateEndMonth];
+                    $row = DB::table('conciliado_data')
+                        ->where($where)
+                        ->first();
+                    if (isset($row->id))
+                    {
+                        $conciliado_reg = ConciliadoData::findOrFail($row->id);
+                        $oldvalue=$value_real;    
+                        $conciliado_reg->update([
+                            'valor' => $value_conciliado
+                        ]);
+                        $transaccion ="EDIT";           
+                        ConciliadoHistorial::create([
+                            'conciliado_data_id' => $conciliado_reg->id,
+                            'fecha' => date('Y-m-d H:i:s'),
+                            'transaccion' => $transaccion,
+                            'valorviejo' => $oldvalue,
+                            'valornuevo' => $value_conciliado,
+                            'diasconciliacion' => $days_conciliado,
+                            'usuario' => auth()->user()->name
+                        ]);                             
+                    }
+                    else
+                    {                  
+                        $conciliado_reg = ConciliadoData::create([
+                            'variable_id' => $variable_id,
+                            'fecha' => $dateEndMonth,
+                            'valor' => $value_conciliado
+                        ]);
+                        $transaccion ="CREATE";
+                        $oldvalue= null;
+                        ConciliadoHistorial::create([
+                            'conciliado_data_id' => $conciliado_reg->id,
+                            'fecha' => date('Y-m-d H:i:s'),
+                            'transaccion' => $transaccion,
+                            'valorviejo' => $oldvalue,
+                            'valornuevo' => $value_conciliado,
+                            'diasconciliacion' => $days_conciliado,
+                            'usuario' => auth()->user()->name
+                        ]);                   
+                    }  
+                }
+            }   
         }                
     } 
 }

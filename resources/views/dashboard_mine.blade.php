@@ -581,18 +581,7 @@
                             return data;
                         }
                     },
-                    {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    return Math.round(data*10)/10 ;
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['dia_budget'] != '-' && row['dia_real'] != '-')
@@ -634,44 +623,8 @@
                                          
                         }
                     },
-                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    if (row['variable'] == 'Humedad')
-                                    {
-                                        return Math.round(data*10)/10 ;
-                                    }
-                                    else
-                                    {
-                                        return Math.round(data);
-                                    }
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    if (row['variable'] == 'Humedad')
-                                    {
-                                        return Math.round(data*10)/10 ;
-                                    }
-                                    else
-                                    {
-                                        return Math.round(data);
-                                    }
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
+                    {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
                     {data: null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['mes_budget'] != '-' && row['mes_real'] != '-')
@@ -710,44 +663,8 @@
                             }                                         
                         }
                     },
-                    {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    if (row['variable'] == 'Humedad')
-                                    {
-                                        return Math.round(data*10)/10 ;
-                                    }
-                                    else
-                                    {
-                                        return Math.round(data);
-                                    }
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    if (row['variable'] == 'Humedad')
-                                    {
-                                        return Math.round(data*10)/10 ;
-                                    }
-                                    else
-                                    {
-                                        return Math.round(data);
-                                    }
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false},
+                    {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
                     {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
@@ -785,44 +702,8 @@
                             }     
                         }
                     },
-                    {data:'anio_real', name:'anio_real', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    if (row['variable'] == 'Humedad')
-                                    {
-                                        return Math.round(data*10)/10 ;
-                                    }
-                                    else
-                                    {
-                                        return Math.round(data);
-                                    }
-                                }
-                            }
-                            return data;
-                        }
-                    },
-                    {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false,
-                        render: function(data,type,row){
-                            if (data != '-')
-                            {
-                                if (row['unidad'] == '%')
-                                {
-                                    if (row['variable'] == 'Humedad')
-                                    {
-                                        return Math.round(data*10)/10 ;
-                                    }
-                                    else
-                                    {
-                                        return Math.round(data);
-                                    }
-                                }
-                            }
-                            return data;
-                        }
-                    },
+                    {data:'anio_real', name:'anio_real', orderable: false,searchable: false},
+                    {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
                     {data:null, orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['anio_budget'] != '-' && row['anio_real'] != '-')

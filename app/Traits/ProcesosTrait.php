@@ -26,6 +26,8 @@ trait ProcesosTrait {
             10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067];
         $this->promarray = 
             [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034];
+        $this->percentage =
+            [10003, 10007, 10009, 10014, 10016, 10017, 10018, 10021, 10026, 10029, 10033, 10034, 10036, 10040, 10049];
         $this->divarray = 
             [10006, 10013, 10020, 10032];
         
@@ -1008,78 +1010,7 @@ trait ProcesosTrait {
                         AND YEAR(A.fecha) = '.$year.''
                     );
                 //end new
-                /*OLD
-                    $this->sumaniobudget10005 = 
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10005
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    ); 
-                    $this->sumaniobudget10011 = 
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10011
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    ); 
-                    $this->sumaniobudget10019 = 
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10019
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    );
-                    $this->sumaniobudget10039 = 
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10039
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    );
-                    $this->sumaniobudget10045 =
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10045
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    );
-                    $this->sumaniobudget10052 =
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10052
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    );
-                    $this->sumaniobudget10061 =
-                    DB::select(
-                        'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                        FROM [dbo].[budget]
-                        WHERE variable_id = 10061
-                        AND  YEAR(fecha) = ?
-                        AND  DATEPART(y, fecha) <= ?
-                        GROUP BY YEAR(fecha)',
-                        [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                    );
-                END OLD */
+
         //FIN CALCULOS REUTILIZABLES
 
         $where = ['variable.estado' => 1, 'categoria.area_id' => 1, 'categoria.estado' => 1, 'subcategoria.estado' => 1, 'data.fecha' => $this->date];
@@ -1476,16 +1407,16 @@ trait ProcesosTrait {
                         break;
                         default:                        
                             if(isset($data->dia_real)) 
-                            { 
+                            {                                 
                                 $d_real = $data->dia_real;
-                                if($d_real > 100)
+                                if($d_real > 100 || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($d_real), 0, '.', ',');
                                 }
                                 else
                                 {
                                     return number_format($d_real, 2, '.', ',');
-                                }
+                                }                                
                             }        
                             else
                             {
@@ -1496,7 +1427,7 @@ trait ProcesosTrait {
                     if(isset($d_real[0]->dia_real)) 
                     { 
                         $d_real = $d_real[0]->dia_real;
-                        if($d_real > 100)
+                        if($d_real > 100  || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($d_real), 0, '.', ',');
                         }
@@ -1570,7 +1501,7 @@ trait ProcesosTrait {
                     if(isset($dia_budget[0]->dia_budget)) 
                     { 
                         $d_budget = $dia_budget[0]->dia_budget;
-                        if($d_budget > 100)
+                        if($d_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($d_budget), 0, '.', ',');
                         }
@@ -2097,7 +2028,7 @@ trait ProcesosTrait {
                             if ($suma[0]->suma > 0)
                             {
                                 $m_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($m_real > 100)
+                                if($m_real > 100  || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($m_real), 0, '.', ',');
                                 }
@@ -2422,14 +2353,7 @@ trait ProcesosTrait {
                                 if(isset($mes_real[0]->mes_real))
                                 {
                                     $m_real = $mes_real[0]->mes_real;
-                                    if($m_real > 100)
-                                    {
-                                        return number_format(round($m_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($m_real, 2, '.', ',');
-                                    }
+                                    return number_format(round($m_real), 0, '.', ',');
                                 }
                                 else
                                 {
@@ -2957,10 +2881,11 @@ trait ProcesosTrait {
                             return '-';
                         }
                     }
+
                     if(isset($mes_budget->mes_budget))
                     {
                         $m_budget = $mes_budget->mes_budget;
-                        if($m_budget > 100)
+                        if($m_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($m_budget), 0, '.', ',');
                         }
@@ -3495,7 +3420,7 @@ trait ProcesosTrait {
                             if ($suma[0]->suma > 0)
                             {
                                 $t_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($t_real > 100)
+                                if($t_real > 100  || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($t_real), 0, '.', ',');
                                 }
@@ -3810,14 +3735,7 @@ trait ProcesosTrait {
                                 if(isset($trimestre_real[0]->trimestre_real))
                                 {
                                     $t_real = $trimestre_real[0]->trimestre_real;
-                                    if($t_real > 100)
-                                    {
-                                        return number_format(round($t_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($t_real, 2, '.', ',');
-                                    }
+                                    return number_format(round($t_real), 0, '.', ',');
                                 }
                                 else
                                 {
@@ -4347,7 +4265,7 @@ trait ProcesosTrait {
                     if(isset($tri_budget->tri_budget))
                     {
                         $t_budget = $tri_budget->tri_budget;
-                        if($t_budget > 100)
+                        if($t_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($t_budget), 0, '.', ',');
                         }
@@ -4854,7 +4772,7 @@ trait ProcesosTrait {
                             if ($suma[0]->suma > 0)
                             {
                                 $a_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($a_real > 100)
+                                if($a_real > 100 || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($a_real), 0, '.', ',');
                                 }
@@ -5169,14 +5087,7 @@ trait ProcesosTrait {
                                 if(isset($anio_real[0]->anio_real))
                                 {
                                     $a_real = $anio_real[0]->anio_real;
-                                    if($a_real > 100)
-                                    {
-                                        return number_format(round($a_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($a_real, 2, '.', ',');
-                                    }
+                                    return number_format(round($a_real), 0, '.', ',');
                                 }
                                 else
                                 {
@@ -5700,7 +5611,7 @@ trait ProcesosTrait {
                     if(isset($anio_budget->anio_budget))
                     {
                         $a_budget = $anio_budget->anio_budget;
-                        if($a_budget > 100)
+                        if($a_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($a_budget), 0, '.', ',');
                         }
@@ -6122,16 +6033,16 @@ trait ProcesosTrait {
                         break;
                         default:                        
                             if(isset($data->dia_real)) 
-                            { 
+                            {                                 
                                 $d_real = $data->dia_real;
-                                if($d_real > 100)
+                                if($d_real > 100 || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($d_real), 0, '.', ',');
                                 }
                                 else
                                 {
                                     return number_format($d_real, 2, '.', ',');
-                                }
+                                }                                
                             }        
                             else
                             {
@@ -6142,7 +6053,7 @@ trait ProcesosTrait {
                     if(isset($d_real[0]->dia_real)) 
                     { 
                         $d_real = $d_real[0]->dia_real;
-                        if($d_real > 100)
+                        if($d_real > 100  || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($d_real), 0, '.', ',');
                         }
@@ -6158,7 +6069,7 @@ trait ProcesosTrait {
 
                 })
                 ->addColumn('dia_budget', function($data)
-                {    
+                {
                     switch($data->unidad)
                     {
                         case 't':
@@ -6216,7 +6127,7 @@ trait ProcesosTrait {
                     if(isset($dia_budget[0]->dia_budget)) 
                     { 
                         $d_budget = $dia_budget[0]->dia_budget;
-                        if($d_budget > 100)
+                        if($d_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($d_budget), 0, '.', ',');
                         }
@@ -6743,7 +6654,7 @@ trait ProcesosTrait {
                             if ($suma[0]->suma > 0)
                             {
                                 $m_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($m_real > 100)
+                                if($m_real > 100  || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($m_real), 0, '.', ',');
                                 }
@@ -7068,14 +6979,7 @@ trait ProcesosTrait {
                                 if(isset($mes_real[0]->mes_real))
                                 {
                                     $m_real = $mes_real[0]->mes_real;
-                                    if($m_real > 100)
-                                    {
-                                        return number_format(round($m_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($m_real, 2, '.', ',');
-                                    }
+                                    return number_format(round($m_real), 0, '.', ',');
                                 }
                                 else
                                 {
@@ -7603,10 +7507,11 @@ trait ProcesosTrait {
                             return '-';
                         }
                     }
+
                     if(isset($mes_budget->mes_budget))
                     {
                         $m_budget = $mes_budget->mes_budget;
-                        if($m_budget > 100)
+                        if($m_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($m_budget), 0, '.', ',');
                         }
@@ -8141,7 +8046,7 @@ trait ProcesosTrait {
                             if ($suma[0]->suma > 0)
                             {
                                 $t_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($t_real > 100)
+                                if($t_real > 100  || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($t_real), 0, '.', ',');
                                 }
@@ -8456,14 +8361,7 @@ trait ProcesosTrait {
                                 if(isset($trimestre_real[0]->trimestre_real))
                                 {
                                     $t_real = $trimestre_real[0]->trimestre_real;
-                                    if($t_real > 100)
-                                    {
-                                        return number_format(round($t_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($t_real, 2, '.', ',');
-                                    }
+                                    return number_format(round($t_real), 0, '.', ',');
                                 }
                                 else
                                 {
@@ -8993,7 +8891,7 @@ trait ProcesosTrait {
                     if(isset($tri_budget->tri_budget))
                     {
                         $t_budget = $tri_budget->tri_budget;
-                        if($t_budget > 100)
+                        if($t_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($t_budget), 0, '.', ',');
                         }
@@ -9500,7 +9398,7 @@ trait ProcesosTrait {
                             if ($suma[0]->suma > 0)
                             {
                                 $a_real = $sumaproducto[0]->sumaproducto/$suma[0]->suma;
-                                if($a_real > 100)
+                                if($a_real > 100 || in_array($data->variable_id, $this->percentage))
                                 {
                                     return number_format(round($a_real), 0, '.', ',');
                                 }
@@ -9674,7 +9572,7 @@ trait ProcesosTrait {
                                             [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                         ); 
                                     }
-                                break; 
+                                break;
                                 case 10038: 
                                     if ($this->date == '2022-12-31')
                                     {
@@ -9704,7 +9602,7 @@ trait ProcesosTrait {
                                             [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                         ); 
                                     }
-                                break;           
+                                break;               
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
@@ -9815,14 +9713,7 @@ trait ProcesosTrait {
                                 if(isset($anio_real[0]->anio_real))
                                 {
                                     $a_real = $anio_real[0]->anio_real;
-                                    if($a_real > 100)
-                                    {
-                                        return number_format(round($a_real), 0, '.', ',');
-                                    }
-                                    else
-                                    {
-                                        return number_format($a_real, 2, '.', ',');
-                                    }
+                                    return number_format(round($a_real), 0, '.', ',');
                                 }
                                 else
                                 {
@@ -10346,7 +10237,7 @@ trait ProcesosTrait {
                     if(isset($anio_budget->anio_budget))
                     {
                         $a_budget = $anio_budget->anio_budget;
-                        if($a_budget > 100)
+                        if($a_budget > 100 || in_array($data->variable_id, $this->percentage))
                         {
                             return number_format(round($a_budget), 0, '.', ',');
                         }
