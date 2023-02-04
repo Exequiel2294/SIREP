@@ -619,7 +619,7 @@
             });
         /* FIN LOAD DATA*/
 
-        /* INICIO MODAL IMPORT DATA */
+        /* INICIO MODAL IMPORT DATA 
             $("#btn-import").click(function(){ 
                 if($("#modal-form-loadvbles").valid())
                 {
@@ -742,7 +742,7 @@
             $('#modal-import').on('hidden.bs.modal', function () {
                 $("#modal-form-import").validate().resetForm();
             });
-        /* FIN MODAL IMPORT DATA */
+        FIN MODAL IMPORT DATA */
     </script>
 @stop
 
@@ -799,7 +799,7 @@
                             <div class="datatables-length">
                             </div> 
                             <div class="datatables-filter"> 
-                                <button type="button" class="btn btn-primary" id="btn-import">Importar</button>&nbsp;&nbsp;                                   
+                                <!--<button type="button" class="btn btn-primary" id="btn-import">Importar</button>&nbsp;&nbsp;-->                             
                             </div>
                         </div>
                         <table style="width:100%" class="table table-striped table-bordered table-hover datatable table-sm" id="conciliado-table"></table>  
