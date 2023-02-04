@@ -1716,6 +1716,9 @@ class ConciliadoController extends Controller
                             case 10080:
                                 $varA = 10079;                                                  
                             break; 
+                            case 10083:
+                                $varA = 10082;                                                  
+                            break; 
                             case 10089:
                                 $varA = 10088;                                                  
                             break; 
