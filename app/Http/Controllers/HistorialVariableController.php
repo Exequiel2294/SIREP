@@ -77,6 +77,22 @@ class HistorialVariableController extends Controller
     { 
         $data_register = Data::findOrFail($id);
 
+        $area_id = 
+        DB::table('variable AS v')
+        ->join('subcategoria AS s', 'v.subcategoria_id', '=', 's.id')
+        ->join('categoria AS c', 's.categoria_id', '=', 'c.id')
+        ->where('v.id', $data_register->variable_id)
+        ->pluck('c.area_id')
+        ->first();
+
+        $conciliado = 
+        DB::table('conciliado_data AS cd')
+        ->join('variable AS v', 'cd.variable_id', '=', 'v.id')
+        ->join('subcategoria AS s', 'v.subcategoria_id', '=', 's.id')
+        ->join('categoria AS c', 's.categoria_id', '=', 'c.id')
+        ->where(['cd.fecha' => date('Y-m-t', strtotime($data_register->fecha)), 'c.area_id' => $area_id])
+        ->count();
+        
         $where = ['user_id' => Auth::user()->id, 'variable_id' => $data_register->variable_id];    
         $uservbles = DB::table('permisos_variables')
                     ->where($where)
@@ -89,8 +105,7 @@ class HistorialVariableController extends Controller
         }
         else
         {
-            if ((date('m', strtotime($data_register->fecha)) == date('m') && date('Y', strtotime($data_register->fecha)) == date('Y')) || 
-            (date('m', strtotime($data_register->fecha)) == date('m') - 1 && date('Y', strtotime($data_register->fecha)) == date('Y') && date('d') <= 10))
+            if ($conciliado == 0)
             {
                 if (date('Y-m-d', strtotime($data_register->fecha)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
                 {  

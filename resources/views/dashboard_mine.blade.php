@@ -885,6 +885,7 @@
                 url:"{{route('dashboard.edit') }}",
                 method:"POST",
                 data:{
+                    area_id: 2,
                     id: $(this).data('id'),
                     variable_id:$(this).data('vbleid'),
                     selecteddate: moment(date_selected).utc().format('YYYY-MM-DD'),
