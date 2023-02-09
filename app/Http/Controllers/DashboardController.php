@@ -654,24 +654,26 @@ class DashboardController extends Controller
         }  
         else
         {
-
+            $conciliado = 
+            DB::table('conciliado_data AS cd')
+            ->join('variable AS v', 'cd.variable_id', '=', 'v.id')
+            ->join('subcategoria AS s', 'v.subcategoria_id', '=', 's.id')
+            ->join('categoria AS c', 's.categoria_id', '=', 'c.id')
+            ->where(['cd.fecha' => date('Y-m-t', strtotime($selecteddate)), 'c.area_id' => $request->get('area_id')])
+            ->count();          
             $where = ['user_id' => Auth::user()->id, 'variable_id' => $request->variable_id];    
             $uservbles = DB::table('permisos_variables')
                         ->where($where)
                         ->get();
-           if ($uservbles->count() == 0)
-           {
-                $data['msg'] = 'No cuenta con los permisos necesarios para editar esta variable.';
-                $data['val'] = -1;
-                return response()->json($data);
-           }
-           else
-           {
-                if (
-                (date('m', strtotime($selecteddate)) == date('m') && date('Y', strtotime($selecteddate)) == date('Y')) || 
-                (date('m', strtotime($selecteddate)) == date('m') - 1 && date('Y', strtotime($selecteddate)) == date('Y') && date('d') <= 10) ||
-                (date('Y', strtotime($selecteddate)) == date('Y') -1 && date('m', strtotime($selecteddate)) == 12 && date('m') == 1 && date('d') <= 10)
-                )
+            if ($uservbles->count() == 0)
+            {
+                    $data['msg'] = 'No cuenta con los permisos necesarios para editar esta variable.';
+                    $data['val'] = -1;
+                    return response()->json($data);
+            }
+            else
+            {
+                if ($conciliado == 0)
                 {
                     if (date('Y-m-d', strtotime($selecteddate)) == date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))))
                     {  
@@ -744,10 +746,9 @@ class DashboardController extends Controller
                     $data['msg'] = 'No puede modificar data que ya fue conciliada.';
                     $data['val'] = -1;
                     return response()->json($data);   
-                }
+                }                   
                 
-            
-           }
+            }
         }
     }
 

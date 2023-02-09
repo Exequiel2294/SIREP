@@ -283,7 +283,7 @@
         var vsc_id = '(';
         var headerp = '<tr>';
         var headers = '<tr>';
-        var date_fd = moment("2023-01-01").format('YYYY-MM-DD');
+        var date_fd = moment().startOf('month').format('YYYY-MM-DD');
         var date_fh = moment().subtract(1, "days");
         var table;
         $(function () {
@@ -490,38 +490,6 @@
             } 
         });
         /* SELECT BUTTON */
-
-
-
-        /* CLOSE ALERT */
-        $(document).on('click', '#close-alert', function(){       
-            $(".alert-error").css('display','none');
-        });        
-        /* CLOSE ALERT */
-
-        /* ACTION TO CLOSE MODAL */
-        $('#modal').on('hidden.bs.modal', function () {
-            $("#modal-form").validate().resetForm();
-            $(".alert-warning").css('display','none');
-        });
-        /* ACTION TO CLOSE MODAL */
-
-        /* EDIT BUTTON */
-        $(document).on('click', '.edit', function(){ 
-            var id=$(this).data('id');
-            $.get('budget/'+id+'/edit', function(data){
-                $('#modal-title').html('Editar Budget'); 
-                $('#modal').modal('show');
-                $('#id').val(data.id);                        
-                $('#valor').val(data.valor);                              
-            })
-        });  
-        
-        function printWarningMsg(msg) {
-            $(".alert-warning").css('display','flex');
-            $(".print-warning-msg").find("span").html(msg);
-        }
-        /* EDIT BUTTON */
 
 
         /* CHANGE AREA */
