@@ -25,8 +25,16 @@ class ReportesController extends Controller
     public function getpdfcompleto(Request $request)
     {
         $date = $request->get('date');
-        $columnsVisibilityDay = $request->get('columnsVisibilityDay');
-
+        $columnsVisibility = $request->get('columnsVisibility');
+        $arrayCount = array_count_values($columnsVisibility);
+        if (isset($arrayCount['true']))
+        {
+            $colspan = ($arrayCount['true']*3)+2; //+2 porque se cuenta las columnas de nombre de variable y unidad
+        }
+        else
+        {
+            $colspan = 2;
+        }
         $request = new Request(array('date' => $date, 'type' => 1));
         $tablaprocesos = $this->TraitProcesosTable($request);
         
@@ -50,14 +58,8 @@ class ReportesController extends Controller
             [$date]
         );
 
-        if ($columnsVisibilityDay == 'true')
-        {
-            $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'tablacomentarios','date'));
-        }
-        else
-        {
-            $pdf = Pdf::loadView('pdf.combinadoSinDia', compact('registros', 'tablacomentarios','date'));
-        }
+        $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan'));
+        
         
 
         $pdf->render(); 

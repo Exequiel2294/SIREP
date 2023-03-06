@@ -340,7 +340,7 @@
     <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
-        let columnsVisibilityDay;
+        let columnsVisibility = [];
         var idx = -1;        
 
         /*PRESS NAV-LINK BUTTON*/
@@ -381,17 +381,20 @@
         })
         
         //Descarga PFD Completo
-        $(document).on('click','.expPdf', function(event) {   
-            tabledata = $("#mina-table").DataTable();
-            columnsVisibilityDay = tabledata.column(7).visible();
-            console.log(columnsVisibilityDay);
+        $(document).on('click','.expPdf', function(event) {  
+            columnsVisibility = [];
+            tabledata = $("#procesos-table").DataTable();
+            for (i=7; i<17; i=i+3)
+            {
+                columnsVisibility.push(tabledata.column(i).visible());
+            }
             event.preventDefault();
             $.ajax({
                 url: "{{route('dashboard.getpdfcompleto') }}",
                 type: 'POST',
                 data:{
                     date: moment(date_selected).format('YYYY-MM-DD'),
-                    columnsVisibilityDay: columnsVisibilityDay,
+                    columnsVisibility: columnsVisibility,
                     _token: $('input[name="_token"]').val()
                 },
                 contentType: "application/json; charset=utf-8",
