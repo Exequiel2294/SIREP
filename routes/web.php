@@ -44,7 +44,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('dashboard/edit','DashboardController@edit')->name('dashboard.edit'); 
     Route::get('dashboard/{id}/complete_value','DashboardController@complete_value')->name('dashboard.complete_value');
     //PDF Full
-    Route::get('{date}/getpdfcompleto', 'ReportesController@getpdfcompleto')->name('getpdfcompleto');
+    Route::post('getpdfcompleto', 'ReportesController@getpdfcompleto')->name('dashboard.getpdfcompleto');
     
        
     Route::get('historial', 'HistorialController@index')->name('historial');    

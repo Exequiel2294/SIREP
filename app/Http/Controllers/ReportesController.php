@@ -22,22 +22,15 @@ class ReportesController extends Controller
 {
     use MinaTrait, ProcesosTrait;
 
-    public function getpdfcompleto($date)
+    public function getpdfcompleto(Request $request)
     {
-        
-        if ($date == 1)
-        {         
-            $this->date = date('Y-m-d',strtotime("-1 days"));
-        }
-        else
-        {   
-            $this->date = $date;
-        }
+        $date = $request->get('date');
+        $columnsVisibilityDay = $request->get('columnsVisibilityDay');
 
-        $request = new Request(array('date' => $this->date, 'type' => 1));
+        $request = new Request(array('date' => $date, 'type' => 1));
         $tablaprocesos = $this->TraitProcesosTable($request);
         
-        $request = new Request(array('date' => $this->date, 'type' => 1));
+        $request = new Request(array('date' => $date, 'type' => 1));
         $tablamina = $this->TraitMinaTable($request);
          
         $registrosmina= $tablamina->getData()->data;        
@@ -54,10 +47,17 @@ class ReportesController extends Controller
             ON c.area_id = ca.id
             WHERE c.fecha = ?
             AND ca.area_id = 1',
-            [$this->date]
+            [$date]
         );
-        $date = $this->date;
-        $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'tablacomentarios','date'));
+
+        if ($columnsVisibilityDay == 'true')
+        {
+            $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'tablacomentarios','date'));
+        }
+        else
+        {
+            $pdf = Pdf::loadView('pdf.combinadoSinDia', compact('registros', 'tablacomentarios','date'));
+        }
         
 
         $pdf->render(); 

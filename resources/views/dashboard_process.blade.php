@@ -328,7 +328,8 @@
     <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     
-    <script>
+    <script>        
+        let columnsVisibilityDay;
         var idx = -1;        
 
         /*PRESS NAV-LINK BUTTON*/
@@ -372,33 +373,35 @@
         
         //Descarga PFD Completo
         $(document).on('click','.expPdf', function(event) {
-                
-                event.preventDefault();
-                let date = moment(date_selected).format('YYYY-MM-DD');
-                let date2 = moment(date_selected).format('DD-MM-YYYY');
-                let url = '{{ route("getpdfcompleto", ":date" )}}';
-                url = url.replace(':date', date);
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    contentType: "application/json; charset=utf-8",
-                    beforeSend: function(){
-                        $('#modal-overlay').modal({
-                            show: true,
-                            backdrop: 'static',
-                            keyboard:false,
-                        });
-                    }
-                }).done(function(res){
+            tabledata = $("#procesos-table").DataTable();
+            columnsVisibilityDay = tabledata.column(7).visible();
+            console.log(columnsVisibilityDay);
+            event.preventDefault();
+            $.ajax({
+                url: "{{route('dashboard.getpdfcompleto') }}",
+                type: 'POST',
+                data:{
+                    date: moment(date_selected).format('YYYY-MM-DD'),
+                    columnsVisibilityDay: columnsVisibilityDay,
+                    _token: $('input[name="_token"]').val()
+                },
+                beforeSend: function(){
+                    $('#modal-overlay').modal({
+                        show: true,
+                        backdrop: 'static',
+                        keyboard:false,
+                    });
+                }
+            }).done(function(res){
 
-                    const link = document.createElement('a');
-                    link.href = res.ruta;
-                    const nom = 'Daily Report Completo ' + date2 + '.pdf';
-                    link.setAttribute('download',nom);
-                    document.body.appendChild(link);
-                    link.click();
-                    $('#modal-overlay').modal('hide')
-                })
+                const link = document.createElement('a');
+                link.href = res.ruta;
+                const nom = 'Daily Report Completo ' + moment(date_selected).format('DD-MM-YYYY') + '.pdf';
+                link.setAttribute('download',nom);
+                document.body.appendChild(link);
+                link.click();
+                $('#modal-overlay').modal('hide')
+            })
                 
         });
 
