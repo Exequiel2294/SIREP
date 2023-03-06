@@ -1829,7 +1829,7 @@ class ConciliadoController extends Controller
                             'transaccion' => $transaccion,
                             'valorviejo' => $oldvalue,
                             'valornuevo' => $value_conciliado,
-                            'diasconciliacion' => $days_conciliado,
+                            'diasconciliado' => $days_conciliado,
                             'usuario' => auth()->user()->name
                         ]);                             
                     }
@@ -1848,7 +1848,7 @@ class ConciliadoController extends Controller
                             'transaccion' => $transaccion,
                             'valorviejo' => $oldvalue,
                             'valornuevo' => $value_conciliado,
-                            'diasconciliacion' => $days_conciliado,
+                            'diasconciliado' => $days_conciliado,
                             'usuario' => auth()->user()->name
                         ]);                   
                     }  
