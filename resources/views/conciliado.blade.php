@@ -472,15 +472,6 @@
                     var variable = $(this).data('name');
                     var subcategoria = $(this).data('subcategoria');
 
-                    console.log($(this).attr('id'));
-                    console.log($(this).data('name'));
-                    console.log($(this).data('subcategoria'));
-                    console.log($('#r'+id).val());
-                    console.log($('#c'+id).val().replaceAll(',',''));
-                    console.log($('#d'+id).val());
-                    console.log($('#year').val());
-                    console.log($('#month').val());
-
                     if (isNumeric(cvalue) && cvalue !='' && parseFloat(cvalue) > 0)
                     {
                         $.ajax({

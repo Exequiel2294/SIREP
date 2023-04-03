@@ -22,22 +22,23 @@ class ReportesController extends Controller
 {
     use MinaTrait, ProcesosTrait;
 
-    public function getpdfcompleto($date)
+    public function getpdfcompleto(Request $request)
     {
-        
-        if ($date == 1)
-        {         
-            $this->date = date('Y-m-d',strtotime("-1 days"));
+        $date = $request->get('date');
+        $columnsVisibility = $request->get('columnsVisibility');
+        $arrayCount = array_count_values($columnsVisibility);
+        if (isset($arrayCount['true']))
+        {
+            $colspan = ($arrayCount['true']*3)+2; //+2 porque se cuenta las columnas de nombre de variable y unidad
         }
         else
-        {   
-            $this->date = $date;
+        {
+            $colspan = 2;
         }
-
-        $request = new Request(array('date' => $this->date, 'type' => 1));
+        $request = new Request(array('date' => $date, 'type' => 1));
         $tablaprocesos = $this->TraitProcesosTable($request);
         
-        $request = new Request(array('date' => $this->date, 'type' => 1));
+        $request = new Request(array('date' => $date, 'type' => 1));
         $tablamina = $this->TraitMinaTable($request);
          
         $registrosmina= $tablamina->getData()->data;        
@@ -54,10 +55,11 @@ class ReportesController extends Controller
             ON c.area_id = ca.id
             WHERE c.fecha = ?
             AND ca.area_id = 1',
-            [$this->date]
+            [$date]
         );
-        $date = $this->date;
-        $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'tablacomentarios','date'));
+
+        $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan'));
+        
         
 
         $pdf->render(); 

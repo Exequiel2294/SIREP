@@ -340,6 +340,7 @@
     <script src="{{asset("vendor/jquery-ui/jquery-ui.js")}}"></script> 
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
+        let columnsVisibility = [];
         var idx = -1;        
 
         /*PRESS NAV-LINK BUTTON*/
@@ -380,15 +381,22 @@
         })
         
         //Descarga PFD Completo
-        $(document).on('click','.expPdf', function(event) {   
+        $(document).on('click','.expPdf', function(event) {  
+            columnsVisibility = [];
+            tabledata = $("#procesos-table").DataTable();
+            for (i=7; i<17; i=i+3)
+            {
+                columnsVisibility.push(tabledata.column(i).visible());
+            }
             event.preventDefault();
-            let date = moment(date_selected).format('YYYY-MM-DD');
-            let date2 = moment(date_selected).format('DD-MM-YYYY');
-            let url = '{{ route("getpdfcompleto", ":date" )}}';
-            url = url.replace(':date', date);
             $.ajax({
-                url: url,
-                type: 'GET',
+                url: "{{route('dashboard.getpdfcompleto') }}",
+                type: 'POST',
+                data:{
+                    date: moment(date_selected).format('YYYY-MM-DD'),
+                    columnsVisibility: columnsVisibility,
+                    _token: $('input[name="_token"]').val()
+                },
                 contentType: "application/json; charset=utf-8",
                 beforeSend: function(){
                     $('#modal-overlay').modal({
@@ -401,7 +409,7 @@
 
                 const link = document.createElement('a');
                 link.href = res.ruta;
-                const nom = 'Daily Report Completo ' + date2 + '.pdf';
+                const nom = 'Daily Report Completo ' + moment(date_selected).format('DD-MM-YYYY') + '.pdf';
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
