@@ -354,6 +354,7 @@
 
                             <td class="text-center">{{$registro->mes_real}}</td>
                             <td class="text-center">{{$registro->mes_budget}}</td>
+
                             @if ($mes_por == '-')
                                 <td class="text-center">{{$mes_por}}</td>
                             @else
@@ -388,6 +389,7 @@
 
                             <td class="text-center">{{$registro->trimestre_real}}</td>
                             <td class="text-center">{{$registro->trimestre_budget}}</td>
+
                             @if ($trimestre_por == '-')
                                 <td class="text-center">{{$trimestre_por}}</td>
                             @else
@@ -423,6 +425,7 @@
 
                             <td class="text-center">{{$registro->anio_real}}</td>
                             <td class="text-center">{{$registro->anio_budget}}</td>
+                            
                             @if ($anio_por == '-')
                                 <td class="text-center">{{$anio_por}}</td>
                             @else
