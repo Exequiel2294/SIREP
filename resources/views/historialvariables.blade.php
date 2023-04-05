@@ -267,6 +267,7 @@
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
 
+
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
             setTimeout(
@@ -303,7 +304,8 @@
             $('#fechahasta').datetimepicker({
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fh,
-                maxDate: moment().subtract(1, "days")
+                maxDate: moment().subtract(1, "days"),
+                orientation: "bottom"
             });
             $("#fechahasta").on("change.datetimepicker", function (e) {
                 date_fh = e.date;
@@ -546,40 +548,44 @@
                                                 <option value="" selected disabled>Seleccione Variable</option>                                       
                                             </select> 
                                         </div>
-                                    </div>                              
-                                    <!--<div class="form-group date col-md-2"  data-target-input="nearest">
-                                        <label for="fechadesde" class="col-form-label">Desde</label>
-                                        <div class="input-group-append " data-target="#fechadesde" data-toggle="datetimepicker">
-                                            <input type="text" class="form-control datetimepicker-input" data-target="#fechadesde" id="fechadesde" name="fechadesde"/>
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group date col-md-2"  data-target-input="nearest">
-                                        <label for="fechahasta" class="col-form-label">Hasta</label>
-                                        <div class="input-group-append" data-target="#fechahasta" data-toggle="datetimepicker">
-                                            <input type="text" class="form-control datetimepicker-input" data-target="#fechahasta" id="fechahasta" name="fechahasta"/>
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>                                
-                                    </div> -->                            
-                                    <div class="form-group date col-md-2" style="display: flex;flex-direction: column; justify-content: space-between;">
+                                    </div>              
+                                    <div class="form-group date col-md-4" style="display: flex;flex-direction: column; justify-content: space-between;">    
+                                        <div style="display: flex;flex-direction: row; justify-content: space-between;">             
+                                            <div class="form-group date col-md-6"  data-target-input="nearest">
+                                                <label for="fechadesde" class="col-form-label">Desde</label>
+                                                <div class="input-group-append " data-target="#fechadesde" data-toggle="datetimepicker">
+                                                    <input type="text" class="form-control datetimepicker-input" data-target="#fechadesde" id="fechadesde" name="fechadesde"/>
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group date col-md-6"  data-target-input="nearest">
+                                                <label for="fechahasta" class="col-form-label">Hasta</label>
+                                                <div class="input-group-append" data-target="#fechahasta" data-toggle="datetimepicker">
+                                                    <input type="text" class="form-control datetimepicker-input" data-target="#fechahasta" id="fechahasta" name="fechahasta"/>
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>                                
+                                            </div>  
+                                        </div>                                                             
+                                        <div style="display: flex;flex-direction: row;justify-content: center;">  
+                                            <button type="button" class="btn btn-primary" id="select-button">Cargar Valores</button>                                      
+                                        </div>    
+                                    </div>                     
+                                    <!--<div class="form-group date col-md-2" style="display: flex;flex-direction: column; justify-content: space-between;">
                                         <div data-target-input="nearest">
                                             <label for="fechadesde" class="col-form-label">Desde</label>
-                                            <div class="input-group-append " data-target="#fechadesde" data-toggle="datetimepicker">
+                                            <div class="input-group-append dateinput" data-target="#fechadesde" data-toggle="datetimepicker">
                                                 <input type="text" class="form-control datetimepicker-input" data-target="#fechadesde" id="fechadesde" name="fechadesde"/>
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
                                         </div>
                                         <div data-target-input="nearest">
                                             <label for="fechahasta" class="col-form-label">Hasta</label>
-                                            <div class="input-group-append" data-target="#fechahasta" data-toggle="datetimepicker">
+                                            <div class="input-group-append dateinput" data-target="#fechahasta" data-toggle="datetimepicker" id="">
                                                 <input type="text" class="form-control datetimepicker-input" data-target="#fechahasta" id="fechahasta" name="fechahasta"/>
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div> 
                                         </div>
-                                    </div>                                                               
-                                    <div class="form-group col-md-2" style="display: flex;flex-direction: column;justify-content: center;">  
-                                        <div><button type="button" class="btn btn-primary" id="select-button">Cargar Valores</button>   </div>                                     
-                                    </div>                                     
+                                    </div>  -->                                      
                                 </div>                                       
                             @csrf
                         </form> 
