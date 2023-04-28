@@ -6,7 +6,7 @@
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Historial por Variable</h1>
+            <h1>SIOM - Historial por Variable</h1>
         </div> 
     </div>  
 @stop

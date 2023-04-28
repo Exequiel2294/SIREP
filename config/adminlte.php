@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'MansfieldRep',
+    'title' => 'SIOM Reportes',
     'title_prefix' => '',
-    'title_postfix' => '| MansfieldRep',
+    'title_postfix' => '| SIOM Reportes',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => '<b>Mansfield</b>Rep',
+    'logo' => '<b>SIOM</b>&nbsp;Reportes',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'MansfieldRep',
+    'logo_img_alt' => 'SIOMReportes',
 
     /*
     |--------------------------------------------------------------------------

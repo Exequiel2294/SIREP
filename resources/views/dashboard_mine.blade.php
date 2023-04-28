@@ -6,7 +6,7 @@
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Tablero Mina</h1>            
+            <h1>SIOM - Tablero Mina</h1>            
             <div class="row">
                 <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
