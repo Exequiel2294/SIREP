@@ -16,22 +16,21 @@
 @section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
 
 @section('body')
-    <div class="{{ $auth_type ?? 'login' }}-box">
+    <div class="{{ $auth_type ?? 'login' }}-box" style="margin-top:-3rem;">
 
         {{-- Logo --}}
-        <!-- <div class="{{ $auth_type ?? 'login' }}-logo">
-            <a href="{{ $dashboard_url }}">
-                <img src="{{ asset(config('adminlte.logo_img')) }}" height="50">
-                {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
+        <div class="login-logo" style="font-size: 3.5rem!important;margin-bottom: 1rem;">
+            <a href="{{ env('APP_URL') }}/home">
+                <b>SIOM</b>&nbsp;Reportes
             </a>
-        </div> -->
+        </div>
 
         {{-- Card Box --}}
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
 
             {{-- Card Header --}}
             @hasSection('auth_header')
-                <div class="login-logo" style="padding-top:2rem;">
+                <div class="login-logo" style="padding-top:2rem!important;">
                     <a href="{{ env('APP_URL') }}/home">
                         <img src="{{ env('APP_URL') }}/images/logo.png" height="80">
                     </a>
