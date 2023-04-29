@@ -381,9 +381,9 @@
         })
         
         //Descarga PFD Completo
-        $(document).on('click','.expPdf', function(event) {  
+        $(document).on('click','.expPdf', function(event) {
             columnsVisibility = [];
-            tabledata = $("#procesos-table").DataTable();
+            tabledata = $("#mina-table").DataTable();
             for (i=7; i<17; i=i+3)
             {
                 columnsVisibility.push(tabledata.column(i).visible());
@@ -397,7 +397,6 @@
                     columnsVisibility: columnsVisibility,
                     _token: $('input[name="_token"]').val()
                 },
-                contentType: "application/json; charset=utf-8",
                 beforeSend: function(){
                     $('#modal-overlay').modal({
                         show: true,
@@ -413,8 +412,9 @@
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
-                $('#modal-overlay').modal('hide');
-            }) 
+                $('#modal-overlay').modal('hide')
+            })
+                
         });
 
         /* DATATABLES */
