@@ -818,15 +818,15 @@
                             </div>
                         </div>    
                         <div class="form-group row">
-                            <label for="max" class="col-sm-2 col-form-label">Máximo</label>
+                            <label for="max" class="col-sm-2 col-form-label">Valor Max</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="max" name="max">
+                                <input type="number" class="form-control" id="max" name="max" placeholder="Valor Máximo">
                             </div>
                         </div> 
                         <div class="form-group row">
-                            <label for="min" class="col-sm-2 col-form-label">Minimo</label>
+                            <label for="min" class="col-sm-2 col-form-label">Valor Min</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="min" name="min">
+                                <input type="number" class="form-control" id="min" name="min" placeholder="Valor Mínimo">
                             </div>
                         </div> 
                         <div class="form-group row">
