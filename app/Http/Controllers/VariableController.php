@@ -29,7 +29,7 @@ class VariableController extends Controller
                         ->join('subcategoria', 'variable.subcategoria_id', '=', 'subcategoria.id')
                         ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                         ->join('area', 'categoria.area_id', '=', 'area.id')
-                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado', 'variable.orden as orden', 'variable.cparametro')
+                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado', 'variable.orden as orden', 'variable.cparametro', 'valor_max as a max', 'valor_min as min')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
