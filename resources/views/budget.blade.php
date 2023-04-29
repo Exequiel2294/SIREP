@@ -6,7 +6,7 @@
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>SIOM - Budget</h1>
+            <h1><b style="color:#495057;">SIOM</b> Budget</h1>
         </div> 
     </div>  
 @stop
