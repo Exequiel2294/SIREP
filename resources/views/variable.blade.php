@@ -357,9 +357,11 @@
             function format ( d ) {
                 return '<table class="table table-info table-sm text-left" style="width:100%" border="0">'+
                             '<tr>'+
-                                '<td style="width: 25%">Descripcion: '+ d.descripcion + '</td>' +
-                                '<td style="width: 25%">CParametro: ' + d.cparametro + '</td>' +
-                                '<td style="width: 25%">Orden: ' + d.orden + '</td>' +
+                                '<td style="width: 27%">Descripcion: '+ d.descripcion + '</td>' +
+                                '<td style="width: 18%">Min: '+ d.min + '</td>' +
+                                '<td style="width: 18%">Max: '+ d.max + '</td>' +
+                                '<td style="width: 18%">CParametro: ' + d.cparametro + '</td>' +
+                                '<td style="width: 18%">Orden: ' + d.orden + '</td>' +
                             '</tr>'+  
                         '</table>';
             }
@@ -429,6 +431,8 @@
                 $("#area_id").val(data.area_id).attr("selected", "selected");                  
                 $('#nombre').val(data.nombre);                   
                 $('#descripcion').val(data.descripcion);            
+                $('#max').val(data.max);                       
+                $('#min').val(data.min);                       
                 $('#orden').val(data.orden);                  
                 $('#unidad').val(data.unidad);                   
                 $("#estado").val(data.estado).attr("selected", "selected");
@@ -530,6 +534,12 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
+                max : {
+                    required: false
+                },
+                min: {
+                    required: false
+                },
                 area_id: {
                     required: true
                 },
@@ -621,6 +631,8 @@
                         subcategoria_id:$('#subcategoria_id').val(),
                         nombre:$('#nombre').val(),
                         descripcion:$('#descripcion').val(),
+                        max:$('#max').val(),
+                        min:$('#min').val(),
                         orden:$('#orden').val(),
                         unidad:$('#unidad').val(),
                         estado:$('#estado').val(),
@@ -805,6 +817,18 @@
                               <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion">
                             </div>
                         </div>    
+                        <div class="form-group row">
+                            <label for="max" class="col-sm-2 col-form-label">Valor Max</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="max" name="max" placeholder="Valor Máximo">
+                            </div>
+                        </div> 
+                        <div class="form-group row">
+                            <label for="min" class="col-sm-2 col-form-label">Valor Min</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="min" name="min" placeholder="Valor Mínimo">
+                            </div>
+                        </div> 
                         <div class="form-group row">
                             <label for="unidad" class="col-sm-2 col-form-label">Unidad</label>
                             <div class="col-sm-10">

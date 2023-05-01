@@ -342,6 +342,7 @@
     <script>
         let columnsVisibility = [];
         var idx = -1;        
+        const valor = document.querySelector('#valor'); 
 
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
@@ -913,7 +914,9 @@
                         $('#subcategoria').val(data['generic'].subcategoria);
                         $('#variable').val(data['generic'].variable);
                         $('#fecha').val(data['generic'].fecha);
-                        $('#valor').val(data['generic'].valor);
+                        valor.value = data['generic'].valor;
+                        valor.setAttribute("max", data['generic'].max);
+                        valor.setAttribute("min", data['generic'].min); 
                     }
                     else
                     {
@@ -1104,7 +1107,7 @@
                     method:"POST",
                     data:{
                         id: $("#id").val(),
-                        valor:$('#valor').val(),
+                        valor:valor.value,
                         selecteddate: moment(date_selected).format('YYYY-MM-DD'),
                         _token: $('input[name="_token"]').val()
                     },

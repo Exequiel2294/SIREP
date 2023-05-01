@@ -29,7 +29,7 @@ class VariableController extends Controller
                         ->join('subcategoria', 'variable.subcategoria_id', '=', 'subcategoria.id')
                         ->join('categoria', 'subcategoria.categoria_id', '=', 'categoria.id')
                         ->join('area', 'categoria.area_id', '=', 'area.id')
-                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado', 'variable.orden as orden', 'variable.cparametro')
+                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado', 'variable.orden as orden', 'variable.cparametro', 'variable.valor_max as max', 'variable.valor_min as min')
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -61,6 +61,8 @@ class VariableController extends Controller
                     'subcategoria_id' => 'required|numeric|exists:subcategoria,id',
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'required|string|min:3|max:250|unique:variable,descripcion',
+                    'min' => 'nullable',
+                    'max' => 'nullable',
                     'unidad' => 'required|string|min:1|max:50',
                     'estado' => 'required|numeric|between:0,1',
                     'orden' => 'required|numeric|between:0,100',
@@ -78,6 +80,8 @@ class VariableController extends Controller
                         'subcategoria_id' => $request->get('subcategoria_id'),
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
+                        'valor_min' => $request->get('min'),
+                        'valor_max' => $request->get('max'),
                         'unidad' => $request->get('unidad'),
                         'estado' => $request->get('estado'),
                         'orden' => $request->get('orden'),
@@ -95,6 +99,8 @@ class VariableController extends Controller
                     'id'    => 'required|numeric|exists:variable,id',
                     'nombre' => 'required|string|min:3|max:250',
                     'descripcion' => 'required|string|min:3|max:250|unique:variable,descripcion,'.$request->get('id'),
+                    'min' => 'nullable',
+                    'max' => 'nullable',
                     'unidad' => 'required|string|min:1|max:50',
                     'estado' => 'required|numeric|between:0,1',
                     'orden' => 'required|numeric|between:0,100',
@@ -113,6 +119,8 @@ class VariableController extends Controller
                         'subcategoria_id' => $request->get('subcategoria_id'),
                         'nombre' => $request->get('nombre'),
                         'descripcion' => $request->get('descripcion'),
+                        'valor_min' => $request->get('min'),
+                        'valor_max' => $request->get('max'),
                         'unidad' => $request->get('unidad'),
                         'estado' => $request->get('estado'),
                         'orden' => $request->get('orden'),
@@ -132,7 +140,7 @@ class VariableController extends Controller
         ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')        
         ->join('categoria','subcategoria.categoria_id','=','categoria.id')
         ->where($where)
-        ->select('categoria.area_id as area_id','categoria.id as categoria_id','subcategoria.id as subcategoria_id','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado','variable.orden', 'variable.cparametro')
+        ->select('categoria.area_id as area_id','categoria.id as categoria_id','subcategoria.id as subcategoria_id','variable.id','variable.nombre','variable.descripcion','variable.unidad','variable.estado','variable.orden', 'variable.cparametro', 'variable.valor_max as max', 'variable.valor_min as min')
         ->first();
         return response()->json($generic);
     }

@@ -710,14 +710,14 @@ class DashboardController extends Controller
                                         {
                                             $where = array('data.id' => $request->id);
                                             $data['msg'] = 'El valor de esta variable se sobreescribirá a 21hs. del dia corriente.';
-                                            $data['val'] = 2;
+                                            $data['val'] = 2;                                            
                                             $data['generic'] =  DB::table('area')
                                                         ->join('categoria', 'categoria.area_id', '=','area.id')
                                                         ->join('subcategoria', 'subcategoria.categoria_id', '=','categoria.id')
                                                         ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
                                                         ->join('data', 'data.variable_id', '=','variable.id')
                                                         ->where($where)
-                                                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                                                        ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha','valor_min as min', 'valor_max as max')
                                                         ->first();
                                             return response()->json($data);      
                                         }
@@ -735,7 +735,7 @@ class DashboardController extends Controller
                                 ->join('variable', 'variable.subcategoria_id', '=','subcategoria.id')
                                 ->join('data', 'data.variable_id', '=','variable.id')
                                 ->where($where)
-                                ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha')
+                                ->select('area.nombre as area','categoria.nombre as categoria','subcategoria.nombre as subcategoria','variable.nombre as variable','data.id as id','data.valor as valor', 'data.fecha as fecha','valor_min as min', 'valor_max as max')
                                 ->first();
                     return response()->json($data);  
                     
@@ -765,7 +765,21 @@ class DashboardController extends Controller
                 $request->all(),
                 [   
                     'id'    => 'required|numeric|exists:data,id',
-                    'valor' => 'string'
+                    'valor' => [
+                        'required',
+                        function ($attribute, $value, $fail) use($request) {
+                            $variable = DB::table('variable')
+                                ->join('data', 'data.variable_id', '=','variable.id')
+                                ->where('data.id', $request->get('id'))
+                                ->select('variable.valor_max as max', 'variable.valor_min as min')
+                                ->first();
+                            if (isset($variable->min) && isset($variable->max)){
+                                if ($value < $variable->min  || $value > $variable->max){
+                                    $fail('El valor ingresado debe que encontrarse en el rango ['.$variable->min.', '.$variable->max.']');
+                                }
+                            }
+                        }
+                    ]
                 ]            
             );
             if ($validator->fails()) 
