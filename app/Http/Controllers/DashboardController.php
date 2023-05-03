@@ -77,7 +77,7 @@ class DashboardController extends Controller
         );
         $date = $this->date;
         $pdf = Pdf::loadView('pdf.procesos', compact('registros', 'tablacomentarios','date'));
-        return $pdf->download('DailyReportProcesos'.$this->date.'.pdf');
+        return $pdf->download('SIOM_DailyReportProcesos_'.$this->date.'.pdf');
     }
 
     public function minatable(Request $request)
@@ -120,7 +120,7 @@ class DashboardController extends Controller
         );
         $date = $this->date;
         $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
-        return $pdf->download('DailyReportMina'.$this->date.'.pdf');
+        return $pdf->download('SIOM_DailyReportMina_'.$this->date.'.pdf');
     }
 
     public function edit(Request $request)
