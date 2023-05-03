@@ -66,7 +66,7 @@ class SendDailyReportMina extends Command
             $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "DailyReport Mina ";
+                $data["subject"] = "SIOM DailyReport Mina ";
                 $data["email"] = "mmsa.dailyreport_mina@mansfieldmin.com";
             }
             else
@@ -77,14 +77,14 @@ class SendDailyReportMina extends Command
             Mail::send('mails.dailytablemina', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
                 $message->subject($data["subject"].$this->date);
-                $message->attachData($pdf->output(), 'DailyReportMina'.$this->date.'.pdf'); //attached pdf file
+                $message->attachData($pdf->output(), 'SIOM_DailyReportMina_'.$this->date.'.pdf'); //attached pdf file
             });
         }
         else
         {
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "DailyReport Mina ";
+                $data["subject"] = "SIOM DailyReport Mina ";
                 $data["email"] = ["mmsa.soporteit@mansfieldmin.com"];
             }
             else

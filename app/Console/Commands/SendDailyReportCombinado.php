@@ -73,7 +73,7 @@ class SendDailyReportCombinado extends Command
             $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'date', 'tablacomentarios')); 
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "DailyReport ";
+                $data["subject"] = "SIOM DailyReport ";
                 $data["email"] = "mmsa.dailyreport@mansfieldmin.com";
             }
             else
@@ -84,14 +84,14 @@ class SendDailyReportCombinado extends Command
             Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
                 $message->subject($data["subject"].$this->date);
-                $message->attachData($pdf->output(), 'DailyReport'.$this->date.'.pdf'); //attached pdf file
+                $message->attachData($pdf->output(), 'SIOM_DailyReport'.$this->date.'.pdf'); //attached pdf file
             });
         }
         else
         {
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "DailyReport ";
+                $data["subject"] = "SIOM DailyReport ";
                 $data["email"] = ["mmsa.soporteit@mansfieldmin.com"];
             }
             else

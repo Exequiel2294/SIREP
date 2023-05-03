@@ -409,7 +409,7 @@
 
                 const link = document.createElement('a');
                 link.href = res.ruta;
-                const nom = 'Daily Report Completo ' + moment(date_selected).format('DD-MM-YYYY') + '.pdf';
+                const nom = 'SIOM_DailyReportCompleto_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
