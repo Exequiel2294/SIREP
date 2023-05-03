@@ -67,7 +67,7 @@ class SendDailyReport extends Command
             $pdf = Pdf::loadView('pdf.procesos', compact('registros', 'tablacomentarios','date'));
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "DailyReport Procesos ";
+                $data["subject"] = "SIOM DailyReport Procesos ";
                 $data["email"] = "mmsa.dailyreport_procesos@mansfieldmin.com";
             }
             else
@@ -78,14 +78,14 @@ class SendDailyReport extends Command
             Mail::send('mails.dailytable', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
                 $message->subject($data["subject"].$this->date);
-                $message->attachData($pdf->output(), 'DailyReportProcesos'.$this->date.'.pdf'); //attached pdf file
+                $message->attachData($pdf->output(), 'SIOM_DailyReportProcesos_'.$this->date.'.pdf'); //attached pdf file
             });
         }
         else
         {
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "DailyReport Procesos ";
+                $data["subject"] = "SIOM DailyReport Procesos ";
                 $data["email"] = ["mmsa.soporteit@mansfieldmin.com"];
             }
             else
