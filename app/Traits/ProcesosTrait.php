@@ -5136,77 +5136,84 @@ trait ProcesosTrait {
                                     {
                                         return number_format(round(107280), 0, '.', ',');
                                     }
-                                    else
-                                    {
-                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
-                                        //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)    
-                                        
-                                        
-                                                                              
-                                        //10030 Ley Au MMSA_HPGR_Ley Au 
-                                        //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10030 MMSA_HPGR_Ley Au g/t)                         
-                                        $sumaproducto10030 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10030) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10031) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );  
-
-                                        //10033 MMSA_APILAM_STACKER_Recuperación %
-                                        //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                        $sumaproducto10033 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10033) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10031) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );                                     
-                                        $suma10031 = $this->sumanioreal10031; 
-                                       
-                                        
-                                        
-                                        if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                                    else{
+                                        if ($this->date == '2023-04-30')
                                         {
-                                            if ($suma10031[0]->suma > 0) {
-                                                //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
-                                                $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
-                                                $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
-                                                $sumMin = $suma10031[0]->suma;
-                                                $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
-                                                if($a_real > 100)
-                                                {
-                                                    return number_format(round($a_real), 0, '.', ',');
-                                                }
-                                                else
-                                                {
-                                                    return number_format($a_real, 2, '.', ',');
-                                                }
-                                            }
-                                            else {
-                                                return '-';
-                                            }
+                                            return number_format(round(33491), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return '-';
+                                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                            //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)    
+                                            
+                                            
+                                                                                  
+                                            //10030 Ley Au MMSA_HPGR_Ley Au 
+                                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10030 MMSA_HPGR_Ley Au g/t)                         
+                                            $sumaproducto10030 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10030) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10031) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );  
+    
+                                            //10033 MMSA_APILAM_STACKER_Recuperación %
+                                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
+                                            $sumaproducto10033 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10033) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10031) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );                                     
+                                            $suma10031 = $this->sumanioreal10031; 
+                                           
+                                            
+                                            
+                                            if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                                            {
+                                                if ($suma10031[0]->suma > 0) {
+                                                    //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                                    $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
+                                                    $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
+                                                    $sumMin = $suma10031[0]->suma;
+                                                    $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                                    if($a_real > 100)
+                                                    {
+                                                        return number_format(round($a_real), 0, '.', ',');
+                                                    }
+                                                    else
+                                                    {
+                                                        return number_format($a_real, 2, '.', ',');
+                                                    }
+                                                }
+                                                else {
+                                                    return '-';
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
                                         }
+                                        
                                     }
                                 break;
                                 case 10038: 
@@ -5215,75 +5222,82 @@ trait ProcesosTrait {
                                         return number_format(round(107362), 0, '.', ',');
                                     }
                                     else{
-                                        //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
-                                        //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
-                                        
-                                                                               
-                                        //10035 MMSA_APILAM_TA_Ley Au g/t
-                                        //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
-                                        $sumaproducto10035 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10035) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10039) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );                                                                      
-                                                                            
-                                        //10036 MMSA_APILAM_TA_Recuperación %
-                                        //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
-                                        $sumaproducto10036 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10036) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10039) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );                                     
-                                        $suma10039 = $this->sumanioreal10039; 
-                                        
-
-                                        if(isset($sumaproducto10035[0]->sumaproducto) && isset($sumaproducto10036[0]->sumaproducto) && isset($suma10039[0]->suma))
+                                        if ($this->date == '2023-04-30')
                                         {
-                                            if ($suma10039[0]->suma > 0) {
-                                                //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
-                                                $recup =  $sumaproducto10036[0]->sumaproducto/$suma10039[0]->suma;
-                                                $leyAu = $sumaproducto10035[0]->sumaproducto/$suma10039[0]->suma;
-                                                $sumMin = $suma10039[0]->suma;
-                                                $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
-                                                if($a_real > 100)
-                                                {
-                                                    return number_format(round($a_real), 0, '.', ',');
+                                            return number_format(round(33491), 0, '.', ',');
+                                        }
+                                        else{
+                                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                            //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
+                                            
+                                                                                   
+                                            //10035 MMSA_APILAM_TA_Ley Au g/t
+                                            //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
+                                            $sumaproducto10035 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10035) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );                                                                      
+                                                                                
+                                            //10036 MMSA_APILAM_TA_Recuperación %
+                                            //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
+                                            $sumaproducto10036 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10036) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );                                     
+                                            $suma10039 = $this->sumanioreal10039; 
+                                            
+    
+                                            if(isset($sumaproducto10035[0]->sumaproducto) && isset($sumaproducto10036[0]->sumaproducto) && isset($suma10039[0]->suma))
+                                            {
+                                                if ($suma10039[0]->suma > 0) {
+                                                    //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                                    $recup =  $sumaproducto10036[0]->sumaproducto/$suma10039[0]->suma;
+                                                    $leyAu = $sumaproducto10035[0]->sumaproducto/$suma10039[0]->suma;
+                                                    $sumMin = $suma10039[0]->suma;
+                                                    $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                                    if($a_real > 100)
+                                                    {
+                                                        return number_format(round($a_real), 0, '.', ',');
+                                                    }
+                                                    else
+                                                    {
+                                                        return number_format($a_real, 2, '.', ',');
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    return number_format($a_real, 2, '.', ',');
+                                                else {
+                                                    return '-';
                                                 }
                                             }
-                                            else {
+                                            else
+                                            {
                                                 return '-';
                                             }
                                         }
-                                        else
-                                        {
-                                            return '-';
-                                        }
+                                        
                                     }
-                                break;              
+                                break;               
                                 case 10046:
                                     //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                     //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
@@ -10037,77 +10051,84 @@ trait ProcesosTrait {
                                     {
                                         return number_format(round(107280), 0, '.', ',');
                                     }
-                                    else
-                                    {
-                                        //MMSA_APILAM_STACKER_Au Extraible Apilado                  
-                                        //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)    
-                                        
-                                        
-                                                                              
-                                        //10030 Ley Au MMSA_HPGR_Ley Au 
-                                        //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10030 MMSA_HPGR_Ley Au g/t)                         
-                                        $sumaproducto10030 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10030) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10031) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );  
-
-                                        //10033 MMSA_APILAM_STACKER_Recuperación %
-                                        //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                        $sumaproducto10033 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10033) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10031) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );                                     
-                                        $suma10031 = $this->sumanioreal10031; 
-                                       
-                                        
-                                        
-                                        if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                                    else{
+                                        if ($this->date == '2023-04-30')
                                         {
-                                            if ($suma10031[0]->suma > 0) {
-                                                //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
-                                                $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
-                                                $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
-                                                $sumMin = $suma10031[0]->suma;
-                                                $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
-                                                if($a_real > 100)
-                                                {
-                                                    return number_format(round($a_real), 0, '.', ',');
-                                                }
-                                                else
-                                                {
-                                                    return number_format($a_real, 2, '.', ',');
-                                                }
-                                            }
-                                            else {
-                                                return '-';
-                                            }
+                                            return number_format(round(33491), 0, '.', ',');
                                         }
                                         else
                                         {
-                                            return '-';
+                                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                            //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)    
+                                            
+                                            
+                                                                                  
+                                            //10030 Ley Au MMSA_HPGR_Ley Au 
+                                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10030 MMSA_HPGR_Ley Au g/t)                         
+                                            $sumaproducto10030 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10030) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10031) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );  
+    
+                                            //10033 MMSA_APILAM_STACKER_Recuperación %
+                                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
+                                            $sumaproducto10033 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10033) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10031) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );                                     
+                                            $suma10031 = $this->sumanioreal10031; 
+                                           
+                                            
+                                            
+                                            if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                                            {
+                                                if ($suma10031[0]->suma > 0) {
+                                                    //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                                    $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
+                                                    $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
+                                                    $sumMin = $suma10031[0]->suma;
+                                                    $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                                    if($a_real > 100)
+                                                    {
+                                                        return number_format(round($a_real), 0, '.', ',');
+                                                    }
+                                                    else
+                                                    {
+                                                        return number_format($a_real, 2, '.', ',');
+                                                    }
+                                                }
+                                                else {
+                                                    return '-';
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return '-';
+                                            }
                                         }
+                                        
                                     }
                                 break;
                                 case 10038: 
@@ -10116,73 +10137,80 @@ trait ProcesosTrait {
                                         return number_format(round(107362), 0, '.', ',');
                                     }
                                     else{
-                                        //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
-                                        //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
-                                        
-                                                                               
-                                        //10035 MMSA_APILAM_TA_Ley Au g/t
-                                        //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
-                                        $sumaproducto10035 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10035) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10039) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );                                                                      
-                                                                            
-                                        //10036 MMSA_APILAM_TA_Recuperación %
-                                        //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
-                                        $sumaproducto10036 = DB::select(
-                                            'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10036) as A
-                                            INNER JOIN   
-                                            (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
-                                            where variable_id = 10039) as B
-                                            ON A.fecha = B.fecha
-                                            WHERE YEAR(A.fecha) = ?
-                                            AND  DATEPART(y, A.fecha) <=  ?
-                                            GROUP BY YEAR(A.fecha)',
-                                            [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-                                        );                                     
-                                        $suma10039 = $this->sumanioreal10039; 
-                                        
-
-                                        if(isset($sumaproducto10035[0]->sumaproducto) && isset($sumaproducto10036[0]->sumaproducto) && isset($suma10039[0]->suma))
+                                        if ($this->date == '2023-04-30')
                                         {
-                                            if ($suma10039[0]->suma > 0) {
-                                                //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
-                                                $recup =  $sumaproducto10036[0]->sumaproducto/$suma10039[0]->suma;
-                                                $leyAu = $sumaproducto10035[0]->sumaproducto/$suma10039[0]->suma;
-                                                $sumMin = $suma10039[0]->suma;
-                                                $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
-                                                if($a_real > 100)
-                                                {
-                                                    return number_format(round($a_real), 0, '.', ',');
+                                            return number_format(round(33491), 0, '.', ',');
+                                        }
+                                        else{
+                                            //10038 MMSA_APILAM_TA_Total Au Extraible Apilado (oz)                  
+                                            //SUMAMENSUAL((((10036 MMSA_APILAM_TA_Recuperación %)* 100) * (10039 MMSA_APILAM_TA_Total Mineral Apilado t) * (10035 MMSA_APILAM_TA_Ley Au g/t)) / 31.1035)       
+                                            
+                                                                                   
+                                            //10035 MMSA_APILAM_TA_Ley Au g/t
+                                            //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10035 MMSA_APILAM_TA_Ley Au g/t)                       
+                                            $sumaproducto10035 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10035) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );                                                                      
+                                                                                
+                                            //10036 MMSA_APILAM_TA_Recuperación %
+                                            //Promedio Ponderado Anual(10039 MMSA_APILAM_TA_Total Mineral Apilado t, 10036 MMSA_APILAM_TA_Recuperación)                      
+                                            $sumaproducto10036 = DB::select(
+                                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10036) as A
+                                                INNER JOIN   
+                                                (SELECT fecha, variable_id, [valor]
+                                                FROM [dbo].[data]
+                                                where variable_id = 10039) as B
+                                                ON A.fecha = B.fecha
+                                                WHERE YEAR(A.fecha) = ?
+                                                AND  DATEPART(y, A.fecha) <=  ?
+                                                GROUP BY YEAR(A.fecha)',
+                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            );                                     
+                                            $suma10039 = $this->sumanioreal10039; 
+                                            
+    
+                                            if(isset($sumaproducto10035[0]->sumaproducto) && isset($sumaproducto10036[0]->sumaproducto) && isset($suma10039[0]->suma))
+                                            {
+                                                if ($suma10039[0]->suma > 0) {
+                                                    //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                                    $recup =  $sumaproducto10036[0]->sumaproducto/$suma10039[0]->suma;
+                                                    $leyAu = $sumaproducto10035[0]->sumaproducto/$suma10039[0]->suma;
+                                                    $sumMin = $suma10039[0]->suma;
+                                                    $a_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                                    if($a_real > 100)
+                                                    {
+                                                        return number_format(round($a_real), 0, '.', ',');
+                                                    }
+                                                    else
+                                                    {
+                                                        return number_format($a_real, 2, '.', ',');
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    return number_format($a_real, 2, '.', ',');
+                                                else {
+                                                    return '-';
                                                 }
                                             }
-                                            else {
+                                            else
+                                            {
                                                 return '-';
                                             }
                                         }
-                                        else
-                                        {
-                                            return '-';
-                                        }
+                                        
                                     }
                                 break;               
                                 case 10046:
