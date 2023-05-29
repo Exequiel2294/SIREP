@@ -5142,7 +5142,7 @@ trait ProcesosTrait {
                                             return number_format(round(33491), 0, '.', ',');
                                         }
                                         else {
-                                            if (strtotime($this->date) >= strtotime('2023-05-27')) {
+                                            if (strtotime($this->date) >= strtotime('2023-05-29')) {
                                                 $resultado = DB::select('SELECT 
                                                     SUM(CASE 
                                                         WHEN V10031 > 0 THEN ((V10033/V10031) * (V10030/V10031) * V10031 * 0.01)/31.1035
@@ -5283,7 +5283,7 @@ trait ProcesosTrait {
                                             return number_format(round(33491), 0, '.', ',');
                                         }
                                         else {
-                                            if (strtotime($this->date) >= strtotime('2023-05-27')) {
+                                            if (strtotime($this->date) >= strtotime('2023-05-29')) {
                                                 $resultado = DB::select('SELECT 
                                                     SUM(CASE 
                                                         WHEN V10039 > 0 THEN ((V10036/V10039) * (V10035/V10039) * V10039 * 0.01)/31.1035
@@ -10169,7 +10169,7 @@ trait ProcesosTrait {
                                             return number_format(round(33491), 0, '.', ',');
                                         }
                                         else {
-                                            if (strtotime($this->date) >= strtotime('2023-05-27')) {
+                                            if (strtotime($this->date) >= strtotime('2023-05-29')) {
                                                 $resultado = DB::select('SELECT 
                                                     SUM(CASE 
                                                         WHEN V10031 > 0 THEN ((V10033/V10031) * (V10030/V10031) * V10031 * 0.01)/31.1035
@@ -10310,7 +10310,7 @@ trait ProcesosTrait {
                                             return number_format(round(33491), 0, '.', ',');
                                         }
                                         else {
-                                            if (strtotime($this->date) >= strtotime('2023-05-27')) {
+                                            if (strtotime($this->date) >= strtotime('2023-05-29')) {
                                                 $resultado = DB::select('SELECT 
                                                     SUM(CASE 
                                                         WHEN V10039 > 0 THEN ((V10036/V10039) * (V10035/V10039) * V10039 * 0.01)/31.1035
