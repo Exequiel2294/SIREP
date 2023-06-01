@@ -262,7 +262,12 @@
         });
         /*PRESS NAV-LINK BUTTON*/
         var date_selected = moment().subtract(1, "days");
-        var date_fd = moment().startOf('month').format('YYYY-MM-DD');
+        if ( moment().startOf('month').format('YYYY-MM-DD') === moment().format('YYYY-MM-DD') ) {
+            var date_fd = moment().subtract(1, "month").startOf('month').format('YYYY-MM-DD');
+        }
+        else {
+            var date_fd = moment().startOf('month').format('YYYY-MM-DD');
+        }
         var date_fh = moment().subtract(1, "days");
         $(function () {
             /* Calendario Fecha desde*/

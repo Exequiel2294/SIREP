@@ -284,7 +284,13 @@
         var vsc_id = '(';
         var headerp = '<tr>';
         var headers = '<tr>';
-        var date_fd = moment().startOf('month').format('YYYY-MM-DD');
+        if ( moment().startOf('month').format('YYYY-MM-DD') === moment().format('YYYY-MM-DD') ) {
+            var date_fd = moment().subtract(1, "month").startOf('month').format('YYYY-MM-DD');
+        }
+        else {
+            var date_fd = moment().startOf('month').format('YYYY-MM-DD');
+        }
+        
         var date_fh = moment().subtract(1, "days");
         var table;
         $(function () {
