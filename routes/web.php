@@ -78,6 +78,29 @@ Route::group(['middleware' => ['auth', 'permission:budget module']], function() 
 
 });
 
+Route::group(['middleware' => ['auth', 'permission:forecast module']], function() {
+    Route::get('forecast_individual', 'ForecastController@FI_index')->name('forecast_individual');
+    Route::post('forecast_individual/getvariables', 'ForecastController@FI_getVariables')->name('forecast_individual.getvariables');
+    Route::post('forecast_individual/getvalores', 'ForecastController@FI_getValores')->name('forecast_individual.getvalores');
+    Route::get('forecast_individual/{id}/edit','ForecastController@FI_edit')->name('forecast_individual.edit');
+    Route::post('forecast_individual/load', 'ForecastController@FI_load')->name('forecast_individual.load');
+
+    Route::get('forecast_group', 'ForecastController@FG_index')->name('forecast_group');
+    Route::post('forecast_group/getvariables', 'ForecastController@FG_getVariables')->name('forecast_group.getvariables');
+    Route::post('forecast_group/getvalores', 'ForecastController@FG_getValores')->name('forecast_group.getvalores');
+    Route::post('forecast_group/getcolumnas','ForecastController@FG_getColumnas')->name('forecast_group.getcolumnas');
+
+
+
+    Route::get('historialvariables', 'HistorialVariablesController@index')->name('historialvariables');
+    Route::post('historialvariables/getvariables', 'HistorialVariablesController@getvariables')->name('historialvariables.getvariables');
+    Route::post('historialvariables/getvalores', 'HistorialVariablesController@getvalores')->name('historialvariables.getvalores');
+    Route::post('historialvariables/getcolumnas','HistorialVariablesController@getcolumnas')->name('historialvariables.getcolumnas');
+
+
+
+});
+
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {
 
     Route::get('area', 'AreaController@index')->name('area');
