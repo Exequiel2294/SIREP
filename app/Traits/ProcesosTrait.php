@@ -127,6 +127,7 @@ trait ProcesosTrait {
                     GROUP BY MONTH(fecha)', 
                     [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 ); 
+            //FIN
             //MES BUDGET
                 
                 $this->summesbudget = 
@@ -293,7 +294,224 @@ trait ProcesosTrait {
                     WHERE MONTH(A.fecha) = '.$month.'
                     AND YEAR(A.fecha) = '.$year.''
                 );
-                
+            //FIN
+            //MES FORECAST
+                $this->summesforecast = 
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor as mes_forecast FROM
+                    (SELECT variable_id, SUM(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND MONTH(fecha) = '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->avgmesforecast =
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
+                    (SELECT variable_id, AVG(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND valor <> 0
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND MONTH(fecha) = '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->leymesforecast =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
             //TRIMESTRE REAL
                 $this->sumtrireal10005 = 
                 DB::select(
@@ -383,6 +601,7 @@ trait ProcesosTrait {
                     GROUP BY DATEPART(QUARTER, fecha)', 
                     [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 );
+            //FIN
             //TRIMESTRE BUDGET                
                 $this->sumtribudget = 
                 DB::select(
@@ -677,7 +896,227 @@ trait ProcesosTrait {
                     AND MONTH(A.fecha) <= '.$month.'
                     AND YEAR(A.fecha) = '.$year.''
                 );
-                
+            //FIN   
+            //TRIMESTRE FORECAST 
+                $this->sumtriforecast = 
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor as tri_forecast FROM
+                    (SELECT variable_id, SUM(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, fecha) = '.$quarter.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->avgtriforecast =
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor AS tri_forecast FROM
+                    (SELECT variable_id, 
+                    AVG(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND valor <>0
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, fecha) = '.$quarter.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->leytriforecast =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
             //AÑO REAL
                 $this->sumanioreal10005 = 
                 DB::select(
@@ -759,289 +1198,496 @@ trait ProcesosTrait {
                     GROUP BY YEAR(fecha)',
                     [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                 );
-            //ANO BUDGET
-                //new
-                    $this->sumaniobudget = 
-                    DB::select(
-                        'SELECT v.id AS variable_id, d.valor as anio_budget
-                        FROM
-                        (SELECT variable_id, 
-                        SUM(CASE	
-                            WHEN MONTH(fecha) < '.$month.' THEN valor
-                            WHEN MONTH(fecha) = '.$month.' THEN (valor/DAY(fecha)) * '.$day.'
-                        END) AS valor
-                        FROM [dbo].[budget]
-                        WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
-                        AND MONTH(fecha) <= '.$month.'
-                        AND YEAR(fecha) = '.$year.'
-                        GROUP BY variable_id) AS d
-                        RIGHT JOIN
-                        (SELECT id 
-                        FROM [dbo].[variable] 
-                        WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
-                        ON d.variable_id = v.id
-                        ORDER BY id ASC'
-                    );
+            //FIN
+            //AÑO BUDGET
+                $this->sumaniobudget = 
+                DB::select(
+                    'SELECT v.id AS variable_id, d.valor as anio_budget
+                    FROM
+                    (SELECT variable_id, 
+                    SUM(CASE	
+                        WHEN MONTH(fecha) < '.$month.' THEN valor
+                        WHEN MONTH(fecha) = '.$month.' THEN (valor/DAY(fecha)) * '.$day.'
+                    END) AS valor
+                    FROM [dbo].[budget]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND MONTH(fecha) <= '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS d
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON d.variable_id = v.id
+                    ORDER BY id ASC'
+                );
 
-                    $this->avganiobudget =
-                    DB::select(
-                        'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
-                        (SELECT variable_id, 
-                        SUM(CASE	
-                            WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
-                            WHEN MONTH(fecha) = '.$month.' THEN valor * '.$day.'
-                        END) AS valor,
-                        SUM(CASE	
-                            WHEN MONTH(fecha) < '.$month.' THEN DAY(fecha)
-                            WHEN MONTH(fecha) = '.$month.' THEN '.$day.'
-                        END) AS dias
-                        FROM [dbo].[budget]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
-                        AND MONTH(fecha) <= '.$month.'
-                        AND YEAR(fecha) = '.$year.'
-                        GROUP BY variable_id) AS d
-                        RIGHT JOIN
-                        (SELECT id 
-                        FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
-                        ON d.variable_id = v.id
-                        ORDER BY id ASC'
-                    );
+                $this->avganiobudget =
+                DB::select(
+                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
+                    (SELECT variable_id, 
+                    SUM(CASE	
+                        WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
+                        WHEN MONTH(fecha) = '.$month.' THEN valor * '.$day.'
+                    END) AS valor,
+                    SUM(CASE	
+                        WHEN MONTH(fecha) < '.$month.' THEN DAY(fecha)
+                        WHEN MONTH(fecha) = '.$month.' THEN '.$day.'
+                    END) AS dias
+                    FROM [dbo].[budget]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND MONTH(fecha) <= '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS d
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON d.variable_id = v.id
+                    ORDER BY id ASC'
+                );
 
-                    $this->leyaniobudget =
-                    DB::select(
-                        'SELECT 10041 as variable_id, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10041) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10042, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10042) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10043, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10043) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10044, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10044) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10050, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10052) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10050) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10051, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10052) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10051) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10054, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10054) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10055, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10059) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10055) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10056, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10060) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10056) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10057, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10057) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10058, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10058) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.''
-                    );
-                //end new
+                $this->leyaniobudget =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
+            //AÑO FORECAST 
+                $this->sumanioforecast = 
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor as anio_forecast FROM
+                    (SELECT variable_id, SUM(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->avganioforecast =
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor AS anio_forecast FROM
+                    (SELECT variable_id, 
+                    AVG(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND valor <>0
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->leyanioforecast =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
 
         //FIN CALCULOS REUTILIZABLES
 
@@ -1053,6 +1699,10 @@ trait ProcesosTrait {
                 ->join('variable','data.variable_id','=','variable.id')
                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
+                ->leftJoin('forecast', function($q) {
+                    $q->on('data.variable_id', '=', 'forecast.variable_id')
+                    ->on('data.fecha', '=', 'forecast.fecha');
+                })
                 ->where($where)
                 ->select(
                     'data.variable_id as variable_id',
@@ -1062,8 +1712,8 @@ trait ProcesosTrait {
                     'variable.nombre as nombre',
                     'variable.export as var_export',
                     'data.valor as dia_real',
-                    'variable.subcategoria_id as subcategoria_id',
-                    'data.valor as anio_budget'
+                    'forecast.valor as dia_forecast',
+                    'variable.subcategoria_id as subcategoria_id'
                     )
                 ->orderBy('variable.orden', 'asc')
                 ->get();
@@ -1549,76 +2199,22 @@ trait ProcesosTrait {
                 }) 
                 ->addColumn('dia_forecast', function($data)
                 {
-                    switch($data->unidad)
-                    {
-                        case 't':
-                        case 'oz':
-                        case 'h':
-                        case 'm3':                                         
-                            switch($data->variable_id)
-                            { 
-                                case 10048:  
-                                    $dia_budget= DB::select(
-                                        'SELECT valor/DAY(fecha) as dia_budget
-                                        FROM [dbo].[budget]
-                                        WHERE variable_id = ?
-                                        AND MONTH(fecha) = ?
-                                        AND YEAR(fecha) = ?',
-                                        [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-                                    );                                    
-                                    if(isset($dia_budget[0]->dia_budget)) 
-                                    { 
-                                        $d_budget = $dia_budget[0]->dia_budget;
-                                        return number_format($d_budget, 2, '.', ',');                                        
-                                    }        
-                                    else
-                                    {
-                                        return '-';
-                                    } 
-                                break;
-                            } 
-                            $dia_budget= DB::select(
-                                'SELECT valor/DAY(fecha) as dia_budget
-                                FROM [dbo].[budget]
-                                WHERE variable_id = ?
-                                AND MONTH(fecha) = ?
-                                AND YEAR(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-                            ); 
-                        break;
-                        case 'g/t':
-                        case '%':
-                        case 't/h':
-                        case 'mm':
-                        case 'ppm':
-                        case 'kg/t':
-                            $dia_budget= DB::select(
-                                'SELECT valor as dia_budget
-                                FROM [dbo].[budget]
-                                WHERE variable_id = ?
-                                AND MONTH(fecha) = ?
-                                AND YEAR(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-
-                            );
-                        break;
-                    }
-                    if(isset($dia_budget[0]->dia_budget)) 
-                    { 
-                        $d_budget = $dia_budget[0]->dia_budget;
-                        if($d_budget > 100 || in_array($data->variable_id, $this->percentage))
+                    if(isset($data->dia_forecast)) 
+                    {                                 
+                        $d_forecast = $data->dia_forecast;
+                        if($d_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($d_budget), 0, '.', ',');
+                            return number_format(round($d_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($d_budget, 2, '.', ',');
-                        }
+                            return number_format($d_forecast, 2, '.', ',');
+                        }                                
                     }        
                     else
                     {
                         return '-';
-                    } 
+                    }          
                 }) 
                 ->addColumn('mes_real', function($data)
                 {    
@@ -3099,16 +3695,16 @@ trait ProcesosTrait {
                     switch($data->variable_id)
                     {
                         case 10002:
-                            $mes_budget = $this->summesbudget[0];
+                            $mes_forecast = $this->summesforecast[0];
                         break;
                         case 10003:
-                            $mes_budget = $this->avgmesbudget[0];
+                            $mes_forecast = $this->avgmesforecast[0];
                         break;
                         case 10004:
-                            if(isset($this->summesbudget[0]->mes_budget) && isset($this->summesbudget[1]->mes_budget))
+                            if(isset($this->summesforecast[0]->mes_forecast) && isset($this->summesforecast[1]->mes_forecast))
                             {
-                                $au = $this->summesbudget[0]->mes_budget;
-                                $min = $this->summesbudget[1]->mes_budget;
+                                $au = $this->summesforecast[0]->mes_forecast;
+                                $min = $this->summesforecast[1]->mes_forecast;
                             }   
                             else
                             {
@@ -3116,13 +3712,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10005:
-                            $mes_budget = $this->summesbudget[1];
+                            $mes_forecast = $this->summesforecast[1];
                         break;
                         case 10006:
-                            if(isset($this->summesbudget[1]->mes_budget) && (isset($this->summesbudget[23]->mes_budget) && $this->summesbudget[23]->mes_budget != 0))
+                            if(isset($this->summesforecast[1]->mes_forecast) && (isset($this->summesforecast[23]->mes_forecast) && $this->summesforecast[23]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[1]->mes_budget;
-                                $hs = $this->summesbudget[23]->mes_budget;
+                                $min = $this->summesforecast[1]->mes_forecast;
+                                $hs = $this->summesforecast[23]->mes_forecast;
                             }   
                             else
                             {
@@ -3130,19 +3726,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10007:
-                            $mes_budget = $this->avgmesbudget[1];
+                            $mes_forecast = $this->avgmesforecast[1];
                         break;
                         case 10008:
-                            $mes_budget = $this->summesbudget[2];
+                            $mes_forecast = $this->summesforecast[2];
                         break;
                         case 10009:
-                            $mes_budget = $this->avgmesbudget[2];
+                            $mes_forecast = $this->avgmesforecast[2];
                         break;
                         case 10010:
-                            if(isset($this->summesbudget[3]->mes_budget) && isset($this->summesbudget[2]->mes_budget))
+                            if(isset($this->summesforecast[3]->mes_forecast) && isset($this->summesforecast[2]->mes_forecast))
                             {
-                                $au = $this->summesbudget[2]->mes_budget;
-                                $min = $this->summesbudget[3]->mes_budget;
+                                $au = $this->summesforecast[2]->mes_forecast;
+                                $min = $this->summesforecast[3]->mes_forecast;
                             }   
                             else
                             {
@@ -3150,16 +3746,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10011:
-                            $mes_budget = $this->summesbudget[3];
+                            $mes_forecast = $this->summesforecast[3];
                         break;
                         case 10012:
-                            $mes_budget = $this->avgmesbudget[3];
+                            $mes_forecast = $this->avgmesforecast[3];
                         break;
                         case 10013:
-                            if(isset($this->summesbudget[3]->mes_budget) && (isset($this->summesbudget[24]->mes_budget) && $this->summesbudget[24]->mes_budget != 0))
+                            if(isset($this->summesforecast[3]->mes_forecast) && (isset($this->summesforecast[24]->mes_forecast) && $this->summesforecast[24]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[3]->mes_budget;
-                                $hs = $this->summesbudget[24]->mes_budget;
+                                $min = $this->summesforecast[3]->mes_forecast;
+                                $hs = $this->summesforecast[24]->mes_forecast;
                             }   
                             else
                             {
@@ -3167,28 +3763,28 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10014:
-                            $mes_budget = $this->avgmesbudget[4];
+                            $mes_forecast = $this->avgmesforecast[4];
                         break;
                         case 10015:
-                            $mes_budget = $this->avgmesbudget[5];
+                            $mes_forecast = $this->avgmesforecast[5];
                         break;
                         case 10016:
-                            $mes_budget = 0;
+                            $mes_forecast = 0;
                         break;
                         case 10017:
-                            $mes_budget = $this->avgmesbudget[6];
+                            $mes_forecast = $this->avgmesforecast[6];
                         break;
                         case 10018:
-                            $mes_budget = $this->avgmesbudget[7];
+                            $mes_forecast = $this->avgmesforecast[7];
                         break;
                         case 10019:
-                            $mes_budget = $this->summesbudget[4];
+                            $mes_forecast = $this->summesforecast[4];
                         break;
                         case 10020:
-                            if(isset($this->summesbudget[4]->mes_budget) && (isset($this->summesbudget[25]->mes_budget) && $this->summesbudget[25]->mes_budget != 0))
+                            if(isset($this->summesforecast[4]->mes_forecast) && (isset($this->summesforecast[25]->mes_forecast) && $this->summesforecast[25]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[4]->mes_budget;
-                                $hs = $this->summesbudget[25]->mes_budget;
+                                $min = $this->summesforecast[4]->mes_forecast;
+                                $hs = $this->summesforecast[25]->mes_forecast;
                             }   
                             else
                             {
@@ -3196,19 +3792,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10021:
-                            $mes_budget = $this->avgmesbudget[8];
+                            $mes_forecast = $this->avgmesforecast[8];
                         break;
                         case 10022:
-                            $mes_budget = $this->summesbudget[5];
+                            $mes_forecast = $this->summesforecast[5];
                         break;
                         case 10023:
-                            $mes_budget = $this->summesbudget[6];
+                            $mes_forecast = $this->summesforecast[6];
                         break;
                         case 10024:
-                            if(isset($this->summesbudget[7]->mes_budget) && isset($this->summesbudget[6]->mes_budget))
+                            if(isset($this->summesforecast[7]->mes_forecast) && isset($this->summesforecast[6]->mes_forecast))
                             {
-                                $au = $this->summesbudget[6]->mes_budget;
-                                $min = $this->summesbudget[7]->mes_budget;
+                                $au = $this->summesforecast[6]->mes_forecast;
+                                $min = $this->summesforecast[7]->mes_forecast;
                             }   
                             else
                             {
@@ -3216,25 +3812,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10025:
-                            $mes_budget = $this->summesbudget[7];
+                            $mes_forecast = $this->summesforecast[7];
                         break;
                         case 10026:
-                            $mes_budget = $this->avgmesbudget[9];
+                            $mes_forecast = $this->avgmesforecast[9];
                         break;
                         case 10027:
-                            $mes_budget = $this->summesbudget[8];
+                            $mes_forecast = $this->summesforecast[8];
                         break;
                         case 10028:
-                            $mes_budget = $this->summesbudget[9];
+                            $mes_forecast = $this->summesforecast[9];
                         break;
                         case 10029:
-                            $mes_budget = $this->avgmesbudget[10];
+                            $mes_forecast = $this->avgmesforecast[10];
                         break;
                         case 10030:
-                            if(isset($this->summesbudget[10]->mes_budget) && isset($this->summesbudget[8]->mes_budget))
+                            if(isset($this->summesforecast[10]->mes_forecast) && isset($this->summesforecast[8]->mes_forecast))
                             {
-                                $au = $this->summesbudget[8]->mes_budget;
-                                $min = $this->summesbudget[10]->mes_budget;
+                                $au = $this->summesforecast[8]->mes_forecast;
+                                $min = $this->summesforecast[10]->mes_forecast;
                             }   
                             else
                             {
@@ -3242,13 +3838,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10031:
-                            $mes_budget = $this->summesbudget[10];
+                            $mes_forecast = $this->summesforecast[10];
                         break;
                         case 10032:
-                            if(isset($this->summesbudget[10]->mes_budget) && (isset($this->summesbudget[26]->mes_budget) && $this->summesbudget[26]->mes_budget != 0))
+                            if(isset($this->summesforecast[10]->mes_forecast) && (isset($this->summesforecast[26]->mes_forecast) && $this->summesforecast[26]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[10]->mes_budget;
-                                $hs = $this->summesbudget[26]->mes_budget;
+                                $min = $this->summesforecast[10]->mes_forecast;
+                                $hs = $this->summesforecast[26]->mes_forecast;
                             }   
                             else
                             {
@@ -3256,16 +3852,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10033:
-                            $mes_budget = $this->avgmesbudget[11];
+                            $mes_forecast = $this->avgmesforecast[11];
                         break;
                         case 10034:
-                            $mes_budget = $this->avgmesbudget[12];
+                            $mes_forecast = $this->avgmesforecast[12];
                         break;
                         case 10035:
-                            if(isset($this->summesbudget[13]->mes_budget) && isset($this->summesbudget[11]->mes_budget))
+                            if(isset($this->summesforecast[13]->mes_forecast) && isset($this->summesforecast[11]->mes_forecast))
                             {
-                                $au = $this->summesbudget[11]->mes_budget;
-                                $min = $this->summesbudget[13]->mes_budget;
+                                $au = $this->summesforecast[11]->mes_forecast;
+                                $min = $this->summesforecast[13]->mes_forecast;
                             }   
                             else
                             {
@@ -3273,25 +3869,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10036:
-                            $mes_budget = $this->avgmesbudget[13];
+                            $mes_forecast = $this->avgmesforecast[13];
                         break;
                         case 10037:
-                            $mes_budget = $this->summesbudget[11];
+                            $mes_forecast = $this->summesforecast[11];
                         break;
                         case 10038:
-                            $mes_budget = $this->summesbudget[12];
+                            $mes_forecast = $this->summesforecast[12];
                         break;
                         case 10039:
-                            $mes_budget = $this->summesbudget[13];
+                            $mes_forecast = $this->summesforecast[13];
                         break;
                         case 10040:
-                            $mes_budget = $this->avgmesbudget[14];
+                            $mes_forecast = $this->avgmesforecast[14];
                         break;
                         case 10041:
-                            if(isset($this->leymesbudget[0]->sumaproducto) && (isset($this->leymesbudget[0]->suma) && $this->leymesbudget[0]->suma != 0))
+                            if(isset($this->leymesforecast[0]->sumaproducto) && (isset($this->leymesforecast[0]->suma) && $this->leymesforecast[0]->suma != 0))
                             {
-                                $min = $this->leymesbudget[0]->sumaproducto;
-                                $hs = $this->leymesbudget[0]->suma;
+                                $min = $this->leymesforecast[0]->sumaproducto;
+                                $hs = $this->leymesforecast[0]->suma;
                             }   
                             else
                             {
@@ -3299,10 +3895,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10042:
-                            if(isset($this->leymesbudget[1]->sumaproducto) && (isset($this->leymesbudget[1]->suma) && $this->leymesbudget[1]->suma != 0))
+                            if(isset($this->leymesforecast[1]->sumaproducto) && (isset($this->leymesforecast[1]->suma) && $this->leymesforecast[1]->suma != 0))
                             {
-                                $min = $this->leymesbudget[1]->sumaproducto;
-                                $hs = $this->leymesbudget[1]->suma;
+                                $min = $this->leymesforecast[1]->sumaproducto;
+                                $hs = $this->leymesforecast[1]->suma;
                             }   
                             else
                             {
@@ -3310,10 +3906,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10043:
-                            if(isset($this->leymesbudget[2]->sumaproducto) && (isset($this->leymesbudget[2]->suma) && $this->leymesbudget[2]->suma != 0))
+                            if(isset($this->leymesforecast[2]->sumaproducto) && (isset($this->leymesforecast[2]->suma) && $this->leymesforecast[2]->suma != 0))
                             {
-                                $min = $this->leymesbudget[2]->sumaproducto;
-                                $hs = $this->leymesbudget[2]->suma;
+                                $min = $this->leymesforecast[2]->sumaproducto;
+                                $hs = $this->leymesforecast[2]->suma;
                             }   
                             else
                             {
@@ -3321,10 +3917,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10044:
-                            if(isset($this->leymesbudget[3]->sumaproducto) && (isset($this->leymesbudget[3]->suma) && $this->leymesbudget[3]->suma != 0))
+                            if(isset($this->leymesforecast[3]->sumaproducto) && (isset($this->leymesforecast[3]->suma) && $this->leymesforecast[3]->suma != 0))
                             {
-                                $min = $this->leymesbudget[3]->sumaproducto;
-                                $hs = $this->leymesbudget[3]->suma;
+                                $min = $this->leymesforecast[3]->sumaproducto;
+                                $hs = $this->leymesforecast[3]->suma;
                             }   
                             else
                             {
@@ -3332,20 +3928,20 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10045:
-                            $mes_budget = $this->summesbudget[14];
+                            $mes_forecast = $this->summesforecast[14];
                         break;
                         case 10046:
-                            $mes_budget = $this->summesbudget[15];
+                            $mes_forecast = $this->summesforecast[15];
                         break;
                         case 10047:
-                            $mes_budget = $this->summesbudget[16];
+                            $mes_forecast = $this->summesforecast[16];
                         break;
                         case 10048:
-                            $mes_budget = $this->summesbudget[17];                            
-                            if(isset($mes_budget->mes_budget))
+                            $mes_forecast = $this->summesforecast[17];                            
+                            if(isset($mes_forecast->mes_forecast))
                             {
-                                $m_budget = $mes_budget->mes_budget;
-                                return number_format($m_budget, 2, '.', ',');                                
+                                $m_forecast = $mes_forecast->mes_forecast;
+                                return number_format($m_forecast, 2, '.', ',');                                
                             }
                             else
                             {
@@ -3353,13 +3949,13 @@ trait ProcesosTrait {
                             }
                         break;
                         case 10049:
-                            $mes_budget = $this->avgmesbudget[15];
+                            $mes_forecast = $this->avgmesforecast[15];
                         break;
                         case 10050:
-                            if(isset($this->leymesbudget[4]->sumaproducto) && (isset($this->leymesbudget[4]->suma) && $this->leymesbudget[4]->suma != 0))
+                            if(isset($this->leymesforecast[4]->sumaproducto) && (isset($this->leymesforecast[4]->suma) && $this->leymesforecast[4]->suma != 0))
                             {
-                                $min = $this->leymesbudget[4]->sumaproducto;
-                                $hs = $this->leymesbudget[4]->suma;
+                                $min = $this->leymesforecast[4]->sumaproducto;
+                                $hs = $this->leymesforecast[4]->suma;
                             }   
                             else
                             {
@@ -3367,10 +3963,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10051:
-                            if(isset($this->leymesbudget[5]->sumaproducto) && (isset($this->leymesbudget[5]->suma) && $this->leymesbudget[5]->suma != 0))
+                            if(isset($this->leymesforecast[5]->sumaproducto) && (isset($this->leymesforecast[5]->suma) && $this->leymesforecast[5]->suma != 0))
                             {
-                                $min = $this->leymesbudget[5]->sumaproducto;
-                                $hs = $this->leymesbudget[5]->suma;
+                                $min = $this->leymesforecast[5]->sumaproducto;
+                                $hs = $this->leymesforecast[5]->suma;
                             }   
                             else
                             {
@@ -3378,16 +3974,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10052:
-                            $mes_budget = $this->summesbudget[18];
+                            $mes_forecast = $this->summesforecast[18];
                         break;
                         case 10053:
-                            $mes_budget = $this->summesbudget[19];
+                            $mes_forecast = $this->summesforecast[19];
                         break;
                         case 10054:
-                            if(isset($this->leymesbudget[6]->sumaproducto) && (isset($this->leymesbudget[6]->suma) && $this->leymesbudget[6]->suma != 0))
+                            if(isset($this->leymesforecast[6]->sumaproducto) && (isset($this->leymesforecast[6]->suma) && $this->leymesforecast[6]->suma != 0))
                             {
-                                $min = $this->leymesbudget[6]->sumaproducto;
-                                $hs = $this->leymesbudget[6]->suma;
+                                $min = $this->leymesforecast[6]->sumaproducto;
+                                $hs = $this->leymesforecast[6]->suma;
                             }   
                             else
                             {
@@ -3395,10 +3991,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10055:
-                            if(isset($this->leymesbudget[7]->sumaproducto) && (isset($this->leymesbudget[7]->suma) && $this->leymesbudget[7]->suma != 0))
+                            if(isset($this->leymesforecast[7]->sumaproducto) && (isset($this->leymesforecast[7]->suma) && $this->leymesforecast[7]->suma != 0))
                             {
-                                $min = $this->leymesbudget[7]->sumaproducto;
-                                $hs = $this->leymesbudget[7]->suma;
+                                $min = $this->leymesforecast[7]->sumaproducto;
+                                $hs = $this->leymesforecast[7]->suma;
                             }   
                             else
                             {
@@ -3406,10 +4002,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10056:
-                            if(isset($this->leymesbudget[8]->sumaproducto) && (isset($this->leymesbudget[8]->suma) && $this->leymesbudget[8]->suma != 0))
+                            if(isset($this->leymesforecast[8]->sumaproducto) && (isset($this->leymesforecast[8]->suma) && $this->leymesforecast[8]->suma != 0))
                             {
-                                $min = $this->leymesbudget[8]->sumaproducto;
-                                $hs = $this->leymesbudget[8]->suma;
+                                $min = $this->leymesforecast[8]->sumaproducto;
+                                $hs = $this->leymesforecast[8]->suma;
                             }   
                             else
                             {
@@ -3417,10 +4013,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10057:
-                            if(isset($this->leymesbudget[9]->sumaproducto) && (isset($this->leymesbudget[9]->suma) && $this->leymesbudget[9]->suma != 0))
+                            if(isset($this->leymesforecast[9]->sumaproducto) && (isset($this->leymesforecast[9]->suma) && $this->leymesforecast[9]->suma != 0))
                             {
-                                $min = $this->leymesbudget[9]->sumaproducto;
-                                $hs = $this->leymesbudget[9]->suma;
+                                $min = $this->leymesforecast[9]->sumaproducto;
+                                $hs = $this->leymesforecast[9]->suma;
                             }   
                             else
                             {
@@ -3428,10 +4024,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10058:
-                            if(isset($this->leymesbudget[10]->sumaproducto) && (isset($this->leymesbudget[10]->suma) && $this->leymesbudget[10]->suma != 0))
+                            if(isset($this->leymesforecast[10]->sumaproducto) && (isset($this->leymesforecast[10]->suma) && $this->leymesforecast[10]->suma != 0))
                             {
-                                $min = $this->leymesbudget[10]->sumaproducto;
-                                $hs = $this->leymesbudget[10]->suma;
+                                $min = $this->leymesforecast[10]->sumaproducto;
+                                $hs = $this->leymesforecast[10]->suma;
                             }   
                             else
                             {
@@ -3439,41 +4035,40 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10059:
-                            $mes_budget = $this->summesbudget[20];
+                            $mes_forecast = $this->summesforecast[20];
                         break;
                         case 10060:
-                            $mes_budget = $this->summesbudget[21];
+                            $mes_forecast = $this->summesforecast[21];
                         break;
                         case 10061:
-                            $mes_budget = $this->summesbudget[22];
+                            $mes_forecast = $this->summesforecast[22];
                         break;
                         case 10062:
-                            $mes_budget = $this->summesbudget[23];
+                            $mes_forecast = $this->summesforecast[23];
                         break;
                         case 10063:
-                            $mes_budget = $this->summesbudget[24];
+                            $mes_forecast = $this->summesforecast[24];
                         break;
                         case 10064:
-                            $mes_budget = $this->summesbudget[25];
+                            $mes_forecast = $this->summesforecast[25];
                         break;
                         case 10065:
-                            $mes_budget = $this->summesbudget[26];
+                            $mes_forecast = $this->summesforecast[26];
                         break;
                         case 10066:
-                            $mes_budget = 0;
+                            $mes_forecast = 0;
                         break;
                         case 10067:
-                            $mes_budget = $this->summesbudget[27];
+                            $mes_forecast = $this->summesforecast[27];
                         break;
                         case 10068:
-                            $mes_budget = $this->summesbudget[28];
+                            $mes_forecast = $this->summesforecast[28];
                         break;
                         case 10069:
-                            $mes_budget = $this->summesbudget[29];
+                            $mes_forecast = $this->summesforecast[29];
                         break;
 
                     }
-
                     
                     if (in_array($data->variable_id, $this->ley))
                     {
@@ -3491,14 +4086,14 @@ trait ProcesosTrait {
                     {
                         if ($min > 0)
                         {
-                            $m_budget = $min/$hs;
-                            if($m_budget > 100)
+                            $m_forecast = $min/$hs;
+                            if($m_forecast > 100)
                             {
-                                return number_format(round($m_budget), 0, '.', ',');
+                                return number_format(round($m_forecast), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($m_budget, 2, '.', ',');
+                                return number_format($m_forecast, 2, '.', ',');
                             }
                         }
                         else
@@ -3507,16 +4102,16 @@ trait ProcesosTrait {
                         }
                     }
 
-                    if(isset($mes_budget->mes_budget))
+                    if(isset($mes_forecast->mes_forecast))
                     {
-                        $m_budget = $mes_budget->mes_budget;
-                        if($m_budget > 100 || in_array($data->variable_id, $this->percentage))
+                        $m_forecast = $mes_forecast->mes_forecast;
+                        if($m_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($m_budget), 0, '.', ',');
+                            return number_format(round($m_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($m_budget, 2, '.', ',');
+                            return number_format($m_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -5001,16 +5596,16 @@ trait ProcesosTrait {
                     switch($data->variable_id)
                     {
                         case 10002:
-                            $tri_budget = $this->sumtribudget[0];
+                            $tri_forecast = $this->sumtriforecast[0];
                         break;
                         case 10003:
-                            $tri_budget = $this->avgtribudget[0];
+                            $tri_forecast = $this->avgtriforecast[0];
                         break;
                         case 10004:
-                            if(isset($this->sumtribudget[0]->tri_budget) && isset($this->sumtribudget[1]->tri_budget))
+                            if(isset($this->sumtriforecast[0]->tri_forecast) && isset($this->sumtriforecast[1]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[0]->tri_budget;
-                                $min = $this->sumtribudget[1]->tri_budget;
+                                $au = $this->sumtriforecast[0]->tri_forecast;
+                                $min = $this->sumtriforecast[1]->tri_forecast;
                             }   
                             else
                             {
@@ -5018,13 +5613,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10005:
-                            $tri_budget = $this->sumtribudget[1];
+                            $tri_forecast = $this->sumtriforecast[1];
                         break;
                         case 10006:
-                            if(isset($this->sumtribudget[1]->tri_budget) && (isset($this->sumtribudget[23]->tri_budget) && $this->sumtribudget[23]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[1]->tri_forecast) && (isset($this->sumtriforecast[23]->tri_forecast) && $this->sumtriforecast[23]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[1]->tri_budget;
-                                $hs = $this->sumtribudget[23]->tri_budget;
+                                $min = $this->sumtriforecast[1]->tri_forecast;
+                                $hs = $this->sumtriforecast[23]->tri_forecast;
                             }   
                             else
                             {
@@ -5032,19 +5627,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10007:
-                            $tri_budget = $this->avgtribudget[1];
+                            $tri_forecast = $this->avgtriforecast[1];
                         break;
                         case 10008:
-                            $tri_budget = $this->sumtribudget[2];
+                            $tri_forecast = $this->sumtriforecast[2];
                         break;
                         case 10009:
-                            $tri_budget = $this->avgtribudget[2];
+                            $tri_forecast = $this->avgtriforecast[2];
                         break;
                         case 10010:
-                            if(isset($this->sumtribudget[3]->tri_budget) && isset($this->sumtribudget[2]->tri_budget))
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && isset($this->sumtriforecast[2]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[2]->tri_budget;
-                                $min = $this->sumtribudget[3]->tri_budget;
+                                $au = $this->sumtriforecast[2]->tri_forecast;
+                                $min = $this->sumtriforecast[3]->tri_forecast;
                             }   
                             else
                             {
@@ -5052,16 +5647,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10011:
-                            $tri_budget = $this->sumtribudget[3];
+                            $tri_forecast = $this->sumtriforecast[3];
                         break;
                         case 10012:
-                            $tri_budget = $this->avgtribudget[3];
+                            $tri_forecast = $this->avgtriforecast[3];
                         break;
                         case 10013:
-                            if(isset($this->sumtribudget[3]->tri_budget) && (isset($this->sumtribudget[24]->tri_budget) && $this->sumtribudget[24]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && (isset($this->sumtriforecast[24]->tri_forecast) && $this->sumtriforecast[24]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[3]->tri_budget;
-                                $hs = $this->sumtribudget[24]->tri_budget;
+                                $min = $this->sumtriforecast[3]->tri_forecast;
+                                $hs = $this->sumtriforecast[24]->tri_forecast;
                             }   
                             else
                             {
@@ -5069,28 +5664,28 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10014:
-                            $tri_budget = $this->avgtribudget[4];
+                            $tri_forecast = $this->avgtriforecast[4];
                         break;
                         case 10015:
-                            $tri_budget = $this->avgtribudget[5];
+                            $tri_forecast = $this->avgtriforecast[5];
                         break;
                         case 10016:
-                            $tri_budget = 0;
+                            $tri_forecast = 0;
                         break;
                         case 10017:
-                            $tri_budget = $this->avgtribudget[6];
+                            $tri_forecast = $this->avgtriforecast[6];
                         break;
                         case 10018:
-                            $tri_budget = $this->avgtribudget[7];
+                            $tri_forecast = $this->avgtriforecast[7];
                         break;
                         case 10019:
-                            $tri_budget = $this->sumtribudget[4];
+                            $tri_forecast = $this->sumtriforecast[4];
                         break;
                         case 10020:
-                            if(isset($this->sumtribudget[4]->tri_budget) && (isset($this->sumtribudget[25]->tri_budget) && $this->sumtribudget[25]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[4]->tri_forecast) && (isset($this->sumtriforecast[25]->tri_forecast) && $this->sumtriforecast[25]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[4]->tri_budget;
-                                $hs = $this->sumtribudget[25]->tri_budget;
+                                $min = $this->sumtriforecast[4]->tri_forecast;
+                                $hs = $this->sumtriforecast[25]->tri_forecast;
                             }   
                             else
                             {
@@ -5098,19 +5693,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10021:
-                            $tri_budget = $this->avgtribudget[8];
+                            $tri_forecast = $this->avgtriforecast[8];
                         break;
                         case 10022:
-                            $tri_budget = $this->sumtribudget[5];
+                            $tri_forecast = $this->sumtriforecast[5];
                         break;
                         case 10023:
-                            $tri_budget = $this->sumtribudget[6];
+                            $tri_forecast = $this->sumtriforecast[6];
                         break;
                         case 10024:
-                            if(isset($this->sumtribudget[7]->tri_budget) && isset($this->sumtribudget[6]->tri_budget))
+                            if(isset($this->sumtriforecast[7]->tri_forecast) && isset($this->sumtriforecast[6]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[6]->tri_budget;
-                                $min = $this->sumtribudget[7]->tri_budget;
+                                $au = $this->sumtriforecast[6]->tri_forecast;
+                                $min = $this->sumtriforecast[7]->tri_forecast;
                             }   
                             else
                             {
@@ -5118,25 +5713,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10025:
-                            $tri_budget = $this->sumtribudget[7];
+                            $tri_forecast = $this->sumtriforecast[7];
                         break;
                         case 10026:
-                            $tri_budget = $this->avgtribudget[9];
+                            $tri_forecast = $this->avgtriforecast[9];
                         break;
                         case 10027:
-                            $tri_budget = $this->sumtribudget[8];
+                            $tri_forecast = $this->sumtriforecast[8];
                         break;
                         case 10028:
-                            $tri_budget = $this->sumtribudget[9];
+                            $tri_forecast = $this->sumtriforecast[9];
                         break;
                         case 10029:
-                            $tri_budget = $this->avgtribudget[10];
+                            $tri_forecast = $this->avgtriforecast[10];
                         break;
                         case 10030:
-                            if(isset($this->sumtribudget[10]->tri_budget) && isset($this->sumtribudget[8]->tri_budget))
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && isset($this->sumtriforecast[8]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[8]->tri_budget;
-                                $min = $this->sumtribudget[10]->tri_budget;
+                                $au = $this->sumtriforecast[8]->tri_forecast;
+                                $min = $this->sumtriforecast[10]->tri_forecast;
                             }   
                             else
                             {
@@ -5144,13 +5739,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10031:
-                            $tri_budget = $this->sumtribudget[10];
+                            $tri_forecast = $this->sumtriforecast[10];
                         break;
                         case 10032:
-                            if(isset($this->sumtribudget[10]->tri_budget) && (isset($this->sumtribudget[26]->tri_budget) && $this->sumtribudget[26]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && (isset($this->sumtriforecast[26]->tri_forecast) && $this->sumtriforecast[26]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[10]->tri_budget;
-                                $hs = $this->sumtribudget[26]->tri_budget;
+                                $min = $this->sumtriforecast[10]->tri_forecast;
+                                $hs = $this->sumtriforecast[26]->tri_forecast;
                             }   
                             else
                             {
@@ -5158,16 +5753,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10033:
-                            $tri_budget = $this->avgtribudget[11];
+                            $tri_forecast = $this->avgtriforecast[11];
                         break;
                         case 10034:
-                            $tri_budget = $this->avgtribudget[12];
+                            $tri_forecast = $this->avgtriforecast[12];
                         break;
                         case 10035:
-                            if(isset($this->sumtribudget[13]->tri_budget) && isset($this->sumtribudget[11]->tri_budget))
+                            if(isset($this->sumtriforecast[13]->tri_forecast) && isset($this->sumtriforecast[11]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[11]->tri_budget;
-                                $min = $this->sumtribudget[13]->tri_budget;
+                                $au = $this->sumtriforecast[11]->tri_forecast;
+                                $min = $this->sumtriforecast[13]->tri_forecast;
                             }   
                             else
                             {
@@ -5175,25 +5770,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10036:
-                            $tri_budget = $this->avgtribudget[13];
+                            $tri_forecast = $this->avgtriforecast[13];
                         break;
                         case 10037:
-                            $tri_budget = $this->sumtribudget[11];
+                            $tri_forecast = $this->sumtriforecast[11];
                         break;
                         case 10038:
-                            $tri_budget = $this->sumtribudget[12];
+                            $tri_forecast = $this->sumtriforecast[12];
                         break;
                         case 10039:
-                            $tri_budget = $this->sumtribudget[13];
+                            $tri_forecast = $this->sumtriforecast[13];
                         break;
                         case 10040:
-                            $tri_budget = $this->avgtribudget[14];
+                            $tri_forecast = $this->avgtriforecast[14];
                         break;
                         case 10041:
-                            if(isset($this->leytribudget[0]->sumaproducto) && (isset($this->leytribudget[0]->suma) && $this->leytribudget[0]->suma != 0))
+                            if(isset($this->leytriforecast[0]->sumaproducto) && (isset($this->leytriforecast[0]->suma) && $this->leytriforecast[0]->suma != 0))
                             {
-                                $min = $this->leytribudget[0]->sumaproducto;
-                                $hs = $this->leytribudget[0]->suma;
+                                $min = $this->leytriforecast[0]->sumaproducto;
+                                $hs = $this->leytriforecast[0]->suma;
                             }   
                             else
                             {
@@ -5201,10 +5796,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10042:
-                            if(isset($this->leytribudget[1]->sumaproducto) && (isset($this->leytribudget[1]->suma) && $this->leytribudget[1]->suma != 0))
+                            if(isset($this->leytriforecast[1]->sumaproducto) && (isset($this->leytriforecast[1]->suma) && $this->leytriforecast[1]->suma != 0))
                             {
-                                $min = $this->leytribudget[1]->sumaproducto;
-                                $hs = $this->leytribudget[1]->suma;
+                                $min = $this->leytriforecast[1]->sumaproducto;
+                                $hs = $this->leytriforecast[1]->suma;
                             }   
                             else
                             {
@@ -5212,10 +5807,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10043:
-                            if(isset($this->leytribudget[2]->sumaproducto) && (isset($this->leytribudget[2]->suma) && $this->leytribudget[2]->suma != 0))
+                            if(isset($this->leytriforecast[2]->sumaproducto) && (isset($this->leytriforecast[2]->suma) && $this->leytriforecast[2]->suma != 0))
                             {
-                                $min = $this->leytribudget[2]->sumaproducto;
-                                $hs = $this->leytribudget[2]->suma;
+                                $min = $this->leytriforecast[2]->sumaproducto;
+                                $hs = $this->leytriforecast[2]->suma;
                             }   
                             else
                             {
@@ -5223,10 +5818,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10044:
-                            if(isset($this->leytribudget[3]->sumaproducto) && (isset($this->leytribudget[3]->suma) && $this->leytribudget[3]->suma != 0))
+                            if(isset($this->leytriforecast[3]->sumaproducto) && (isset($this->leytriforecast[3]->suma) && $this->leytriforecast[3]->suma != 0))
                             {
-                                $min = $this->leytribudget[3]->sumaproducto;
-                                $hs = $this->leytribudget[3]->suma;
+                                $min = $this->leytriforecast[3]->sumaproducto;
+                                $hs = $this->leytriforecast[3]->suma;
                             }   
                             else
                             {
@@ -5234,20 +5829,20 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10045:
-                            $tri_budget = $this->sumtribudget[14];
+                            $tri_forecast = $this->sumtriforecast[14];
                         break;
                         case 10046:
-                            $tri_budget = $this->sumtribudget[15];
+                            $tri_forecast = $this->sumtriforecast[15];
                         break;
                         case 10047:
-                            $tri_budget = $this->sumtribudget[16];
+                            $tri_forecast = $this->sumtriforecast[16];
                         break;
                         case 10048:
-                            $tri_budget = $this->sumtribudget[17];                            
-                            if(isset($tri_budget->tri_budget))
+                            $tri_forecast = $this->sumtriforecast[17];                            
+                            if(isset($tri_forecast->tri_forecast))
                             {
-                                $t_budget = $tri_budget->tri_budget;
-                                return number_format($t_budget, 2, '.', ',');                                
+                                $t_forecast = $tri_forecast->tri_forecast;
+                                return number_format($t_forecast, 2, '.', ',');                                
                             }
                             else
                             {
@@ -5255,13 +5850,13 @@ trait ProcesosTrait {
                             }
                         break;
                         case 10049:
-                            $tri_budget = $this->avgtribudget[15];
+                            $tri_forecast = $this->avgtriforecast[15];
                         break;
                         case 10050:
-                            if(isset($this->leytribudget[4]->sumaproducto) && (isset($this->leytribudget[4]->suma) && $this->leytribudget[4]->suma != 0))
+                            if(isset($this->leytriforecast[4]->sumaproducto) && (isset($this->leytriforecast[4]->suma) && $this->leytriforecast[4]->suma != 0))
                             {
-                                $min = $this->leytribudget[4]->sumaproducto;
-                                $hs = $this->leytribudget[4]->suma;
+                                $min = $this->leytriforecast[4]->sumaproducto;
+                                $hs = $this->leytriforecast[4]->suma;
                             }   
                             else
                             {
@@ -5269,10 +5864,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10051:
-                            if(isset($this->leytribudget[5]->sumaproducto) && (isset($this->leytribudget[5]->suma) && $this->leytribudget[5]->suma != 0))
+                            if(isset($this->leytriforecast[5]->sumaproducto) && (isset($this->leytriforecast[5]->suma) && $this->leytriforecast[5]->suma != 0))
                             {
-                                $min = $this->leytribudget[5]->sumaproducto;
-                                $hs = $this->leytribudget[5]->suma;
+                                $min = $this->leytriforecast[5]->sumaproducto;
+                                $hs = $this->leytriforecast[5]->suma;
                             }   
                             else
                             {
@@ -5280,16 +5875,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10052:
-                            $tri_budget = $this->sumtribudget[18];
+                            $tri_forecast = $this->sumtriforecast[18];
                         break;
                         case 10053:
-                            $tri_budget = $this->sumtribudget[19];
+                            $tri_forecast = $this->sumtriforecast[19];
                         break;
                         case 10054:
-                            if(isset($this->leytribudget[6]->sumaproducto) && (isset($this->leytribudget[6]->suma) && $this->leytribudget[6]->suma != 0))
+                            if(isset($this->leytriforecast[6]->sumaproducto) && (isset($this->leytriforecast[6]->suma) && $this->leytriforecast[6]->suma != 0))
                             {
-                                $min = $this->leytribudget[6]->sumaproducto;
-                                $hs = $this->leytribudget[6]->suma;
+                                $min = $this->leytriforecast[6]->sumaproducto;
+                                $hs = $this->leytriforecast[6]->suma;
                             }   
                             else
                             {
@@ -5297,10 +5892,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10055:
-                            if(isset($this->leytribudget[7]->sumaproducto) && (isset($this->leytribudget[7]->suma) && $this->leytribudget[7]->suma != 0))
+                            if(isset($this->leytriforecast[7]->sumaproducto) && (isset($this->leytriforecast[7]->suma) && $this->leytriforecast[7]->suma != 0))
                             {
-                                $min = $this->leytribudget[7]->sumaproducto;
-                                $hs = $this->leytribudget[7]->suma;
+                                $min = $this->leytriforecast[7]->sumaproducto;
+                                $hs = $this->leytriforecast[7]->suma;
                             }   
                             else
                             {
@@ -5308,10 +5903,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10056:
-                            if(isset($this->leytribudget[8]->sumaproducto) && (isset($this->leytribudget[8]->suma) && $this->leytribudget[8]->suma != 0))
+                            if(isset($this->leytriforecast[8]->sumaproducto) && (isset($this->leytriforecast[8]->suma) && $this->leytriforecast[8]->suma != 0))
                             {
-                                $min = $this->leytribudget[8]->sumaproducto;
-                                $hs = $this->leytribudget[8]->suma;
+                                $min = $this->leytriforecast[8]->sumaproducto;
+                                $hs = $this->leytriforecast[8]->suma;
                             }   
                             else
                             {
@@ -5319,10 +5914,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10057:
-                            if(isset($this->leytribudget[9]->sumaproducto) && (isset($this->leytribudget[9]->suma) && $this->leytribudget[9]->suma != 0))
+                            if(isset($this->leytriforecast[9]->sumaproducto) && (isset($this->leytriforecast[9]->suma) && $this->leytriforecast[9]->suma != 0))
                             {
-                                $min = $this->leytribudget[9]->sumaproducto;
-                                $hs = $this->leytribudget[9]->suma;
+                                $min = $this->leytriforecast[9]->sumaproducto;
+                                $hs = $this->leytriforecast[9]->suma;
                             }   
                             else
                             {
@@ -5330,10 +5925,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10058:
-                            if(isset($this->leytribudget[10]->sumaproducto) && (isset($this->leytribudget[10]->suma) && $this->leytribudget[10]->suma != 0))
+                            if(isset($this->leytriforecast[10]->sumaproducto) && (isset($this->leytriforecast[10]->suma) && $this->leytriforecast[10]->suma != 0))
                             {
-                                $min = $this->leytribudget[10]->sumaproducto;
-                                $hs = $this->leytribudget[10]->suma;
+                                $min = $this->leytriforecast[10]->sumaproducto;
+                                $hs = $this->leytriforecast[10]->suma;
                             }   
                             else
                             {
@@ -5341,37 +5936,37 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10059:
-                            $tri_budget = $this->sumtribudget[20];
+                            $tri_forecast = $this->sumtriforecast[20];
                         break;
                         case 10060:
-                            $tri_budget = $this->sumtribudget[21];
+                            $tri_forecast = $this->sumtriforecast[21];
                         break;
                         case 10061:
-                            $tri_budget = $this->sumtribudget[22];
+                            $tri_forecast = $this->sumtriforecast[22];
                         break;
                         case 10062:
-                            $tri_budget = $this->sumtribudget[23];
+                            $tri_forecast = $this->sumtriforecast[23];
                         break;
                         case 10063:
-                            $tri_budget = $this->sumtribudget[24];
+                            $tri_forecast = $this->sumtriforecast[24];
                         break;
                         case 10064:
-                            $tri_budget = $this->sumtribudget[25];
+                            $tri_forecast = $this->sumtriforecast[25];
                         break;
                         case 10065:
-                            $tri_budget = $this->sumtribudget[26];
+                            $tri_forecast = $this->sumtriforecast[26];
                         break;
                         case 10066:
-                            $tri_budget = 0;
+                            $tri_forecast = 0;
                         break;
                         case 10067:
-                            $tri_budget = $this->sumtribudget[27];
+                            $tri_forecast = $this->sumtriforecast[27];
                         break;
                         case 10068:
-                            $tri_budget = $this->sumtribudget[28];
+                            $tri_forecast = $this->sumtriforecast[28];
                         break;
                         case 10069:
-                            $tri_budget = $this->sumtribudget[29];
+                            $tri_forecast = $this->sumtriforecast[29];
                         break;
                     
                     }                    
@@ -5392,14 +5987,14 @@ trait ProcesosTrait {
                     {
                         if ($min > 0)
                         {
-                            $t_budget = $min/$hs;
-                            if($t_budget > 100)
+                            $t_forecast = $min/$hs;
+                            if($t_forecast > 100)
                             {
-                                return number_format(round($t_budget), 0, '.', ',');
+                                return number_format(round($t_forecast), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($t_budget, 2, '.', ',');
+                                return number_format($t_forecast, 2, '.', ',');
                             }
                         }
                         else
@@ -5407,16 +6002,16 @@ trait ProcesosTrait {
                             return '-';
                         }
                     }
-                    if(isset($tri_budget->tri_budget))
+                    if(isset($tri_forecast->tri_forecast))
                     {
-                        $t_budget = $tri_budget->tri_budget;
-                        if($t_budget > 100 || in_array($data->variable_id, $this->percentage))
+                        $t_forecast = $tri_forecast->tri_forecast;
+                        if($t_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($t_budget), 0, '.', ',');
+                            return number_format(round($t_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($t_budget, 2, '.', ',');
+                            return number_format($t_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -6993,16 +7588,16 @@ trait ProcesosTrait {
                     switch($data->variable_id)
                     {
                         case 10002:
-                            $anio_budget = $this->sumaniobudget[0];
+                            $anio_forecast = $this->sumanioforecast[0];
                         break;
                         case 10003:
-                            $anio_budget = $this->avganiobudget[0];
+                            $anio_forecast = $this->avganioforecast[0];
                         break;
                         case 10004:
-                            if(isset($this->sumaniobudget[0]->anio_budget) && isset($this->sumaniobudget[1]->anio_budget))
+                            if(isset($this->sumanioforecast[0]->anio_forecast) && isset($this->sumanioforecast[1]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[0]->anio_budget;
-                                $min = $this->sumaniobudget[1]->anio_budget;
+                                $au = $this->sumanioforecast[0]->anio_forecast;
+                                $min = $this->sumanioforecast[1]->anio_forecast;
                             }   
                             else
                             {
@@ -7010,13 +7605,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10005:
-                            $anio_budget = $this->sumaniobudget[1];
+                            $anio_forecast = $this->sumanioforecast[1];
                         break;
                         case 10006:
-                            if(isset($this->sumaniobudget[1]->anio_budget) && (isset($this->sumaniobudget[23]->anio_budget) && $this->sumaniobudget[23]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[1]->anio_forecast) && (isset($this->sumanioforecast[23]->anio_forecast) && $this->sumanioforecast[23]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[1]->anio_budget;
-                                $hs = $this->sumaniobudget[23]->anio_budget;
+                                $min = $this->sumanioforecast[1]->anio_forecast;
+                                $hs = $this->sumanioforecast[23]->anio_forecast;
                             }   
                             else
                             {
@@ -7024,19 +7619,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10007:
-                            $anio_budget = $this->avganiobudget[1];
+                            $anio_forecast = $this->avganioforecast[1];
                         break;
                         case 10008:
-                            $anio_budget = $this->sumaniobudget[2];
+                            $anio_forecast = $this->sumanioforecast[2];
                         break;
                         case 10009:
-                            $anio_budget = $this->avganiobudget[2];
+                            $anio_forecast = $this->avganioforecast[2];
                         break;
                         case 10010:
-                            if(isset($this->sumaniobudget[3]->anio_budget) && isset($this->sumaniobudget[2]->anio_budget))
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && isset($this->sumanioforecast[2]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[2]->anio_budget;
-                                $min = $this->sumaniobudget[3]->anio_budget;
+                                $au = $this->sumanioforecast[2]->anio_forecast;
+                                $min = $this->sumanioforecast[3]->anio_forecast;
                             }   
                             else
                             {
@@ -7044,16 +7639,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10011:
-                            $anio_budget = $this->sumaniobudget[3];
+                            $anio_forecast = $this->sumanioforecast[3];
                         break;
                         case 10012:
-                            $anio_budget = $this->avganiobudget[3];
+                            $anio_forecast = $this->avganioforecast[3];
                         break;
                         case 10013:
-                            if(isset($this->sumaniobudget[3]->anio_budget) && (isset($this->sumaniobudget[24]->anio_budget) && $this->sumaniobudget[24]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && (isset($this->sumanioforecast[24]->anio_forecast) && $this->sumanioforecast[24]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[3]->anio_budget;
-                                $hs = $this->sumaniobudget[24]->anio_budget;
+                                $min = $this->sumanioforecast[3]->anio_forecast;
+                                $hs = $this->sumanioforecast[24]->anio_forecast;
                             }   
                             else
                             {
@@ -7061,28 +7656,28 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10014:
-                            $anio_budget = $this->avganiobudget[4];
+                            $anio_forecast = $this->avganioforecast[4];
                         break;
                         case 10015:
-                            $anio_budget = $this->avganiobudget[5];
+                            $anio_forecast = $this->avganioforecast[5];
                         break;
                         case 10016:
-                            $anio_budget = 0;
+                            $anio_forecast = 0;
                         break;
                         case 10017:
-                            $anio_budget = $this->avganiobudget[6];
+                            $anio_forecast = $this->avganioforecast[6];
                         break;
                         case 10018:
-                            $anio_budget = $this->avganiobudget[7];
+                            $anio_forecast = $this->avganioforecast[7];
                         break;
                         case 10019:
-                            $anio_budget = $this->sumaniobudget[4];
+                            $anio_forecast = $this->sumanioforecast[4];
                         break;
                         case 10020:
-                            if(isset($this->sumaniobudget[4]->anio_budget) && (isset($this->sumaniobudget[25]->anio_budget) && $this->sumaniobudget[25]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[4]->anio_forecast) && (isset($this->sumanioforecast[25]->anio_forecast) && $this->sumanioforecast[25]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[4]->anio_budget;
-                                $hs = $this->sumaniobudget[25]->anio_budget;
+                                $min = $this->sumanioforecast[4]->anio_forecast;
+                                $hs = $this->sumanioforecast[25]->anio_forecast;
                             }   
                             else
                             {
@@ -7090,19 +7685,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10021:
-                            $anio_budget = $this->avganiobudget[8];
+                            $anio_forecast = $this->avganioforecast[8];
                         break;
                         case 10022:
-                            $anio_budget = $this->sumaniobudget[5];
+                            $anio_forecast = $this->sumanioforecast[5];
                         break;
                         case 10023:
-                            $anio_budget = $this->sumaniobudget[6];
+                            $anio_forecast = $this->sumanioforecast[6];
                         break;
                         case 10024:
-                            if(isset($this->sumaniobudget[7]->anio_budget) && isset($this->sumaniobudget[6]->anio_budget))
+                            if(isset($this->sumanioforecast[7]->anio_forecast) && isset($this->sumanioforecast[6]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[6]->anio_budget;
-                                $min = $this->sumaniobudget[7]->anio_budget;
+                                $au = $this->sumanioforecast[6]->anio_forecast;
+                                $min = $this->sumanioforecast[7]->anio_forecast;
                             }   
                             else
                             {
@@ -7110,25 +7705,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10025:
-                            $anio_budget = $this->sumaniobudget[7];
+                            $anio_forecast = $this->sumanioforecast[7];
                         break;
                         case 10026:
-                            $anio_budget = $this->avganiobudget[9];
+                            $anio_forecast = $this->avganioforecast[9];
                         break;
                         case 10027:
-                            $anio_budget = $this->sumaniobudget[8];
+                            $anio_forecast = $this->sumanioforecast[8];
                         break;
                         case 10028:
-                            $anio_budget = $this->sumaniobudget[9];
+                            $anio_forecast = $this->sumanioforecast[9];
                         break;
                         case 10029:
-                            $anio_budget = $this->avganiobudget[10];
+                            $anio_forecast = $this->avganioforecast[10];
                         break;
                         case 10030:
-                            if(isset($this->sumaniobudget[10]->anio_budget) && isset($this->sumaniobudget[8]->anio_budget))
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && isset($this->sumanioforecast[8]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[8]->anio_budget;
-                                $min = $this->sumaniobudget[10]->anio_budget;
+                                $au = $this->sumanioforecast[8]->anio_forecast;
+                                $min = $this->sumanioforecast[10]->anio_forecast;
                             }   
                             else
                             {
@@ -7136,13 +7731,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10031:
-                            $anio_budget = $this->sumaniobudget[10];
+                            $anio_forecast = $this->sumanioforecast[10];
                         break;
                         case 10032:
-                            if(isset($this->sumaniobudget[10]->anio_budget) && (isset($this->sumaniobudget[26]->anio_budget) && $this->sumaniobudget[26]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && (isset($this->sumanioforecast[26]->anio_forecast) && $this->sumanioforecast[26]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[10]->anio_budget;
-                                $hs = $this->sumaniobudget[26]->anio_budget;
+                                $min = $this->sumanioforecast[10]->anio_forecast;
+                                $hs = $this->sumanioforecast[26]->anio_forecast;
                             }   
                             else
                             {
@@ -7150,16 +7745,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10033:
-                            $anio_budget = $this->avganiobudget[11];
+                            $anio_forecast = $this->avganioforecast[11];
                         break;
                         case 10034:
-                            $anio_budget = $this->avganiobudget[12];
+                            $anio_forecast = $this->avganioforecast[12];
                         break;
                         case 10035:
-                            if(isset($this->sumaniobudget[13]->anio_budget) && isset($this->sumaniobudget[11]->anio_budget))
+                            if(isset($this->sumanioforecast[13]->anio_forecast) && isset($this->sumanioforecast[11]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[11]->anio_budget;
-                                $min = $this->sumaniobudget[13]->anio_budget;
+                                $au = $this->sumanioforecast[11]->anio_forecast;
+                                $min = $this->sumanioforecast[13]->anio_forecast;
                             }   
                             else
                             {
@@ -7167,25 +7762,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10036:
-                            $anio_budget = $this->avganiobudget[13];
+                            $anio_forecast = $this->avganioforecast[13];
                         break;
                         case 10037:
-                            $anio_budget = $this->sumaniobudget[11];
+                            $anio_forecast = $this->sumanioforecast[11];
                         break;
                         case 10038:
-                            $anio_budget = $this->sumaniobudget[12];
+                            $anio_forecast = $this->sumanioforecast[12];
                         break;
                         case 10039:
-                            $anio_budget = $this->sumaniobudget[13];
+                            $anio_forecast = $this->sumanioforecast[13];
                         break;
                         case 10040:
-                            $anio_budget = $this->avganiobudget[14];
+                            $anio_forecast = $this->avganioforecast[14];
                         break;
                         case 10041:
-                            if(isset($this->leyaniobudget[0]->sumaproducto) && (isset($this->leyaniobudget[0]->suma) && $this->leyaniobudget[0]->suma != 0))
+                            if(isset($this->leyanioforecast[0]->sumaproducto) && (isset($this->leyanioforecast[0]->suma) && $this->leyanioforecast[0]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[0]->sumaproducto;
-                                $hs = $this->leyaniobudget[0]->suma;
+                                $min = $this->leyanioforecast[0]->sumaproducto;
+                                $hs = $this->leyanioforecast[0]->suma;
                             }   
                             else
                             {
@@ -7193,10 +7788,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10042:
-                            if(isset($this->leyaniobudget[1]->sumaproducto) && (isset($this->leyaniobudget[1]->suma) && $this->leyaniobudget[1]->suma != 0))
+                            if(isset($this->leyanioforecast[1]->sumaproducto) && (isset($this->leyanioforecast[1]->suma) && $this->leyanioforecast[1]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[1]->sumaproducto;
-                                $hs = $this->leyaniobudget[1]->suma;
+                                $min = $this->leyanioforecast[1]->sumaproducto;
+                                $hs = $this->leyanioforecast[1]->suma;
                             }   
                             else
                             {
@@ -7204,10 +7799,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10043:
-                            if(isset($this->leyaniobudget[2]->sumaproducto) && (isset($this->leyaniobudget[2]->suma) && $this->leyaniobudget[2]->suma != 0))
+                            if(isset($this->leyanioforecast[2]->sumaproducto) && (isset($this->leyanioforecast[2]->suma) && $this->leyanioforecast[2]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[2]->sumaproducto;
-                                $hs = $this->leyaniobudget[2]->suma;
+                                $min = $this->leyanioforecast[2]->sumaproducto;
+                                $hs = $this->leyanioforecast[2]->suma;
                             }   
                             else
                             {
@@ -7215,10 +7810,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10044:
-                            if(isset($this->leyaniobudget[3]->sumaproducto) && (isset($this->leyaniobudget[3]->suma) && $this->leyaniobudget[3]->suma != 0))
+                            if(isset($this->leyanioforecast[3]->sumaproducto) && (isset($this->leyanioforecast[3]->suma) && $this->leyanioforecast[3]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[3]->sumaproducto;
-                                $hs = $this->leyaniobudget[3]->suma;
+                                $min = $this->leyanioforecast[3]->sumaproducto;
+                                $hs = $this->leyanioforecast[3]->suma;
                             }   
                             else
                             {
@@ -7226,20 +7821,20 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10045:
-                            $anio_budget = $this->sumaniobudget[14];
+                            $anio_forecast = $this->sumanioforecast[14];
                         break;
                         case 10046:
-                            $anio_budget = $this->sumaniobudget[15];
+                            $anio_forecast = $this->sumanioforecast[15];
                         break;
                         case 10047:
-                            $anio_budget = $this->sumaniobudget[16];
+                            $anio_forecast = $this->sumanioforecast[16];
                         break;
                         case 10048:
-                            $anio_budget = $this->sumaniobudget[17];                            
-                            if(isset($anio_budget->anio_budget))
+                            $anio_forecast = $this->sumanioforecast[17];                            
+                            if(isset($anio_forecast->anio_forecast))
                             {
-                                $a_budget = $anio_budget->anio_budget;
-                                return number_format($a_budget, 2, '.', ',');                                
+                                $a_forecast = $anio_forecast->anio_forecast;
+                                return number_format($a_forecast, 2, '.', ',');                                
                             }
                             else
                             {
@@ -7247,13 +7842,13 @@ trait ProcesosTrait {
                             }
                         break;
                         case 10049:
-                            $anio_budget = $this->avganiobudget[15];
+                            $anio_forecast = $this->avganioforecast[15];
                         break;
                         case 10050:
-                            if(isset($this->leyaniobudget[4]->sumaproducto) && (isset($this->leyaniobudget[4]->suma) && $this->leyaniobudget[4]->suma != 0))
+                            if(isset($this->leyanioforecast[4]->sumaproducto) && (isset($this->leyanioforecast[4]->suma) && $this->leyanioforecast[4]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[4]->sumaproducto;
-                                $hs = $this->leyaniobudget[4]->suma;
+                                $min = $this->leyanioforecast[4]->sumaproducto;
+                                $hs = $this->leyanioforecast[4]->suma;
                             }   
                             else
                             {
@@ -7261,10 +7856,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10051:
-                            if(isset($this->leyaniobudget[5]->sumaproducto) && (isset($this->leyaniobudget[5]->suma) && $this->leyaniobudget[5]->suma != 0))
+                            if(isset($this->leyanioforecast[5]->sumaproducto) && (isset($this->leyanioforecast[5]->suma) && $this->leyanioforecast[5]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[5]->sumaproducto;
-                                $hs = $this->leyaniobudget[5]->suma;
+                                $min = $this->leyanioforecast[5]->sumaproducto;
+                                $hs = $this->leyanioforecast[5]->suma;
                             }   
                             else
                             {
@@ -7272,16 +7867,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10052:
-                            $anio_budget = $this->sumaniobudget[18];
+                            $anio_forecast = $this->sumanioforecast[18];
                         break;
                         case 10053:
-                            $anio_budget = $this->sumaniobudget[19];
+                            $anio_forecast = $this->sumanioforecast[19];
                         break;
                         case 10054:
-                            if(isset($this->leyaniobudget[6]->sumaproducto) && (isset($this->leyaniobudget[6]->suma) && $this->leyaniobudget[6]->suma != 0))
+                            if(isset($this->leyanioforecast[6]->sumaproducto) && (isset($this->leyanioforecast[6]->suma) && $this->leyanioforecast[6]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[6]->sumaproducto;
-                                $hs = $this->leyaniobudget[6]->suma;
+                                $min = $this->leyanioforecast[6]->sumaproducto;
+                                $hs = $this->leyanioforecast[6]->suma;
                             }   
                             else
                             {
@@ -7289,10 +7884,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10055:
-                            if(isset($this->leyaniobudget[7]->sumaproducto) && (isset($this->leyaniobudget[7]->suma) && $this->leyaniobudget[7]->suma != 0))
+                            if(isset($this->leyanioforecast[7]->sumaproducto) && (isset($this->leyanioforecast[7]->suma) && $this->leyanioforecast[7]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[7]->sumaproducto;
-                                $hs = $this->leyaniobudget[7]->suma;
+                                $min = $this->leyanioforecast[7]->sumaproducto;
+                                $hs = $this->leyanioforecast[7]->suma;
                             }   
                             else
                             {
@@ -7300,10 +7895,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10056:
-                            if(isset($this->leyaniobudget[8]->sumaproducto) && (isset($this->leyaniobudget[8]->suma) && $this->leyaniobudget[8]->suma != 0))
+                            if(isset($this->leyanioforecast[8]->sumaproducto) && (isset($this->leyanioforecast[8]->suma) && $this->leyanioforecast[8]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[8]->sumaproducto;
-                                $hs = $this->leyaniobudget[8]->suma;
+                                $min = $this->leyanioforecast[8]->sumaproducto;
+                                $hs = $this->leyanioforecast[8]->suma;
                             }   
                             else
                             {
@@ -7311,10 +7906,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10057:
-                            if(isset($this->leyaniobudget[9]->sumaproducto) && (isset($this->leyaniobudget[9]->suma) && $this->leyaniobudget[9]->suma != 0))
+                            if(isset($this->leyanioforecast[9]->sumaproducto) && (isset($this->leyanioforecast[9]->suma) && $this->leyanioforecast[9]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[9]->sumaproducto;
-                                $hs = $this->leyaniobudget[9]->suma;
+                                $min = $this->leyanioforecast[9]->sumaproducto;
+                                $hs = $this->leyanioforecast[9]->suma;
                             }   
                             else
                             {
@@ -7322,10 +7917,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10058:
-                            if(isset($this->leyaniobudget[10]->sumaproducto) && (isset($this->leyaniobudget[10]->suma) && $this->leyaniobudget[10]->suma != 0))
+                            if(isset($this->leyanioforecast[10]->sumaproducto) && (isset($this->leyanioforecast[10]->suma) && $this->leyanioforecast[10]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[10]->sumaproducto;
-                                $hs = $this->leyaniobudget[10]->suma;
+                                $min = $this->leyanioforecast[10]->sumaproducto;
+                                $hs = $this->leyanioforecast[10]->suma;
                             }   
                             else
                             {
@@ -7333,37 +7928,37 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10059:
-                            $anio_budget = $this->sumaniobudget[20];
+                            $anio_forecast = $this->sumanioforecast[20];
                         break;
                         case 10060:
-                            $anio_budget = $this->sumaniobudget[21];
+                            $anio_forecast = $this->sumanioforecast[21];
                         break;
                         case 10061:
-                            $anio_budget = $this->sumaniobudget[22];
+                            $anio_forecast = $this->sumanioforecast[22];
                         break;
                         case 10062:
-                            $anio_budget = $this->sumaniobudget[23];
+                            $anio_forecast = $this->sumanioforecast[23];
                         break;
                         case 10063:
-                            $anio_budget = $this->sumaniobudget[24];
+                            $anio_forecast = $this->sumanioforecast[24];
                         break;
                         case 10064:
-                            $anio_budget = $this->sumaniobudget[25];
+                            $anio_forecast = $this->sumanioforecast[25];
                         break;
                         case 10065:
-                            $anio_budget = $this->sumaniobudget[26];
+                            $anio_forecast = $this->sumanioforecast[26];
                         break;
                         case 10066:
-                            $anio_budget = 0;
+                            $anio_forecast = 0;
                         break;
                         case 10067:
-                            $anio_budget = $this->sumaniobudget[27];
+                            $anio_forecast = $this->sumanioforecast[27];
                         break;
                         case 10068:
-                            $anio_budget = $this->sumaniobudget[28];
+                            $anio_forecast = $this->sumanioforecast[28];
                         break;
                         case 10069:
-                            $anio_budget = $this->sumaniobudget[29];
+                            $anio_forecast = $this->sumanioforecast[29];
                         break;
                     
                     } 
@@ -7383,14 +7978,14 @@ trait ProcesosTrait {
                     {
                         if ($min > 0)
                         {
-                            $a_budget = $min/$hs;
-                            if($a_budget > 100)
+                            $a_forecast = $min/$hs;
+                            if($a_forecast > 100)
                             {
-                                return number_format(round($a_budget), 0, '.', ',');
+                                return number_format(round($a_forecast), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($a_budget, 2, '.', ',');
+                                return number_format($a_forecast, 2, '.', ',');
                             }
                         }
                         else
@@ -7398,16 +7993,16 @@ trait ProcesosTrait {
                             return '-';
                         }
                     }
-                    if(isset($anio_budget->anio_budget))
+                    if(isset($anio_forecast->anio_forecast))
                     {
-                        $a_budget = $anio_budget->anio_budget;
-                        if($a_budget > 100 || in_array($data->variable_id, $this->percentage))
+                        $a_forecast = $anio_forecast->anio_forecast;
+                        if($a_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($a_budget), 0, '.', ',');
+                            return number_format(round($a_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($a_budget, 2, '.', ',');
+                            return number_format($a_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -7424,6 +8019,10 @@ trait ProcesosTrait {
                 ->join('variable','data.variable_id','=','variable.id')
                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
+                ->leftJoin('forecast', function($q) {
+                    $q->on('data.variable_id', '=', 'forecast.variable_id')
+                    ->on('data.fecha', '=', 'forecast.fecha');
+                })
                 ->where($where)
                 ->select(
                     'data.id as id',
@@ -7440,7 +8039,7 @@ trait ProcesosTrait {
                     'variable.export as var_export',
                     'variable.tipo as tipo',
                     'data.valor as dia_real',
-                    'data.valor as anio_budget'
+                    'forecast.valor as dia_forecast'
                     )
                 ->get();
             
@@ -7933,76 +8532,22 @@ trait ProcesosTrait {
                 }) 
                 ->addColumn('dia_forecast', function($data)
                 {
-                    switch($data->unidad)
-                    {
-                        case 't':
-                        case 'oz':
-                        case 'h':
-                        case 'm3':                                         
-                            switch($data->variable_id)
-                            { 
-                                case 10048:  
-                                    $dia_budget= DB::select(
-                                        'SELECT valor/DAY(fecha) as dia_budget
-                                        FROM [dbo].[budget]
-                                        WHERE variable_id = ?
-                                        AND MONTH(fecha) = ?
-                                        AND YEAR(fecha) = ?',
-                                        [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-                                    );                                    
-                                    if(isset($dia_budget[0]->dia_budget)) 
-                                    { 
-                                        $d_budget = $dia_budget[0]->dia_budget;
-                                        return number_format($d_budget, 2, '.', ',');                                        
-                                    }        
-                                    else
-                                    {
-                                        return '-';
-                                    } 
-                                break;
-                            } 
-                            $dia_budget= DB::select(
-                                'SELECT valor/DAY(fecha) as dia_budget
-                                FROM [dbo].[budget]
-                                WHERE variable_id = ?
-                                AND MONTH(fecha) = ?
-                                AND YEAR(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-                            ); 
-                        break;
-                        case 'g/t':
-                        case '%':
-                        case 't/h':
-                        case 'mm':
-                        case 'ppm':
-                        case 'kg/t':
-                            $dia_budget= DB::select(
-                                'SELECT valor as dia_budget
-                                FROM [dbo].[budget]
-                                WHERE variable_id = ?
-                                AND MONTH(fecha) = ?
-                                AND YEAR(fecha) = ?',
-                                [$data->variable_id, date('m', strtotime($this->date)), date('Y', strtotime($this->date))]
-
-                            );
-                        break;
-                    }
-                    if(isset($dia_budget[0]->dia_budget)) 
-                    { 
-                        $d_budget = $dia_budget[0]->dia_budget;
-                        if($d_budget > 100 || in_array($data->variable_id, $this->percentage))
+                    if(isset($data->dia_forecast)) 
+                    {                                 
+                        $d_forecast = $data->dia_forecast;
+                        if($d_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($d_budget), 0, '.', ',');
+                            return number_format(round($d_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($d_budget, 2, '.', ',');
-                        }
+                            return number_format($d_forecast, 2, '.', ',');
+                        }                                
                     }        
                     else
                     {
                         return '-';
-                    } 
+                    }          
                 }) 
                 ->addColumn('mes_real', function($data)
                 {    
@@ -9484,16 +10029,16 @@ trait ProcesosTrait {
                     switch($data->variable_id)
                     {
                         case 10002:
-                            $mes_budget = $this->summesbudget[0];
+                            $mes_forecast = $this->summesforecast[0];
                         break;
                         case 10003:
-                            $mes_budget = $this->avgmesbudget[0];
+                            $mes_forecast = $this->avgmesforecast[0];
                         break;
                         case 10004:
-                            if(isset($this->summesbudget[0]->mes_budget) && isset($this->summesbudget[1]->mes_budget))
+                            if(isset($this->summesforecast[0]->mes_forecast) && isset($this->summesforecast[1]->mes_forecast))
                             {
-                                $au = $this->summesbudget[0]->mes_budget;
-                                $min = $this->summesbudget[1]->mes_budget;
+                                $au = $this->summesforecast[0]->mes_forecast;
+                                $min = $this->summesforecast[1]->mes_forecast;
                             }   
                             else
                             {
@@ -9501,13 +10046,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10005:
-                            $mes_budget = $this->summesbudget[1];
+                            $mes_forecast = $this->summesforecast[1];
                         break;
                         case 10006:
-                            if(isset($this->summesbudget[1]->mes_budget) && (isset($this->summesbudget[23]->mes_budget) && $this->summesbudget[23]->mes_budget != 0))
+                            if(isset($this->summesforecast[1]->mes_forecast) && (isset($this->summesforecast[23]->mes_forecast) && $this->summesforecast[23]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[1]->mes_budget;
-                                $hs = $this->summesbudget[23]->mes_budget;
+                                $min = $this->summesforecast[1]->mes_forecast;
+                                $hs = $this->summesforecast[23]->mes_forecast;
                             }   
                             else
                             {
@@ -9515,19 +10060,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10007:
-                            $mes_budget = $this->avgmesbudget[1];
+                            $mes_forecast = $this->avgmesforecast[1];
                         break;
                         case 10008:
-                            $mes_budget = $this->summesbudget[2];
+                            $mes_forecast = $this->summesforecast[2];
                         break;
                         case 10009:
-                            $mes_budget = $this->avgmesbudget[2];
+                            $mes_forecast = $this->avgmesforecast[2];
                         break;
                         case 10010:
-                            if(isset($this->summesbudget[3]->mes_budget) && isset($this->summesbudget[2]->mes_budget))
+                            if(isset($this->summesforecast[3]->mes_forecast) && isset($this->summesforecast[2]->mes_forecast))
                             {
-                                $au = $this->summesbudget[2]->mes_budget;
-                                $min = $this->summesbudget[3]->mes_budget;
+                                $au = $this->summesforecast[2]->mes_forecast;
+                                $min = $this->summesforecast[3]->mes_forecast;
                             }   
                             else
                             {
@@ -9535,16 +10080,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10011:
-                            $mes_budget = $this->summesbudget[3];
+                            $mes_forecast = $this->summesforecast[3];
                         break;
                         case 10012:
-                            $mes_budget = $this->avgmesbudget[3];
+                            $mes_forecast = $this->avgmesforecast[3];
                         break;
                         case 10013:
-                            if(isset($this->summesbudget[3]->mes_budget) && (isset($this->summesbudget[24]->mes_budget) && $this->summesbudget[24]->mes_budget != 0))
+                            if(isset($this->summesforecast[3]->mes_forecast) && (isset($this->summesforecast[24]->mes_forecast) && $this->summesforecast[24]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[3]->mes_budget;
-                                $hs = $this->summesbudget[24]->mes_budget;
+                                $min = $this->summesforecast[3]->mes_forecast;
+                                $hs = $this->summesforecast[24]->mes_forecast;
                             }   
                             else
                             {
@@ -9552,28 +10097,28 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10014:
-                            $mes_budget = $this->avgmesbudget[4];
+                            $mes_forecast = $this->avgmesforecast[4];
                         break;
                         case 10015:
-                            $mes_budget = $this->avgmesbudget[5];
+                            $mes_forecast = $this->avgmesforecast[5];
                         break;
                         case 10016:
-                            $mes_budget = 0;
+                            $mes_forecast = 0;
                         break;
                         case 10017:
-                            $mes_budget = $this->avgmesbudget[6];
+                            $mes_forecast = $this->avgmesforecast[6];
                         break;
                         case 10018:
-                            $mes_budget = $this->avgmesbudget[7];
+                            $mes_forecast = $this->avgmesforecast[7];
                         break;
                         case 10019:
-                            $mes_budget = $this->summesbudget[4];
+                            $mes_forecast = $this->summesforecast[4];
                         break;
                         case 10020:
-                            if(isset($this->summesbudget[4]->mes_budget) && (isset($this->summesbudget[25]->mes_budget) && $this->summesbudget[25]->mes_budget != 0))
+                            if(isset($this->summesforecast[4]->mes_forecast) && (isset($this->summesforecast[25]->mes_forecast) && $this->summesforecast[25]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[4]->mes_budget;
-                                $hs = $this->summesbudget[25]->mes_budget;
+                                $min = $this->summesforecast[4]->mes_forecast;
+                                $hs = $this->summesforecast[25]->mes_forecast;
                             }   
                             else
                             {
@@ -9581,19 +10126,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10021:
-                            $mes_budget = $this->avgmesbudget[8];
+                            $mes_forecast = $this->avgmesforecast[8];
                         break;
                         case 10022:
-                            $mes_budget = $this->summesbudget[5];
+                            $mes_forecast = $this->summesforecast[5];
                         break;
                         case 10023:
-                            $mes_budget = $this->summesbudget[6];
+                            $mes_forecast = $this->summesforecast[6];
                         break;
                         case 10024:
-                            if(isset($this->summesbudget[7]->mes_budget) && isset($this->summesbudget[6]->mes_budget))
+                            if(isset($this->summesforecast[7]->mes_forecast) && isset($this->summesforecast[6]->mes_forecast))
                             {
-                                $au = $this->summesbudget[6]->mes_budget;
-                                $min = $this->summesbudget[7]->mes_budget;
+                                $au = $this->summesforecast[6]->mes_forecast;
+                                $min = $this->summesforecast[7]->mes_forecast;
                             }   
                             else
                             {
@@ -9601,25 +10146,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10025:
-                            $mes_budget = $this->summesbudget[7];
+                            $mes_forecast = $this->summesforecast[7];
                         break;
                         case 10026:
-                            $mes_budget = $this->avgmesbudget[9];
+                            $mes_forecast = $this->avgmesforecast[9];
                         break;
                         case 10027:
-                            $mes_budget = $this->summesbudget[8];
+                            $mes_forecast = $this->summesforecast[8];
                         break;
                         case 10028:
-                            $mes_budget = $this->summesbudget[9];
+                            $mes_forecast = $this->summesforecast[9];
                         break;
                         case 10029:
-                            $mes_budget = $this->avgmesbudget[10];
+                            $mes_forecast = $this->avgmesforecast[10];
                         break;
                         case 10030:
-                            if(isset($this->summesbudget[10]->mes_budget) && isset($this->summesbudget[8]->mes_budget))
+                            if(isset($this->summesforecast[10]->mes_forecast) && isset($this->summesforecast[8]->mes_forecast))
                             {
-                                $au = $this->summesbudget[8]->mes_budget;
-                                $min = $this->summesbudget[10]->mes_budget;
+                                $au = $this->summesforecast[8]->mes_forecast;
+                                $min = $this->summesforecast[10]->mes_forecast;
                             }   
                             else
                             {
@@ -9627,13 +10172,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10031:
-                            $mes_budget = $this->summesbudget[10];
+                            $mes_forecast = $this->summesforecast[10];
                         break;
                         case 10032:
-                            if(isset($this->summesbudget[10]->mes_budget) && (isset($this->summesbudget[26]->mes_budget) && $this->summesbudget[26]->mes_budget != 0))
+                            if(isset($this->summesforecast[10]->mes_forecast) && (isset($this->summesforecast[26]->mes_forecast) && $this->summesforecast[26]->mes_forecast != 0))
                             {
-                                $min = $this->summesbudget[10]->mes_budget;
-                                $hs = $this->summesbudget[26]->mes_budget;
+                                $min = $this->summesforecast[10]->mes_forecast;
+                                $hs = $this->summesforecast[26]->mes_forecast;
                             }   
                             else
                             {
@@ -9641,16 +10186,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10033:
-                            $mes_budget = $this->avgmesbudget[11];
+                            $mes_forecast = $this->avgmesforecast[11];
                         break;
                         case 10034:
-                            $mes_budget = $this->avgmesbudget[12];
+                            $mes_forecast = $this->avgmesforecast[12];
                         break;
                         case 10035:
-                            if(isset($this->summesbudget[13]->mes_budget) && isset($this->summesbudget[11]->mes_budget))
+                            if(isset($this->summesforecast[13]->mes_forecast) && isset($this->summesforecast[11]->mes_forecast))
                             {
-                                $au = $this->summesbudget[11]->mes_budget;
-                                $min = $this->summesbudget[13]->mes_budget;
+                                $au = $this->summesforecast[11]->mes_forecast;
+                                $min = $this->summesforecast[13]->mes_forecast;
                             }   
                             else
                             {
@@ -9658,25 +10203,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10036:
-                            $mes_budget = $this->avgmesbudget[13];
+                            $mes_forecast = $this->avgmesforecast[13];
                         break;
                         case 10037:
-                            $mes_budget = $this->summesbudget[11];
+                            $mes_forecast = $this->summesforecast[11];
                         break;
                         case 10038:
-                            $mes_budget = $this->summesbudget[12];
+                            $mes_forecast = $this->summesforecast[12];
                         break;
                         case 10039:
-                            $mes_budget = $this->summesbudget[13];
+                            $mes_forecast = $this->summesforecast[13];
                         break;
                         case 10040:
-                            $mes_budget = $this->avgmesbudget[14];
+                            $mes_forecast = $this->avgmesforecast[14];
                         break;
                         case 10041:
-                            if(isset($this->leymesbudget[0]->sumaproducto) && (isset($this->leymesbudget[0]->suma) && $this->leymesbudget[0]->suma != 0))
+                            if(isset($this->leymesforecast[0]->sumaproducto) && (isset($this->leymesforecast[0]->suma) && $this->leymesforecast[0]->suma != 0))
                             {
-                                $min = $this->leymesbudget[0]->sumaproducto;
-                                $hs = $this->leymesbudget[0]->suma;
+                                $min = $this->leymesforecast[0]->sumaproducto;
+                                $hs = $this->leymesforecast[0]->suma;
                             }   
                             else
                             {
@@ -9684,10 +10229,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10042:
-                            if(isset($this->leymesbudget[1]->sumaproducto) && (isset($this->leymesbudget[1]->suma) && $this->leymesbudget[1]->suma != 0))
+                            if(isset($this->leymesforecast[1]->sumaproducto) && (isset($this->leymesforecast[1]->suma) && $this->leymesforecast[1]->suma != 0))
                             {
-                                $min = $this->leymesbudget[1]->sumaproducto;
-                                $hs = $this->leymesbudget[1]->suma;
+                                $min = $this->leymesforecast[1]->sumaproducto;
+                                $hs = $this->leymesforecast[1]->suma;
                             }   
                             else
                             {
@@ -9695,10 +10240,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10043:
-                            if(isset($this->leymesbudget[2]->sumaproducto) && (isset($this->leymesbudget[2]->suma) && $this->leymesbudget[2]->suma != 0))
+                            if(isset($this->leymesforecast[2]->sumaproducto) && (isset($this->leymesforecast[2]->suma) && $this->leymesforecast[2]->suma != 0))
                             {
-                                $min = $this->leymesbudget[2]->sumaproducto;
-                                $hs = $this->leymesbudget[2]->suma;
+                                $min = $this->leymesforecast[2]->sumaproducto;
+                                $hs = $this->leymesforecast[2]->suma;
                             }   
                             else
                             {
@@ -9706,10 +10251,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10044:
-                            if(isset($this->leymesbudget[3]->sumaproducto) && (isset($this->leymesbudget[3]->suma) && $this->leymesbudget[3]->suma != 0))
+                            if(isset($this->leymesforecast[3]->sumaproducto) && (isset($this->leymesforecast[3]->suma) && $this->leymesforecast[3]->suma != 0))
                             {
-                                $min = $this->leymesbudget[3]->sumaproducto;
-                                $hs = $this->leymesbudget[3]->suma;
+                                $min = $this->leymesforecast[3]->sumaproducto;
+                                $hs = $this->leymesforecast[3]->suma;
                             }   
                             else
                             {
@@ -9717,20 +10262,20 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10045:
-                            $mes_budget = $this->summesbudget[14];
+                            $mes_forecast = $this->summesforecast[14];
                         break;
                         case 10046:
-                            $mes_budget = $this->summesbudget[15];
+                            $mes_forecast = $this->summesforecast[15];
                         break;
                         case 10047:
-                            $mes_budget = $this->summesbudget[16];
+                            $mes_forecast = $this->summesforecast[16];
                         break;
                         case 10048:
-                            $mes_budget = $this->summesbudget[17];                            
-                            if(isset($mes_budget->mes_budget))
+                            $mes_forecast = $this->summesforecast[17];                            
+                            if(isset($mes_forecast->mes_forecast))
                             {
-                                $m_budget = $mes_budget->mes_budget;
-                                return number_format($m_budget, 2, '.', ',');                                
+                                $m_forecast = $mes_forecast->mes_forecast;
+                                return number_format($m_forecast, 2, '.', ',');                                
                             }
                             else
                             {
@@ -9738,13 +10283,13 @@ trait ProcesosTrait {
                             }
                         break;
                         case 10049:
-                            $mes_budget = $this->avgmesbudget[15];
+                            $mes_forecast = $this->avgmesforecast[15];
                         break;
                         case 10050:
-                            if(isset($this->leymesbudget[4]->sumaproducto) && (isset($this->leymesbudget[4]->suma) && $this->leymesbudget[4]->suma != 0))
+                            if(isset($this->leymesforecast[4]->sumaproducto) && (isset($this->leymesforecast[4]->suma) && $this->leymesforecast[4]->suma != 0))
                             {
-                                $min = $this->leymesbudget[4]->sumaproducto;
-                                $hs = $this->leymesbudget[4]->suma;
+                                $min = $this->leymesforecast[4]->sumaproducto;
+                                $hs = $this->leymesforecast[4]->suma;
                             }   
                             else
                             {
@@ -9752,10 +10297,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10051:
-                            if(isset($this->leymesbudget[5]->sumaproducto) && (isset($this->leymesbudget[5]->suma) && $this->leymesbudget[5]->suma != 0))
+                            if(isset($this->leymesforecast[5]->sumaproducto) && (isset($this->leymesforecast[5]->suma) && $this->leymesforecast[5]->suma != 0))
                             {
-                                $min = $this->leymesbudget[5]->sumaproducto;
-                                $hs = $this->leymesbudget[5]->suma;
+                                $min = $this->leymesforecast[5]->sumaproducto;
+                                $hs = $this->leymesforecast[5]->suma;
                             }   
                             else
                             {
@@ -9763,16 +10308,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10052:
-                            $mes_budget = $this->summesbudget[18];
+                            $mes_forecast = $this->summesforecast[18];
                         break;
                         case 10053:
-                            $mes_budget = $this->summesbudget[19];
+                            $mes_forecast = $this->summesforecast[19];
                         break;
                         case 10054:
-                            if(isset($this->leymesbudget[6]->sumaproducto) && (isset($this->leymesbudget[6]->suma) && $this->leymesbudget[6]->suma != 0))
+                            if(isset($this->leymesforecast[6]->sumaproducto) && (isset($this->leymesforecast[6]->suma) && $this->leymesforecast[6]->suma != 0))
                             {
-                                $min = $this->leymesbudget[6]->sumaproducto;
-                                $hs = $this->leymesbudget[6]->suma;
+                                $min = $this->leymesforecast[6]->sumaproducto;
+                                $hs = $this->leymesforecast[6]->suma;
                             }   
                             else
                             {
@@ -9780,10 +10325,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10055:
-                            if(isset($this->leymesbudget[7]->sumaproducto) && (isset($this->leymesbudget[7]->suma) && $this->leymesbudget[7]->suma != 0))
+                            if(isset($this->leymesforecast[7]->sumaproducto) && (isset($this->leymesforecast[7]->suma) && $this->leymesforecast[7]->suma != 0))
                             {
-                                $min = $this->leymesbudget[7]->sumaproducto;
-                                $hs = $this->leymesbudget[7]->suma;
+                                $min = $this->leymesforecast[7]->sumaproducto;
+                                $hs = $this->leymesforecast[7]->suma;
                             }   
                             else
                             {
@@ -9791,10 +10336,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10056:
-                            if(isset($this->leymesbudget[8]->sumaproducto) && (isset($this->leymesbudget[8]->suma) && $this->leymesbudget[8]->suma != 0))
+                            if(isset($this->leymesforecast[8]->sumaproducto) && (isset($this->leymesforecast[8]->suma) && $this->leymesforecast[8]->suma != 0))
                             {
-                                $min = $this->leymesbudget[8]->sumaproducto;
-                                $hs = $this->leymesbudget[8]->suma;
+                                $min = $this->leymesforecast[8]->sumaproducto;
+                                $hs = $this->leymesforecast[8]->suma;
                             }   
                             else
                             {
@@ -9802,10 +10347,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10057:
-                            if(isset($this->leymesbudget[9]->sumaproducto) && (isset($this->leymesbudget[9]->suma) && $this->leymesbudget[9]->suma != 0))
+                            if(isset($this->leymesforecast[9]->sumaproducto) && (isset($this->leymesforecast[9]->suma) && $this->leymesforecast[9]->suma != 0))
                             {
-                                $min = $this->leymesbudget[9]->sumaproducto;
-                                $hs = $this->leymesbudget[9]->suma;
+                                $min = $this->leymesforecast[9]->sumaproducto;
+                                $hs = $this->leymesforecast[9]->suma;
                             }   
                             else
                             {
@@ -9813,10 +10358,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10058:
-                            if(isset($this->leymesbudget[10]->sumaproducto) && (isset($this->leymesbudget[10]->suma) && $this->leymesbudget[10]->suma != 0))
+                            if(isset($this->leymesforecast[10]->sumaproducto) && (isset($this->leymesforecast[10]->suma) && $this->leymesforecast[10]->suma != 0))
                             {
-                                $min = $this->leymesbudget[10]->sumaproducto;
-                                $hs = $this->leymesbudget[10]->suma;
+                                $min = $this->leymesforecast[10]->sumaproducto;
+                                $hs = $this->leymesforecast[10]->suma;
                             }   
                             else
                             {
@@ -9824,41 +10369,40 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10059:
-                            $mes_budget = $this->summesbudget[20];
+                            $mes_forecast = $this->summesforecast[20];
                         break;
                         case 10060:
-                            $mes_budget = $this->summesbudget[21];
+                            $mes_forecast = $this->summesforecast[21];
                         break;
                         case 10061:
-                            $mes_budget = $this->summesbudget[22];
+                            $mes_forecast = $this->summesforecast[22];
                         break;
                         case 10062:
-                            $mes_budget = $this->summesbudget[23];
+                            $mes_forecast = $this->summesforecast[23];
                         break;
                         case 10063:
-                            $mes_budget = $this->summesbudget[24];
+                            $mes_forecast = $this->summesforecast[24];
                         break;
                         case 10064:
-                            $mes_budget = $this->summesbudget[25];
+                            $mes_forecast = $this->summesforecast[25];
                         break;
                         case 10065:
-                            $mes_budget = $this->summesbudget[26];
+                            $mes_forecast = $this->summesforecast[26];
                         break;
                         case 10066:
-                            $mes_budget = 0;
+                            $mes_forecast = 0;
                         break;
                         case 10067:
-                            $mes_budget = $this->summesbudget[27];
+                            $mes_forecast = $this->summesforecast[27];
                         break;
                         case 10068:
-                            $mes_budget = $this->summesbudget[28];
+                            $mes_forecast = $this->summesforecast[28];
                         break;
                         case 10069:
-                            $mes_budget = $this->summesbudget[29];
+                            $mes_forecast = $this->summesforecast[29];
                         break;
 
                     }
-
                     
                     if (in_array($data->variable_id, $this->ley))
                     {
@@ -9876,14 +10420,14 @@ trait ProcesosTrait {
                     {
                         if ($min > 0)
                         {
-                            $m_budget = $min/$hs;
-                            if($m_budget > 100)
+                            $m_forecast = $min/$hs;
+                            if($m_forecast > 100)
                             {
-                                return number_format(round($m_budget), 0, '.', ',');
+                                return number_format(round($m_forecast), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($m_budget, 2, '.', ',');
+                                return number_format($m_forecast, 2, '.', ',');
                             }
                         }
                         else
@@ -9892,16 +10436,16 @@ trait ProcesosTrait {
                         }
                     }
 
-                    if(isset($mes_budget->mes_budget))
+                    if(isset($mes_forecast->mes_forecast))
                     {
-                        $m_budget = $mes_budget->mes_budget;
-                        if($m_budget > 100 || in_array($data->variable_id, $this->percentage))
+                        $m_forecast = $mes_forecast->mes_forecast;
+                        if($m_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($m_budget), 0, '.', ',');
+                            return number_format(round($m_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($m_budget, 2, '.', ',');
+                            return number_format($m_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -11386,16 +11930,16 @@ trait ProcesosTrait {
                     switch($data->variable_id)
                     {
                         case 10002:
-                            $tri_budget = $this->sumtribudget[0];
+                            $tri_forecast = $this->sumtriforecast[0];
                         break;
                         case 10003:
-                            $tri_budget = $this->avgtribudget[0];
+                            $tri_forecast = $this->avgtriforecast[0];
                         break;
                         case 10004:
-                            if(isset($this->sumtribudget[0]->tri_budget) && isset($this->sumtribudget[1]->tri_budget))
+                            if(isset($this->sumtriforecast[0]->tri_forecast) && isset($this->sumtriforecast[1]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[0]->tri_budget;
-                                $min = $this->sumtribudget[1]->tri_budget;
+                                $au = $this->sumtriforecast[0]->tri_forecast;
+                                $min = $this->sumtriforecast[1]->tri_forecast;
                             }   
                             else
                             {
@@ -11403,13 +11947,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10005:
-                            $tri_budget = $this->sumtribudget[1];
+                            $tri_forecast = $this->sumtriforecast[1];
                         break;
                         case 10006:
-                            if(isset($this->sumtribudget[1]->tri_budget) && (isset($this->sumtribudget[23]->tri_budget) && $this->sumtribudget[23]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[1]->tri_forecast) && (isset($this->sumtriforecast[23]->tri_forecast) && $this->sumtriforecast[23]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[1]->tri_budget;
-                                $hs = $this->sumtribudget[23]->tri_budget;
+                                $min = $this->sumtriforecast[1]->tri_forecast;
+                                $hs = $this->sumtriforecast[23]->tri_forecast;
                             }   
                             else
                             {
@@ -11417,19 +11961,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10007:
-                            $tri_budget = $this->avgtribudget[1];
+                            $tri_forecast = $this->avgtriforecast[1];
                         break;
                         case 10008:
-                            $tri_budget = $this->sumtribudget[2];
+                            $tri_forecast = $this->sumtriforecast[2];
                         break;
                         case 10009:
-                            $tri_budget = $this->avgtribudget[2];
+                            $tri_forecast = $this->avgtriforecast[2];
                         break;
                         case 10010:
-                            if(isset($this->sumtribudget[3]->tri_budget) && isset($this->sumtribudget[2]->tri_budget))
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && isset($this->sumtriforecast[2]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[2]->tri_budget;
-                                $min = $this->sumtribudget[3]->tri_budget;
+                                $au = $this->sumtriforecast[2]->tri_forecast;
+                                $min = $this->sumtriforecast[3]->tri_forecast;
                             }   
                             else
                             {
@@ -11437,16 +11981,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10011:
-                            $tri_budget = $this->sumtribudget[3];
+                            $tri_forecast = $this->sumtriforecast[3];
                         break;
                         case 10012:
-                            $tri_budget = $this->avgtribudget[3];
+                            $tri_forecast = $this->avgtriforecast[3];
                         break;
                         case 10013:
-                            if(isset($this->sumtribudget[3]->tri_budget) && (isset($this->sumtribudget[24]->tri_budget) && $this->sumtribudget[24]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && (isset($this->sumtriforecast[24]->tri_forecast) && $this->sumtriforecast[24]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[3]->tri_budget;
-                                $hs = $this->sumtribudget[24]->tri_budget;
+                                $min = $this->sumtriforecast[3]->tri_forecast;
+                                $hs = $this->sumtriforecast[24]->tri_forecast;
                             }   
                             else
                             {
@@ -11454,28 +11998,28 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10014:
-                            $tri_budget = $this->avgtribudget[4];
+                            $tri_forecast = $this->avgtriforecast[4];
                         break;
                         case 10015:
-                            $tri_budget = $this->avgtribudget[5];
+                            $tri_forecast = $this->avgtriforecast[5];
                         break;
                         case 10016:
-                            $tri_budget = 0;
+                            $tri_forecast = 0;
                         break;
                         case 10017:
-                            $tri_budget = $this->avgtribudget[6];
+                            $tri_forecast = $this->avgtriforecast[6];
                         break;
                         case 10018:
-                            $tri_budget = $this->avgtribudget[7];
+                            $tri_forecast = $this->avgtriforecast[7];
                         break;
                         case 10019:
-                            $tri_budget = $this->sumtribudget[4];
+                            $tri_forecast = $this->sumtriforecast[4];
                         break;
                         case 10020:
-                            if(isset($this->sumtribudget[4]->tri_budget) && (isset($this->sumtribudget[25]->tri_budget) && $this->sumtribudget[25]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[4]->tri_forecast) && (isset($this->sumtriforecast[25]->tri_forecast) && $this->sumtriforecast[25]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[4]->tri_budget;
-                                $hs = $this->sumtribudget[25]->tri_budget;
+                                $min = $this->sumtriforecast[4]->tri_forecast;
+                                $hs = $this->sumtriforecast[25]->tri_forecast;
                             }   
                             else
                             {
@@ -11483,19 +12027,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10021:
-                            $tri_budget = $this->avgtribudget[8];
+                            $tri_forecast = $this->avgtriforecast[8];
                         break;
                         case 10022:
-                            $tri_budget = $this->sumtribudget[5];
+                            $tri_forecast = $this->sumtriforecast[5];
                         break;
                         case 10023:
-                            $tri_budget = $this->sumtribudget[6];
+                            $tri_forecast = $this->sumtriforecast[6];
                         break;
                         case 10024:
-                            if(isset($this->sumtribudget[7]->tri_budget) && isset($this->sumtribudget[6]->tri_budget))
+                            if(isset($this->sumtriforecast[7]->tri_forecast) && isset($this->sumtriforecast[6]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[6]->tri_budget;
-                                $min = $this->sumtribudget[7]->tri_budget;
+                                $au = $this->sumtriforecast[6]->tri_forecast;
+                                $min = $this->sumtriforecast[7]->tri_forecast;
                             }   
                             else
                             {
@@ -11503,25 +12047,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10025:
-                            $tri_budget = $this->sumtribudget[7];
+                            $tri_forecast = $this->sumtriforecast[7];
                         break;
                         case 10026:
-                            $tri_budget = $this->avgtribudget[9];
+                            $tri_forecast = $this->avgtriforecast[9];
                         break;
                         case 10027:
-                            $tri_budget = $this->sumtribudget[8];
+                            $tri_forecast = $this->sumtriforecast[8];
                         break;
                         case 10028:
-                            $tri_budget = $this->sumtribudget[9];
+                            $tri_forecast = $this->sumtriforecast[9];
                         break;
                         case 10029:
-                            $tri_budget = $this->avgtribudget[10];
+                            $tri_forecast = $this->avgtriforecast[10];
                         break;
                         case 10030:
-                            if(isset($this->sumtribudget[10]->tri_budget) && isset($this->sumtribudget[8]->tri_budget))
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && isset($this->sumtriforecast[8]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[8]->tri_budget;
-                                $min = $this->sumtribudget[10]->tri_budget;
+                                $au = $this->sumtriforecast[8]->tri_forecast;
+                                $min = $this->sumtriforecast[10]->tri_forecast;
                             }   
                             else
                             {
@@ -11529,13 +12073,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10031:
-                            $tri_budget = $this->sumtribudget[10];
+                            $tri_forecast = $this->sumtriforecast[10];
                         break;
                         case 10032:
-                            if(isset($this->sumtribudget[10]->tri_budget) && (isset($this->sumtribudget[26]->tri_budget) && $this->sumtribudget[26]->tri_budget != 0))
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && (isset($this->sumtriforecast[26]->tri_forecast) && $this->sumtriforecast[26]->tri_forecast != 0))
                             {
-                                $min = $this->sumtribudget[10]->tri_budget;
-                                $hs = $this->sumtribudget[26]->tri_budget;
+                                $min = $this->sumtriforecast[10]->tri_forecast;
+                                $hs = $this->sumtriforecast[26]->tri_forecast;
                             }   
                             else
                             {
@@ -11543,16 +12087,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10033:
-                            $tri_budget = $this->avgtribudget[11];
+                            $tri_forecast = $this->avgtriforecast[11];
                         break;
                         case 10034:
-                            $tri_budget = $this->avgtribudget[12];
+                            $tri_forecast = $this->avgtriforecast[12];
                         break;
                         case 10035:
-                            if(isset($this->sumtribudget[13]->tri_budget) && isset($this->sumtribudget[11]->tri_budget))
+                            if(isset($this->sumtriforecast[13]->tri_forecast) && isset($this->sumtriforecast[11]->tri_forecast))
                             {
-                                $au = $this->sumtribudget[11]->tri_budget;
-                                $min = $this->sumtribudget[13]->tri_budget;
+                                $au = $this->sumtriforecast[11]->tri_forecast;
+                                $min = $this->sumtriforecast[13]->tri_forecast;
                             }   
                             else
                             {
@@ -11560,25 +12104,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10036:
-                            $tri_budget = $this->avgtribudget[13];
+                            $tri_forecast = $this->avgtriforecast[13];
                         break;
                         case 10037:
-                            $tri_budget = $this->sumtribudget[11];
+                            $tri_forecast = $this->sumtriforecast[11];
                         break;
                         case 10038:
-                            $tri_budget = $this->sumtribudget[12];
+                            $tri_forecast = $this->sumtriforecast[12];
                         break;
                         case 10039:
-                            $tri_budget = $this->sumtribudget[13];
+                            $tri_forecast = $this->sumtriforecast[13];
                         break;
                         case 10040:
-                            $tri_budget = $this->avgtribudget[14];
+                            $tri_forecast = $this->avgtriforecast[14];
                         break;
                         case 10041:
-                            if(isset($this->leytribudget[0]->sumaproducto) && (isset($this->leytribudget[0]->suma) && $this->leytribudget[0]->suma != 0))
+                            if(isset($this->leytriforecast[0]->sumaproducto) && (isset($this->leytriforecast[0]->suma) && $this->leytriforecast[0]->suma != 0))
                             {
-                                $min = $this->leytribudget[0]->sumaproducto;
-                                $hs = $this->leytribudget[0]->suma;
+                                $min = $this->leytriforecast[0]->sumaproducto;
+                                $hs = $this->leytriforecast[0]->suma;
                             }   
                             else
                             {
@@ -11586,10 +12130,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10042:
-                            if(isset($this->leytribudget[1]->sumaproducto) && (isset($this->leytribudget[1]->suma) && $this->leytribudget[1]->suma != 0))
+                            if(isset($this->leytriforecast[1]->sumaproducto) && (isset($this->leytriforecast[1]->suma) && $this->leytriforecast[1]->suma != 0))
                             {
-                                $min = $this->leytribudget[1]->sumaproducto;
-                                $hs = $this->leytribudget[1]->suma;
+                                $min = $this->leytriforecast[1]->sumaproducto;
+                                $hs = $this->leytriforecast[1]->suma;
                             }   
                             else
                             {
@@ -11597,10 +12141,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10043:
-                            if(isset($this->leytribudget[2]->sumaproducto) && (isset($this->leytribudget[2]->suma) && $this->leytribudget[2]->suma != 0))
+                            if(isset($this->leytriforecast[2]->sumaproducto) && (isset($this->leytriforecast[2]->suma) && $this->leytriforecast[2]->suma != 0))
                             {
-                                $min = $this->leytribudget[2]->sumaproducto;
-                                $hs = $this->leytribudget[2]->suma;
+                                $min = $this->leytriforecast[2]->sumaproducto;
+                                $hs = $this->leytriforecast[2]->suma;
                             }   
                             else
                             {
@@ -11608,10 +12152,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10044:
-                            if(isset($this->leytribudget[3]->sumaproducto) && (isset($this->leytribudget[3]->suma) && $this->leytribudget[3]->suma != 0))
+                            if(isset($this->leytriforecast[3]->sumaproducto) && (isset($this->leytriforecast[3]->suma) && $this->leytriforecast[3]->suma != 0))
                             {
-                                $min = $this->leytribudget[3]->sumaproducto;
-                                $hs = $this->leytribudget[3]->suma;
+                                $min = $this->leytriforecast[3]->sumaproducto;
+                                $hs = $this->leytriforecast[3]->suma;
                             }   
                             else
                             {
@@ -11619,20 +12163,20 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10045:
-                            $tri_budget = $this->sumtribudget[14];
+                            $tri_forecast = $this->sumtriforecast[14];
                         break;
                         case 10046:
-                            $tri_budget = $this->sumtribudget[15];
+                            $tri_forecast = $this->sumtriforecast[15];
                         break;
                         case 10047:
-                            $tri_budget = $this->sumtribudget[16];
+                            $tri_forecast = $this->sumtriforecast[16];
                         break;
                         case 10048:
-                            $tri_budget = $this->sumtribudget[17];                            
-                            if(isset($tri_budget->tri_budget))
+                            $tri_forecast = $this->sumtriforecast[17];                            
+                            if(isset($tri_forecast->tri_forecast))
                             {
-                                $t_budget = $tri_budget->tri_budget;
-                                return number_format($t_budget, 2, '.', ',');                                
+                                $t_forecast = $tri_forecast->tri_forecast;
+                                return number_format($t_forecast, 2, '.', ',');                                
                             }
                             else
                             {
@@ -11640,13 +12184,13 @@ trait ProcesosTrait {
                             }
                         break;
                         case 10049:
-                            $tri_budget = $this->avgtribudget[15];
+                            $tri_forecast = $this->avgtriforecast[15];
                         break;
                         case 10050:
-                            if(isset($this->leytribudget[4]->sumaproducto) && (isset($this->leytribudget[4]->suma) && $this->leytribudget[4]->suma != 0))
+                            if(isset($this->leytriforecast[4]->sumaproducto) && (isset($this->leytriforecast[4]->suma) && $this->leytriforecast[4]->suma != 0))
                             {
-                                $min = $this->leytribudget[4]->sumaproducto;
-                                $hs = $this->leytribudget[4]->suma;
+                                $min = $this->leytriforecast[4]->sumaproducto;
+                                $hs = $this->leytriforecast[4]->suma;
                             }   
                             else
                             {
@@ -11654,10 +12198,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10051:
-                            if(isset($this->leytribudget[5]->sumaproducto) && (isset($this->leytribudget[5]->suma) && $this->leytribudget[5]->suma != 0))
+                            if(isset($this->leytriforecast[5]->sumaproducto) && (isset($this->leytriforecast[5]->suma) && $this->leytriforecast[5]->suma != 0))
                             {
-                                $min = $this->leytribudget[5]->sumaproducto;
-                                $hs = $this->leytribudget[5]->suma;
+                                $min = $this->leytriforecast[5]->sumaproducto;
+                                $hs = $this->leytriforecast[5]->suma;
                             }   
                             else
                             {
@@ -11665,16 +12209,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10052:
-                            $tri_budget = $this->sumtribudget[18];
+                            $tri_forecast = $this->sumtriforecast[18];
                         break;
                         case 10053:
-                            $tri_budget = $this->sumtribudget[19];
+                            $tri_forecast = $this->sumtriforecast[19];
                         break;
                         case 10054:
-                            if(isset($this->leytribudget[6]->sumaproducto) && (isset($this->leytribudget[6]->suma) && $this->leytribudget[6]->suma != 0))
+                            if(isset($this->leytriforecast[6]->sumaproducto) && (isset($this->leytriforecast[6]->suma) && $this->leytriforecast[6]->suma != 0))
                             {
-                                $min = $this->leytribudget[6]->sumaproducto;
-                                $hs = $this->leytribudget[6]->suma;
+                                $min = $this->leytriforecast[6]->sumaproducto;
+                                $hs = $this->leytriforecast[6]->suma;
                             }   
                             else
                             {
@@ -11682,10 +12226,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10055:
-                            if(isset($this->leytribudget[7]->sumaproducto) && (isset($this->leytribudget[7]->suma) && $this->leytribudget[7]->suma != 0))
+                            if(isset($this->leytriforecast[7]->sumaproducto) && (isset($this->leytriforecast[7]->suma) && $this->leytriforecast[7]->suma != 0))
                             {
-                                $min = $this->leytribudget[7]->sumaproducto;
-                                $hs = $this->leytribudget[7]->suma;
+                                $min = $this->leytriforecast[7]->sumaproducto;
+                                $hs = $this->leytriforecast[7]->suma;
                             }   
                             else
                             {
@@ -11693,10 +12237,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10056:
-                            if(isset($this->leytribudget[8]->sumaproducto) && (isset($this->leytribudget[8]->suma) && $this->leytribudget[8]->suma != 0))
+                            if(isset($this->leytriforecast[8]->sumaproducto) && (isset($this->leytriforecast[8]->suma) && $this->leytriforecast[8]->suma != 0))
                             {
-                                $min = $this->leytribudget[8]->sumaproducto;
-                                $hs = $this->leytribudget[8]->suma;
+                                $min = $this->leytriforecast[8]->sumaproducto;
+                                $hs = $this->leytriforecast[8]->suma;
                             }   
                             else
                             {
@@ -11704,10 +12248,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10057:
-                            if(isset($this->leytribudget[9]->sumaproducto) && (isset($this->leytribudget[9]->suma) && $this->leytribudget[9]->suma != 0))
+                            if(isset($this->leytriforecast[9]->sumaproducto) && (isset($this->leytriforecast[9]->suma) && $this->leytriforecast[9]->suma != 0))
                             {
-                                $min = $this->leytribudget[9]->sumaproducto;
-                                $hs = $this->leytribudget[9]->suma;
+                                $min = $this->leytriforecast[9]->sumaproducto;
+                                $hs = $this->leytriforecast[9]->suma;
                             }   
                             else
                             {
@@ -11715,10 +12259,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10058:
-                            if(isset($this->leytribudget[10]->sumaproducto) && (isset($this->leytribudget[10]->suma) && $this->leytribudget[10]->suma != 0))
+                            if(isset($this->leytriforecast[10]->sumaproducto) && (isset($this->leytriforecast[10]->suma) && $this->leytriforecast[10]->suma != 0))
                             {
-                                $min = $this->leytribudget[10]->sumaproducto;
-                                $hs = $this->leytribudget[10]->suma;
+                                $min = $this->leytriforecast[10]->sumaproducto;
+                                $hs = $this->leytriforecast[10]->suma;
                             }   
                             else
                             {
@@ -11726,37 +12270,37 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10059:
-                            $tri_budget = $this->sumtribudget[20];
+                            $tri_forecast = $this->sumtriforecast[20];
                         break;
                         case 10060:
-                            $tri_budget = $this->sumtribudget[21];
+                            $tri_forecast = $this->sumtriforecast[21];
                         break;
                         case 10061:
-                            $tri_budget = $this->sumtribudget[22];
+                            $tri_forecast = $this->sumtriforecast[22];
                         break;
                         case 10062:
-                            $tri_budget = $this->sumtribudget[23];
+                            $tri_forecast = $this->sumtriforecast[23];
                         break;
                         case 10063:
-                            $tri_budget = $this->sumtribudget[24];
+                            $tri_forecast = $this->sumtriforecast[24];
                         break;
                         case 10064:
-                            $tri_budget = $this->sumtribudget[25];
+                            $tri_forecast = $this->sumtriforecast[25];
                         break;
                         case 10065:
-                            $tri_budget = $this->sumtribudget[26];
+                            $tri_forecast = $this->sumtriforecast[26];
                         break;
                         case 10066:
-                            $tri_budget = 0;
+                            $tri_forecast = 0;
                         break;
                         case 10067:
-                            $tri_budget = $this->sumtribudget[27];
+                            $tri_forecast = $this->sumtriforecast[27];
                         break;
                         case 10068:
-                            $tri_budget = $this->sumtribudget[28];
+                            $tri_forecast = $this->sumtriforecast[28];
                         break;
                         case 10069:
-                            $tri_budget = $this->sumtribudget[29];
+                            $tri_forecast = $this->sumtriforecast[29];
                         break;
                     
                     }                    
@@ -11777,14 +12321,14 @@ trait ProcesosTrait {
                     {
                         if ($min > 0)
                         {
-                            $t_budget = $min/$hs;
-                            if($t_budget > 100)
+                            $t_forecast = $min/$hs;
+                            if($t_forecast > 100)
                             {
-                                return number_format(round($t_budget), 0, '.', ',');
+                                return number_format(round($t_forecast), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($t_budget, 2, '.', ',');
+                                return number_format($t_forecast, 2, '.', ',');
                             }
                         }
                         else
@@ -11792,16 +12336,16 @@ trait ProcesosTrait {
                             return '-';
                         }
                     }
-                    if(isset($tri_budget->tri_budget))
+                    if(isset($tri_forecast->tri_forecast))
                     {
-                        $t_budget = $tri_budget->tri_budget;
-                        if($t_budget > 100 || in_array($data->variable_id, $this->percentage))
+                        $t_forecast = $tri_forecast->tri_forecast;
+                        if($t_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($t_budget), 0, '.', ',');
+                            return number_format(round($t_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($t_budget, 2, '.', ',');
+                            return number_format($t_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -13378,16 +13922,16 @@ trait ProcesosTrait {
                     switch($data->variable_id)
                     {
                         case 10002:
-                            $anio_budget = $this->sumaniobudget[0];
+                            $anio_forecast = $this->sumanioforecast[0];
                         break;
                         case 10003:
-                            $anio_budget = $this->avganiobudget[0];
+                            $anio_forecast = $this->avganioforecast[0];
                         break;
                         case 10004:
-                            if(isset($this->sumaniobudget[0]->anio_budget) && isset($this->sumaniobudget[1]->anio_budget))
+                            if(isset($this->sumanioforecast[0]->anio_forecast) && isset($this->sumanioforecast[1]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[0]->anio_budget;
-                                $min = $this->sumaniobudget[1]->anio_budget;
+                                $au = $this->sumanioforecast[0]->anio_forecast;
+                                $min = $this->sumanioforecast[1]->anio_forecast;
                             }   
                             else
                             {
@@ -13395,13 +13939,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10005:
-                            $anio_budget = $this->sumaniobudget[1];
+                            $anio_forecast = $this->sumanioforecast[1];
                         break;
                         case 10006:
-                            if(isset($this->sumaniobudget[1]->anio_budget) && (isset($this->sumaniobudget[23]->anio_budget) && $this->sumaniobudget[23]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[1]->anio_forecast) && (isset($this->sumanioforecast[23]->anio_forecast) && $this->sumanioforecast[23]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[1]->anio_budget;
-                                $hs = $this->sumaniobudget[23]->anio_budget;
+                                $min = $this->sumanioforecast[1]->anio_forecast;
+                                $hs = $this->sumanioforecast[23]->anio_forecast;
                             }   
                             else
                             {
@@ -13409,19 +13953,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10007:
-                            $anio_budget = $this->avganiobudget[1];
+                            $anio_forecast = $this->avganioforecast[1];
                         break;
                         case 10008:
-                            $anio_budget = $this->sumaniobudget[2];
+                            $anio_forecast = $this->sumanioforecast[2];
                         break;
                         case 10009:
-                            $anio_budget = $this->avganiobudget[2];
+                            $anio_forecast = $this->avganioforecast[2];
                         break;
                         case 10010:
-                            if(isset($this->sumaniobudget[3]->anio_budget) && isset($this->sumaniobudget[2]->anio_budget))
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && isset($this->sumanioforecast[2]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[2]->anio_budget;
-                                $min = $this->sumaniobudget[3]->anio_budget;
+                                $au = $this->sumanioforecast[2]->anio_forecast;
+                                $min = $this->sumanioforecast[3]->anio_forecast;
                             }   
                             else
                             {
@@ -13429,16 +13973,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10011:
-                            $anio_budget = $this->sumaniobudget[3];
+                            $anio_forecast = $this->sumanioforecast[3];
                         break;
                         case 10012:
-                            $anio_budget = $this->avganiobudget[3];
+                            $anio_forecast = $this->avganioforecast[3];
                         break;
                         case 10013:
-                            if(isset($this->sumaniobudget[3]->anio_budget) && (isset($this->sumaniobudget[24]->anio_budget) && $this->sumaniobudget[24]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && (isset($this->sumanioforecast[24]->anio_forecast) && $this->sumanioforecast[24]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[3]->anio_budget;
-                                $hs = $this->sumaniobudget[24]->anio_budget;
+                                $min = $this->sumanioforecast[3]->anio_forecast;
+                                $hs = $this->sumanioforecast[24]->anio_forecast;
                             }   
                             else
                             {
@@ -13446,28 +13990,28 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10014:
-                            $anio_budget = $this->avganiobudget[4];
+                            $anio_forecast = $this->avganioforecast[4];
                         break;
                         case 10015:
-                            $anio_budget = $this->avganiobudget[5];
+                            $anio_forecast = $this->avganioforecast[5];
                         break;
                         case 10016:
-                            $anio_budget = 0;
+                            $anio_forecast = 0;
                         break;
                         case 10017:
-                            $anio_budget = $this->avganiobudget[6];
+                            $anio_forecast = $this->avganioforecast[6];
                         break;
                         case 10018:
-                            $anio_budget = $this->avganiobudget[7];
+                            $anio_forecast = $this->avganioforecast[7];
                         break;
                         case 10019:
-                            $anio_budget = $this->sumaniobudget[4];
+                            $anio_forecast = $this->sumanioforecast[4];
                         break;
                         case 10020:
-                            if(isset($this->sumaniobudget[4]->anio_budget) && (isset($this->sumaniobudget[25]->anio_budget) && $this->sumaniobudget[25]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[4]->anio_forecast) && (isset($this->sumanioforecast[25]->anio_forecast) && $this->sumanioforecast[25]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[4]->anio_budget;
-                                $hs = $this->sumaniobudget[25]->anio_budget;
+                                $min = $this->sumanioforecast[4]->anio_forecast;
+                                $hs = $this->sumanioforecast[25]->anio_forecast;
                             }   
                             else
                             {
@@ -13475,19 +14019,19 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10021:
-                            $anio_budget = $this->avganiobudget[8];
+                            $anio_forecast = $this->avganioforecast[8];
                         break;
                         case 10022:
-                            $anio_budget = $this->sumaniobudget[5];
+                            $anio_forecast = $this->sumanioforecast[5];
                         break;
                         case 10023:
-                            $anio_budget = $this->sumaniobudget[6];
+                            $anio_forecast = $this->sumanioforecast[6];
                         break;
                         case 10024:
-                            if(isset($this->sumaniobudget[7]->anio_budget) && isset($this->sumaniobudget[6]->anio_budget))
+                            if(isset($this->sumanioforecast[7]->anio_forecast) && isset($this->sumanioforecast[6]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[6]->anio_budget;
-                                $min = $this->sumaniobudget[7]->anio_budget;
+                                $au = $this->sumanioforecast[6]->anio_forecast;
+                                $min = $this->sumanioforecast[7]->anio_forecast;
                             }   
                             else
                             {
@@ -13495,25 +14039,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10025:
-                            $anio_budget = $this->sumaniobudget[7];
+                            $anio_forecast = $this->sumanioforecast[7];
                         break;
                         case 10026:
-                            $anio_budget = $this->avganiobudget[9];
+                            $anio_forecast = $this->avganioforecast[9];
                         break;
                         case 10027:
-                            $anio_budget = $this->sumaniobudget[8];
+                            $anio_forecast = $this->sumanioforecast[8];
                         break;
                         case 10028:
-                            $anio_budget = $this->sumaniobudget[9];
+                            $anio_forecast = $this->sumanioforecast[9];
                         break;
                         case 10029:
-                            $anio_budget = $this->avganiobudget[10];
+                            $anio_forecast = $this->avganioforecast[10];
                         break;
                         case 10030:
-                            if(isset($this->sumaniobudget[10]->anio_budget) && isset($this->sumaniobudget[8]->anio_budget))
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && isset($this->sumanioforecast[8]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[8]->anio_budget;
-                                $min = $this->sumaniobudget[10]->anio_budget;
+                                $au = $this->sumanioforecast[8]->anio_forecast;
+                                $min = $this->sumanioforecast[10]->anio_forecast;
                             }   
                             else
                             {
@@ -13521,13 +14065,13 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10031:
-                            $anio_budget = $this->sumaniobudget[10];
+                            $anio_forecast = $this->sumanioforecast[10];
                         break;
                         case 10032:
-                            if(isset($this->sumaniobudget[10]->anio_budget) && (isset($this->sumaniobudget[26]->anio_budget) && $this->sumaniobudget[26]->anio_budget != 0))
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && (isset($this->sumanioforecast[26]->anio_forecast) && $this->sumanioforecast[26]->anio_forecast != 0))
                             {
-                                $min = $this->sumaniobudget[10]->anio_budget;
-                                $hs = $this->sumaniobudget[26]->anio_budget;
+                                $min = $this->sumanioforecast[10]->anio_forecast;
+                                $hs = $this->sumanioforecast[26]->anio_forecast;
                             }   
                             else
                             {
@@ -13535,16 +14079,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10033:
-                            $anio_budget = $this->avganiobudget[11];
+                            $anio_forecast = $this->avganioforecast[11];
                         break;
                         case 10034:
-                            $anio_budget = $this->avganiobudget[12];
+                            $anio_forecast = $this->avganioforecast[12];
                         break;
                         case 10035:
-                            if(isset($this->sumaniobudget[13]->anio_budget) && isset($this->sumaniobudget[11]->anio_budget))
+                            if(isset($this->sumanioforecast[13]->anio_forecast) && isset($this->sumanioforecast[11]->anio_forecast))
                             {
-                                $au = $this->sumaniobudget[11]->anio_budget;
-                                $min = $this->sumaniobudget[13]->anio_budget;
+                                $au = $this->sumanioforecast[11]->anio_forecast;
+                                $min = $this->sumanioforecast[13]->anio_forecast;
                             }   
                             else
                             {
@@ -13552,25 +14096,25 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10036:
-                            $anio_budget = $this->avganiobudget[13];
+                            $anio_forecast = $this->avganioforecast[13];
                         break;
                         case 10037:
-                            $anio_budget = $this->sumaniobudget[11];
+                            $anio_forecast = $this->sumanioforecast[11];
                         break;
                         case 10038:
-                            $anio_budget = $this->sumaniobudget[12];
+                            $anio_forecast = $this->sumanioforecast[12];
                         break;
                         case 10039:
-                            $anio_budget = $this->sumaniobudget[13];
+                            $anio_forecast = $this->sumanioforecast[13];
                         break;
                         case 10040:
-                            $anio_budget = $this->avganiobudget[14];
+                            $anio_forecast = $this->avganioforecast[14];
                         break;
                         case 10041:
-                            if(isset($this->leyaniobudget[0]->sumaproducto) && (isset($this->leyaniobudget[0]->suma) && $this->leyaniobudget[0]->suma != 0))
+                            if(isset($this->leyanioforecast[0]->sumaproducto) && (isset($this->leyanioforecast[0]->suma) && $this->leyanioforecast[0]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[0]->sumaproducto;
-                                $hs = $this->leyaniobudget[0]->suma;
+                                $min = $this->leyanioforecast[0]->sumaproducto;
+                                $hs = $this->leyanioforecast[0]->suma;
                             }   
                             else
                             {
@@ -13578,10 +14122,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10042:
-                            if(isset($this->leyaniobudget[1]->sumaproducto) && (isset($this->leyaniobudget[1]->suma) && $this->leyaniobudget[1]->suma != 0))
+                            if(isset($this->leyanioforecast[1]->sumaproducto) && (isset($this->leyanioforecast[1]->suma) && $this->leyanioforecast[1]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[1]->sumaproducto;
-                                $hs = $this->leyaniobudget[1]->suma;
+                                $min = $this->leyanioforecast[1]->sumaproducto;
+                                $hs = $this->leyanioforecast[1]->suma;
                             }   
                             else
                             {
@@ -13589,10 +14133,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10043:
-                            if(isset($this->leyaniobudget[2]->sumaproducto) && (isset($this->leyaniobudget[2]->suma) && $this->leyaniobudget[2]->suma != 0))
+                            if(isset($this->leyanioforecast[2]->sumaproducto) && (isset($this->leyanioforecast[2]->suma) && $this->leyanioforecast[2]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[2]->sumaproducto;
-                                $hs = $this->leyaniobudget[2]->suma;
+                                $min = $this->leyanioforecast[2]->sumaproducto;
+                                $hs = $this->leyanioforecast[2]->suma;
                             }   
                             else
                             {
@@ -13600,10 +14144,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10044:
-                            if(isset($this->leyaniobudget[3]->sumaproducto) && (isset($this->leyaniobudget[3]->suma) && $this->leyaniobudget[3]->suma != 0))
+                            if(isset($this->leyanioforecast[3]->sumaproducto) && (isset($this->leyanioforecast[3]->suma) && $this->leyanioforecast[3]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[3]->sumaproducto;
-                                $hs = $this->leyaniobudget[3]->suma;
+                                $min = $this->leyanioforecast[3]->sumaproducto;
+                                $hs = $this->leyanioforecast[3]->suma;
                             }   
                             else
                             {
@@ -13611,20 +14155,20 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10045:
-                            $anio_budget = $this->sumaniobudget[14];
+                            $anio_forecast = $this->sumanioforecast[14];
                         break;
                         case 10046:
-                            $anio_budget = $this->sumaniobudget[15];
+                            $anio_forecast = $this->sumanioforecast[15];
                         break;
                         case 10047:
-                            $anio_budget = $this->sumaniobudget[16];
+                            $anio_forecast = $this->sumanioforecast[16];
                         break;
                         case 10048:
-                            $anio_budget = $this->sumaniobudget[17];                            
-                            if(isset($anio_budget->anio_budget))
+                            $anio_forecast = $this->sumanioforecast[17];                            
+                            if(isset($anio_forecast->anio_forecast))
                             {
-                                $a_budget = $anio_budget->anio_budget;
-                                return number_format($a_budget, 2, '.', ',');                                
+                                $a_forecast = $anio_forecast->anio_forecast;
+                                return number_format($a_forecast, 2, '.', ',');                                
                             }
                             else
                             {
@@ -13632,13 +14176,13 @@ trait ProcesosTrait {
                             }
                         break;
                         case 10049:
-                            $anio_budget = $this->avganiobudget[15];
+                            $anio_forecast = $this->avganioforecast[15];
                         break;
                         case 10050:
-                            if(isset($this->leyaniobudget[4]->sumaproducto) && (isset($this->leyaniobudget[4]->suma) && $this->leyaniobudget[4]->suma != 0))
+                            if(isset($this->leyanioforecast[4]->sumaproducto) && (isset($this->leyanioforecast[4]->suma) && $this->leyanioforecast[4]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[4]->sumaproducto;
-                                $hs = $this->leyaniobudget[4]->suma;
+                                $min = $this->leyanioforecast[4]->sumaproducto;
+                                $hs = $this->leyanioforecast[4]->suma;
                             }   
                             else
                             {
@@ -13646,10 +14190,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10051:
-                            if(isset($this->leyaniobudget[5]->sumaproducto) && (isset($this->leyaniobudget[5]->suma) && $this->leyaniobudget[5]->suma != 0))
+                            if(isset($this->leyanioforecast[5]->sumaproducto) && (isset($this->leyanioforecast[5]->suma) && $this->leyanioforecast[5]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[5]->sumaproducto;
-                                $hs = $this->leyaniobudget[5]->suma;
+                                $min = $this->leyanioforecast[5]->sumaproducto;
+                                $hs = $this->leyanioforecast[5]->suma;
                             }   
                             else
                             {
@@ -13657,16 +14201,16 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10052:
-                            $anio_budget = $this->sumaniobudget[18];
+                            $anio_forecast = $this->sumanioforecast[18];
                         break;
                         case 10053:
-                            $anio_budget = $this->sumaniobudget[19];
+                            $anio_forecast = $this->sumanioforecast[19];
                         break;
                         case 10054:
-                            if(isset($this->leyaniobudget[6]->sumaproducto) && (isset($this->leyaniobudget[6]->suma) && $this->leyaniobudget[6]->suma != 0))
+                            if(isset($this->leyanioforecast[6]->sumaproducto) && (isset($this->leyanioforecast[6]->suma) && $this->leyanioforecast[6]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[6]->sumaproducto;
-                                $hs = $this->leyaniobudget[6]->suma;
+                                $min = $this->leyanioforecast[6]->sumaproducto;
+                                $hs = $this->leyanioforecast[6]->suma;
                             }   
                             else
                             {
@@ -13674,10 +14218,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10055:
-                            if(isset($this->leyaniobudget[7]->sumaproducto) && (isset($this->leyaniobudget[7]->suma) && $this->leyaniobudget[7]->suma != 0))
+                            if(isset($this->leyanioforecast[7]->sumaproducto) && (isset($this->leyanioforecast[7]->suma) && $this->leyanioforecast[7]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[7]->sumaproducto;
-                                $hs = $this->leyaniobudget[7]->suma;
+                                $min = $this->leyanioforecast[7]->sumaproducto;
+                                $hs = $this->leyanioforecast[7]->suma;
                             }   
                             else
                             {
@@ -13685,10 +14229,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10056:
-                            if(isset($this->leyaniobudget[8]->sumaproducto) && (isset($this->leyaniobudget[8]->suma) && $this->leyaniobudget[8]->suma != 0))
+                            if(isset($this->leyanioforecast[8]->sumaproducto) && (isset($this->leyanioforecast[8]->suma) && $this->leyanioforecast[8]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[8]->sumaproducto;
-                                $hs = $this->leyaniobudget[8]->suma;
+                                $min = $this->leyanioforecast[8]->sumaproducto;
+                                $hs = $this->leyanioforecast[8]->suma;
                             }   
                             else
                             {
@@ -13696,10 +14240,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10057:
-                            if(isset($this->leyaniobudget[9]->sumaproducto) && (isset($this->leyaniobudget[9]->suma) && $this->leyaniobudget[9]->suma != 0))
+                            if(isset($this->leyanioforecast[9]->sumaproducto) && (isset($this->leyanioforecast[9]->suma) && $this->leyanioforecast[9]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[9]->sumaproducto;
-                                $hs = $this->leyaniobudget[9]->suma;
+                                $min = $this->leyanioforecast[9]->sumaproducto;
+                                $hs = $this->leyanioforecast[9]->suma;
                             }   
                             else
                             {
@@ -13707,10 +14251,10 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10058:
-                            if(isset($this->leyaniobudget[10]->sumaproducto) && (isset($this->leyaniobudget[10]->suma) && $this->leyaniobudget[10]->suma != 0))
+                            if(isset($this->leyanioforecast[10]->sumaproducto) && (isset($this->leyanioforecast[10]->suma) && $this->leyanioforecast[10]->suma != 0))
                             {
-                                $min = $this->leyaniobudget[10]->sumaproducto;
-                                $hs = $this->leyaniobudget[10]->suma;
+                                $min = $this->leyanioforecast[10]->sumaproducto;
+                                $hs = $this->leyanioforecast[10]->suma;
                             }   
                             else
                             {
@@ -13718,37 +14262,37 @@ trait ProcesosTrait {
                             } 
                         break;
                         case 10059:
-                            $anio_budget = $this->sumaniobudget[20];
+                            $anio_forecast = $this->sumanioforecast[20];
                         break;
                         case 10060:
-                            $anio_budget = $this->sumaniobudget[21];
+                            $anio_forecast = $this->sumanioforecast[21];
                         break;
                         case 10061:
-                            $anio_budget = $this->sumaniobudget[22];
+                            $anio_forecast = $this->sumanioforecast[22];
                         break;
                         case 10062:
-                            $anio_budget = $this->sumaniobudget[23];
+                            $anio_forecast = $this->sumanioforecast[23];
                         break;
                         case 10063:
-                            $anio_budget = $this->sumaniobudget[24];
+                            $anio_forecast = $this->sumanioforecast[24];
                         break;
                         case 10064:
-                            $anio_budget = $this->sumaniobudget[25];
+                            $anio_forecast = $this->sumanioforecast[25];
                         break;
                         case 10065:
-                            $anio_budget = $this->sumaniobudget[26];
+                            $anio_forecast = $this->sumanioforecast[26];
                         break;
                         case 10066:
-                            $anio_budget = 0;
+                            $anio_forecast = 0;
                         break;
                         case 10067:
-                            $anio_budget = $this->sumaniobudget[27];
+                            $anio_forecast = $this->sumanioforecast[27];
                         break;
                         case 10068:
-                            $anio_budget = $this->sumaniobudget[28];
+                            $anio_forecast = $this->sumanioforecast[28];
                         break;
                         case 10069:
-                            $anio_budget = $this->sumaniobudget[29];
+                            $anio_forecast = $this->sumanioforecast[29];
                         break;
                     
                     } 
@@ -13768,14 +14312,14 @@ trait ProcesosTrait {
                     {
                         if ($min > 0)
                         {
-                            $a_budget = $min/$hs;
-                            if($a_budget > 100)
+                            $a_forecast = $min/$hs;
+                            if($a_forecast > 100)
                             {
-                                return number_format(round($a_budget), 0, '.', ',');
+                                return number_format(round($a_forecast), 0, '.', ',');
                             }
                             else
                             {
-                                return number_format($a_budget, 2, '.', ',');
+                                return number_format($a_forecast, 2, '.', ',');
                             }
                         }
                         else
@@ -13783,16 +14327,16 @@ trait ProcesosTrait {
                             return '-';
                         }
                     }
-                    if(isset($anio_budget->anio_budget))
+                    if(isset($anio_forecast->anio_forecast))
                     {
-                        $a_budget = $anio_budget->anio_budget;
-                        if($a_budget > 100 || in_array($data->variable_id, $this->percentage))
+                        $a_forecast = $anio_forecast->anio_forecast;
+                        if($a_forecast > 100 || in_array($data->variable_id, $this->percentage))
                         {
-                            return number_format(round($a_budget), 0, '.', ',');
+                            return number_format(round($a_forecast), 0, '.', ',');
                         }
                         else
                         {
-                            return number_format($a_budget, 2, '.', ',');
+                            return number_format($a_forecast, 2, '.', ',');
                         }
                     }
                     else
