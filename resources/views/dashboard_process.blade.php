@@ -1897,10 +1897,10 @@
                 case 'DIA':
                     if (dt.column( -20 ).visible() === false) {
                         dt.columns( [-20] ).visible(true);
-                        if (budgetVisibility === 1) {
+                        if (focastVisibility === 1) {
                             dt.columns( [-17,-19] ).visible(true);
                         }
-                        if (focastVisibility === 1) {
+                        if (budgetVisibility === 1) {
                             dt.columns( [-16,-18] ).visible(true);
                         }
                     }
@@ -1911,10 +1911,10 @@
                 case 'MES':
                     if (dt.column( -15 ).visible() === false) {
                         dt.columns( [-15] ).visible(true);
-                        if (budgetVisibility === 1) {
+                        if (focastVisibility === 1) {
                             dt.columns( [-12,-14] ).visible(true);
                         }
-                        if (focastVisibility === 1) {
+                        if (budgetVisibility === 1) {
                             dt.columns( [-11,-13] ).visible(true);
                         }
                     }
@@ -1925,10 +1925,10 @@
                 case 'TRIM':
                     if (dt.column( -10 ).visible() === false) {
                         dt.columns( [-10] ).visible(true);
-                        if (budgetVisibility === 1) {
+                        if (focastVisibility === 1) {
                             dt.columns( [-7,-9] ).visible(true);
                         }
-                        if (focastVisibility === 1) {
+                        if (budgetVisibility === 1) {
                             dt.columns( [-6,-8] ).visible(true);
                         }
                     }
@@ -1939,10 +1939,10 @@
                 case 'ANIO':
                     if (dt.column( -5 ).visible() === false) {
                         dt.columns( [-5] ).visible(true);
-                        if (budgetVisibility === 1) {
+                        if (focastVisibility === 1) {
                             dt.columns( [-2,-4] ).visible(true);
                         }
-                        if (focastVisibility === 1) {
+                        if (budgetVisibility === 1) {
                             dt.columns( [-2,-3] ).visible(true);
                         }
                     }
