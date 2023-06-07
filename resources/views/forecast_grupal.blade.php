@@ -267,6 +267,11 @@
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
 
+        $(document).ready(function(){
+            jQuery.validator.addMethod("compareDate", function(value, element, param) { 
+                return ((moment(date_fd)).diff((moment(date_fh)), 'days') <= 0) ?  true : false;                    
+            },'');
+        });
 
         /*PRESS NAV-LINK BUTTON*/
         $('.nav-link').click(function (){ 
@@ -322,10 +327,12 @@
                     required: true
                 },
                 fechadesde:{
-                    required: true
+                    required: true,
+                    compareDate: true
                 },
                 fechahasta:{
-                    required: true
+                    required: true,
+                    compareDate: true
                 },
             },
             messages: {  
@@ -514,6 +521,122 @@
         });
         /* END CHANGE AREA */
 
+        /* MODAL IMPORT */
+            /* ACTION TO CLOSE MODAL */
+            $('#modal').on('hidden.bs.modal', function () {
+                $("#modal-form-import").validate().resetForm();
+                $(".alert-warning").css('display','none');
+            });
+            /* ACTION TO CLOSE MODAL */
+
+            /* INICIO MODAL IMPORT DATA */
+                $("#import-button").click(function(){ 
+                    if($("#select-form").valid())
+                    {                        
+                            $('#form-button-import').val(1);     
+                            $('#modal-title-import').html('Importar Datos'); 
+                            $('#modal-form-import').trigger("reset"); 
+                            $('#modal-import').modal('show');  
+                    }
+                });
+
+                $("#modal-form-import").validate({
+                    rules: {
+                        import: {
+                            required: true
+                        },
+                        decimalseparator: {
+                            required: true,
+                            number: true,
+                            range: [0,1]
+                        }
+                    },
+                    messages: {  
+                
+                    },
+                    errorElement: 'span', 
+                    errorClass: 'help-block help-block-error', 
+                    focusInvalid: false, 
+                    ignore: "", 
+                    highlight: function (element, errorClass, validClass) { 
+                        $(element).closest('.form-group').addClass('text-danger'); 
+                        $(element).closest('.form-control').addClass('is-invalid');
+                    },
+                    unhighlight: function (element) { 
+                        $(element).closest('.form-group').removeClass('text-danger'); 
+                        $(element).closest('.form-control').removeClass('is-invalid');
+                    },
+                    success: function (label) {
+                        label.closest('.form-group').removeClass('text-danger');
+                    },
+                    errorPlacement: function (error, element) {
+                        if ($(element).is('select') && element.hasClass('bs-select')) {
+                            error.insertAfter(element);
+                        } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
+                            element.next().after(error);
+                        } else if (element.attr("data-error-container")) {
+                            error.appendTo(element.attr("data-error-container"));
+                        } else {
+                            error.insertAfter(element); 
+                        }
+                    },
+                    invalidHandler: function (event, validator) {                 
+                    },
+                    submitHandler: function (form) {
+                        return true; 
+                    }
+                });
+
+                $("#form-button-import").click(function(){
+                    if($("#modal-form-import").valid()){  
+                        var import_data = $("#import").val();
+                        import_data = import_data.split(/\r\n|\r|\n|\t/);
+                        if (import_data[import_data.length-1] == '')
+                        {
+                            import_data.pop();
+                        }
+                        console.log(import_data);
+                        var table = $('#data-table').DataTable();
+                        var arrayid = table.column(0).data().toArray(); 
+                        console.log(arrayid);
+                        if ($("#decimalseparator").val() == 0)
+                        {
+                            for (var i=0; i < import_data.length; i++)
+                            {
+                                let val = import_data[i].replaceAll(' ','').replaceAll(',','');
+                                let val2 = (isNumeric(val)) ? parseFloat(val).toFixed(8) : val.replaceAll('-','');
+                                $("#"+arrayid[i]).val(val2);
+                            }  
+                        }
+                        else
+                        {
+                            for (var i=0; i < import_data.length; i++)
+                            {
+                                let val = import_data[i].replaceAll(' ','').replaceAll('.','').replaceAll(',','.');
+                                let val2 = (isNumeric(val)) ? parseFloat(val).toFixed(8) : val.replaceAll('-','');
+                                $("#"+arrayid[i]).val(val2);
+                            } 
+                        }     
+                        for (let j = i; j < arrayid.length; j++)
+                        {
+                            $("#"+arrayid[j]).val(null);
+                        }
+                        $('#modal-import').modal('hide');
+                        $('#modal-form-import').trigger("reset");
+                        
+                        
+                    }
+                });
+
+                $('#modal-import').on('hidden.bs.modal', function () {
+                    $("#modal-form-import").validate().resetForm();
+                });
+            /* FIN MODAL IMPORT DATA */
+
+        /* END MODAL IMPORT */
+
+ 
+
 
 
 
@@ -526,8 +649,7 @@
             <div class="card" style="min-height: 35rem;">
                 <div class="generic-body">  
                     <div class="card-body" style="margin:auto; width:95%"> 
-                        <form action="post" id="select-form" name="select-form" autocomplete="off">                            
-                                <!-- <legend class="w-auto">Seleccionar Área y Mes</legend> -->
+                        <form action="post" id="select-form" name="select-form" autocomplete="off">  
                                 <div class="row" style="justify-content: space-around;">
                                     <div class="form-group col-md-2">
                                         <label for="area_id" class="col-form-label">Área</label>
@@ -552,7 +674,7 @@
                                         <div style="display: flex;flex-direction: row; justify-content: space-between;">             
                                             <div class="form-group date col-md-6"  data-target-input="nearest">
                                                 <label for="fechadesde" class="col-form-label">Desde</label>
-                                                <div class="input-group-append " data-target="#fechadesde" data-toggle="datetimepicker">
+                                                <div class="input-group-append" data-target="#fechadesde" data-toggle="datetimepicker">
                                                     <input type="text" class="form-control datetimepicker-input" data-target="#fechadesde" id="fechadesde" name="fechadesde"/>
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                                 </div>
@@ -565,26 +687,11 @@
                                                 </div>                                
                                             </div>  
                                         </div>                                                             
-                                        <div style="display: flex;flex-direction: row;justify-content: center;">  
-                                            <button type="button" class="btn btn-primary" id="select-button">Cargar Valores</button>                                      
+                                        <div style="display: flex;flex-direction: row;justify-content: space-evenly;">  
+                                            <button type="button" class="btn btn-success" id="select-button">Cargar Valores</button>        
+                                            <button type="button" class="btn btn-primary" id="import-button">Importar</button>                               
                                         </div>    
-                                    </div>                     
-                                    <!--<div class="form-group date col-md-2" style="display: flex;flex-direction: column; justify-content: space-between;">
-                                        <div data-target-input="nearest">
-                                            <label for="fechadesde" class="col-form-label">Desde</label>
-                                            <div class="input-group-append dateinput" data-target="#fechadesde" data-toggle="datetimepicker">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#fechadesde" id="fechadesde" name="fechadesde"/>
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                            </div>
-                                        </div>
-                                        <div data-target-input="nearest">
-                                            <label for="fechahasta" class="col-form-label">Hasta</label>
-                                            <div class="input-group-append dateinput" data-target="#fechahasta" data-toggle="datetimepicker" id="">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#fechahasta" id="fechahasta" name="fechahasta"/>
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                            </div> 
-                                        </div>
-                                    </div>  -->                                      
+                                    </div>                                            
                                 </div>                                       
                             @csrf
                         </form> 
@@ -598,7 +705,7 @@
 
     {{-- MODAL --}}
     <div class="modal fade" id="modal-import" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-head">
                     <h5 id="modal-title-import"></h5>
@@ -615,21 +722,17 @@
                 </div>
                 <div class="modal-bod">
                     <form action="post" id="modal-form-import" name="modal-form-import" autocomplete="off">
-                        <div class="form-group">
-                            <label for="decimalseparator" class="col-sm-12 col-form-label">Seleccione Separador Decimal</label>
-                            <div class="col-sm-12">
-                                <select class="form-control" name="decimalseparator" id="decimalseparator">
-                                    <option value=0 selected="selected">Punto</option> 
-                                    <option value=1>Coma</option>                                    
-                                </select> 
-                            </div>
-                        </div>  
-                        <div class="form-group">
+                         
+                        {{-- <div class="form-group">
                             <label for="separadordecimal" class="col-sm-12 col-form-label">Pegue Columna o Fila de Datos</label>
                             <div class="col-sm-12">
                                 <textarea type="text" class="form-control" id="import" name="import" rows="10"></textarea>
                             </div>
-                        </div>              
+                        </div> ---}}   
+                        <div class="mb-3 form-group">
+                            <label for="formFile" class="form-label">Seleccione Excel a Cargar</label>
+                            <input class="form-control" type="file" id="formFile">
+                        </div>          
                         @csrf
                     </form>
                 </div>

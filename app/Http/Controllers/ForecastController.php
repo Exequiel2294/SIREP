@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ForecastImport;
 use Illuminate\Support\Facades\DB;
 use App\Models\Area;
 use App\Models\Forecast;
 use App\Models\ForecastHistorial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ForecastController extends Controller
 {
@@ -237,6 +239,11 @@ class ForecastController extends Controller
             return response()->json($columnas);
         }
     //FIN
+
+    public function import() {
+        $array  = Excel::toArray(new ForecastImport, 'forecast.xlsx');
+        return redirect('/')->with('success', 'All good!');
+    }
 
 
 }
