@@ -13,5 +13,8 @@ return [
     'dashboard_process'           => 'Tablero Procesos',
     'dashboard_mine'              => 'Tablero Mina',
     'conciliado'                  => 'Conciliar Data',
-    'budget'                      => 'Budget'
+    'budget'                      => 'Budget',
+    'forecast'                    => 'Forecast',
+    'individual'                  => 'Individual',
+    'group'                       => 'Grupal'
 ];
