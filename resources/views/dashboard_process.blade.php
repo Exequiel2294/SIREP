@@ -310,14 +310,14 @@
             font-weight: bold;
         }
 
-        /*SCROLLBALL HIDDEN */
+        /* SCROLLBALL HIDDEN
         .dataTables_scrollBody {
             -ms-overflow-style: none;  
             scrollbar-width: none; 
         }
         .dataTables_scrollBody::-webkit-scrollbar { 
             display: none;  
-        }
+        } */
 
         /* PROJECTION */
         .budgetAndForecastVisibility {
@@ -2000,22 +2000,22 @@
                             </tr>
                             <tr>
                                 <th class="thcenter exportable">Real</th>
-                                <th class="thcenter exportable">Focast</th>
+                                <th class="thcenter exportable">Forecast</th>
                                 <th class="thcenter exportable">Budget</th>
                                 <th class="thcenter exportable">% F</th>
                                 <th class="thcenter exportable">% B</th>
                                 <th class="thcenter exportable">Real</th>
-                                <th class="thcenter exportable">Focast</th>
+                                <th class="thcenter exportable">Forecast</th>
                                 <th class="thcenter exportable">Budget</th>
                                 <th class="thcenter exportable">% F</th>
                                 <th class="thcenter exportable">% B</th>
                                 <th class="thcenter exportable">Real</th>
-                                <th class="thcenter exportable">Focast</th>
+                                <th class="thcenter exportable">Forecast</th>
                                 <th class="thcenter exportable">Budget</th>
                                 <th class="thcenter exportable">% F</th>
                                 <th class="thcenter exportable">% B</th>
                                 <th class="thcenter exportable">Real</th>
-                                <th class="thcenter exportable">Focast</th>
+                                <th class="thcenter exportable">Forecast</th>
                                 <th class="thcenter exportable">Budget</th>
                                 <th class="thcenter exportable">% F</th>
                                 <th class="thcenter exportable">% B</th>

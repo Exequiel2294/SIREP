@@ -77,6 +77,7 @@ class DashboardController extends Controller
         );
         $date = $this->date;
         $pdf = Pdf::loadView('pdf.procesos', compact('registros', 'tablacomentarios','date'));
+        $pdf->set_paper('a3','portrait');
         return $pdf->download('SIOM_DailyReportProcesos_'.$this->date.'.pdf');
     }
 
@@ -120,6 +121,7 @@ class DashboardController extends Controller
         );
         $date = $this->date;
         $pdf = Pdf::loadView('pdf.mina', compact('registros', 'date', 'tablacomentarios'));
+        $pdf->set_paper('a3','portrait');
         return $pdf->download('SIOM_DailyReportMina_'.$this->date.'.pdf');
     }
 
