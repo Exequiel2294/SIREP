@@ -65,6 +65,7 @@ class SendDailyReport extends Command
             );
             $date = $this->date;
             $pdf = Pdf::loadView('pdf.procesos', compact('registros', 'tablacomentarios','date'));
+            $pdf->set_paper('a3','portrait');
             if ( env('APP_ENV') == 'production')
             {
                 $data["subject"] = "SIOM DailyReport Procesos ";

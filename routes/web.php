@@ -91,11 +91,13 @@ Route::group(['middleware' => ['auth', 'permission:forecast module']], function(
     Route::post('forecast_group/getcolumnas','ForecastController@FG_getColumnas')->name('forecast_group.getcolumnas');
 
 
-
-    Route::get('historialvariables', 'HistorialVariablesController@index')->name('historialvariables');
-    Route::post('historialvariables/getvariables', 'HistorialVariablesController@getvariables')->name('historialvariables.getvariables');
-    Route::post('historialvariables/getvalores', 'HistorialVariablesController@getvalores')->name('historialvariables.getvalores');
-    Route::post('historialvariables/getcolumnas','HistorialVariablesController@getcolumnas')->name('historialvariables.getcolumnas');
+    /**
+     * Comento esta area de codigo por que al ingresar al hosrial de varibles da un erro 403:Forbidden
+     */
+    // Route::get('historialvariables', 'HistorialVariablesController@index')->name('historialvariables');
+    // Route::post('historialvariables/getvariables', 'HistorialVariablesController@getvariables')->name('historialvariables.getvariables');
+    // Route::post('historialvariables/getvalores', 'HistorialVariablesController@getvalores')->name('historialvariables.getvalores');
+    // Route::post('historialvariables/getcolumnas','HistorialVariablesController@getcolumnas')->name('historialvariables.getcolumnas');
 
 
 
