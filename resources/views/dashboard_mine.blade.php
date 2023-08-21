@@ -332,6 +332,20 @@
             display: none;  
         }
 
+        /* PROJECTION */
+        .budgetAndForecastVisibility {
+            min-width:20vw!important;
+            max-width:20vw!important;
+        }
+        .budgetOrForecastVisibility {
+            min-width:12vw!important;
+            max-width:12vw!important;
+        }
+        .budgetAndForecastNoVisibility {
+            min-width:4vw!important;
+            max-width:4vw!important;
+        }
+
     </style> 
 @stop
 
@@ -341,7 +355,10 @@
     <script src="{{asset("assets/DataTables/Select-1.3.4/js/dataTables.select.min.js")}}"></script> 
     <script>
         let columnsVisibility = [];
-        var idx = -1;        
+        var idx = -1;     
+        let focastVisibility = 1;
+        let budgetVisibility = 1;
+        let timeFrames = document.querySelectorAll('.timeFrame');   
         const valor = document.querySelector('#valor'); 
 
         /*PRESS NAV-LINK BUTTON*/
@@ -385,7 +402,7 @@
         $(document).on('click','.expPdf', function(event) {
             columnsVisibility = [];
             tabledata = $("#mina-table").DataTable();
-            for (i=7; i<17; i=i+3)
+            for (i=7; i<23; i=i+5)
             {
                 columnsVisibility.push(tabledata.column(i).visible());
             }
@@ -396,6 +413,8 @@
                 data:{
                     date: moment(date_selected).format('YYYY-MM-DD'),
                     columnsVisibility: columnsVisibility,
+                    focastVisibility: focastVisibility,
+                    budgetVisibility: budgetVisibility,
                     _token: $('input[name="_token"]').val()
                 },
                 beforeSend: function(){
@@ -420,7 +439,7 @@
 
         /* DATATABLES */
         $(document).ready(function(){            
-            
+            assignWidthColumn('budgetAndForecastVisibility');
             var collapsedGroups = {};
             if(moment(date_selected).format('YYYY-MM-DD') == moment().subtract(1, 'days').format('YYYY-MM-DD') && moment().utc().format('HH') < 14)
             {
@@ -446,30 +465,48 @@
                 buttons: [
                     {
                         extend: 'collection',
+                        text: 'Proyección',
+                        buttons: [
+                            {
+                                text: 'BUDGET',
+                                action: function ( e, dt, node, config ) {
+                                    columnVisibility('BUDGET', dt);                                            
+                                }
+                            },
+                            {
+                                text: 'FORECAST',
+                                action: function ( e, dt, node, config ) {  
+                                    columnVisibility('FORECAST', dt);                                      
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        extend: 'collection',
                         text: 'Periodo',
                         buttons: [
                             {
                                 text: 'DÍA',
                                 action: function ( e, dt, node, config ) {
-                                    dt.columns( [-10,-11,-12] ).visible( ! dt.column( -10 ).visible() );
+                                    columnVisibility('DIA', dt);
                                 }
                             },
                             {
                                 text: 'MES',
                                 action: function ( e, dt, node, config ) {
-                                    dt.columns( [-7,-8,-9] ).visible( ! dt.column( -7 ).visible() );
+                                    columnVisibility('MES', dt);
                                 }
                             },
                             {
                                 text: 'TRIM.',
                                 action: function ( e, dt, node, config ) {
-                                    dt.columns( [-4,-5,-6] ).visible( ! dt.column( -4 ).visible() );
+                                    columnVisibility('TRIM', dt);
                                 }
                             },
                             {
                                 text: 'AÑO',
                                 action: function ( e, dt, node, config ) {
-                                    dt.columns( [-1,-2,-3] ).visible( ! dt.column( -1 ).visible() );
+                                    columnVisibility('ANIO', dt);
                                 }
                             },
                         ]
@@ -590,8 +627,50 @@
                             return data;
                         }
                     },
+                    {data:'dia_forecast', name:'dia_forecast', orderable: false,searchable: false},
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
-                    {data: null, orderable: false,searchable: false,
+                    {data: null, name:'per_forecast', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            if(row['dia_forecast'] != '-' && row['dia_real'] != '-')
+                            {
+                                $d_budget = parseFloat(row['dia_forecast'].replaceAll(',',''));
+                                $d_real = parseFloat(row['dia_real'].replaceAll(',',''));
+                                if($d_budget != 0.00 )
+                                {
+                                    $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $dia_porcentaje < 90:
+                                            //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        case $dia_porcentaje >= 90 && $dia_porcentaje < 95 :
+                                            //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        case  $dia_porcentaje >= 95 :
+                                            //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
+                                            return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $dia_porcentaje+'%';
+                                        break;
+                                            
+                                    }    
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                                         
+                        }
+                    },
+                    {data: null, name:'per_budget', orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['dia_budget'] != '-' && row['dia_real'] != '-')
                             {
@@ -633,8 +712,47 @@
                         }
                     },
                     {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
+                    {data:'mes_forecast', name:'mes_forecast', orderable: false,searchable: false},
                     {data:'mes_budget', name:'mes_budget', orderable: false,searchable: false},
-                    {data: null, orderable: false,searchable: false,
+                    {data: null, name:'per_forecast', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            if(row['mes_forecast'] != '-' && row['mes_real'] != '-')
+                            {
+                                $m_budget = parseFloat(row['mes_forecast'].replaceAll(',',''));
+                                $m_real = parseFloat(row['mes_real'].replaceAll(',',''));
+                                if($m_budget != 0.00)
+                                {
+                                    $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $mes_porcentaje < 90:
+                                            return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                        break;
+                                        case $mes_porcentaje >= 90 && $mes_porcentaje < 95 :
+                                            return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                        break;
+                                        case  $mes_porcentaje >= 95 :
+                                            return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $mes_porcentaje+'%';
+                                        break;
+                                            
+                                    }    
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+
+                            }
+                            else
+                            {
+                                return '-';
+                            }                                         
+                        }
+                    },
+                    {data: null, name:'per_budget', orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['mes_budget'] != '-' && row['mes_real'] != '-')
                             {
@@ -673,8 +791,46 @@
                         }
                     },
                     {data:'trimestre_real', name:'trimestre_real', orderable: false,searchable: false},
+                    {data:'trimestre_forecast', name:'trimestre_forecast', orderable: false,searchable: false},
                     {data:'trimestre_budget', name:'trimestre_budget', orderable: false,searchable: false},
-                    {data:null, orderable: false,searchable: false,
+                    {data:null, name:'per_forecast', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            if(row['trimestre_forecast'] != '-' && row['trimestre_real'] != '-')
+                            {                                
+                                $t_budget = parseFloat(row['trimestre_forecast'].replaceAll(',',''));
+                                $t_real = parseFloat(row['trimestre_real'].replaceAll(',',''));
+                                if($t_budget != 0.00)
+                                {
+                                    $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $trimestre_porcentaje < 90:
+                                            return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                        break;
+                                        case $trimestre_porcentaje >= 90 && $trimestre_porcentaje < 95 :
+                                            return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                        break;
+                                        case  $trimestre_porcentaje >= 95 :
+                                            return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $trimestre_porcentaje+'%';
+                                        break;                                            
+                                    }   
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+
+                            }
+                            else
+                            {
+                                return '-';
+                            }     
+                        }
+                    },
+                    {data:null, name:'per_budget', orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['trimestre_budget'] != '-' && row['trimestre_real'] != '-')
                             {                                
@@ -712,8 +868,47 @@
                         }
                     },
                     {data:'anio_real', name:'anio_real', orderable: false,searchable: false},
+                    {data:'anio_forecast', name:'anio_forecast', orderable: false,searchable: false},
                     {data:'anio_budget', name:'anio_budget', orderable: false,searchable: false},
-                    {data:null, orderable: false,searchable: false,
+                    {data:null, name:'per_forecast', orderable: false,searchable: false,
+                        render: function (data,type,row){
+                            if(row['anio_forecast'] != '-' && row['anio_real'] != '-')
+                            {                               
+                                $a_budget = parseFloat(row['anio_forecast'].replaceAll(',',''));
+                                $a_real = parseFloat(row['anio_real'].replaceAll(',',''));
+                                if($a_budget != 0.00)
+                                {
+                                    $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
+                                    switch(true)
+                                    {
+                                        case $anio_porcentaje < 90:
+                                            return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                        break;
+                                        case $anio_porcentaje >= 90 && $anio_porcentaje < 95 :
+                                            return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                        break;
+                                        case  $anio_porcentaje >= 95 :
+                                            return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                        break;
+                                        default:
+                                            return $anio_porcentaje+'%';
+                                        break;
+                                            
+                                    }   
+                                }
+                                else
+                                {
+                                    return '-';
+                                }
+
+                            }
+                            else
+                            {
+                                return '-';
+                            }     
+                        }
+                    },
+                    {data:null, name:'per_budget', orderable: false,searchable: false,
                         render: function (data,type,row){
                             if(row['anio_budget'] != '-' && row['anio_real'] != '-')
                             {                               
@@ -764,7 +959,7 @@
 
                         // Add category name to the <tr>. NOTE: Hardcoded colspan
                         return $('<tr/>')
-                            .append('<td colspan="15">' + group + '</td>')
+                            .append('<td colspan="23">' + group + '</td>')
                             .attr('data-name', group)
                             .toggleClass('collapsed', collapsed);
                     }                 
@@ -772,7 +967,7 @@
                 },
                 columnDefs: [
                     {
-                        targets: [6,7,8,9,10,11,12,13,14,15,16,17,18],
+                        targets: [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26],
                         className: "dt-center"
                     }
                 ],
@@ -789,7 +984,7 @@
                 collapsedGroups[name] = !collapsedGroups[name];
                 tabledata.draw();
             });
-            /** */
+            
             
             var tablecomentario = $("#comentarios-table").DataTable({
                 dom:     "<'datatables-s'<'datatables-title'l><'datatables-btn-cargar'f>>" +
@@ -858,24 +1053,6 @@
 
         });
         /* DATATABLES */
-
-        /*$('#mina-table').on( 'draw.dt', function () {
-            if (idx >= 0)
-            {
-                //$("#mina-table").DataTable().row(idx).select();
-                let row = $("#mina-table").DataTable().row(idx);
-                row.select();
-                
-                //var pos = row.position();
-
-                if (pos != undefined)
-                {                
-                    $('.dataTables_scrollBody').animate({
-                        scrollTop: (pos['top'])
-                    },500);
-                }
-            }
-        });*/
 
         /* ADD BUTTON*/
         $(document).on('click', '.add', function(){ 
@@ -1269,6 +1446,154 @@
         $('.modal.draggable>.modal-dialog>.modal-content>.modal-head').css('cursor', 'move');
         /* MODAL DRAGGABLE */
 
+                /* FUNCIONES */
+                function assignWidthColumn(classN) {
+            for (const frame of timeFrames) {
+                frame.classList.remove('budgetAndForecastVisibility', 'budgetOrForecastVisibility', 'budgetAndForecastNoVisibility');
+                frame.classList.add(classN);
+            }
+        }
+
+        function columnVisibility(projection, dt) {
+            switch (projection) {
+                case 'BUDGET': 
+                    if (budgetVisibility === 1) {
+                        if (dt.column( -20 ).visible() === true) {
+                            dt.columns( [-16,-18] ).visible( false );
+                        }
+                        if (dt.column( -15 ).visible() === true) {
+                            dt.columns( [-11,-13] ).visible( false );
+                        }
+                        if (dt.column( -10 ).visible() === true) {
+                            dt.columns( [-6,-8] ).visible( false );
+                        }
+                        if (dt.column( -5 ).visible() === true) {
+                            dt.columns( [-1,-3] ).visible( false );
+                        }
+                        budgetVisibility = 0;
+                    }
+                    else {
+                        if (dt.column( -20 ).visible() === true) {
+                            dt.columns( [-16,-18] ).visible( true );
+                        }
+                        if (dt.column( -15 ).visible() === true) {
+                            dt.columns( [-11,-13] ).visible( true );
+                        }
+                        if (dt.column( -10 ).visible() === true) {
+                            dt.columns( [-6,-8] ).visible( true );
+                        }
+                        if (dt.column( -5 ).visible() === true) {
+                            dt.columns( [-1,-3] ).visible( true );
+                        }
+                        budgetVisibility = 1;
+                    } 
+                break;
+                case 'FORECAST': 
+                    if (focastVisibility === 1) {
+                        if (dt.column( -20 ).visible() === true) {
+                            dt.columns( [-17,-19] ).visible( false );
+                        }
+                        if (dt.column( -15 ).visible() === true) {
+                            dt.columns( [-12,-14] ).visible( false );
+                        }
+                        if (dt.column( -10 ).visible() === true) {
+                            dt.columns( [-7,-9] ).visible( false );
+                        }
+                        if (dt.column( -5 ).visible() === true) {
+                            dt.columns( [-2,-4] ).visible( false );
+                        }
+                        focastVisibility = 0;
+                    }
+                    else {
+                        if (dt.column( -20 ).visible() === true) {
+                            dt.columns( [-17,-19] ).visible( true );
+                        }
+                        if (dt.column( -15 ).visible() === true) {
+                            dt.columns( [-12,-14] ).visible( true );
+                        }
+                        if (dt.column( -10 ).visible() === true) {
+                            dt.columns( [-7,-9] ).visible( true );
+                        }
+                        if (dt.column( -5 ).visible() === true) {
+                            dt.columns( [-2,-4] ).visible( true );
+                        }
+                        focastVisibility = 1;
+                    }
+                break;
+                case 'DIA':
+                    if (dt.column( -20 ).visible() === false) {
+                        dt.columns( [-20] ).visible(true);
+                        if (focastVisibility === 1) {
+                            dt.columns( [-17,-19] ).visible(true);
+                        }
+                        if (budgetVisibility === 1) {
+                            dt.columns( [-16,-18] ).visible(true);
+                        }
+                    }
+                    else {
+                        dt.columns( [-16,-17,-18,-19,-20] ).visible( false );
+                    }
+                break;
+                case 'MES':
+                    if (dt.column( -15 ).visible() === false) {
+                        dt.columns( [-15] ).visible(true);
+                        if (focastVisibility === 1) {
+                            dt.columns( [-12,-14] ).visible(true);
+                        }
+                        if (budgetVisibility === 1) {
+                            dt.columns( [-11,-13] ).visible(true);
+                        }
+                    }
+                    else {
+                        dt.columns( [-11,-12,-13,-14,-15] ).visible( false );
+                    }
+                break;
+                case 'TRIM':
+                    if (dt.column( -10 ).visible() === false) {
+                        dt.columns( [-10] ).visible(true);
+                        if (focastVisibility === 1) {
+                            dt.columns( [-7,-9] ).visible(true);
+                        }
+                        if (budgetVisibility === 1) {
+                            dt.columns( [-6,-8] ).visible(true);
+                        }
+                    }
+                    else {
+                        dt.columns( [-6,-7,-8,-9,-10] ).visible( false );
+                    }
+                break;
+                case 'ANIO':
+                    if (dt.column( -5 ).visible() === false) {
+                        dt.columns( [-5] ).visible(true);
+                        if (focastVisibility === 1) {
+                            dt.columns( [-2,-4] ).visible(true);
+                        }
+                        if (budgetVisibility === 1) {
+                            dt.columns( [-2,-3] ).visible(true);
+                        }
+                    }
+                    else {
+                        dt.columns( [-1,-2,-3,-4,-5] ).visible( false );
+                    }
+                break;
+            }
+
+            /*var oTable = $('#procesos-table').dataTable();
+            oTable.fnAdjustColumnSizing();*/
+
+            if (budgetVisibility === 1 && focastVisibility === 1) {
+                assignWidthColumn('budgetAndForecastVisibility');
+            }
+            else {
+                if (budgetVisibility === 0 && focastVisibility === 0) {
+                    assignWidthColumn('budgetAndForecastNoVisibility');
+                }
+                else {
+                    assignWidthColumn('budgetOrForecastVisibility');
+                }
+            }
+        }
+
 
     </script>
 @stop
@@ -1295,24 +1620,32 @@
                                 <th rowspan="2">ÁREA</th>
                                 <th rowspan="2" class="thcenter exportable">NOMBRE</th>
                                 <th rowspan="2" class="thcenter exportable" style="min-width:25px!important;">U.</th>
-                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">DIA</th>
-                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">MES</th>
-                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">TRIMESTRE</th>
-                                <th colspan="3" class="thcenter" style="min-width:12vw!important;">AÑO</th>
+                                <th colspan="5" class="thcenter timeFrame">DIA</th>
+                                <th colspan="5" class="thcenter timeFrame">MES</th>
+                                <th colspan="5" class="thcenter timeFrame">TRIMESTRE</th>
+                                <th colspan="5" class="thcenter timeFrame">AÑO</th>
                             </tr>
                             <tr>
                                 <th class="thcenter exportable">Real</th>
+                                <th class="thcenter exportable">Focast</th>
                                 <th class="thcenter exportable">Budget</th>
-                                <th class="thcenter exportable">%</th>
+                                <th class="thcenter exportable">% F</th>
+                                <th class="thcenter exportable">% B</th>
                                 <th class="thcenter exportable">Real</th>
+                                <th class="thcenter exportable">Focast</th>
                                 <th class="thcenter exportable">Budget</th>
-                                <th class="thcenter exportable">%</th>
+                                <th class="thcenter exportable">% F</th>
+                                <th class="thcenter exportable">% B</th>
                                 <th class="thcenter exportable">Real</th>
+                                <th class="thcenter exportable">Focast</th>
                                 <th class="thcenter exportable">Budget</th>
-                                <th class="thcenter exportable">%</th>
+                                <th class="thcenter exportable">% F</th>
+                                <th class="thcenter exportable">% B</th>
                                 <th class="thcenter exportable">Real</th>
+                                <th class="thcenter exportable">Focast</th>
                                 <th class="thcenter exportable">Budget</th>
-                                <th class="thcenter exportable">%</th>
+                                <th class="thcenter exportable">% F</th>
+                                <th class="thcenter exportable">% B</th>
                             </tr>
                         </thead>  
                     </table>                

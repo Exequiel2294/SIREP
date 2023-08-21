@@ -26,10 +26,19 @@ class ReportesController extends Controller
     {
         $date = $request->get('date');
         $columnsVisibility = $request->get('columnsVisibility');
+        $focastVisibility = $request->get('focastVisibility');
+        $budgetVisibility = $request->get('budgetVisibility');
         $arrayCount = array_count_values($columnsVisibility);
         if (isset($arrayCount['true']))
         {
-            $colspan = ($arrayCount['true']*3)+2; //+2 porque se cuenta las columnas de nombre de variable y unidad
+            $colspanTFrame = 1;
+            if ($focastVisibility) {
+                $colspanTFrame+=2;
+            }
+            if ($budgetVisibility) {
+                $colspanTFrame+=2;
+            }
+            $colspan = ($arrayCount['true']*$colspanTFrame)+2; //+2 porque se cuenta las columnas de nombre de variable y unidad
         }
         else
         {
@@ -58,10 +67,11 @@ class ReportesController extends Controller
             [$date]
         );
 
-        $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan'));
+        $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
         
         
 
+        $pdf->set_paper('a3', 'portrait');
         $pdf->render(); 
         $output = $pdf->output();
         file_put_contents(public_path('pdf/DailyReport.pdf'), $output);

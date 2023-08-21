@@ -127,6 +127,7 @@ trait ProcesosTrait {
                     GROUP BY MONTH(fecha)', 
                     [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 ); 
+            //FIN
             //MES BUDGET
                 
                 $this->summesbudget = 
@@ -293,7 +294,224 @@ trait ProcesosTrait {
                     WHERE MONTH(A.fecha) = '.$month.'
                     AND YEAR(A.fecha) = '.$year.''
                 );
-                
+            //FIN
+            //MES FORECAST
+                $this->summesforecast = 
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor as mes_forecast FROM
+                    (SELECT variable_id, SUM(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND MONTH(fecha) = '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->avgmesforecast =
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
+                    (SELECT variable_id, AVG(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND valor <> 0
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND MONTH(fecha) = '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->leymesforecast =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND MONTH(A.fecha) = '.$month.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
             //TRIMESTRE REAL
                 $this->sumtrireal10005 = 
                 DB::select(
@@ -383,6 +601,7 @@ trait ProcesosTrait {
                     GROUP BY DATEPART(QUARTER, fecha)', 
                     [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 );
+            //FIN
             //TRIMESTRE BUDGET                
                 $this->sumtribudget = 
                 DB::select(
@@ -677,7 +896,227 @@ trait ProcesosTrait {
                     AND MONTH(A.fecha) <= '.$month.'
                     AND YEAR(A.fecha) = '.$year.''
                 );
-                
+            //FIN   
+            //TRIMESTRE FORECAST 
+                $this->sumtriforecast = 
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor as tri_forecast FROM
+                    (SELECT variable_id, SUM(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, fecha) = '.$quarter.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->avgtriforecast =
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor AS tri_forecast FROM
+                    (SELECT variable_id, 
+                    AVG(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND valor <>0
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, fecha) = '.$quarter.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->leytriforecast =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
             //AÑO REAL
                 $this->sumanioreal10005 = 
                 DB::select(
@@ -759,289 +1198,496 @@ trait ProcesosTrait {
                     GROUP BY YEAR(fecha)',
                     [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                 );
-            //ANO BUDGET
-                //new
-                    $this->sumaniobudget = 
-                    DB::select(
-                        'SELECT v.id AS variable_id, d.valor as anio_budget
-                        FROM
-                        (SELECT variable_id, 
-                        SUM(CASE	
-                            WHEN MONTH(fecha) < '.$month.' THEN valor
-                            WHEN MONTH(fecha) = '.$month.' THEN (valor/DAY(fecha)) * '.$day.'
-                        END) AS valor
-                        FROM [dbo].[budget]
-                        WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
-                        AND MONTH(fecha) <= '.$month.'
-                        AND YEAR(fecha) = '.$year.'
-                        GROUP BY variable_id) AS d
-                        RIGHT JOIN
-                        (SELECT id 
-                        FROM [dbo].[variable] 
-                        WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
-                        ON d.variable_id = v.id
-                        ORDER BY id ASC'
-                    );
+            //FIN
+            //AÑO BUDGET
+                $this->sumaniobudget = 
+                DB::select(
+                    'SELECT v.id AS variable_id, d.valor as anio_budget
+                    FROM
+                    (SELECT variable_id, 
+                    SUM(CASE	
+                        WHEN MONTH(fecha) < '.$month.' THEN valor
+                        WHEN MONTH(fecha) = '.$month.' THEN (valor/DAY(fecha)) * '.$day.'
+                    END) AS valor
+                    FROM [dbo].[budget]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND MONTH(fecha) <= '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS d
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON d.variable_id = v.id
+                    ORDER BY id ASC'
+                );
 
-                    $this->avganiobudget =
-                    DB::select(
-                        'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
-                        (SELECT variable_id, 
-                        SUM(CASE	
-                            WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
-                            WHEN MONTH(fecha) = '.$month.' THEN valor * '.$day.'
-                        END) AS valor,
-                        SUM(CASE	
-                            WHEN MONTH(fecha) < '.$month.' THEN DAY(fecha)
-                            WHEN MONTH(fecha) = '.$month.' THEN '.$day.'
-                        END) AS dias
-                        FROM [dbo].[budget]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
-                        AND MONTH(fecha) <= '.$month.'
-                        AND YEAR(fecha) = '.$year.'
-                        GROUP BY variable_id) AS d
-                        RIGHT JOIN
-                        (SELECT id 
-                        FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
-                        ON d.variable_id = v.id
-                        ORDER BY id ASC'
-                    );
+                $this->avganiobudget =
+                DB::select(
+                    'SELECT v.id AS variable_id, (d.valor/(CASE WHEN d.dias = 0 THEN NULL ELSE d.dias END)) AS anio_budget FROM
+                    (SELECT variable_id, 
+                    SUM(CASE	
+                        WHEN MONTH(fecha) < '.$month.' THEN valor * DAY(fecha)
+                        WHEN MONTH(fecha) = '.$month.' THEN valor * '.$day.'
+                    END) AS valor,
+                    SUM(CASE	
+                        WHEN MONTH(fecha) < '.$month.' THEN DAY(fecha)
+                        WHEN MONTH(fecha) = '.$month.' THEN '.$day.'
+                    END) AS dias
+                    FROM [dbo].[budget]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND MONTH(fecha) <= '.$month.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS d
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON d.variable_id = v.id
+                    ORDER BY id ASC'
+                );
 
-                    $this->leyaniobudget =
-                    DB::select(
-                        'SELECT 10041 as variable_id, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10041) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10042, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10042) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10043, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10043) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10044, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10045) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10044) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10050, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10052) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10050) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10051, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10052) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10051) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10054, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10054) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10055, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10059) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10055) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10056, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10060) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10056) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10057, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10057) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.'
-                        UNION 
-                        SELECT 10058, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
-                        END) as sumaproducto, 
-                        SUM(CASE
-                            WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
-                            WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
-                        END) as suma 
-                        FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10061) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[budget]
-                        where variable_id = 10058) as B
-                        ON A.fecha = B.fecha
-                        AND MONTH(A.fecha) <= '.$month.'
-                        AND YEAR(A.fecha) = '.$year.''
-                    );
-                //end new
+                $this->leyaniobudget =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * DAY(A.fecha))
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (((A.valor/DAY(A.fecha)) * B.valor) * '.$day.')
+                    END) as sumaproducto, 
+                    SUM(CASE
+                        WHEN MONTH(A.fecha) < '.$month.' THEN (A.valor/DAY(A.fecha)) * DAY(A.fecha)
+                        WHEN MONTH(A.fecha) = '.$month.' THEN (A.valor/DAY(A.fecha)) * '.$day.'
+                    END) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[budget]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    AND MONTH(A.fecha) <= '.$month.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
+            //AÑO FORECAST 
+                $this->sumanioforecast = 
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor as anio_forecast FROM
+                    (SELECT variable_id, SUM(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->avganioforecast =
+                DB::select(
+                    'SELECT v.id AS variable_id, f.valor AS anio_forecast FROM
+                    (SELECT variable_id, 
+                    AVG(valor) AS valor
+                    FROM [dbo].[forecast]
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                    AND valor <>0
+                    AND  DATEPART(y, fecha) <= '.$daypart.'
+                    AND YEAR(fecha) = '.$year.'
+                    GROUP BY variable_id) AS f
+                    RIGHT JOIN
+                    (SELECT id 
+                    FROM [dbo].[variable] 
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                    ON f.variable_id = v.id
+                    ORDER BY id ASC'
+                );
+
+                $this->leyanioforecast =
+                DB::select(
+                    'SELECT 10041 as variable_id, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10041) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10042, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10042) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10043, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10043) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10044, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10045) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10044) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10050, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10050) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10051, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10052) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10051) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10054, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10054) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10055, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10059) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10055) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10056, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10060) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10056) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10057, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10057) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.'
+                    UNION 
+                    SELECT 10058, 
+                    SUM(A.valor * B.valor) as sumaproducto, 
+                    SUM(A.valor) as suma 
+                    FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10061) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[forecast]
+                    where variable_id = 10058) as B
+                    ON A.fecha = B.fecha
+                    WHERE DATEPART(y, A.fecha) <= '.$daypart.'
+                    AND YEAR(A.fecha) = '.$year.''
+                );
+            //FIN
 
         //FIN CALCULOS REUTILIZABLES
 
@@ -1053,6 +1699,10 @@ trait ProcesosTrait {
                 ->join('variable','data.variable_id','=','variable.id')
                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
+                ->leftJoin('forecast', function($q) {
+                    $q->on('data.variable_id', '=', 'forecast.variable_id')
+                    ->on('data.fecha', '=', 'forecast.fecha');
+                })
                 ->where($where)
                 ->select(
                     'data.variable_id as variable_id',
@@ -1062,8 +1712,8 @@ trait ProcesosTrait {
                     'variable.nombre as nombre',
                     'variable.export as var_export',
                     'data.valor as dia_real',
-                    'variable.subcategoria_id as subcategoria_id',
-                    'data.valor as anio_budget'
+                    'forecast.valor as dia_forecast',
+                    'variable.subcategoria_id as subcategoria_id'
                     )
                 ->orderBy('variable.orden', 'asc')
                 ->get();
@@ -1546,6 +2196,25 @@ trait ProcesosTrait {
                     {
                         return '-';
                     } 
+                }) 
+                ->addColumn('dia_forecast', function($data)
+                {
+                    if(isset($data->dia_forecast)) 
+                    {                                 
+                        $d_forecast = $data->dia_forecast;
+                        if($d_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($d_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($d_forecast, 2, '.', ',');
+                        }                                
+                    }        
+                    else
+                    {
+                        return '-';
+                    }          
                 }) 
                 ->addColumn('mes_real', function($data)
                 {    
@@ -2971,7 +3640,6 @@ trait ProcesosTrait {
                         break;
 
                     }
-
                     
                     if (in_array($data->variable_id, $this->ley))
                     {
@@ -3015,6 +3683,435 @@ trait ProcesosTrait {
                         else
                         {
                             return number_format($m_budget, 2, '.', ',');
+                        }
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                })
+                ->addColumn('mes_forecast', function($data)
+                {     
+                    switch($data->variable_id)
+                    {
+                        case 10002:
+                            $mes_forecast = $this->summesforecast[0];
+                        break;
+                        case 10003:
+                            $mes_forecast = $this->avgmesforecast[0];
+                        break;
+                        case 10004:
+                            if(isset($this->summesforecast[0]->mes_forecast) && isset($this->summesforecast[1]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[0]->mes_forecast;
+                                $min = $this->summesforecast[1]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10005:
+                            $mes_forecast = $this->summesforecast[1];
+                        break;
+                        case 10006:
+                            if(isset($this->summesforecast[1]->mes_forecast) && (isset($this->summesforecast[23]->mes_forecast) && $this->summesforecast[23]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[1]->mes_forecast;
+                                $hs = $this->summesforecast[23]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10007:
+                            $mes_forecast = $this->avgmesforecast[1];
+                        break;
+                        case 10008:
+                            $mes_forecast = $this->summesforecast[2];
+                        break;
+                        case 10009:
+                            $mes_forecast = $this->avgmesforecast[2];
+                        break;
+                        case 10010:
+                            if(isset($this->summesforecast[3]->mes_forecast) && isset($this->summesforecast[2]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[2]->mes_forecast;
+                                $min = $this->summesforecast[3]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10011:
+                            $mes_forecast = $this->summesforecast[3];
+                        break;
+                        case 10012:
+                            $mes_forecast = $this->avgmesforecast[3];
+                        break;
+                        case 10013:
+                            if(isset($this->summesforecast[3]->mes_forecast) && (isset($this->summesforecast[24]->mes_forecast) && $this->summesforecast[24]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[3]->mes_forecast;
+                                $hs = $this->summesforecast[24]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10014:
+                            $mes_forecast = $this->avgmesforecast[4];
+                        break;
+                        case 10015:
+                            $mes_forecast = $this->avgmesforecast[5];
+                        break;
+                        case 10016:
+                            $mes_forecast = 0;
+                        break;
+                        case 10017:
+                            $mes_forecast = $this->avgmesforecast[6];
+                        break;
+                        case 10018:
+                            $mes_forecast = $this->avgmesforecast[7];
+                        break;
+                        case 10019:
+                            $mes_forecast = $this->summesforecast[4];
+                        break;
+                        case 10020:
+                            if(isset($this->summesforecast[4]->mes_forecast) && (isset($this->summesforecast[25]->mes_forecast) && $this->summesforecast[25]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[4]->mes_forecast;
+                                $hs = $this->summesforecast[25]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10021:
+                            $mes_forecast = $this->avgmesforecast[8];
+                        break;
+                        case 10022:
+                            $mes_forecast = $this->summesforecast[5];
+                        break;
+                        case 10023:
+                            $mes_forecast = $this->summesforecast[6];
+                        break;
+                        case 10024:
+                            if(isset($this->summesforecast[7]->mes_forecast) && isset($this->summesforecast[6]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[6]->mes_forecast;
+                                $min = $this->summesforecast[7]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10025:
+                            $mes_forecast = $this->summesforecast[7];
+                        break;
+                        case 10026:
+                            $mes_forecast = $this->avgmesforecast[9];
+                        break;
+                        case 10027:
+                            $mes_forecast = $this->summesforecast[8];
+                        break;
+                        case 10028:
+                            $mes_forecast = $this->summesforecast[9];
+                        break;
+                        case 10029:
+                            $mes_forecast = $this->avgmesforecast[10];
+                        break;
+                        case 10030:
+                            if(isset($this->summesforecast[10]->mes_forecast) && isset($this->summesforecast[8]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[8]->mes_forecast;
+                                $min = $this->summesforecast[10]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10031:
+                            $mes_forecast = $this->summesforecast[10];
+                        break;
+                        case 10032:
+                            if(isset($this->summesforecast[10]->mes_forecast) && (isset($this->summesforecast[26]->mes_forecast) && $this->summesforecast[26]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[10]->mes_forecast;
+                                $hs = $this->summesforecast[26]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10033:
+                            $mes_forecast = $this->avgmesforecast[11];
+                        break;
+                        case 10034:
+                            $mes_forecast = $this->avgmesforecast[12];
+                        break;
+                        case 10035:
+                            if(isset($this->summesforecast[13]->mes_forecast) && isset($this->summesforecast[11]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[11]->mes_forecast;
+                                $min = $this->summesforecast[13]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10036:
+                            $mes_forecast = $this->avgmesforecast[13];
+                        break;
+                        case 10037:
+                            $mes_forecast = $this->summesforecast[11];
+                        break;
+                        case 10038:
+                            $mes_forecast = $this->summesforecast[12];
+                        break;
+                        case 10039:
+                            $mes_forecast = $this->summesforecast[13];
+                        break;
+                        case 10040:
+                            $mes_forecast = $this->avgmesforecast[14];
+                        break;
+                        case 10041:
+                            if(isset($this->leymesforecast[0]->sumaproducto) && (isset($this->leymesforecast[0]->suma) && $this->leymesforecast[0]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[0]->sumaproducto;
+                                $hs = $this->leymesforecast[0]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10042:
+                            if(isset($this->leymesforecast[1]->sumaproducto) && (isset($this->leymesforecast[1]->suma) && $this->leymesforecast[1]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[1]->sumaproducto;
+                                $hs = $this->leymesforecast[1]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10043:
+                            if(isset($this->leymesforecast[2]->sumaproducto) && (isset($this->leymesforecast[2]->suma) && $this->leymesforecast[2]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[2]->sumaproducto;
+                                $hs = $this->leymesforecast[2]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10044:
+                            if(isset($this->leymesforecast[3]->sumaproducto) && (isset($this->leymesforecast[3]->suma) && $this->leymesforecast[3]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[3]->sumaproducto;
+                                $hs = $this->leymesforecast[3]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10045:
+                            $mes_forecast = $this->summesforecast[14];
+                        break;
+                        case 10046:
+                            $mes_forecast = $this->summesforecast[15];
+                        break;
+                        case 10047:
+                            $mes_forecast = $this->summesforecast[16];
+                        break;
+                        case 10048:
+                            $mes_forecast = $this->summesforecast[17];                            
+                            if(isset($mes_forecast->mes_forecast))
+                            {
+                                $m_forecast = $mes_forecast->mes_forecast;
+                                return number_format($m_forecast, 2, '.', ',');                                
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        break;
+                        case 10049:
+                            $mes_forecast = $this->avgmesforecast[15];
+                        break;
+                        case 10050:
+                            if(isset($this->leymesforecast[4]->sumaproducto) && (isset($this->leymesforecast[4]->suma) && $this->leymesforecast[4]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[4]->sumaproducto;
+                                $hs = $this->leymesforecast[4]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10051:
+                            if(isset($this->leymesforecast[5]->sumaproducto) && (isset($this->leymesforecast[5]->suma) && $this->leymesforecast[5]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[5]->sumaproducto;
+                                $hs = $this->leymesforecast[5]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10052:
+                            $mes_forecast = $this->summesforecast[18];
+                        break;
+                        case 10053:
+                            $mes_forecast = $this->summesforecast[19];
+                        break;
+                        case 10054:
+                            if(isset($this->leymesforecast[6]->sumaproducto) && (isset($this->leymesforecast[6]->suma) && $this->leymesforecast[6]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[6]->sumaproducto;
+                                $hs = $this->leymesforecast[6]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10055:
+                            if(isset($this->leymesforecast[7]->sumaproducto) && (isset($this->leymesforecast[7]->suma) && $this->leymesforecast[7]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[7]->sumaproducto;
+                                $hs = $this->leymesforecast[7]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10056:
+                            if(isset($this->leymesforecast[8]->sumaproducto) && (isset($this->leymesforecast[8]->suma) && $this->leymesforecast[8]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[8]->sumaproducto;
+                                $hs = $this->leymesforecast[8]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10057:
+                            if(isset($this->leymesforecast[9]->sumaproducto) && (isset($this->leymesforecast[9]->suma) && $this->leymesforecast[9]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[9]->sumaproducto;
+                                $hs = $this->leymesforecast[9]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10058:
+                            if(isset($this->leymesforecast[10]->sumaproducto) && (isset($this->leymesforecast[10]->suma) && $this->leymesforecast[10]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[10]->sumaproducto;
+                                $hs = $this->leymesforecast[10]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10059:
+                            $mes_forecast = $this->summesforecast[20];
+                        break;
+                        case 10060:
+                            $mes_forecast = $this->summesforecast[21];
+                        break;
+                        case 10061:
+                            $mes_forecast = $this->summesforecast[22];
+                        break;
+                        case 10062:
+                            $mes_forecast = $this->summesforecast[23];
+                        break;
+                        case 10063:
+                            $mes_forecast = $this->summesforecast[24];
+                        break;
+                        case 10064:
+                            $mes_forecast = $this->summesforecast[25];
+                        break;
+                        case 10065:
+                            $mes_forecast = $this->summesforecast[26];
+                        break;
+                        case 10066:
+                            $mes_forecast = 0;
+                        break;
+                        case 10067:
+                            $mes_forecast = $this->summesforecast[27];
+                        break;
+                        case 10068:
+                            $mes_forecast = $this->summesforecast[28];
+                        break;
+                        case 10069:
+                            $mes_forecast = $this->summesforecast[29];
+                        break;
+
+                    }
+                    
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }  
+                    if (in_array($data->variable_id, $this->div))
+                    {
+                        if ($min > 0)
+                        {
+                            $m_forecast = $min/$hs;
+                            if($m_forecast > 100)
+                            {
+                                return number_format(round($m_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($m_forecast, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+
+                    if(isset($mes_forecast->mes_forecast))
+                    {
+                        $m_forecast = $mes_forecast->mes_forecast;
+                        if($m_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($m_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($m_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -4487,6 +5584,434 @@ trait ProcesosTrait {
                         else
                         {
                             return number_format($t_budget, 2, '.', ',');
+                        }
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                })
+                ->addColumn('trimestre_forecast', function($data)
+                {                            
+                    switch($data->variable_id)
+                    {
+                        case 10002:
+                            $tri_forecast = $this->sumtriforecast[0];
+                        break;
+                        case 10003:
+                            $tri_forecast = $this->avgtriforecast[0];
+                        break;
+                        case 10004:
+                            if(isset($this->sumtriforecast[0]->tri_forecast) && isset($this->sumtriforecast[1]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[0]->tri_forecast;
+                                $min = $this->sumtriforecast[1]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10005:
+                            $tri_forecast = $this->sumtriforecast[1];
+                        break;
+                        case 10006:
+                            if(isset($this->sumtriforecast[1]->tri_forecast) && (isset($this->sumtriforecast[23]->tri_forecast) && $this->sumtriforecast[23]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[1]->tri_forecast;
+                                $hs = $this->sumtriforecast[23]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10007:
+                            $tri_forecast = $this->avgtriforecast[1];
+                        break;
+                        case 10008:
+                            $tri_forecast = $this->sumtriforecast[2];
+                        break;
+                        case 10009:
+                            $tri_forecast = $this->avgtriforecast[2];
+                        break;
+                        case 10010:
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && isset($this->sumtriforecast[2]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[2]->tri_forecast;
+                                $min = $this->sumtriforecast[3]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10011:
+                            $tri_forecast = $this->sumtriforecast[3];
+                        break;
+                        case 10012:
+                            $tri_forecast = $this->avgtriforecast[3];
+                        break;
+                        case 10013:
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && (isset($this->sumtriforecast[24]->tri_forecast) && $this->sumtriforecast[24]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[3]->tri_forecast;
+                                $hs = $this->sumtriforecast[24]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10014:
+                            $tri_forecast = $this->avgtriforecast[4];
+                        break;
+                        case 10015:
+                            $tri_forecast = $this->avgtriforecast[5];
+                        break;
+                        case 10016:
+                            $tri_forecast = 0;
+                        break;
+                        case 10017:
+                            $tri_forecast = $this->avgtriforecast[6];
+                        break;
+                        case 10018:
+                            $tri_forecast = $this->avgtriforecast[7];
+                        break;
+                        case 10019:
+                            $tri_forecast = $this->sumtriforecast[4];
+                        break;
+                        case 10020:
+                            if(isset($this->sumtriforecast[4]->tri_forecast) && (isset($this->sumtriforecast[25]->tri_forecast) && $this->sumtriforecast[25]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[4]->tri_forecast;
+                                $hs = $this->sumtriforecast[25]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10021:
+                            $tri_forecast = $this->avgtriforecast[8];
+                        break;
+                        case 10022:
+                            $tri_forecast = $this->sumtriforecast[5];
+                        break;
+                        case 10023:
+                            $tri_forecast = $this->sumtriforecast[6];
+                        break;
+                        case 10024:
+                            if(isset($this->sumtriforecast[7]->tri_forecast) && isset($this->sumtriforecast[6]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[6]->tri_forecast;
+                                $min = $this->sumtriforecast[7]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10025:
+                            $tri_forecast = $this->sumtriforecast[7];
+                        break;
+                        case 10026:
+                            $tri_forecast = $this->avgtriforecast[9];
+                        break;
+                        case 10027:
+                            $tri_forecast = $this->sumtriforecast[8];
+                        break;
+                        case 10028:
+                            $tri_forecast = $this->sumtriforecast[9];
+                        break;
+                        case 10029:
+                            $tri_forecast = $this->avgtriforecast[10];
+                        break;
+                        case 10030:
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && isset($this->sumtriforecast[8]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[8]->tri_forecast;
+                                $min = $this->sumtriforecast[10]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10031:
+                            $tri_forecast = $this->sumtriforecast[10];
+                        break;
+                        case 10032:
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && (isset($this->sumtriforecast[26]->tri_forecast) && $this->sumtriforecast[26]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[10]->tri_forecast;
+                                $hs = $this->sumtriforecast[26]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10033:
+                            $tri_forecast = $this->avgtriforecast[11];
+                        break;
+                        case 10034:
+                            $tri_forecast = $this->avgtriforecast[12];
+                        break;
+                        case 10035:
+                            if(isset($this->sumtriforecast[13]->tri_forecast) && isset($this->sumtriforecast[11]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[11]->tri_forecast;
+                                $min = $this->sumtriforecast[13]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10036:
+                            $tri_forecast = $this->avgtriforecast[13];
+                        break;
+                        case 10037:
+                            $tri_forecast = $this->sumtriforecast[11];
+                        break;
+                        case 10038:
+                            $tri_forecast = $this->sumtriforecast[12];
+                        break;
+                        case 10039:
+                            $tri_forecast = $this->sumtriforecast[13];
+                        break;
+                        case 10040:
+                            $tri_forecast = $this->avgtriforecast[14];
+                        break;
+                        case 10041:
+                            if(isset($this->leytriforecast[0]->sumaproducto) && (isset($this->leytriforecast[0]->suma) && $this->leytriforecast[0]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[0]->sumaproducto;
+                                $hs = $this->leytriforecast[0]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10042:
+                            if(isset($this->leytriforecast[1]->sumaproducto) && (isset($this->leytriforecast[1]->suma) && $this->leytriforecast[1]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[1]->sumaproducto;
+                                $hs = $this->leytriforecast[1]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10043:
+                            if(isset($this->leytriforecast[2]->sumaproducto) && (isset($this->leytriforecast[2]->suma) && $this->leytriforecast[2]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[2]->sumaproducto;
+                                $hs = $this->leytriforecast[2]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10044:
+                            if(isset($this->leytriforecast[3]->sumaproducto) && (isset($this->leytriforecast[3]->suma) && $this->leytriforecast[3]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[3]->sumaproducto;
+                                $hs = $this->leytriforecast[3]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10045:
+                            $tri_forecast = $this->sumtriforecast[14];
+                        break;
+                        case 10046:
+                            $tri_forecast = $this->sumtriforecast[15];
+                        break;
+                        case 10047:
+                            $tri_forecast = $this->sumtriforecast[16];
+                        break;
+                        case 10048:
+                            $tri_forecast = $this->sumtriforecast[17];                            
+                            if(isset($tri_forecast->tri_forecast))
+                            {
+                                $t_forecast = $tri_forecast->tri_forecast;
+                                return number_format($t_forecast, 2, '.', ',');                                
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        break;
+                        case 10049:
+                            $tri_forecast = $this->avgtriforecast[15];
+                        break;
+                        case 10050:
+                            if(isset($this->leytriforecast[4]->sumaproducto) && (isset($this->leytriforecast[4]->suma) && $this->leytriforecast[4]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[4]->sumaproducto;
+                                $hs = $this->leytriforecast[4]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10051:
+                            if(isset($this->leytriforecast[5]->sumaproducto) && (isset($this->leytriforecast[5]->suma) && $this->leytriforecast[5]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[5]->sumaproducto;
+                                $hs = $this->leytriforecast[5]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10052:
+                            $tri_forecast = $this->sumtriforecast[18];
+                        break;
+                        case 10053:
+                            $tri_forecast = $this->sumtriforecast[19];
+                        break;
+                        case 10054:
+                            if(isset($this->leytriforecast[6]->sumaproducto) && (isset($this->leytriforecast[6]->suma) && $this->leytriforecast[6]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[6]->sumaproducto;
+                                $hs = $this->leytriforecast[6]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10055:
+                            if(isset($this->leytriforecast[7]->sumaproducto) && (isset($this->leytriforecast[7]->suma) && $this->leytriforecast[7]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[7]->sumaproducto;
+                                $hs = $this->leytriforecast[7]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10056:
+                            if(isset($this->leytriforecast[8]->sumaproducto) && (isset($this->leytriforecast[8]->suma) && $this->leytriforecast[8]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[8]->sumaproducto;
+                                $hs = $this->leytriforecast[8]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10057:
+                            if(isset($this->leytriforecast[9]->sumaproducto) && (isset($this->leytriforecast[9]->suma) && $this->leytriforecast[9]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[9]->sumaproducto;
+                                $hs = $this->leytriforecast[9]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10058:
+                            if(isset($this->leytriforecast[10]->sumaproducto) && (isset($this->leytriforecast[10]->suma) && $this->leytriforecast[10]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[10]->sumaproducto;
+                                $hs = $this->leytriforecast[10]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10059:
+                            $tri_forecast = $this->sumtriforecast[20];
+                        break;
+                        case 10060:
+                            $tri_forecast = $this->sumtriforecast[21];
+                        break;
+                        case 10061:
+                            $tri_forecast = $this->sumtriforecast[22];
+                        break;
+                        case 10062:
+                            $tri_forecast = $this->sumtriforecast[23];
+                        break;
+                        case 10063:
+                            $tri_forecast = $this->sumtriforecast[24];
+                        break;
+                        case 10064:
+                            $tri_forecast = $this->sumtriforecast[25];
+                        break;
+                        case 10065:
+                            $tri_forecast = $this->sumtriforecast[26];
+                        break;
+                        case 10066:
+                            $tri_forecast = 0;
+                        break;
+                        case 10067:
+                            $tri_forecast = $this->sumtriforecast[27];
+                        break;
+                        case 10068:
+                            $tri_forecast = $this->sumtriforecast[28];
+                        break;
+                        case 10069:
+                            $tri_forecast = $this->sumtriforecast[29];
+                        break;
+                    
+                    }                    
+                    
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }                    
+                    if (in_array($data->variable_id, $this->div))
+                    {
+                        if ($min > 0)
+                        {
+                            $t_forecast = $min/$hs;
+                            if($t_forecast > 100)
+                            {
+                                return number_format(round($t_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($t_forecast, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+                    if(isset($tri_forecast->tri_forecast))
+                    {
+                        $t_forecast = $tri_forecast->tri_forecast;
+                        if($t_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($t_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($t_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -6058,7 +7583,434 @@ trait ProcesosTrait {
                         return '-';
                     }
                 })
-                ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','mes_real','mes_budget','trimestre_real','anio_real'])
+                ->addColumn('anio_forecast', function($data)
+                {   
+                    switch($data->variable_id)
+                    {
+                        case 10002:
+                            $anio_forecast = $this->sumanioforecast[0];
+                        break;
+                        case 10003:
+                            $anio_forecast = $this->avganioforecast[0];
+                        break;
+                        case 10004:
+                            if(isset($this->sumanioforecast[0]->anio_forecast) && isset($this->sumanioforecast[1]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[0]->anio_forecast;
+                                $min = $this->sumanioforecast[1]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10005:
+                            $anio_forecast = $this->sumanioforecast[1];
+                        break;
+                        case 10006:
+                            if(isset($this->sumanioforecast[1]->anio_forecast) && (isset($this->sumanioforecast[23]->anio_forecast) && $this->sumanioforecast[23]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[1]->anio_forecast;
+                                $hs = $this->sumanioforecast[23]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10007:
+                            $anio_forecast = $this->avganioforecast[1];
+                        break;
+                        case 10008:
+                            $anio_forecast = $this->sumanioforecast[2];
+                        break;
+                        case 10009:
+                            $anio_forecast = $this->avganioforecast[2];
+                        break;
+                        case 10010:
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && isset($this->sumanioforecast[2]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[2]->anio_forecast;
+                                $min = $this->sumanioforecast[3]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10011:
+                            $anio_forecast = $this->sumanioforecast[3];
+                        break;
+                        case 10012:
+                            $anio_forecast = $this->avganioforecast[3];
+                        break;
+                        case 10013:
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && (isset($this->sumanioforecast[24]->anio_forecast) && $this->sumanioforecast[24]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[3]->anio_forecast;
+                                $hs = $this->sumanioforecast[24]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10014:
+                            $anio_forecast = $this->avganioforecast[4];
+                        break;
+                        case 10015:
+                            $anio_forecast = $this->avganioforecast[5];
+                        break;
+                        case 10016:
+                            $anio_forecast = 0;
+                        break;
+                        case 10017:
+                            $anio_forecast = $this->avganioforecast[6];
+                        break;
+                        case 10018:
+                            $anio_forecast = $this->avganioforecast[7];
+                        break;
+                        case 10019:
+                            $anio_forecast = $this->sumanioforecast[4];
+                        break;
+                        case 10020:
+                            if(isset($this->sumanioforecast[4]->anio_forecast) && (isset($this->sumanioforecast[25]->anio_forecast) && $this->sumanioforecast[25]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[4]->anio_forecast;
+                                $hs = $this->sumanioforecast[25]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10021:
+                            $anio_forecast = $this->avganioforecast[8];
+                        break;
+                        case 10022:
+                            $anio_forecast = $this->sumanioforecast[5];
+                        break;
+                        case 10023:
+                            $anio_forecast = $this->sumanioforecast[6];
+                        break;
+                        case 10024:
+                            if(isset($this->sumanioforecast[7]->anio_forecast) && isset($this->sumanioforecast[6]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[6]->anio_forecast;
+                                $min = $this->sumanioforecast[7]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10025:
+                            $anio_forecast = $this->sumanioforecast[7];
+                        break;
+                        case 10026:
+                            $anio_forecast = $this->avganioforecast[9];
+                        break;
+                        case 10027:
+                            $anio_forecast = $this->sumanioforecast[8];
+                        break;
+                        case 10028:
+                            $anio_forecast = $this->sumanioforecast[9];
+                        break;
+                        case 10029:
+                            $anio_forecast = $this->avganioforecast[10];
+                        break;
+                        case 10030:
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && isset($this->sumanioforecast[8]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[8]->anio_forecast;
+                                $min = $this->sumanioforecast[10]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10031:
+                            $anio_forecast = $this->sumanioforecast[10];
+                        break;
+                        case 10032:
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && (isset($this->sumanioforecast[26]->anio_forecast) && $this->sumanioforecast[26]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[10]->anio_forecast;
+                                $hs = $this->sumanioforecast[26]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10033:
+                            $anio_forecast = $this->avganioforecast[11];
+                        break;
+                        case 10034:
+                            $anio_forecast = $this->avganioforecast[12];
+                        break;
+                        case 10035:
+                            if(isset($this->sumanioforecast[13]->anio_forecast) && isset($this->sumanioforecast[11]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[11]->anio_forecast;
+                                $min = $this->sumanioforecast[13]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10036:
+                            $anio_forecast = $this->avganioforecast[13];
+                        break;
+                        case 10037:
+                            $anio_forecast = $this->sumanioforecast[11];
+                        break;
+                        case 10038:
+                            $anio_forecast = $this->sumanioforecast[12];
+                        break;
+                        case 10039:
+                            $anio_forecast = $this->sumanioforecast[13];
+                        break;
+                        case 10040:
+                            $anio_forecast = $this->avganioforecast[14];
+                        break;
+                        case 10041:
+                            if(isset($this->leyanioforecast[0]->sumaproducto) && (isset($this->leyanioforecast[0]->suma) && $this->leyanioforecast[0]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[0]->sumaproducto;
+                                $hs = $this->leyanioforecast[0]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10042:
+                            if(isset($this->leyanioforecast[1]->sumaproducto) && (isset($this->leyanioforecast[1]->suma) && $this->leyanioforecast[1]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[1]->sumaproducto;
+                                $hs = $this->leyanioforecast[1]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10043:
+                            if(isset($this->leyanioforecast[2]->sumaproducto) && (isset($this->leyanioforecast[2]->suma) && $this->leyanioforecast[2]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[2]->sumaproducto;
+                                $hs = $this->leyanioforecast[2]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10044:
+                            if(isset($this->leyanioforecast[3]->sumaproducto) && (isset($this->leyanioforecast[3]->suma) && $this->leyanioforecast[3]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[3]->sumaproducto;
+                                $hs = $this->leyanioforecast[3]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10045:
+                            $anio_forecast = $this->sumanioforecast[14];
+                        break;
+                        case 10046:
+                            $anio_forecast = $this->sumanioforecast[15];
+                        break;
+                        case 10047:
+                            $anio_forecast = $this->sumanioforecast[16];
+                        break;
+                        case 10048:
+                            $anio_forecast = $this->sumanioforecast[17];                            
+                            if(isset($anio_forecast->anio_forecast))
+                            {
+                                $a_forecast = $anio_forecast->anio_forecast;
+                                return number_format($a_forecast, 2, '.', ',');                                
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        break;
+                        case 10049:
+                            $anio_forecast = $this->avganioforecast[15];
+                        break;
+                        case 10050:
+                            if(isset($this->leyanioforecast[4]->sumaproducto) && (isset($this->leyanioforecast[4]->suma) && $this->leyanioforecast[4]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[4]->sumaproducto;
+                                $hs = $this->leyanioforecast[4]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10051:
+                            if(isset($this->leyanioforecast[5]->sumaproducto) && (isset($this->leyanioforecast[5]->suma) && $this->leyanioforecast[5]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[5]->sumaproducto;
+                                $hs = $this->leyanioforecast[5]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10052:
+                            $anio_forecast = $this->sumanioforecast[18];
+                        break;
+                        case 10053:
+                            $anio_forecast = $this->sumanioforecast[19];
+                        break;
+                        case 10054:
+                            if(isset($this->leyanioforecast[6]->sumaproducto) && (isset($this->leyanioforecast[6]->suma) && $this->leyanioforecast[6]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[6]->sumaproducto;
+                                $hs = $this->leyanioforecast[6]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10055:
+                            if(isset($this->leyanioforecast[7]->sumaproducto) && (isset($this->leyanioforecast[7]->suma) && $this->leyanioforecast[7]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[7]->sumaproducto;
+                                $hs = $this->leyanioforecast[7]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10056:
+                            if(isset($this->leyanioforecast[8]->sumaproducto) && (isset($this->leyanioforecast[8]->suma) && $this->leyanioforecast[8]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[8]->sumaproducto;
+                                $hs = $this->leyanioforecast[8]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10057:
+                            if(isset($this->leyanioforecast[9]->sumaproducto) && (isset($this->leyanioforecast[9]->suma) && $this->leyanioforecast[9]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[9]->sumaproducto;
+                                $hs = $this->leyanioforecast[9]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10058:
+                            if(isset($this->leyanioforecast[10]->sumaproducto) && (isset($this->leyanioforecast[10]->suma) && $this->leyanioforecast[10]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[10]->sumaproducto;
+                                $hs = $this->leyanioforecast[10]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10059:
+                            $anio_forecast = $this->sumanioforecast[20];
+                        break;
+                        case 10060:
+                            $anio_forecast = $this->sumanioforecast[21];
+                        break;
+                        case 10061:
+                            $anio_forecast = $this->sumanioforecast[22];
+                        break;
+                        case 10062:
+                            $anio_forecast = $this->sumanioforecast[23];
+                        break;
+                        case 10063:
+                            $anio_forecast = $this->sumanioforecast[24];
+                        break;
+                        case 10064:
+                            $anio_forecast = $this->sumanioforecast[25];
+                        break;
+                        case 10065:
+                            $anio_forecast = $this->sumanioforecast[26];
+                        break;
+                        case 10066:
+                            $anio_forecast = 0;
+                        break;
+                        case 10067:
+                            $anio_forecast = $this->sumanioforecast[27];
+                        break;
+                        case 10068:
+                            $anio_forecast = $this->sumanioforecast[28];
+                        break;
+                        case 10069:
+                            $anio_forecast = $this->sumanioforecast[29];
+                        break;
+                    
+                    } 
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }                        
+                    if (in_array($data->variable_id, $this->div))
+                    {
+                        if ($min > 0)
+                        {
+                            $a_forecast = $min/$hs;
+                            if($a_forecast > 100)
+                            {
+                                return number_format(round($a_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($a_forecast, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+                    if(isset($anio_forecast->anio_forecast))
+                    {
+                        $a_forecast = $anio_forecast->anio_forecast;
+                        if($a_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($a_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($a_forecast, 2, '.', ',');
+                        }
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                })
+                ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_forecast','mes_real','mes_budget','mes_forecast','trimestre_real','trimestre_budget','trimestre_forecast','anio_real','anio_budget','anio_forecast'])
                 ->make(true);
         }
         else
@@ -6067,6 +8019,10 @@ trait ProcesosTrait {
                 ->join('variable','data.variable_id','=','variable.id')
                 ->join('subcategoria','variable.subcategoria_id','=','subcategoria.id')
                 ->join('categoria','subcategoria.categoria_id','=','categoria.id')
+                ->leftJoin('forecast', function($q) {
+                    $q->on('data.variable_id', '=', 'forecast.variable_id')
+                    ->on('data.fecha', '=', 'forecast.fecha');
+                })
                 ->where($where)
                 ->select(
                     'data.id as id',
@@ -6083,7 +8039,7 @@ trait ProcesosTrait {
                     'variable.export as var_export',
                     'variable.tipo as tipo',
                     'data.valor as dia_real',
-                    'data.valor as anio_budget'
+                    'forecast.valor as dia_forecast'
                     )
                 ->get();
             
@@ -6573,6 +8529,25 @@ trait ProcesosTrait {
                     {
                         return '-';
                     } 
+                }) 
+                ->addColumn('dia_forecast', function($data)
+                {
+                    if(isset($data->dia_forecast)) 
+                    {                                 
+                        $d_forecast = $data->dia_forecast;
+                        if($d_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($d_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($d_forecast, 2, '.', ',');
+                        }                                
+                    }        
+                    else
+                    {
+                        return '-';
+                    }          
                 }) 
                 ->addColumn('mes_real', function($data)
                 {    
@@ -8049,6 +10024,435 @@ trait ProcesosTrait {
                         return '-';
                     }
                 })
+                ->addColumn('mes_forecast', function($data)
+                {     
+                    switch($data->variable_id)
+                    {
+                        case 10002:
+                            $mes_forecast = $this->summesforecast[0];
+                        break;
+                        case 10003:
+                            $mes_forecast = $this->avgmesforecast[0];
+                        break;
+                        case 10004:
+                            if(isset($this->summesforecast[0]->mes_forecast) && isset($this->summesforecast[1]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[0]->mes_forecast;
+                                $min = $this->summesforecast[1]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10005:
+                            $mes_forecast = $this->summesforecast[1];
+                        break;
+                        case 10006:
+                            if(isset($this->summesforecast[1]->mes_forecast) && (isset($this->summesforecast[23]->mes_forecast) && $this->summesforecast[23]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[1]->mes_forecast;
+                                $hs = $this->summesforecast[23]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10007:
+                            $mes_forecast = $this->avgmesforecast[1];
+                        break;
+                        case 10008:
+                            $mes_forecast = $this->summesforecast[2];
+                        break;
+                        case 10009:
+                            $mes_forecast = $this->avgmesforecast[2];
+                        break;
+                        case 10010:
+                            if(isset($this->summesforecast[3]->mes_forecast) && isset($this->summesforecast[2]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[2]->mes_forecast;
+                                $min = $this->summesforecast[3]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10011:
+                            $mes_forecast = $this->summesforecast[3];
+                        break;
+                        case 10012:
+                            $mes_forecast = $this->avgmesforecast[3];
+                        break;
+                        case 10013:
+                            if(isset($this->summesforecast[3]->mes_forecast) && (isset($this->summesforecast[24]->mes_forecast) && $this->summesforecast[24]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[3]->mes_forecast;
+                                $hs = $this->summesforecast[24]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10014:
+                            $mes_forecast = $this->avgmesforecast[4];
+                        break;
+                        case 10015:
+                            $mes_forecast = $this->avgmesforecast[5];
+                        break;
+                        case 10016:
+                            $mes_forecast = 0;
+                        break;
+                        case 10017:
+                            $mes_forecast = $this->avgmesforecast[6];
+                        break;
+                        case 10018:
+                            $mes_forecast = $this->avgmesforecast[7];
+                        break;
+                        case 10019:
+                            $mes_forecast = $this->summesforecast[4];
+                        break;
+                        case 10020:
+                            if(isset($this->summesforecast[4]->mes_forecast) && (isset($this->summesforecast[25]->mes_forecast) && $this->summesforecast[25]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[4]->mes_forecast;
+                                $hs = $this->summesforecast[25]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10021:
+                            $mes_forecast = $this->avgmesforecast[8];
+                        break;
+                        case 10022:
+                            $mes_forecast = $this->summesforecast[5];
+                        break;
+                        case 10023:
+                            $mes_forecast = $this->summesforecast[6];
+                        break;
+                        case 10024:
+                            if(isset($this->summesforecast[7]->mes_forecast) && isset($this->summesforecast[6]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[6]->mes_forecast;
+                                $min = $this->summesforecast[7]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10025:
+                            $mes_forecast = $this->summesforecast[7];
+                        break;
+                        case 10026:
+                            $mes_forecast = $this->avgmesforecast[9];
+                        break;
+                        case 10027:
+                            $mes_forecast = $this->summesforecast[8];
+                        break;
+                        case 10028:
+                            $mes_forecast = $this->summesforecast[9];
+                        break;
+                        case 10029:
+                            $mes_forecast = $this->avgmesforecast[10];
+                        break;
+                        case 10030:
+                            if(isset($this->summesforecast[10]->mes_forecast) && isset($this->summesforecast[8]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[8]->mes_forecast;
+                                $min = $this->summesforecast[10]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10031:
+                            $mes_forecast = $this->summesforecast[10];
+                        break;
+                        case 10032:
+                            if(isset($this->summesforecast[10]->mes_forecast) && (isset($this->summesforecast[26]->mes_forecast) && $this->summesforecast[26]->mes_forecast != 0))
+                            {
+                                $min = $this->summesforecast[10]->mes_forecast;
+                                $hs = $this->summesforecast[26]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10033:
+                            $mes_forecast = $this->avgmesforecast[11];
+                        break;
+                        case 10034:
+                            $mes_forecast = $this->avgmesforecast[12];
+                        break;
+                        case 10035:
+                            if(isset($this->summesforecast[13]->mes_forecast) && isset($this->summesforecast[11]->mes_forecast))
+                            {
+                                $au = $this->summesforecast[11]->mes_forecast;
+                                $min = $this->summesforecast[13]->mes_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10036:
+                            $mes_forecast = $this->avgmesforecast[13];
+                        break;
+                        case 10037:
+                            $mes_forecast = $this->summesforecast[11];
+                        break;
+                        case 10038:
+                            $mes_forecast = $this->summesforecast[12];
+                        break;
+                        case 10039:
+                            $mes_forecast = $this->summesforecast[13];
+                        break;
+                        case 10040:
+                            $mes_forecast = $this->avgmesforecast[14];
+                        break;
+                        case 10041:
+                            if(isset($this->leymesforecast[0]->sumaproducto) && (isset($this->leymesforecast[0]->suma) && $this->leymesforecast[0]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[0]->sumaproducto;
+                                $hs = $this->leymesforecast[0]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10042:
+                            if(isset($this->leymesforecast[1]->sumaproducto) && (isset($this->leymesforecast[1]->suma) && $this->leymesforecast[1]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[1]->sumaproducto;
+                                $hs = $this->leymesforecast[1]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10043:
+                            if(isset($this->leymesforecast[2]->sumaproducto) && (isset($this->leymesforecast[2]->suma) && $this->leymesforecast[2]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[2]->sumaproducto;
+                                $hs = $this->leymesforecast[2]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10044:
+                            if(isset($this->leymesforecast[3]->sumaproducto) && (isset($this->leymesforecast[3]->suma) && $this->leymesforecast[3]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[3]->sumaproducto;
+                                $hs = $this->leymesforecast[3]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10045:
+                            $mes_forecast = $this->summesforecast[14];
+                        break;
+                        case 10046:
+                            $mes_forecast = $this->summesforecast[15];
+                        break;
+                        case 10047:
+                            $mes_forecast = $this->summesforecast[16];
+                        break;
+                        case 10048:
+                            $mes_forecast = $this->summesforecast[17];                            
+                            if(isset($mes_forecast->mes_forecast))
+                            {
+                                $m_forecast = $mes_forecast->mes_forecast;
+                                return number_format($m_forecast, 2, '.', ',');                                
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        break;
+                        case 10049:
+                            $mes_forecast = $this->avgmesforecast[15];
+                        break;
+                        case 10050:
+                            if(isset($this->leymesforecast[4]->sumaproducto) && (isset($this->leymesforecast[4]->suma) && $this->leymesforecast[4]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[4]->sumaproducto;
+                                $hs = $this->leymesforecast[4]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10051:
+                            if(isset($this->leymesforecast[5]->sumaproducto) && (isset($this->leymesforecast[5]->suma) && $this->leymesforecast[5]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[5]->sumaproducto;
+                                $hs = $this->leymesforecast[5]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10052:
+                            $mes_forecast = $this->summesforecast[18];
+                        break;
+                        case 10053:
+                            $mes_forecast = $this->summesforecast[19];
+                        break;
+                        case 10054:
+                            if(isset($this->leymesforecast[6]->sumaproducto) && (isset($this->leymesforecast[6]->suma) && $this->leymesforecast[6]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[6]->sumaproducto;
+                                $hs = $this->leymesforecast[6]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10055:
+                            if(isset($this->leymesforecast[7]->sumaproducto) && (isset($this->leymesforecast[7]->suma) && $this->leymesforecast[7]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[7]->sumaproducto;
+                                $hs = $this->leymesforecast[7]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10056:
+                            if(isset($this->leymesforecast[8]->sumaproducto) && (isset($this->leymesforecast[8]->suma) && $this->leymesforecast[8]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[8]->sumaproducto;
+                                $hs = $this->leymesforecast[8]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10057:
+                            if(isset($this->leymesforecast[9]->sumaproducto) && (isset($this->leymesforecast[9]->suma) && $this->leymesforecast[9]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[9]->sumaproducto;
+                                $hs = $this->leymesforecast[9]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10058:
+                            if(isset($this->leymesforecast[10]->sumaproducto) && (isset($this->leymesforecast[10]->suma) && $this->leymesforecast[10]->suma != 0))
+                            {
+                                $min = $this->leymesforecast[10]->sumaproducto;
+                                $hs = $this->leymesforecast[10]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10059:
+                            $mes_forecast = $this->summesforecast[20];
+                        break;
+                        case 10060:
+                            $mes_forecast = $this->summesforecast[21];
+                        break;
+                        case 10061:
+                            $mes_forecast = $this->summesforecast[22];
+                        break;
+                        case 10062:
+                            $mes_forecast = $this->summesforecast[23];
+                        break;
+                        case 10063:
+                            $mes_forecast = $this->summesforecast[24];
+                        break;
+                        case 10064:
+                            $mes_forecast = $this->summesforecast[25];
+                        break;
+                        case 10065:
+                            $mes_forecast = $this->summesforecast[26];
+                        break;
+                        case 10066:
+                            $mes_forecast = 0;
+                        break;
+                        case 10067:
+                            $mes_forecast = $this->summesforecast[27];
+                        break;
+                        case 10068:
+                            $mes_forecast = $this->summesforecast[28];
+                        break;
+                        case 10069:
+                            $mes_forecast = $this->summesforecast[29];
+                        break;
+
+                    }
+                    
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }  
+                    if (in_array($data->variable_id, $this->div))
+                    {
+                        if ($min > 0)
+                        {
+                            $m_forecast = $min/$hs;
+                            if($m_forecast > 100)
+                            {
+                                return number_format(round($m_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($m_forecast, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+
+                    if(isset($mes_forecast->mes_forecast))
+                    {
+                        $m_forecast = $mes_forecast->mes_forecast;
+                        if($m_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($m_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($m_forecast, 2, '.', ',');
+                        }
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                })
                 ->addColumn('trimestre_real', function($data)
                 {              
                     if (in_array($data->variable_id, $this->pparray))
@@ -9514,6 +11918,434 @@ trait ProcesosTrait {
                         else
                         {
                             return number_format($t_budget, 2, '.', ',');
+                        }
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                })
+                ->addColumn('trimestre_forecast', function($data)
+                {                            
+                    switch($data->variable_id)
+                    {
+                        case 10002:
+                            $tri_forecast = $this->sumtriforecast[0];
+                        break;
+                        case 10003:
+                            $tri_forecast = $this->avgtriforecast[0];
+                        break;
+                        case 10004:
+                            if(isset($this->sumtriforecast[0]->tri_forecast) && isset($this->sumtriforecast[1]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[0]->tri_forecast;
+                                $min = $this->sumtriforecast[1]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10005:
+                            $tri_forecast = $this->sumtriforecast[1];
+                        break;
+                        case 10006:
+                            if(isset($this->sumtriforecast[1]->tri_forecast) && (isset($this->sumtriforecast[23]->tri_forecast) && $this->sumtriforecast[23]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[1]->tri_forecast;
+                                $hs = $this->sumtriforecast[23]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10007:
+                            $tri_forecast = $this->avgtriforecast[1];
+                        break;
+                        case 10008:
+                            $tri_forecast = $this->sumtriforecast[2];
+                        break;
+                        case 10009:
+                            $tri_forecast = $this->avgtriforecast[2];
+                        break;
+                        case 10010:
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && isset($this->sumtriforecast[2]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[2]->tri_forecast;
+                                $min = $this->sumtriforecast[3]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10011:
+                            $tri_forecast = $this->sumtriforecast[3];
+                        break;
+                        case 10012:
+                            $tri_forecast = $this->avgtriforecast[3];
+                        break;
+                        case 10013:
+                            if(isset($this->sumtriforecast[3]->tri_forecast) && (isset($this->sumtriforecast[24]->tri_forecast) && $this->sumtriforecast[24]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[3]->tri_forecast;
+                                $hs = $this->sumtriforecast[24]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10014:
+                            $tri_forecast = $this->avgtriforecast[4];
+                        break;
+                        case 10015:
+                            $tri_forecast = $this->avgtriforecast[5];
+                        break;
+                        case 10016:
+                            $tri_forecast = 0;
+                        break;
+                        case 10017:
+                            $tri_forecast = $this->avgtriforecast[6];
+                        break;
+                        case 10018:
+                            $tri_forecast = $this->avgtriforecast[7];
+                        break;
+                        case 10019:
+                            $tri_forecast = $this->sumtriforecast[4];
+                        break;
+                        case 10020:
+                            if(isset($this->sumtriforecast[4]->tri_forecast) && (isset($this->sumtriforecast[25]->tri_forecast) && $this->sumtriforecast[25]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[4]->tri_forecast;
+                                $hs = $this->sumtriforecast[25]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10021:
+                            $tri_forecast = $this->avgtriforecast[8];
+                        break;
+                        case 10022:
+                            $tri_forecast = $this->sumtriforecast[5];
+                        break;
+                        case 10023:
+                            $tri_forecast = $this->sumtriforecast[6];
+                        break;
+                        case 10024:
+                            if(isset($this->sumtriforecast[7]->tri_forecast) && isset($this->sumtriforecast[6]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[6]->tri_forecast;
+                                $min = $this->sumtriforecast[7]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10025:
+                            $tri_forecast = $this->sumtriforecast[7];
+                        break;
+                        case 10026:
+                            $tri_forecast = $this->avgtriforecast[9];
+                        break;
+                        case 10027:
+                            $tri_forecast = $this->sumtriforecast[8];
+                        break;
+                        case 10028:
+                            $tri_forecast = $this->sumtriforecast[9];
+                        break;
+                        case 10029:
+                            $tri_forecast = $this->avgtriforecast[10];
+                        break;
+                        case 10030:
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && isset($this->sumtriforecast[8]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[8]->tri_forecast;
+                                $min = $this->sumtriforecast[10]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10031:
+                            $tri_forecast = $this->sumtriforecast[10];
+                        break;
+                        case 10032:
+                            if(isset($this->sumtriforecast[10]->tri_forecast) && (isset($this->sumtriforecast[26]->tri_forecast) && $this->sumtriforecast[26]->tri_forecast != 0))
+                            {
+                                $min = $this->sumtriforecast[10]->tri_forecast;
+                                $hs = $this->sumtriforecast[26]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10033:
+                            $tri_forecast = $this->avgtriforecast[11];
+                        break;
+                        case 10034:
+                            $tri_forecast = $this->avgtriforecast[12];
+                        break;
+                        case 10035:
+                            if(isset($this->sumtriforecast[13]->tri_forecast) && isset($this->sumtriforecast[11]->tri_forecast))
+                            {
+                                $au = $this->sumtriforecast[11]->tri_forecast;
+                                $min = $this->sumtriforecast[13]->tri_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10036:
+                            $tri_forecast = $this->avgtriforecast[13];
+                        break;
+                        case 10037:
+                            $tri_forecast = $this->sumtriforecast[11];
+                        break;
+                        case 10038:
+                            $tri_forecast = $this->sumtriforecast[12];
+                        break;
+                        case 10039:
+                            $tri_forecast = $this->sumtriforecast[13];
+                        break;
+                        case 10040:
+                            $tri_forecast = $this->avgtriforecast[14];
+                        break;
+                        case 10041:
+                            if(isset($this->leytriforecast[0]->sumaproducto) && (isset($this->leytriforecast[0]->suma) && $this->leytriforecast[0]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[0]->sumaproducto;
+                                $hs = $this->leytriforecast[0]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10042:
+                            if(isset($this->leytriforecast[1]->sumaproducto) && (isset($this->leytriforecast[1]->suma) && $this->leytriforecast[1]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[1]->sumaproducto;
+                                $hs = $this->leytriforecast[1]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10043:
+                            if(isset($this->leytriforecast[2]->sumaproducto) && (isset($this->leytriforecast[2]->suma) && $this->leytriforecast[2]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[2]->sumaproducto;
+                                $hs = $this->leytriforecast[2]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10044:
+                            if(isset($this->leytriforecast[3]->sumaproducto) && (isset($this->leytriforecast[3]->suma) && $this->leytriforecast[3]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[3]->sumaproducto;
+                                $hs = $this->leytriforecast[3]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10045:
+                            $tri_forecast = $this->sumtriforecast[14];
+                        break;
+                        case 10046:
+                            $tri_forecast = $this->sumtriforecast[15];
+                        break;
+                        case 10047:
+                            $tri_forecast = $this->sumtriforecast[16];
+                        break;
+                        case 10048:
+                            $tri_forecast = $this->sumtriforecast[17];                            
+                            if(isset($tri_forecast->tri_forecast))
+                            {
+                                $t_forecast = $tri_forecast->tri_forecast;
+                                return number_format($t_forecast, 2, '.', ',');                                
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        break;
+                        case 10049:
+                            $tri_forecast = $this->avgtriforecast[15];
+                        break;
+                        case 10050:
+                            if(isset($this->leytriforecast[4]->sumaproducto) && (isset($this->leytriforecast[4]->suma) && $this->leytriforecast[4]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[4]->sumaproducto;
+                                $hs = $this->leytriforecast[4]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10051:
+                            if(isset($this->leytriforecast[5]->sumaproducto) && (isset($this->leytriforecast[5]->suma) && $this->leytriforecast[5]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[5]->sumaproducto;
+                                $hs = $this->leytriforecast[5]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10052:
+                            $tri_forecast = $this->sumtriforecast[18];
+                        break;
+                        case 10053:
+                            $tri_forecast = $this->sumtriforecast[19];
+                        break;
+                        case 10054:
+                            if(isset($this->leytriforecast[6]->sumaproducto) && (isset($this->leytriforecast[6]->suma) && $this->leytriforecast[6]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[6]->sumaproducto;
+                                $hs = $this->leytriforecast[6]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10055:
+                            if(isset($this->leytriforecast[7]->sumaproducto) && (isset($this->leytriforecast[7]->suma) && $this->leytriforecast[7]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[7]->sumaproducto;
+                                $hs = $this->leytriforecast[7]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10056:
+                            if(isset($this->leytriforecast[8]->sumaproducto) && (isset($this->leytriforecast[8]->suma) && $this->leytriforecast[8]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[8]->sumaproducto;
+                                $hs = $this->leytriforecast[8]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10057:
+                            if(isset($this->leytriforecast[9]->sumaproducto) && (isset($this->leytriforecast[9]->suma) && $this->leytriforecast[9]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[9]->sumaproducto;
+                                $hs = $this->leytriforecast[9]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10058:
+                            if(isset($this->leytriforecast[10]->sumaproducto) && (isset($this->leytriforecast[10]->suma) && $this->leytriforecast[10]->suma != 0))
+                            {
+                                $min = $this->leytriforecast[10]->sumaproducto;
+                                $hs = $this->leytriforecast[10]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10059:
+                            $tri_forecast = $this->sumtriforecast[20];
+                        break;
+                        case 10060:
+                            $tri_forecast = $this->sumtriforecast[21];
+                        break;
+                        case 10061:
+                            $tri_forecast = $this->sumtriforecast[22];
+                        break;
+                        case 10062:
+                            $tri_forecast = $this->sumtriforecast[23];
+                        break;
+                        case 10063:
+                            $tri_forecast = $this->sumtriforecast[24];
+                        break;
+                        case 10064:
+                            $tri_forecast = $this->sumtriforecast[25];
+                        break;
+                        case 10065:
+                            $tri_forecast = $this->sumtriforecast[26];
+                        break;
+                        case 10066:
+                            $tri_forecast = 0;
+                        break;
+                        case 10067:
+                            $tri_forecast = $this->sumtriforecast[27];
+                        break;
+                        case 10068:
+                            $tri_forecast = $this->sumtriforecast[28];
+                        break;
+                        case 10069:
+                            $tri_forecast = $this->sumtriforecast[29];
+                        break;
+                    
+                    }                    
+                    
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }                    
+                    if (in_array($data->variable_id, $this->div))
+                    {
+                        if ($min > 0)
+                        {
+                            $t_forecast = $min/$hs;
+                            if($t_forecast > 100)
+                            {
+                                return number_format(round($t_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($t_forecast, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+                    if(isset($tri_forecast->tri_forecast))
+                    {
+                        $t_forecast = $tri_forecast->tri_forecast;
+                        if($t_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($t_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($t_forecast, 2, '.', ',');
                         }
                     }
                     else
@@ -11085,6 +13917,433 @@ trait ProcesosTrait {
                         return '-';
                     }
                 })
+                ->addColumn('anio_forecast', function($data)
+                {   
+                    switch($data->variable_id)
+                    {
+                        case 10002:
+                            $anio_forecast = $this->sumanioforecast[0];
+                        break;
+                        case 10003:
+                            $anio_forecast = $this->avganioforecast[0];
+                        break;
+                        case 10004:
+                            if(isset($this->sumanioforecast[0]->anio_forecast) && isset($this->sumanioforecast[1]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[0]->anio_forecast;
+                                $min = $this->sumanioforecast[1]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10005:
+                            $anio_forecast = $this->sumanioforecast[1];
+                        break;
+                        case 10006:
+                            if(isset($this->sumanioforecast[1]->anio_forecast) && (isset($this->sumanioforecast[23]->anio_forecast) && $this->sumanioforecast[23]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[1]->anio_forecast;
+                                $hs = $this->sumanioforecast[23]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10007:
+                            $anio_forecast = $this->avganioforecast[1];
+                        break;
+                        case 10008:
+                            $anio_forecast = $this->sumanioforecast[2];
+                        break;
+                        case 10009:
+                            $anio_forecast = $this->avganioforecast[2];
+                        break;
+                        case 10010:
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && isset($this->sumanioforecast[2]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[2]->anio_forecast;
+                                $min = $this->sumanioforecast[3]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10011:
+                            $anio_forecast = $this->sumanioforecast[3];
+                        break;
+                        case 10012:
+                            $anio_forecast = $this->avganioforecast[3];
+                        break;
+                        case 10013:
+                            if(isset($this->sumanioforecast[3]->anio_forecast) && (isset($this->sumanioforecast[24]->anio_forecast) && $this->sumanioforecast[24]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[3]->anio_forecast;
+                                $hs = $this->sumanioforecast[24]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10014:
+                            $anio_forecast = $this->avganioforecast[4];
+                        break;
+                        case 10015:
+                            $anio_forecast = $this->avganioforecast[5];
+                        break;
+                        case 10016:
+                            $anio_forecast = 0;
+                        break;
+                        case 10017:
+                            $anio_forecast = $this->avganioforecast[6];
+                        break;
+                        case 10018:
+                            $anio_forecast = $this->avganioforecast[7];
+                        break;
+                        case 10019:
+                            $anio_forecast = $this->sumanioforecast[4];
+                        break;
+                        case 10020:
+                            if(isset($this->sumanioforecast[4]->anio_forecast) && (isset($this->sumanioforecast[25]->anio_forecast) && $this->sumanioforecast[25]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[4]->anio_forecast;
+                                $hs = $this->sumanioforecast[25]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10021:
+                            $anio_forecast = $this->avganioforecast[8];
+                        break;
+                        case 10022:
+                            $anio_forecast = $this->sumanioforecast[5];
+                        break;
+                        case 10023:
+                            $anio_forecast = $this->sumanioforecast[6];
+                        break;
+                        case 10024:
+                            if(isset($this->sumanioforecast[7]->anio_forecast) && isset($this->sumanioforecast[6]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[6]->anio_forecast;
+                                $min = $this->sumanioforecast[7]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10025:
+                            $anio_forecast = $this->sumanioforecast[7];
+                        break;
+                        case 10026:
+                            $anio_forecast = $this->avganioforecast[9];
+                        break;
+                        case 10027:
+                            $anio_forecast = $this->sumanioforecast[8];
+                        break;
+                        case 10028:
+                            $anio_forecast = $this->sumanioforecast[9];
+                        break;
+                        case 10029:
+                            $anio_forecast = $this->avganioforecast[10];
+                        break;
+                        case 10030:
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && isset($this->sumanioforecast[8]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[8]->anio_forecast;
+                                $min = $this->sumanioforecast[10]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10031:
+                            $anio_forecast = $this->sumanioforecast[10];
+                        break;
+                        case 10032:
+                            if(isset($this->sumanioforecast[10]->anio_forecast) && (isset($this->sumanioforecast[26]->anio_forecast) && $this->sumanioforecast[26]->anio_forecast != 0))
+                            {
+                                $min = $this->sumanioforecast[10]->anio_forecast;
+                                $hs = $this->sumanioforecast[26]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10033:
+                            $anio_forecast = $this->avganioforecast[11];
+                        break;
+                        case 10034:
+                            $anio_forecast = $this->avganioforecast[12];
+                        break;
+                        case 10035:
+                            if(isset($this->sumanioforecast[13]->anio_forecast) && isset($this->sumanioforecast[11]->anio_forecast))
+                            {
+                                $au = $this->sumanioforecast[11]->anio_forecast;
+                                $min = $this->sumanioforecast[13]->anio_forecast;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10036:
+                            $anio_forecast = $this->avganioforecast[13];
+                        break;
+                        case 10037:
+                            $anio_forecast = $this->sumanioforecast[11];
+                        break;
+                        case 10038:
+                            $anio_forecast = $this->sumanioforecast[12];
+                        break;
+                        case 10039:
+                            $anio_forecast = $this->sumanioforecast[13];
+                        break;
+                        case 10040:
+                            $anio_forecast = $this->avganioforecast[14];
+                        break;
+                        case 10041:
+                            if(isset($this->leyanioforecast[0]->sumaproducto) && (isset($this->leyanioforecast[0]->suma) && $this->leyanioforecast[0]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[0]->sumaproducto;
+                                $hs = $this->leyanioforecast[0]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10042:
+                            if(isset($this->leyanioforecast[1]->sumaproducto) && (isset($this->leyanioforecast[1]->suma) && $this->leyanioforecast[1]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[1]->sumaproducto;
+                                $hs = $this->leyanioforecast[1]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10043:
+                            if(isset($this->leyanioforecast[2]->sumaproducto) && (isset($this->leyanioforecast[2]->suma) && $this->leyanioforecast[2]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[2]->sumaproducto;
+                                $hs = $this->leyanioforecast[2]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10044:
+                            if(isset($this->leyanioforecast[3]->sumaproducto) && (isset($this->leyanioforecast[3]->suma) && $this->leyanioforecast[3]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[3]->sumaproducto;
+                                $hs = $this->leyanioforecast[3]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10045:
+                            $anio_forecast = $this->sumanioforecast[14];
+                        break;
+                        case 10046:
+                            $anio_forecast = $this->sumanioforecast[15];
+                        break;
+                        case 10047:
+                            $anio_forecast = $this->sumanioforecast[16];
+                        break;
+                        case 10048:
+                            $anio_forecast = $this->sumanioforecast[17];                            
+                            if(isset($anio_forecast->anio_forecast))
+                            {
+                                $a_forecast = $anio_forecast->anio_forecast;
+                                return number_format($a_forecast, 2, '.', ',');                                
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        break;
+                        case 10049:
+                            $anio_forecast = $this->avganioforecast[15];
+                        break;
+                        case 10050:
+                            if(isset($this->leyanioforecast[4]->sumaproducto) && (isset($this->leyanioforecast[4]->suma) && $this->leyanioforecast[4]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[4]->sumaproducto;
+                                $hs = $this->leyanioforecast[4]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10051:
+                            if(isset($this->leyanioforecast[5]->sumaproducto) && (isset($this->leyanioforecast[5]->suma) && $this->leyanioforecast[5]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[5]->sumaproducto;
+                                $hs = $this->leyanioforecast[5]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10052:
+                            $anio_forecast = $this->sumanioforecast[18];
+                        break;
+                        case 10053:
+                            $anio_forecast = $this->sumanioforecast[19];
+                        break;
+                        case 10054:
+                            if(isset($this->leyanioforecast[6]->sumaproducto) && (isset($this->leyanioforecast[6]->suma) && $this->leyanioforecast[6]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[6]->sumaproducto;
+                                $hs = $this->leyanioforecast[6]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10055:
+                            if(isset($this->leyanioforecast[7]->sumaproducto) && (isset($this->leyanioforecast[7]->suma) && $this->leyanioforecast[7]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[7]->sumaproducto;
+                                $hs = $this->leyanioforecast[7]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10056:
+                            if(isset($this->leyanioforecast[8]->sumaproducto) && (isset($this->leyanioforecast[8]->suma) && $this->leyanioforecast[8]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[8]->sumaproducto;
+                                $hs = $this->leyanioforecast[8]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10057:
+                            if(isset($this->leyanioforecast[9]->sumaproducto) && (isset($this->leyanioforecast[9]->suma) && $this->leyanioforecast[9]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[9]->sumaproducto;
+                                $hs = $this->leyanioforecast[9]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10058:
+                            if(isset($this->leyanioforecast[10]->sumaproducto) && (isset($this->leyanioforecast[10]->suma) && $this->leyanioforecast[10]->suma != 0))
+                            {
+                                $min = $this->leyanioforecast[10]->sumaproducto;
+                                $hs = $this->leyanioforecast[10]->suma;
+                            }   
+                            else
+                            {
+                                $min = 0;
+                            } 
+                        break;
+                        case 10059:
+                            $anio_forecast = $this->sumanioforecast[20];
+                        break;
+                        case 10060:
+                            $anio_forecast = $this->sumanioforecast[21];
+                        break;
+                        case 10061:
+                            $anio_forecast = $this->sumanioforecast[22];
+                        break;
+                        case 10062:
+                            $anio_forecast = $this->sumanioforecast[23];
+                        break;
+                        case 10063:
+                            $anio_forecast = $this->sumanioforecast[24];
+                        break;
+                        case 10064:
+                            $anio_forecast = $this->sumanioforecast[25];
+                        break;
+                        case 10065:
+                            $anio_forecast = $this->sumanioforecast[26];
+                        break;
+                        case 10066:
+                            $anio_forecast = 0;
+                        break;
+                        case 10067:
+                            $anio_forecast = $this->sumanioforecast[27];
+                        break;
+                        case 10068:
+                            $anio_forecast = $this->sumanioforecast[28];
+                        break;
+                        case 10069:
+                            $anio_forecast = $this->sumanioforecast[29];
+                        break;
+                    
+                    } 
+                    if (in_array($data->variable_id, $this->ley))
+                    {
+                        if ($min > 0)
+                        {
+                            $ley = ($au*31.1035)/$min;
+                            return number_format($ley, 2, '.', ',');
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }                        
+                    if (in_array($data->variable_id, $this->div))
+                    {
+                        if ($min > 0)
+                        {
+                            $a_forecast = $min/$hs;
+                            if($a_forecast > 100)
+                            {
+                                return number_format(round($a_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($a_forecast, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    }
+                    if(isset($anio_forecast->anio_forecast))
+                    {
+                        $a_forecast = $anio_forecast->anio_forecast;
+                        if($a_forecast > 100 || in_array($data->variable_id, $this->percentage))
+                        {
+                            return number_format(round($a_forecast), 0, '.', ',');
+                        }
+                        else
+                        {
+                            return number_format($a_forecast, 2, '.', ',');
+                        }
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                })
                 ->addColumn('action', function($data)
                 {
                     $button = '';  
@@ -11105,7 +14364,7 @@ trait ProcesosTrait {
                     }                 
                     return $button;
                 })
-                ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_porcentaje','mes_real','mes_budget','trimestre_real','anio_real','action'])
+                ->rawColumns(['categoria','subcategoria','dia_real','dia_budget', 'dia_forecast', 'mes_real', 'mes_budget', 'mes_forecast','trimestre_real', 'trimestre_budget', 'trimestre_forecast', 'anio_real', 'anio_budget', 'anio_forecast', 'action'])
                 ->addIndexColumn()
                 ->make(true);
         }

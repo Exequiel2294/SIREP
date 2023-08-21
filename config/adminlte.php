@@ -255,8 +255,27 @@ return [
         [
             'text' => 'budget',
             'url'  => 'budget',
-            'icon' => 'nav-icon fas fa-bookmark',
+            'icon' => 'nav-icon fas fa-bold',
             'can'  => 'budget module'
+        ],
+        [
+            'text' => 'forecast',
+            'url'  => '#',
+            'icon' => 'nav-icon fab fa-facebook-f',
+            'can'  => 'forecast module',
+            'submenu' => 
+            [
+                [
+                    'text' => 'individual',
+                    'url'  => 'forecast_individual',
+                    'icon' => 'nav-icon far fa-circle',
+                ],
+                [
+                    'text' => 'group',
+                    'url'  => 'forecast_group',
+                    'icon' => 'nav-icon far fa-circle'
+                ]
+            ]
         ],
         [
             'header' => 'Administración',
