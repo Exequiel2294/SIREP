@@ -388,10 +388,11 @@
                 }
             });
         })
-        
+
         //Descarga PFD Completo
         $(document).on('click','.expPdf', function(event) {
             columnsVisibility = [];
+            formato = $(this).attr('id');
             tabledata = $("#procesos-table").DataTable();
             for (i=7; i<23; i=i+5)
             {
@@ -403,6 +404,7 @@
                 url: "{{route('dashboard.getpdfcompleto') }}",
                 type: 'POST',
                 data:{
+                    formato:formato,
                     date: moment(date_selected).format('YYYY-MM-DD'),
                     columnsVisibility: columnsVisibility,
                     focastVisibility: focastVisibility,
@@ -420,7 +422,15 @@
 
                 const link = document.createElement('a');
                 link.href = res.ruta;
-                const nom = 'SIOM_DailyReportCompleto_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
+                if(formato == "full")
+                {
+                    nom = 'SIOM_DailyReportCompleto_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
+                }
+                else
+                {
+                    nom = 'SIOM_DailyReportProcesos_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
+                }
+                
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
@@ -538,16 +548,17 @@
                         buttons:[
                             {
                                 text:'Daily Planta',
-                                action: function ( e, dt, button, config) {
-                                    let date = moment(date_selected).format('YYYY-MM-DD');
-                                    let url = '{{ route("dashboard.getpdfprocesostable", ":date" )}}';
-                                    url = url.replace(':date', date);
-                                    window.location.href = url;
-                                },
+                                className:'expPdf',
+                                attr:{
+                                    id:"process"
+                                }
                             },
                             {
                                 text:'Daily Full Mina y Planta',
                                 className: 'expPdf',
+                                attr:{
+                                    id:"full"
+                                }
                             },
                         ],
                           
