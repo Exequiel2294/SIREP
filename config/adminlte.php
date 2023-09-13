@@ -238,6 +238,35 @@ return [
             'icon' => 'nav-icon fas fa-table',
         ],
         [
+            'text' => 'Seguridad',
+            'url'  => '#',
+            'icon' => 'nav-icon fas fa-table',
+            'can'  => 'ssoma module',
+            'submenu' => 
+            [
+                [
+                    'text' => 'Capacitacion',
+                    'url'  => 'capacitacion_performance',
+                    'icon' => 'nav-icon fas fa-chalkboard-teacher',
+                ],
+                [
+                    'text' => 'OST',
+                    'url'  => 'ost',
+                    'icon' => 'nav-icon fas fa-file-alt'
+                ],
+                [
+                    'text' => 'ATS',
+                    'url'  => 'ats',
+                    'icon' => 'nav-icon fas fa-file-alt'
+                ],
+                [
+                    'text' => 'Inspecciones',
+                    'url'  => 'inspeccion',
+                    'icon' => 'nav-icon fas fa-search'
+                ],
+            ]
+        ],
+        [
             'text' => 'historial',
             'url'  => 'historial',
             'icon' => 'nav-icon fas fa-book',
