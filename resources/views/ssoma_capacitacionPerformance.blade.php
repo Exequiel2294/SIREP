@@ -294,18 +294,18 @@
                     }, 
                     {
                         extend: 'csvHtml5',
-                        title: 'Listado ATS '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoATS'+moment().local().format('DD/MM/YYYY')
+                        title: 'Listado Capacitaciones '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoCapacitaciones'+moment().local().format('DD/MM/YYYY')
                     }, 
                     {
                         extend: 'excelHtml5',
-                        title: 'Listado ATS '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoATS'+moment().local().format('DD/MM/YYYY')            
+                        title: 'Listado Capacitaciones '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoCapacitaciones'+moment().local().format('DD/MM/YYYY')            
                     }, 
                     {
                         extend: 'pdfHtml5',
                         title: moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoATS'+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoCapacitaciones'+moment().local().format('DD/MM/YYYY'),
                         customize: function ( doc ) {
                             doc.styles.title.alignment = 'right';
                             doc.styles.title.fontSize = 12;
@@ -314,7 +314,7 @@
                     {
                         extend: 'print', 
                         text: 'Imprimir',
-                        title: 'Listado ATS '+moment().local().format('DD/MM/YYYY'),
+                        title: 'Listado Capacitaciones '+moment().local().format('DD/MM/YYYY'),
                     }
                 ],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -362,7 +362,7 @@
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar ATS'); 
+            $('#modal-title').html('Cargar Capacitaciones'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
@@ -374,7 +374,7 @@
             var id=$(this).data('id');
             $.get('capacitacion_performance/'+id+'/edit', function(data){
                 $('#form-button').val(0); 
-                $('#modal-title').html('Editar ATS'); 
+                $('#modal-title').html('Editar Capacitaciones'); 
                 $('#modal-form').trigger("reset"); 
                 $('#modal').modal('show');
                 $('#id').val(data.id);
