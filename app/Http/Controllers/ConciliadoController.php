@@ -1656,7 +1656,7 @@ class ConciliadoController extends Controller
                 'variable_id' => 'required|exists:variable,id',
                 'year' => 'required|numeric',
                 'month'    => 'required|numeric',
-                'valor_real' => 'required|numeric',
+                'valor_real' => 'nullable|numeric',
                 'valor_conciliado' => 'required|numeric',
                 'dias_conciliacion' => 'required|numeric'
             ]            
@@ -1667,7 +1667,12 @@ class ConciliadoController extends Controller
         }
         else
         {            
-            $value_real = $request->get('valor_real');
+            if ($request->get('valor_real') === null) {
+                $value_real = 0;
+            }
+            else {
+                $value_real = $request->get('valor_real');
+            }
             $value_conciliado = $request->get('valor_conciliado'); 
             if ($value_conciliado - $value_real == 0)
             {
