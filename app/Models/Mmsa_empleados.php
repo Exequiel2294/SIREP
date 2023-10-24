@@ -9,6 +9,6 @@ class Mmsa_empleados extends Model
     protected $table = 'mmsa_empleados';
     public $timestamps = false;
     protected $guarded = [
-        'DNI'
+        'id'
     ];
 }

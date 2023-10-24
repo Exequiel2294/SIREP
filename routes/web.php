@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Contracts\Permission;
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['auth', 'permission:ssoma module']], function() {
     Route::get('capacitacion_performance', 'SsomaCapacitacionPerformanceController@index')->name('capacitacion_performance');
     Route::post('capacitacion_performance/load', 'SsomaCapacitacionPerformanceController@load')->name('capacitacion_performance.load');
     Route::get('capacitacion_performance/{id}/edit','SsomaCapacitacionPerformanceController@edit')->name('capacitacion_performance.edit');
+    Route::get('capacitacion_performance/{dni}/GetEmpleado','SsomaCapacitacionPerformanceController@GetEmpleado')->name('capacitacion_performance.GetEmpleado');
     Route::delete('capacitacion_performance/{id}','SsomaCapacitacionPerformanceController@delete')->name('capacitacion_performance.delete');
 
     /**
@@ -106,6 +108,7 @@ Route::group(['middleware' => ['auth', 'permission:ssoma module']], function() {
     Route::get('ost', 'SsomaOstController@index')->name('ost');
     Route::post('ost/load', 'SsomaOstController@load')->name('ost.load');
     Route::get('ost/{id}/edit','SsomaOstController@edit')->name('ost.edit');
+    Route::get('ost/{dni}/GetEmpleado','SsomaOstController@GetEmpleado')->name('ost.GetEmpleado');
     Route::delete('ost/{id}','SsomaOstController@delete')->name('ost.delete');
 
     /**
@@ -114,6 +117,7 @@ Route::group(['middleware' => ['auth', 'permission:ssoma module']], function() {
     Route::get('ats', 'SsomaAtsController@index')->name('ats');
     Route::post('ats/load', 'SsomaAtsController@load')->name('ats.load');
     Route::get('ats/{id}/edit','SsomaAtsController@edit')->name('ats.edit');
+    Route::get('ats/{dni}/GetEmpleado','SsomaAtsController@GetEmpleado')->name('ats.GetEmpleado');
     Route::delete('ats/{id}','SsomaAtsController@delete')->name('ats.delete');
 
      /**
@@ -122,6 +126,7 @@ Route::group(['middleware' => ['auth', 'permission:ssoma module']], function() {
     Route::get('inspeccion', 'SsomaInspeccionesController@index')->name('inspeccion');
     Route::post('inspeccion/load', 'SsomaInspeccionesController@load')->name('inspeccion.load');
     Route::get('inspeccion/{id}/edit','SsomaInspeccionesController@edit')->name('inspeccion.edit');
+    Route::get('inspeccion/{dni}/GetEmpleado','SsomaInspeccionesController@GetEmpleado')->name('inspeccion.GetEmpleado');
     Route::delete('inspeccion/{id}','SsomaInspeccionesController@delete')->name('inspeccion.delete');
 
 });
@@ -197,6 +202,13 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::get('comentario_area/{id}/edit','ComentarioAreaController@edit')->name('comentario_area.edit');
     Route::delete('comentario_area/{id}','ComentarioAreaController@delete')->name('comentario_area.delete');
 
-    
+    /**
+     * Creacion de la route para Empleados
+     */
+    Route::get('empleados', 'MmsaEmpleadosController@index')->name('empleados');
+    Route::post('empleados/load', 'MmsaEmpleadosController@load')->name('empleados.load');
+    Route::get('empleados/{id}/edit','MmsaEmpleadosController@edit')->name('empleados.edit');
+    Route::get('empleados/getsectores', 'MmsaEmpleadosController@getsectores')->name('empleados.getsectores');
+    Route::delete('empleados/{id}','MmsaEmpleadosController@delete')->name('empleados.delete');
     
 });

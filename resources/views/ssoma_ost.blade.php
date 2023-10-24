@@ -269,8 +269,8 @@
             $('.datetimepicker-input').datetimepicker({
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fd,
-                maxDate: moment().subtract(2, "days"),
-                minDate: moment("2022-01-01").format('YYYY-MM-DD'),
+                maxDate: moment().subtract(0, "days"),
+                minDate: moment("2023-01-01").format('YYYY-MM-DD'),
                 useCurrent: false,
             });
             $(".fecha-picker").on("change.datetimepicker", function (e) {
@@ -345,26 +345,12 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
-                    
+                    {data:'nombre', name:'nombre'},
+                    {data:'apellido', name:'apellido'},
+                    {data:'puesto', name:'puesto'},
+                    {data:'area', name:'area'},
                     {data:'fecha', name:'fecha'},
-                    {data:'tipologia', name:'tipologia'},
-                    {data:'nombre_y_apellido', name:'nombre_y_apellido'},
-                    {data:'area_reportante', name:'area_reportante'},
-                    {data:'lugar_frente', name:'lugar_frente'},
-                    {data:'tarea_observada', name:'tarea_observada'},
-                    {data:'acto_inseguro', name:'acto_inseguro'},
-                    {data:'condicion_inseguro', name:'condicion_inseguro'},
-                    {data:'desc_condicion_insegura', name:'desc_condicion_insegura'},
-                    {data:'solu_condicion_insegura', name:'solu_condicion_insegura'},
-                    {data:'elimi_condicion_insegura',name:'elimi_condicion_insegura'},
-                    {data:'prevenir_repeticion', name:'prevenir_repeticion'},
-                    {data:'reforzar_acto_seguro', name:'reforzar_acto_seguro'},
-                    {data:'responsable_ejecucion', name:'responsable_ejecucion'},
-                    {data:'fecha_vecimiento', name:'fecha_vecimiento'},
-                    {data:'nivel_criticidad', name:'nivel_criticidad'},
-                    {data:'estado', name:'estado'},
-                    {data:'comentario', name:'comentario'},
-                    {data:'fecha_cierre', name:'fecha_cierre'},
+                    {data:'intelex', name:'intelex'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
                 order: [[0, 'asc']]            
@@ -375,42 +361,73 @@
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar OST'); 
+            $('#modal-title').html('Cargar ost'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
         });
         /* ADD BUTTON*/
 
-         /* EDIT BUTTON */
+         /* SEARCH EMPLOYEE*/
+         $('#get-empleados').click(function(){
+            var dni = $('#dni').val();
+            const swalWithBootstrapButtons = Swal.mixin({
+                    customClass:{
+                        confirmButton:'btn btn-succes',
+                        cancelButton:'btn btn-danger'
+                    },
+                    buttonsStyling:true
+                });
+            if (dni === '' || dni === null){
+                swalWithBootstrapButtons.fire({
+                    title:'DNI NO INGRESADO',
+                    text:"Ingrese un DNI para buscar a una persona",
+                    icon:'warning',
+                    showCancelButton:false
+                })
+            }
+            else{
+                $.get('ost/'+dni+'/GetEmpleado',function(data){
+                    if (data['val'] == 1) {
+                        $('#nombre').val(data['generic'].Nombre);
+                        $('#apellido').val(data['generic'].Apellido);
+                        $('#puesto').val(data['generic'].Puesto);
+                        $('#area').val(data['generic'].nombre);
+                    }
+                    else{
+                        $('#nombre').val("");
+                        $('#apellido').val("");
+                        $('#puesto').val("");
+                        $('#area').val("");
+                        Swal.fire({
+                            title: data['msg'],
+                            icon: 'error',
+                        })
+                       
+                    }
+
+            });
+            }
+        })
+        /* SEARCH EMPLOYEE*/
+
+        /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
             $.get('ost/'+id+'/edit', function(data){
                 $('#form-button').val(0); 
-                $('#modal-title').html('Editar Area'); 
+                $('#modal-title').html('Editar ost'); 
                 $('#modal-form').trigger("reset"); 
                 $('#modal').modal('show');
-                $('#id').val(data.id);
-                $('#fecha').val(data.fecha);
-                $('#tipologia').val(data.tipologia);
-                $('#nomyape').val(data.nombre_y_apellido);
-                $('#area').val(data.area_reportante);
-                $('#lugar').val(data.lugar_frente);
-                $('#tarea').val(data.tarea_observada);
-                $('#acto').val(data.acto_inseguro);
-                $('#condicion').val(data.condicion_inseguro);
-                $('#descripcion').val(data.desc_condicion_insegura);
-                $('#solucion').val(data.solu_condicion_insegura);
-                $('#elimin').val(data.elimi_condicion_insegura);
-                $('#accion').val(data.prevenir_repeticion);
-                $('#reconocio').val(data.reforzar_acto_seguro);
-                $('#responsable').val(data.responsable_ejecucion);
-                $('#fecha_vencimiento').val(data.fecha_vecimiento);
-                $('#nivel').val(data.nivel_criticidad);
-                $('#estado').val(data.estado);
-                $('#comentario').val(data.comentario);
-                $('#fecha_cierre').val(data.fecha_cierre);
-                $('input[name="_token"]').val()                          
+                $("#id").val(data.id),
+                $('#dni').val(data.dni),
+                $('#nombre').val(data.nombre),
+                $('#apellido').val(data.apellido),
+                $('#puesto').val(data.puesto),
+                $('#area').val(data.area),
+                $('#fecha').val(data.fecha),
+                $('#intelex').val(data.id_intelex),
+                $('input[name="_token"]').val()                   
             })
         });      
         /* EDIT BUTTON */
@@ -478,16 +495,17 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
-                nombre: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 100
+                intelex:{
+                    required:true,
+                    number:true,
+                    min:1
                 },
-                descripcion: {
-                    required: false,
-                    minlength: 2,
-                    maxlength: 250
-                },              
+                fecha:{
+                    required:true
+                },
+                dni:{
+                    required:true
+                }
             },
             messages: {  
          
@@ -533,26 +551,10 @@
                     url:"{{route('ost.load') }}",
                     method:"POST",
                     data:{
-                        id: $("#id").val(),
+                        id:$("#id").val(),
+                        dni:$('#dni').val(),
                         fecha:$('#fecha').val(),
-                        tipologia: $('#tipologia').val(),
-                        nombre_y_apellido:$('#nomyape').val(),
-                        area_reportante:$('#area').val(),
-                        lugar_frente:$('#lugar').val(),
-                        tarea_observada:$('#tarea').val(),
-                        acto_inseguro:$('#acto').val(),
-                        condicion_inseguro:$('#condicion').val(),
-                        desc_condicion_insegura:$('#descripcion').val(),
-                        solu_condicion_insegura:$('#solucion').val(),
-                        elimi_condicion_insegura:$('#elimin').val(),
-                        prevenir_repeticion:$('#accion').val(),
-                        reforzar_acto_seguro:$('#reconocio').val(),
-                        responsable_ejecucion:$('#responsable').val(),
-                        fecha_vecimiento:$('#fecha_vencimiento').val(),
-                        nivel_criticidad:$('#nivel').val(),
-                        estado:$('#estado').val(),
-                        comentario:$('#comentario').val(),
-                        fecha_cierre:$('#fecha_cierre').val(),
+                        id_intelex:$('#intelex').val(),
                         active:active,
                         _token: $('input[name="_token"]').val()
                     },
@@ -617,25 +619,12 @@
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
                             <tr>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Puesto</th>
+                                <th>Area</th>
                                 <th>Fecha</th>
-                                <th>Tipologia</th>
-                                <th>Nombre y Apellido</th>
-                                <th>Area reportante</th>
-                                <th>Lugar/Frente</th>
-                                <th>Tarea observada</th>
-                                <th>Acto inseguro</th>
-                                <th>Condicion insegura</th>
-                                <th>Descripcion del acto o condicion insegura</th>
-                                <th>¿Se pudo solucionar en el momento?</th>
-                                <th>¿Como se elimino el acto o condincion insegura?</th>
-                                <th>Accion para prevenir la repiticion</th>
-                                <th>¿Como se reconocio/reforzo el acto seguro?</th>
-                                <th>Responsable de ejecutar la tarea</th>
-                                <th>Fecha de vencimiento</th>
-                                <th>Nivel de criticidad</th>
-                                <th>Estado</th>
-                                <th>Comentario</th>
-                                <th>Fecha de cierre</th>
+                                <th>N° Intelex</th>
                                 <th style="min-width:50px!important;"></th>    
                             </tr>
                         </thead>      
@@ -668,8 +657,57 @@
                     
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id">
-                        {{-- fecha - datetimpicker --}}
+
+                         {{--DNI--}}
+                         <div class="form-group">
+                            <label for="dni" class=" col-form-label">DNI:</label>
+                                <div class="col-sm">
+                                    <div class="input-group-append">
+                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
+                                        <button type="button" class="btn btn-primary" id="get-empleados"><i class="fas fa-search"></i></button>
+                                    </div>
+                                  </div>
+                        </div>
+                        {{--DNI--}}
+
+                        {{--Nombre--}}
                         <div class="form-group">
+                            <label for="nombre" class=" col-form-label">Nombre:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" disabled>
+                            </div>
+                        </div>
+                        {{--Nombre--}}
+
+                        {{--Apellido--}}
+                        <div class="form-group">
+                            <label for="apellido" class=" col-form-label">Apellido:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" disabled>
+                            </div>
+                        </div>
+                        {{--Apellido--}}
+
+                        {{--Puesto--}}
+                        <div class="form-group">
+                            <label for="puesto" class=" col-form-label">Puesto:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="puesto" name="puesto" placeholder="Puesto" disabled>
+                            </div>
+                        </div>
+                        {{--Puesto--}}
+
+                        {{--Area--}}
+                        <div class="form-group">
+                            <label for="area" class=" col-form-label">Area:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="area" name="area" placeholder="Area" disabled>
+                            </div>
+                        </div>
+                        {{--Area--}}
+
+                         {{-- fecha - datetimpicker --}}
+                         <div class="form-group">
                             <label for="nombre" class="col-form-label">Fecha:</label> 
                             <div class="col-sm">
                                 <div class="input-group-append" data-target="#fecha" data-toggle="datetimepicker">
@@ -678,211 +716,16 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- fin - fecha - datetimpicker --}}
-
-                        {{--TIPOLOGIA--}}
-                        <div class="form-group">
-                            <label for="tipologia" class="col-form-label">Tipologia:</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="tipologia" id="tipologia">
-                                    <option value="ACTO INSEGURO" selected>ACTO INSEGURO</option>
-                                    <option value="CONDICION INSEGURA">CONDICION INSEGURA</option>
-                                    <option value="RECONOCIMIENTO">RECONOCIMIENTO</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{--TIPOLOGIA--}}
-
-                        {{--Nombre y Apellido--}}
-                        <div class="form-group">
-                            <label for="nomyape" class=" col-form-label">Nombre y Apellido:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="nomyape" name="nomyape" placeholder="Nombre y Apellido">
-                            </div>
-                        </div>
-                        {{--Nombre y Apellido--}}
-
-                         {{--Area reportante--}}
-                         <div class="form-group">
-                            <label for="area" class="col-form-label">Area Reportante:</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="area" id="area">
-                                    <option value="OPERACIONES" selected>OPERACIONES</option>
-                                    <option value="PROCESOS">PROCESOS</option>
-                                    <option value="MINA">MINA</option>
-                                    <option value="LABORATORIO QUIMICO">LABORATORIO QUIMICO</option>
-                                    <option value="SST">SST</option>
-                                    <option value="PROYECTO">PROYECTO</option>
-                                    <option value="SSOMA">SSOMA</option>
-                                    <option value="CAMPAMENTO">CAMPAMENTO</option>
-                                    <option value="IT">IT</option>
-                                    <option value="LOGISTICA Y ABASTECIMIENTO">LOGISTICA Y ABASTECIMIENTO</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{--Area reportante--}}
-
-                        {{-- LUGAR/FRENTE --}}
-                        <div class="form-group">
-                            <label for="lugar" class=" col-form-label">Lugar/Frente:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="lugar" name="lugar" placeholder="Lugar/Frente">
-                            </div>
-                        </div>
-                        {{-- LUGAR/FRENTE --}}
-
-                        {{-- TAREA OBSERVADA --}}
-                        <div class="form-group">
-                            <label for="tarea" class="col-form-label">Tarea Observada:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="tarea" name="tarea" placeholder="Tarea Observada">
-                            </div>
-                        </div>
-                        {{-- TAREA OBSERVADA --}}
-                        
-                        {{-- ACTO INSEGURO --}}     
-                        <div class="form-group">
-                            <label for="acto" class="col-form-label">Acto inseguro:</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="acto" id="acto">
-                                    <option value="SI" selected>SI</option>
-                                    <option value="NO" >NO</option>
-                                    <option value="NO APLICA" >NO APLICA</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{--ACTO INSEGURO --}}    
-                        
-                         {{-- CONDICION INSEGURA --}}     
-                         <div class="form-group">
-                            <label for="condicion" class="col-form-label">Condicion insegura:</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="condicion" id="condicion">
-                                    <option value="SI" selected>SI</option>
-                                    <option value="NO" >NO</option>
-                                    <option value="NO APLICA" >NO APLICA</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{-- CONDICION INSEGURA --}}          
-                        
-                        {{-- DESCRIPCION DEL ACTO O CONDICION  --}}
-                        <div class="form-group">
-                            <label for="descripcion" class="col-form-label">Descripcion del acto o condicion insegura:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion del acto o condicion insegura">
-                            </div>
-                        </div>
-                        {{-- DESCRIPCION DEL ACTO O CONDICION --}}
-                        
-                        {{-- Solucion de la condicion INSEGURA --}}     
-                        <div class="form-group">
-                            <label for="solucion" class="col-form-label">¿Se pudo solucionar en el momento?</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="solucion" id="solucion">
-                                    <option value="SI" selected>SI</option>
-                                    <option value="NO" >NO</option>
-                                    <option value="NO APLICA" >NO APLICA</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{--  Solucion de la condicion INSEGURA --}}
-
-                        {{-- Eliminacion del acto o condicion insegura  --}}
-                        <div class="form-group ">
-                            <label for="elimin" class="col-form-label">¿Como se elimino el acto o condicion insegura?</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="elimin" name="elimin" placeholder="¿Como se elimino el acto o condicion insegura?">
-                            </div>
-                        </div>
-                        {{-- Eliminacion del acto o condicion insegura --}}
-
-                        {{-- ACCION PARA PREVENIR LA REPETICION  --}}
-                        <div class="form-group ">
-                            <label for="accion" class="col-form-label">Acciones para prevenir la repeticion:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="accion" name="accion" placeholder="¿Como se elimino el acto o condicion insegura?">
-                            </div>
-                        </div>
-                        {{-- ACCION PARA PREVENIR LA REPETICION --}}
-
-                        {{-- COMO SE RECONOCIO/REFORZO EL ACTO SEGURO --}}
-                        <div class="form-group ">
-                            <label for="reconocio" class="col-form-label">¿Como se reconocio/reforzo el acto seguro?</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="reconocio" name="reconocio" placeholder="¿Como se reconocio/reforzo el acto seguro?">
-                            </div>
-                        </div>
-                        {{-- COMO SE RECONOCIO/REFORZO EL ACTO SEGURO --}}
-                        
-                        {{-- RESPONSABLE DE EJECUTAR LA ACCION --}}
-                        <div class="form-group ">
-                            <label for="responsable" class="col-form-label">Responsable de ejecutar la accion:</label>
-                            <div class="col-sm">
-                            <input type="text" class="form-control" id="responsable" name="responsable" placeholder="Responsable de ejecutar la accion">
-                            </div>
-                        </div>
-                        {{-- RESPONSABLE DE EJECUTAR LA ACCION --}}
-
                         {{-- fecha - datetimpicker --}}
-                        <div class="form-group ">
-                            <label for="fecha_vencimiento" class="col-form-label">Fecha de vencimiento:</label> 
+
+                        {{--N° Intelex--}}
+                        <div class="form-group">
+                            <label for="intelex" class=" col-form-label">N° Intelex:</label>
                             <div class="col-sm">
-                                <div class="input-group-append fecha-picker" data-target="#fecha_vencimiento" data-toggle="datetimepicker">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_vencimiento" id="fecha_vencimiento" name="fecha_vencimiento"/>
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
+                              <input type="text" class="form-control" id="intelex" name="intelex" placeholder="N° Intelex">
                             </div>
                         </div>
-                        {{-- fin - fecha - datetimpicker --}}
-
-                        {{-- Nivel de criticidad --}}     
-                        <div class="form-group ">
-                            <label for="nivel" class="col-form-label">Nivel de criticidad:</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="nivel" id="nivel">
-                                    <option value="ALTO" selected>ALTO</option>
-                                    <option value="MEDIO">MEDIO</option>
-                                    <option value="BAJO">BAJO</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{-- Nivel de criticidad --}}
-
-                          {{-- Estado --}}     
-                          <div class="form-group ">
-                            <label for="estado" class="col-form-label">Estado:</label>
-                            <div class="col-sm">
-                                <select class="form-control company" name="estado" id="estado">
-                                    <option value="ABIERTO VENCIDO" selected>ABIERTO VENCIDO</option>
-                                    <option value="ABIERTO EN PLAZO">ABIERTO EN PLAZO</option>
-                                    <option value="CERRADO">CERRADO</option>
-                                </select> 
-                            </div>
-                        </div>
-                        {{-- Estado --}}
-
-                        {{-- COMENTARIO --}}
-                        <div class="form-group ">
-                            <label for="comentario" class="col-form-label">Comentario:</label>
-                            <div class="col-sm">
-                            <input type="text" class="form-control" id="comentario" name="comentario" placeholder="Comentario">
-                            </div>
-                        </div>
-                        {{-- COMENTARIO --}}
-
-                         {{-- fecha - datetimpicker --}}
-                         <div class="form-group ">
-                            <label for="fecha_cierre" class="col-form-label">Fecha de cierre:</label> 
-                            <div class="col-sm">
-                                <div class="input-group-append fecha-picker" data-target="#fecha_cierre" data-toggle="datetimepicker">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_cierre" id="fecha_cierre" name="fecha_cierre"/>
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- fin - fecha - datetimpicker --}}
-
+                        {{--N° Intelex--}}
                         @csrf
                     </form>
                 </div>

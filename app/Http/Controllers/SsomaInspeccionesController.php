@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ssoma_inspecciones;
+use App\Models\Mmsa_empleados;
+use App\Models\Mmsa_sector;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ssoma_capacitacion;
@@ -25,14 +27,13 @@ class SsomaInspeccionesController extends Controller
          * 0(Desactivado) 
          */
         if(request()->ajax()) {
-            $list = DB::table('ssoma_inspecciones')
-                        ->select('id','fecha','tipologia','hora','nombre_y_apellido','area_reportante','area_contratista_inspeccionada','lugar_frente','hallazgos','nivel_criticidad','planes_accion','solucion_momento','responsable_plan_accion','fecha_vencimiento','estado','comentario','fecha_cierre')
-                        ->where(['active'=>1])
+            $list = DB::table('ssoma_inspecciones as insp')
+                        ->select('insp.id as id','emp.Nombre as nombre','emp.Apellido as apellido','emp.Puesto as puesto','sector.nombre as area','insp.fecha as fecha','insp.id_intelex as intelex')
+                        ->join('mmsa_empleados as emp','insp.dni','=','emp.DNI')
+                        ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                        ->where(['insp.active'=>1])
                         ->get();
             return datatables()->of($list)
-                    ->editColumn('hora',function($data){
-                        return date('H:i', strtotime($data->hora));
-                    })
                     ->addColumn('action', function($data)
                     {
                         $button = ''; 
@@ -49,6 +50,27 @@ class SsomaInspeccionesController extends Controller
     }
 
     /**
+     * Function GetEmpleado: devuelve los datos de un empleado segun el dni
+     */
+    public function GetEmpleado($dni){
+        $empleado = Mmsa_empleados::where(['DNI'=>$dni])
+                        ->first();
+        if ($empleado) {
+            $data['val']=1;
+            $data['generic']=DB::table('mmsa_empleados as emp')
+                    ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                    ->where(['emp.DNI'=>$dni])
+                    ->first();
+            return response()->json($data);
+        }
+        else{
+            $data['msg']='No se encontro el DNI ingresado';
+            $data['val']=0;
+            return response()->json($data);
+        }
+    }
+
+    /**
      * Fucntion load(): Realiza las ALTAS de las OST
      */
      public function load(Request $request){
@@ -61,22 +83,9 @@ class SsomaInspeccionesController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [   
+                    'dni' => 'required|numeric',
                     'fecha' => 'required',
-                    'tipologia' => 'required|string|min:3|max:100',
-                    'hora' => 'required',
-                    'nombre_y_apellido' => 'required|string|min:3|max:100',
-                    'area_reportante' => 'required|string|min:2|max:100',
-                    'area_contratista_inspeccionada' => 'required|string|min:2|max:100',
-                    'lugar_frente' => 'required|string|min:3|max:100',
-                    'hallazgos' => 'required|string|min:2|max:100',
-                    'nivel_criticidad' => 'required|string|min:3|max:100',
-                    'planes_accion' => 'required|string|min:2|max:100',
-                    'solucion_momento' => 'required|string|min:2|max:100',
-                    'responsable_plan_accion' => 'required|string|min:3|max:100',
-                    'fecha_vencimiento' => 'required',
-                    'estado' => 'required|string|min:3|max:100',
-                    'comentario' => 'required|string|min:3|max:100',
-                    'fecha_cierre' => 'required'
+                    'id_intelex' => 'required|numeric'
                 ]             
             );
             if ($validator->fails()) 
@@ -87,22 +96,9 @@ class SsomaInspeccionesController extends Controller
             {
                 Ssoma_inspecciones::create(
                     [
+                        'dni'=> $request->get('dni'),
                         'fecha' => $request->get('fecha'),
-                        'tipologia' => $request->get('tipologia'),
-                        'hora' => $request->get('hora'),
-                        'nombre_y_apellido' => $request->get('nombre_y_apellido'),
-                        'area_reportante' => $request->get('area_reportante'),
-                        'area_contratista_inspeccionada' => $request->get('area_contratista_inspeccionada'),
-                        'lugar_frente' => $request->get('lugar_frente'),
-                        'hallazgos' => $request->get('hallazgos'),
-                        'nivel_criticidad' => $request->get('nivel_criticidad'),
-                        'planes_accion' => $request->get('planes_accion'),
-                        'solucion_momento' => $request->get('solucion_momento'),
-                        'responsable_plan_accion' => $request->get('responsable_plan_accion'),
-                        'fecha_vencimiento' => $request->get('fecha_vencimiento'),
-                        'estado' => $request->get('estado'),
-                        'comentario' => $request->get('comentario'),
-                        'fecha_cierre' => $request->get('fecha_cierre'),
+                        'id_intelex'=>$request->get('id_intelex'),
                         'active' => $request->get('active')
                     ]);
                 return;                
@@ -113,22 +109,9 @@ class SsomaInspeccionesController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [   
+                    'dni' => 'required|numeric',
                     'fecha' => 'required',
-                    'tipologia' => 'required|string|min:3|max:100',
-                    'hora' => 'required',
-                    'nombre_y_apellido' => 'required|string|min:3|max:100',
-                    'area_reportante' => 'required|string|min:2|max:100',
-                    'area_contratista_inspeccionada' => 'required|string|min:2|max:100',
-                    'lugar_frente' => 'required|string|min:3|max:100',
-                    'hallazgos' => 'required|string|min:2|max:100',
-                    'nivel_criticidad' => 'required|string|min:3|max:100',
-                    'planes_accion' => 'required|string|min:2|max:100',
-                    'solucion_momento' => 'required|string|min:2|max:100',
-                    'responsable_plan_accion' => 'required|string|min:3|max:100',
-                    'fecha_vencimiento' => 'required',
-                    'estado' => 'required|string|min:3|max:100',
-                    'comentario' => 'required|string|min:3|max:100',
-                    'fecha_cierre' => 'required'
+                    'id_intelex' => 'required|numeric'
                 ]            
             );
             if ($validator->fails()) 
@@ -140,22 +123,9 @@ class SsomaInspeccionesController extends Controller
                 Ssoma_inspecciones::where('id',$id)
                     ->update(
                     [
+                        'dni'=> $request->get('dni'),
                         'fecha' => $request->get('fecha'),
-                        'tipologia' => $request->get('tipologia'),
-                        'hora' => $request->get('hora'),
-                        'nombre_y_apellido' => $request->get('nombre_y_apellido'),
-                        'area_reportante' => $request->get('area_reportante'),
-                        'area_contratista_inspeccionada' => $request->get('area_contratista_inspeccionada'),
-                        'lugar_frente' => $request->get('lugar_frente'),
-                        'hallazgos' => $request->get('hallazgos'),
-                        'nivel_criticidad' => $request->get('nivel_criticidad'),
-                        'planes_accion' => $request->get('planes_accion'),
-                        'solucion_momento' => $request->get('solucion_momento'),
-                        'responsable_plan_accion' => $request->get('responsable_plan_accion'),
-                        'fecha_vencimiento' => $request->get('fecha_vencimiento'),
-                        'estado' => $request->get('estado'),
-                        'comentario' => $request->get('comentario'),
-                        'fecha_cierre' => $request->get('fecha_cierre')
+                        'id_intelex'=>$request->get('id_intelex')
                     ]);
                 return;                
             }
@@ -166,10 +136,13 @@ class SsomaInspeccionesController extends Controller
       * Function edit(): Realiza un get de los datos del registro seleccionado
       */
      public function edit($id){
-        $where = array('id' => $id);
-        $generic =  DB::table('ssoma_inspecciones')
-        ->where($where)
-        ->first();
+        //$where = array('id' => $id);
+        $generic =  DB::table('ssoma_inspecciones as insp')
+                    ->select('insp.id as id','insp.dni as dni','emp.Nombre as nombre','emp.Apellido as apellido','emp.Puesto as puesto','sector.nombre as area','insp.fecha','insp.id_intelex')
+                    ->join('mmsa_empleados as emp','insp.dni','=','emp.DNI')
+                    ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')            
+                    ->where(['insp.id'=> $id])
+                    ->first();
         return response()->json($generic);
      }
 

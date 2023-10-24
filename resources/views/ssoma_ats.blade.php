@@ -267,8 +267,8 @@
             $('.datetimepicker-input').datetimepicker({
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fd,
-                maxDate: moment().subtract(2, "days"),
-                minDate: moment("2022-01-01").format('YYYY-MM-DD'),
+                maxDate: moment().subtract(0, "days"),
+                minDate: moment("2023-01-01").format('YYYY-MM-DD'),
                 useCurrent: false,
             });
             $(".fecha-picker").on("change.datetimepicker", function (e) {
@@ -346,10 +346,11 @@
 
                     {data:'fecha', name:'fecha'},
                     {data:'hora', name:'hora'},
+                    {data:'nombre', name:'nombre'},
+                    {data:'apellido', name:'apellido'},
+                    {data:'area', name:'area'},
                     {data:'tarea', name:'tarea'},
                     {data:'lugar_frente', name:'lugar_frente'},
-                    {data:'nombre_y_apellido', name:'nombre_y_apellido'},
-                    {data:'area', name:'area'},
                     {data:'cantidad_personas', name:'cantidad_personas'},
                     {data:'comentarios', name:'comentarios', orderable: false,searchable: 'false'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
@@ -358,6 +359,50 @@
             });
         });
         /* DATATABLES */
+
+        /* SEARCH EMPLOYEE*/
+        $('#get-empleados').click(function(){
+            var dni = $('#dni').val();
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                    customClass:{
+                        confirmButton:'btn btn-succes',
+                        cancelButton:'btn btn-danger'
+                    },
+                    buttonsStyling:true
+                });
+            if (dni === '' || dni === null){
+                swalWithBootstrapButtons.fire({
+                    title:'DNI NO INGRESADO',
+                    text:"Ingrese un DNI para buscar a una persona",
+                    icon:'warning',
+                    showCancelButton:false
+                })
+            }
+            else{
+                $.get('ats/'+dni+'/GetEmpleado',function(data){
+                    if (data['val'] == 1) {
+                        $('#nombre').val(data['generic'].Nombre);
+                        $('#apellido').val(data['generic'].Apellido);
+                        $('#puesto').val(data['generic'].Puesto);
+                        $('#area').val(data['generic'].nombre);
+                    }
+                    else{
+                        $('#nombre').val("");
+                        $('#apellido').val("");
+                        $('#puesto').val("");
+                        $('#area').val("");
+                        Swal.fire({
+                            title: data['msg'],
+                            icon: 'error',
+                        })
+                       
+                    }
+
+            });
+            }
+        })
+        /* SEARCH EMPLOYEE*/
 
         /* ADD BUTTON*/
         $('#add').click(function () { 
@@ -380,15 +425,15 @@
                 $('#id').val(data.id);
                 $('#fecha').val(data.fecha);
                 $('#hora').val(data.hora);
+                $('#dni').val(data.dni);
+                $('#nombre').val(data.nombre);
+                $('#apellido').val(data.apellido);
+                $('#area').val(data.area);
                 $('#tarea').val(data.tarea);
                 $('#lugar').val(data.lugar_frente);
-                $('#nomyape').val(data.nombre_y_apellido);
-                $('#area').val(data.area);
                 $('#cantidad').val(data.cantidad_personas);
                 $('#comentario').val(data.comentarios);
-                // $('#nombre').val(data.nombre);                   
-                // $('#descripcion').val(data.descripcion);                   
-                // $("#estado").val(data.estado).attr("selected", "selected");
+
             })
         });      
         /* EDIT BUTTON */
@@ -456,22 +501,28 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
-                nombre: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 100
+                fecha:{
+                    required:true
                 },
-                descripcion: {
-                    required: false,
-                    minlength: 2,
+                hora:{
+                    required:true
+                },
+                tarea: {
+                    required: true,
+                    minlength: 5,
                     maxlength: 250
                 },
-                estado: {
+                lugar:{
+                    required:true,
+                    minlength: 5,
+                    maxlength: 250
+                },
+                cantidad: {
                     required: true,
                     number: true,
-                    min: 0,
-                    max: 1
-                }
+                    min: 1,
+                    max: 100
+                },
                 
             },
             messages: {  
@@ -521,10 +572,9 @@
                         id: $("#id").val(),
                         fecha:$('#fecha').val(),
                         hora:$('#hora').val(),
+                        dni:$('#dni').val(),
                         tarea:$('#tarea').val(),
                         lugar_frente:$('#lugar').val(),
-                        nombre_y_apellido:$('#nomyape').val(),
-                        area:$('#area').val(),
                         cantidad_personas:$('#cantidad').val(),
                         comentarios:$('#comentario').val(),
                         active:active,
@@ -532,7 +582,6 @@
                     },
                     success:function(data)
                     {  
-                        console.log(data);
                         $('#modal').scrollTop(0);
                         if($.isEmptyObject(data.error)){
                             $('#modal').modal('hide');
@@ -592,10 +641,11 @@
                             <tr>    
                                 <th>Fecha</th>
                                 <th>Hora</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Area</th>
                                 <th>Tarea</th>
                                 <th>Lugar/Frente</th>
-                                <th>Nombre y Apellido</th>
-                                <th>Area</th>
                                 <th>Cantidad Personas</th>
                                 <th>Comentarios</th>
                                 <th style="min-width:50px!important;"></th>            
@@ -650,6 +700,45 @@
                         </div>
                         {{-- HORA --}}
 
+                         {{--DNI--}}
+                         <div class="form-group">
+                            <label for="dni" class=" col-form-label">DNI:</label>
+                                <div class="col-sm">
+                                    <div class="input-group-append">
+                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
+                                        <button type="button" class="btn btn-primary" id="get-empleados"><i class="fas fa-search"></i></button>
+                                    </div>
+                                  </div>
+                        </div>
+                        {{--DNI--}}
+
+                          {{--Nombre--}}
+                          <div class="form-group">
+                            <label for="nombre" class=" col-form-label">Nombre:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" disabled>
+                            </div>
+                        </div>
+                        {{--Nombre--}}
+
+                        {{--Apellido--}}
+                        <div class="form-group">
+                            <label for="apellido" class=" col-form-label">Apellido:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" disabled>
+                            </div>
+                        </div>
+                        {{--Apellido--}}
+
+                        {{--Area--}}
+                        <div class="form-group">
+                            <label for="area" class=" col-form-label">Area:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="area" name="area" placeholder="Area" disabled>
+                            </div>
+                        </div>
+                        {{--Area--}}
+
                         {{-- TAREA --}}
                         <div class="form-group">
                             <label for="tarea" class="col-form-label">Tarea</label>
@@ -667,24 +756,6 @@
                             </div>
                         </div>  
                         {{-- LUGAR/FRENTE --}}
-
-                        {{-- NOMBRE Y APELLIDO --}}
-                        <div class="form-group">
-                            <label for="nomyape" class="col-form-label">Nombre y Apellido</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="nomyape" name="nomyape" placeholder="Nombre y Apellido">
-                            </div>
-                        </div>
-                        {{-- NOMBRE Y APELLIDO --}}
-
-                        {{-- AREA --}}
-                        <div class="form-group">
-                            <label for="area" class="col-form-label">Area</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="area" name="area" placeholder="Area">
-                            </div>
-                        </div>
-                        {{-- AREA --}}
 
                         {{-- CANTIDAD DE PERSONAS --}}
                         <div class="form-group">

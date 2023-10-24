@@ -250,13 +250,13 @@ return [
                     'icon' => 'nav-icon fas fa-chalkboard-teacher',
                 ],
                 [
-                    'text' => 'OST',
-                    'url'  => 'ost',
+                    'text' => 'ATS',
+                    'url'  => 'ats',
                     'icon' => 'nav-icon fas fa-file-alt'
                 ],
                 [
-                    'text' => 'ATS',
-                    'url'  => 'ats',
+                    'text' => 'OST',
+                    'url'  => 'ost',
                     'icon' => 'nav-icon fas fa-file-alt'
                 ],
                 [
@@ -351,6 +351,11 @@ return [
                     'text' => 'comentario_area',
                     'url'  => 'comentario_area',
                     'icon' => 'nav-icon fas fa-comment-alt',
+                ],
+                [
+                    'text' => 'empleados',
+                    'url'  => 'empleados',
+                    'icon' => 'nav-icon fas fa-users',
                 ],
             ],
         ],

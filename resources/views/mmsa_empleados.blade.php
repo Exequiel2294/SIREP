@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Inspecciones')
+@section('title', 'Empleados')
 @section('post_title', config('app.name'))
 
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Inspecciones</h1>
+            <h1>Empleados</h1>
             <a href="javascript:void(0)" class="btn btn-success" id="add">Añadir</a> 
         </div> 
     </div>  
@@ -269,8 +269,8 @@
             $('.datetimepicker-input').datetimepicker({
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fd,
-                maxDate: moment().subtract(0, "days"),
-                minDate: moment("2023-01-01").format('YYYY-MM-DD'),
+                maxDate: moment().subtract(2, "days"),
+                minDate: moment("2022-01-01").format('YYYY-MM-DD'),
                 useCurrent: false,
             });
             $(".fecha-picker").on("change.datetimepicker", function (e) {
@@ -296,18 +296,18 @@
                     }, 
                     {
                         extend: 'csvHtml5',
-                        title: 'Listado Inspecciones '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoInspecciones'+moment().local().format('DD/MM/YYYY')
+                        title: 'Listado Emepleados '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoEmepleados'+moment().local().format('DD/MM/YYYY')
                     }, 
                     {
                         extend: 'excelHtml5',
-                        title: 'Listado Inspecciones '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoInspecciones'+moment().local().format('DD/MM/YYYY')            
+                        title: 'Listado Emepleados '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoEmepleados'+moment().local().format('DD/MM/YYYY')            
                     }, 
                     {
                         extend: 'pdfHtml5',
                         title: moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoInspecciones'+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoEmepleados'+moment().local().format('DD/MM/YYYY'),
                         customize: function ( doc ) {
                             doc.styles.title.alignment = 'right';
                             doc.styles.title.fontSize = 12;
@@ -316,7 +316,7 @@
                     {
                         extend: 'print', 
                         text: 'Imprimir',
-                        title: 'Listado Inspecciones '+moment().local().format('DD/MM/YYYY'),
+                        title: 'Listado Emepleados '+moment().local().format('DD/MM/YYYY'),
                     }
                 ],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -326,7 +326,7 @@
                 responsive: true,
                 scrollX : true,
                 ajax:{                
-                    url: "{{route('inspeccion')}}",
+                    url: "{{route('empleados')}}",
                     type: 'GET',
                 },
                 "language": {
@@ -345,90 +345,70 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
+                    {data:'dni', name:'dni'},
                     {data:'nombre', name:'nombre'},
                     {data:'apellido', name:'apellido'},
                     {data:'puesto', name:'puesto'},
-                    {data:'area', name:'area'},
-                    {data:'fecha', name:'fecha'},
-                    {data:'intelex', name:'intelex'},
+                    {data:'sector', name:'sector'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
                 order: [[0, 'asc']]            
             });
+
+            // AJAX REQUEST
+            $.ajax({
+                url:"{{route('empleados.getsectores')}}",
+                type:'GET',
+                dataType:'json',
+                success:function(response)
+                {
+                    var len = 0;
+                    if(response['data'] != null){
+                        len=response['data'].length;
+                    }
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            var id=response['data'][i].id;
+                            var nombre=response['data'][i].sector;
+                            var area = response['data'][i].area;
+                            var option = "<option value='"+id+"'>"+area+" - "+nombre+"</option>";
+                            $("#sector").append(option);
+                        }
+                    }
+
+                }
+                
+            })
         });
         /* DATATABLES */
 
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar Inspeccion'); 
+            $('#modal-title').html('Cargar Empleado'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
         });
         /* ADD BUTTON*/
 
-          /* SEARCH EMPLOYEE*/
-          $('#get-empleados').click(function(){
-            var dni = $('#dni').val();
-
-            const swalWithBootstrapButtons = Swal.mixin({
-                    customClass:{
-                        confirmButton:'btn btn-succes',
-                        cancelButton:'btn btn-danger'
-                    },
-                    buttonsStyling:true
-                });
-            if (dni === '' || dni === null){
-                swalWithBootstrapButtons.fire({
-                    title:'DNI NO INGRESADO',
-                    text:"Ingrese un DNI para buscar a una persona",
-                    icon:'warning',
-                    showCancelButton:false
-                })
-            }
-            else{
-                $.get('ats/'+dni+'/GetEmpleado',function(data){
-                    if (data['val'] == 1) {
-                        $('#nombre').val(data['generic'].Nombre);
-                        $('#apellido').val(data['generic'].Apellido);
-                        $('#puesto').val(data['generic'].Puesto);
-                        $('#area').val(data['generic'].nombre);
-                    }
-                    else{
-                        $('#nombre').val("");
-                        $('#apellido').val("");
-                        $('#puesto').val("");
-                        $('#area').val("");
-                        Swal.fire({
-                            title: data['msg'],
-                            icon: 'error',
-                        })
-                       
-                    }
-
-            });
-            }
-        })
-        /* SEARCH EMPLOYEE*/
-
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
-            $.get('inspeccion/'+id+'/edit', function(data){
+            
+            $.get('empleados/'+id+'/edit', function(data){
+                var select = data.id;
                 $('#form-button').val(0); 
-                $('#modal-title').html('Editar Inspeccion'); 
-                $('#modal-form').trigger("reset"); 
+                $('#modal-title').html('Editar Empleado'); 
+                $('#modal-form').trigger("reset");
                 $('#modal').modal('show');
-                $("#id").val(data.id),
-                $('#dni').val(data.dni),
-                $('#nombre').val(data.nombre),
-                $('#apellido').val(data.apellido),
-                $('#puesto').val(data.puesto),
-                $('#area').val(data.area),
-                $('#fecha').val(data.fecha),
-                $('#intelex').val(data.id_intelex),
-                $('input[name="_token"]').val()                   
+                $('#id').val(data.id);
+                $('#dni').val(data.dni);
+                $('#nombre').val(data.nombre);
+                $('#apellido').val(data.apellido);
+                $('#puesto').val(data.puesto);
+                $('#sector').val(data.sector);
+                // $('input[name="_token"]').val()                   
             })
         });      
         /* EDIT BUTTON */
@@ -455,7 +435,7 @@
             }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "inspeccion/" + id,
+                    url: "empleados/" + id,
                     type: 'delete',
                     data:{_token: $('input[name="_token"]').val()},
                     success: function (data) { 
@@ -495,18 +475,13 @@
 
         /* FORM BUTTON */        
         $("#modal-form").validate({
+            //MIRAR SI SE PUEDE DAR LA VALIDACION PARA QUE DE POR DNI
             rules: {
-                intelex:{
-                    required:true,
-                    number:true,
-                    min:1
-                },
-                fecha:{
-                    required:true
-                },
-                dni:{
-                    required:true
-                }
+                nombre: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 100
+                },  
             },
             messages: {  
          
@@ -549,13 +524,15 @@
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
                 $.ajax({
-                    url:"{{route('inspeccion.load') }}",
+                    url:"{{route('empleados.load') }}",
                     method:"POST",
                     data:{
-                        id:$("#id").val(),
+                        id:$('#id').val(),
                         dni:$('#dni').val(),
-                        fecha:$('#fecha').val(),
-                        id_intelex:$('#intelex').val(),
+                        nombre:$('#nombre').val(),
+                        apellido:$('#apellido').val(),
+                        puesto:$('#puesto').val(),
+                        id_sector:$('#sector').val(),
                         active:active,
                         _token: $('input[name="_token"]').val()
                     },
@@ -571,7 +548,7 @@
                             var oTable = $('#data-table').dataTable();
                             oTable.fnDraw(false);
                             if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Inspeccion cargada con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Emepleado cargada con exito', 'MansfieldRep', 'success');
                             }   
                             else{
                                 MansfieldRep.notification('Inspeccion actualizada con exito', 'MansfieldRep', 'success');
@@ -620,12 +597,11 @@
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
                             <tr>
+                                <th>DNI</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Puesto</th>
-                                <th>Area</th>
-                                <th>Fecha</th>
-                                <th>N° Intelex</th>
+                                <th>Sector</th>
                                 <th style="min-width:50px!important;"></th>    
                             </tr>
                         </thead>      
@@ -660,14 +636,11 @@
                         <input type="hidden" name="id" id="id">
 
                          {{--DNI--}}
-                        <div class="form-group">
+                         <div class="form-group">
                             <label for="dni" class=" col-form-label">DNI:</label>
-                                <div class="col-sm">
-                                    <div class="input-group-append">
-                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
-                                        <button type="button" class="btn btn-primary" id="get-empleados"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </div>
+                            <div class="col-sm">
+                                <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
+                            </div>
                         </div>
                         {{--DNI--}}
 
@@ -675,7 +648,7 @@
                         <div class="form-group">
                             <label for="nombre" class=" col-form-label">Nombre:</label>
                             <div class="col-sm">
-                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" disabled>
+                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" >
                             </div>
                         </div>
                         {{--Nombre--}}
@@ -684,7 +657,7 @@
                         <div class="form-group">
                             <label for="apellido" class=" col-form-label">Apellido:</label>
                             <div class="col-sm">
-                              <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" disabled>
+                              <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" >
                             </div>
                         </div>
                         {{--Apellido--}}
@@ -693,40 +666,21 @@
                         <div class="form-group">
                             <label for="puesto" class=" col-form-label">Puesto:</label>
                             <div class="col-sm">
-                              <input type="text" class="form-control" id="puesto" name="puesto" placeholder="Puesto" disabled>
+                              <input type="text" class="form-control" id="puesto" name="puesto" placeholder="Puesto">
                             </div>
                         </div>
                         {{--Puesto--}}
 
-                        {{--Area--}}
+                        {{--Dropdown sector--}}
                         <div class="form-group">
-                            <label for="area" class=" col-form-label">Area:</label>
+                            <label for="puesto" class=" col-form-label">Sector:</label>
                             <div class="col-sm">
-                              <input type="text" class="form-control" id="area" name="area" placeholder="Area" disabled>
+                                <select class='form-control' id='sector' name='sel_sector'>
+                                <option value='0'>Seleccione un sector</option>
                             </div>
                         </div>
-                        {{--Area--}}
-
-                         {{-- fecha - datetimpicker --}}
-                         <div class="form-group">
-                            <label for="nombre" class="col-form-label">Fecha:</label> 
-                            <div class="col-sm">
-                                <div class="input-group-append" data-target="#fecha" data-toggle="datetimepicker">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha" id="fecha" name="fecha"/>
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- fecha - datetimpicker --}}
-
-                        {{--N° Intelex--}}
-                        <div class="form-group">
-                            <label for="intelex" class=" col-form-label">N° Intelex:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="intelex" name="intelex" placeholder="N° Intelex">
-                            </div>
-                        </div>
-                        {{--N° Intelex--}}
+                        {{--Dropdown sector--}}
+                        
                         @csrf
                     </form>
                 </div>

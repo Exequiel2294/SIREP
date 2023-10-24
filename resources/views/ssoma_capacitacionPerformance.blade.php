@@ -267,8 +267,8 @@
             $('.datetimepicker-input').datetimepicker({
                 format: 'DD/MM/YYYY',
                 defaultDate: date_fd,
-                maxDate: moment().subtract(2, "days"),
-                minDate: moment("2022-01-01").format('YYYY-MM-DD'),
+                maxDate: moment().subtract(0, "days"),
+                minDate: moment("2023-01-01").format('YYYY-MM-DD'),
                 useCurrent: false,
             });
             $(".fecha-picker").on("change.datetimepicker", function (e) {
@@ -347,8 +347,9 @@
                     {data:'fecha', name:'fecha'},
                     {data:'hora', name:'hora'},
                     {data:'tema', name:'tema'},
-                    {data:'nombre_y_apellido', name:'nombre_y_apellido'},
-                    {data:'area_reportante', name:'area_reportante'},
+                    {data:'nombre', name:'nombre'},
+                    {data:'apellido', name:'apellido'},
+                    {data:'area', name:'area'},
                     {data:'lugar_frente', name:'lugar_frente'},
                     {data:'duracion', name:'duracion'},
                     {data:'cantidad_asistentes', name:'cantidad_asistentes'},
@@ -369,6 +370,50 @@
         });
         /* ADD BUTTON*/
 
+         /* SEARCH EMPLOYEE*/
+         $('#get-empleados').click(function(){
+            var dni = $('#dni').val();
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                    customClass:{
+                        confirmButton:'btn btn-succes',
+                        cancelButton:'btn btn-danger'
+                    },
+                    buttonsStyling:true
+                });
+            if (dni === '' || dni === null){
+                swalWithBootstrapButtons.fire({
+                    title:'DNI NO INGRESADO',
+                    text:"Ingrese un DNI para buscar a una persona",
+                    icon:'warning',
+                    showCancelButton:false
+                })
+            }
+            else{
+                $.get('capacitacion_performance/'+dni+'/GetEmpleado',function(data){
+                    if (data['val'] == 1) {
+                        $('#nombre').val(data['generic'].Nombre);
+                        $('#apellido').val(data['generic'].Apellido);
+                        $('#puesto').val(data['generic'].Puesto);
+                        $('#area').val(data['generic'].nombre);
+                    }
+                    else{
+                        $('#nombre').val("");
+                        $('#apellido').val("");
+                        $('#puesto').val("");
+                        $('#area').val("");
+                        Swal.fire({
+                            title: data['msg'],
+                            icon: 'error',
+                        })
+                       
+                    }
+
+            });
+            }
+        })
+        /* SEARCH EMPLOYEE*/
+
          /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
@@ -381,8 +426,10 @@
                 $('#fecha').val(data.fecha);
                 $('#hora').val(data.hora);
                 $('#tema').val(data.tema);
-                $('#nomyape').val(data.nombre_y_apellido);
-                $('#area').val(data.area_reportante).attr("selected","selected");
+                $('#dni').val(data.dni);
+                $('#nombre').val(data.nombre);
+                $('#apellido').val(data.apellido);
+                $('#area').val(data.area);
                 $('#lugar').val(data.lugar_frente);
                 $('#duracion').val(data.duracion);
                 $('#cantidad').val(data.cantidad_asistentes);
@@ -453,18 +500,22 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
+                fecha:{
+                    required:true
+                },
+                hora:{
+                    required:true
+                },
                 tema: {
                     required: true,
                     minlength: 2,
                     maxlength: 250
                 },
-                nomyape: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 250
+                dni: {
+                    required: true
                 },
                 lugar: {
-                    required: false,
+                    required: true,
                     minlength: 2,
                     maxlength: 250
                 },
@@ -479,11 +530,6 @@
                     min: 0,
                     max: 100
                 },
-                descripcion: {
-                    required: false,
-                    minlength: 2,
-                    maxlength: 250
-                }
             },
             messages: {  
          
@@ -533,8 +579,7 @@
                         fecha:$('#fecha').val(),
                         hora:$('#hora').val(),
                         tema:$('#tema').val(),
-                        nombre_y_apellido:$('#nomyape').val(),
-                        area_reportante:$('#area').val(),
+                        dni:$('#dni').val(),
                         lugar_frente:$('#lugar').val(),
                         duracion:$('#duracion').val(),
                         cantidad_asistentes:$('#cantidad').val(),
@@ -603,12 +648,13 @@
                             <tr>    
                                 <th>Fecha</th>
                                 <th>Hora</th>
-                                <th>Tarea</th>
-                                <th>Lugar/Frente</th>
-                                <th>Nombre y Apellido</th>
+                                <th>Tema</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
                                 <th>Area</th>
+                                <th>Lugar/Frente</th>
+                                <th>Duracion</th>
                                 <th>Cantidad Personas</th>
-                                <th>Comentarios</th>
                                 <th style="min-width:50px!important;"></th>            
                             </tr>
                         </thead>      
@@ -631,7 +677,7 @@
                 </div>
                 <div class="alert-error">
                     <div class="print-error-msg">
-                        <h4><i class="icon fa fa-ban"></i> El formulario contiene errores</h4>
+                        <h4><i class="icon fa fa-ban"></i>El formulario contiene errores</h4>
                         <ul></ul>
                     </div>
                     <button type="button" id="close-alert" class="close" aria-hidden="true">×</button>          
@@ -670,34 +716,44 @@
                         </div>  
                         {{-- TEMA --}}
 
-                         {{-- NOMBRE Y APELLIDO --}}
-                         <div class="form-group">
-                            <label for="nomyape" class="col-form-label">Nombre y Apellido</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="nomyape" name="nomyape" placeholder="Nombre y Apellido">
-                            </div>
-                        </div>
-                        {{-- NOMBRE Y APELLIDO --}}
-
-                        {{--Area reportante--}}
+                        {{--DNI--}}
                         <div class="form-group">
-                            <label for="area" class="col-form-label">Area Reportante:</label>
+                            <label for="dni" class=" col-form-label">DNI:</label>
+                                <div class="col-sm">
+                                    <div class="input-group-append">
+                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
+                                        <button type="button" class="btn btn-primary" id="get-empleados"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                        </div>
+                        {{--DNI--}}
+
+                          {{--Nombre--}}
+                          <div class="form-group">
+                            <label for="nombre" class=" col-form-label">Nombre:</label>
                             <div class="col-sm">
-                                <select class="form-control company" name="area" id="area">
-                                    <option value="OPERACIONES" selected>OPERACIONES</option>
-                                    <option value="PROCESOS">PROCESOS</option>
-                                    <option value="MINA">MINA</option>
-                                    <option value="LABORATORIO QUIMICO">LABORATORIO QUIMICO</option>
-                                    <option value="SST">SST</option>
-                                    <option value="PROYECTO">PROYECTO</option>
-                                    <option value="SSOMA">SSOMA</option>
-                                    <option value="CAMPAMENTO">CAMPAMENTO</option>
-                                    <option value="IT">IT</option>
-                                    <option value="LOGISTICA Y ABASTECIMIENTO">LOGISTICA Y ABASTECIMIENTO</option>
-                                </select> 
+                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" disabled>
                             </div>
                         </div>
-                        {{--Area reportante--}}
+                        {{--Nombre--}}
+
+                        {{--Apellido--}}
+                        <div class="form-group">
+                            <label for="apellido" class=" col-form-label">Apellido:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" disabled>
+                            </div>
+                        </div>
+                        {{--Apellido--}}
+
+                        {{--Area--}}
+                        <div class="form-group">
+                            <label for="area" class=" col-form-label">Area:</label>
+                            <div class="col-sm">
+                              <input type="text" class="form-control" id="area" name="area" placeholder="Area" disabled>
+                            </div>
+                        </div>
+                        {{--Area--}}
 
                         {{-- LUGAR/FRENTE --}}
                         <div class="form-group">

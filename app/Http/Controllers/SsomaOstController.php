@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ssoma_ost;
+use App\Models\Mmsa_empleados;
+use App\Models\Mmsa_sector;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -24,9 +26,11 @@ class SsomaOstController extends Controller
          * 0(Desactivado) 
          */
         if(request()->ajax()) {
-            $list = DB::table('ssoma_ost')
-                        ->select('*')
-                        ->where(['active'=>1])
+            $list = DB::table('ssoma_ost as ost')
+                        ->select('ost.id as id','emp.Nombre as nombre','emp.Apellido as apellido','emp.Puesto as puesto','sector.nombre as area','ost.fecha as fecha','ost.id_intelex as intelex')
+                        ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                        ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                        ->where(['ost.active'=>1])
                         ->get();
             return datatables()->of($list)
                     ->addColumn('action', function($data)
@@ -45,9 +49,31 @@ class SsomaOstController extends Controller
     }
 
     /**
+     * Function GetEmpleado: devuelve los datos de un empleado segun el dni
+     */
+    public function GetEmpleado($dni){
+        $empleado = Mmsa_empleados::where(['DNI'=>$dni])
+                        ->first();
+        if ($empleado) {
+            $data['val']=1;
+            $data['generic']=DB::table('mmsa_empleados as emp')
+                    ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                    ->where(['emp.DNI'=>$dni])
+                    ->first();
+            return response()->json($data);
+        }
+        else{
+            $data['msg']='No se encontro el DNI ingresado';
+            $data['val']=0;
+            return response()->json($data);
+        }
+    }
+
+    /**
      * Fucntion load(): Realiza las ALTAS de las OST
      */
      public function load(Request $request){
+               
                
         $id = $request->get('id');
         
@@ -57,25 +83,9 @@ class SsomaOstController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [   
+                    'dni' => 'required|numeric',
                     'fecha' => 'required',
-                    'tipologia' => 'required|string|min:3|max:100',
-                    'nombre_y_apellido' => 'required|string|min:3|max:100',
-                    'area_reportante' => 'required|string|min:2|max:100',
-                    'lugar_frente' => 'required|string|min:3|max:100',
-                    'tarea_observada' => 'required|string|min:3|max:100',
-                    'acto_inseguro' => 'required|string|min:2|max:100',
-                    'condicion_inseguro' => 'required|string|min:2|max:100',
-                    'desc_condicion_insegura' => 'required|string|min:3|max:100',
-                    'solu_condicion_insegura' => 'required|string|min:2|max:100',
-                    'elimi_condicion_insegura' => 'required|string|min:3|max:100',
-                    'prevenir_repeticion' => 'required|string|min:3|max:100',
-                    'reforzar_acto_seguro' => 'required|string|min:3|max:100',
-                    'responsable_ejecucion' => 'required|string|min:3|max:100',
-                    'fecha_vecimiento' => 'required',
-                    'nivel_criticidad' => 'required|string|min:3|max:100',
-                    'estado' => 'required|string|min:3|max:100',
-                    'comentario' => 'required|string|min:3|max:100',
-                    'fecha_cierre' => 'required|string|min:3|max:100'
+                    'id_intelex' => 'required|numeric'
                 ]             
             );
             if ($validator->fails()) 
@@ -86,26 +96,10 @@ class SsomaOstController extends Controller
             {
                 Ssoma_ost::create(
                     [
+                        'dni'=> $request->get('dni'),
                         'fecha' => $request->get('fecha'),
-                        'tipologia' => $request->get('tipologia'),
-                        'nombre_y_apellido' => $request->get('nombre_y_apellido'),
-                        'area_reportante' => $request->get('area_reportante'),
-                        'lugar_frente' => $request->get('lugar_frente'),
-                        'tarea_observada' => $request->get('tarea_observada'),
-                        'acto_inseguro' => $request->get('acto_inseguro'),
-                        'condicion_inseguro' => $request->get('condicion_inseguro'),
-                        'desc_condicion_insegura' => $request->get('desc_condicion_insegura'),
-                        'solu_condicion_insegura' => $request->get('solu_condicion_insegura'),
-                        'elimi_condicion_insegura' => $request->get('elimi_condicion_insegura'),
-                        'prevenir_repeticion' => $request->get('prevenir_repeticion'),
-                        'reforzar_acto_seguro' => $request->get('reforzar_acto_seguro'),
-                        'responsable_ejecucion' => $request->get('responsable_ejecucion'),
-                        'fecha_vecimiento' => $request->get('fecha_vecimiento'),
-                        'nivel_criticidad' => $request->get('nivel_criticidad'),
-                        'estado' => $request->get('estado'),
-                        'comentario' => $request->get('comentario'),
-                        'active'=>$request->get('active'),
-                        'fecha_cierre' => $request->get('fecha_cierre')
+                        'id_intelex'=>$request->get('id_intelex'),
+                        'active' => $request->get('active')
                     ]);
                 return;                
             }
@@ -115,25 +109,9 @@ class SsomaOstController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [   
+                    'dni' => 'required|numeric',
                     'fecha' => 'required',
-                    'tipologia' => 'required|string|min:3|max:100',
-                    'nombre_y_apellido' => 'required|string|min:3|max:100',
-                    'area_reportante' => 'required|string|min:2|max:100',
-                    'lugar_frente' => 'required|string|min:3|max:100',
-                    'tarea_observada' => 'required|string|min:3|max:100',
-                    'acto_inseguro' => 'required|string|min:2|max:100',
-                    'condicion_inseguro' => 'required|string|min:2|max:100',
-                    'desc_condicion_insegura' => 'required|string|min:3|max:100',
-                    'solu_condicion_insegura' => 'required|string|min:2|max:100',
-                    'elimi_condicion_insegura' => 'required|string|min:3|max:100',
-                    'prevenir_repeticion' => 'required|string|min:3|max:100',
-                    'reforzar_acto_seguro' => 'required|string|min:3|max:100',
-                    'responsable_ejecucion' => 'required|string|min:3|max:100',
-                    'fecha_vecimiento' => 'required',
-                    'nivel_criticidad' => 'required|string|min:3|max:100',
-                    'estado' => 'required|string|min:3|max:100',
-                    'comentario' => 'required|string|min:3|max:100',
-                    'fecha_cierre' => 'required|string|min:3|max:100'
+                    'id_intelex' => 'required|numeric'
                 ]            
             );
             if ($validator->fails()) 
@@ -145,25 +123,9 @@ class SsomaOstController extends Controller
                 Ssoma_ost::where('id',$id)
                     ->update(
                     [
+                        'dni'=> $request->get('dni'),
                         'fecha' => $request->get('fecha'),
-                        'tipologia' => $request->get('tipologia'),
-                        'nombre_y_apellido' => $request->get('nombre_y_apellido'),
-                        'area_reportante' => $request->get('area_reportante'),
-                        'lugar_frente' => $request->get('lugar_frente'),
-                        'tarea_observada' => $request->get('tarea_observada'),
-                        'acto_inseguro' => $request->get('acto_inseguro'),
-                        'condicion_inseguro' => $request->get('condicion_inseguro'),
-                        'desc_condicion_insegura' => $request->get('desc_condicion_insegura'),
-                        'solu_condicion_insegura' => $request->get('solu_condicion_insegura'),
-                        'elimi_condicion_insegura' => $request->get('elimi_condicion_insegura'),
-                        'prevenir_repeticion' => $request->get('prevenir_repeticion'),
-                        'reforzar_acto_seguro' => $request->get('reforzar_acto_seguro'),
-                        'responsable_ejecucion' => $request->get('responsable_ejecucion'),
-                        'fecha_vecimiento' => $request->get('fecha_vecimiento'),
-                        'nivel_criticidad' => $request->get('nivel_criticidad'),
-                        'estado' => $request->get('estado'),
-                        'comentario' => $request->get('comentario'),
-                        'fecha_cierre' => $request->get('fecha_cierre')
+                        'id_intelex'=>$request->get('id_intelex')
                     ]);
                 return;                
             }
@@ -174,10 +136,12 @@ class SsomaOstController extends Controller
       * Function edit(): Realiza un get de los datos del registro seleccionado
       */
      public function edit($id){
-        $where = array('id' => $id);
-        $generic =  DB::table('ssoma_ost')
-        ->where($where)
-        ->first();
+        $generic =  DB::table('ssoma_ost as ost')
+                    ->select('ost.id as id','ost.dni as dni','emp.Nombre as nombre','emp.Apellido as apellido','emp.Puesto as puesto','sector.nombre as area','ost.fecha','ost.id_intelex')
+                    ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                    ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')            
+                    ->where(['ost.id'=> $id])
+                    ->first();
         return response()->json($generic);
      }
 
