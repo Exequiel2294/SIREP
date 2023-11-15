@@ -11,41 +11,200 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use LdapRecord\Models\Events\Updated;
+use Illuminate\Support\Facades\Auth;
 use Psy\CodeCleaner\FunctionReturnInWriteContextPass;
 use Symfony\Component\HttpFoundation\RateLimiter\RequestRateLimiterInterface;
 
 class SsomaOstController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:ssoma module']);
+    }
+
     /**
-     * Function index(): Index del modulo ost
+     * Function index(): Index del modulo OST
      */
     public function index(){
+        $user= Auth::id(); //obtengo el id del usuario
+        $data_user=Mmsa_empleados::where(['id_usuario'=>$user])->first();//tomo las datos del usuario
         /**
          * where=>
          * 1(Activo)
          * 0(Desactivado) 
          */
-        if(request()->ajax()) {
-            $list = DB::table('ssoma_ost as ost')
-                        ->select('ost.id as id','emp.Nombre as nombre','emp.Apellido as apellido','emp.Puesto as puesto','sector.nombre as area','ost.fecha as fecha','ost.id_intelex as intelex')
-                        ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
-                        ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
-                        ->where(['ost.active'=>1])
-                        ->get();
-            return datatables()->of($list)
-                    ->addColumn('action', function($data)
-                    {
-                        $button = ''; 
-                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
-                        $button .= '&nbsp;';
-                        $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
-                        return $button;
-                    })
-                    ->rawColumns(['action'])
-                    ->addIndexColumn()
-                    ->make(true);
-        } 
-        return view('ssoma_ost');
+        if (Auth::user()->hasAnyRole(['Reportes_E', 'Admin'])) {
+            if(request()->ajax()) {
+                $list = DB::table('ssoma_ost as ost')
+                            ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                            ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                            ->join('mmsa_area as area','sector.id_area','=','area.id')
+                            ->select('ost.id as id',
+                            'emp.Nombre as nombre',
+                            'emp.Apellido as apellido',
+                            'emp.Puesto as puesto',
+                            'sector.nombre as area',
+                            'ost.fecha as fecha',
+                            'ost.id_intelex as intelex')
+                            ->where(['ost.active'=>1])
+                            ->get();
+                return datatables()->of($list)
+                        ->addColumn('action', function($data)
+                        {
+                            $button = ''; 
+                            $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
+                            $button .= '&nbsp;';
+                            $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
+                            return $button;
+                        })
+                        ->rawColumns(['action'])
+                        ->addIndexColumn()
+                        ->make(true);
+            } 
+            return view('ssoma_ost');
+        }
+        else
+        {
+            if(request()->ajax()) {
+                switch ($data_user->id_cargo){
+                    case 1:
+                        $data_direccion = DB::table('mmsa_direccion as dir')//Obtengo el ID direccion en el caso que el usuario sea un director
+                                        ->select('dir.id as id_dir')
+                                        ->join('mmsa_area as area','area.id_direccion','=','dir.id')
+                                        ->join('mmsa_sector as sector','sector.id_area','=','area.id')
+                                        ->where(['sector.id'=>$data_user->id_sector])
+                                        ->first();               
+        
+                        $list = DB::table('ssoma_ost as ost')
+                                        ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                                        ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                                        ->join('mmsa_area as area','sector.id_area','=','area.id')
+                                        ->join('mmsa_direccion as dir','area.id_direccion','=','dir.id')
+                                        ->select('ost.id as id',
+                                        'emp.Nombre as nombre',
+                                        'emp.Apellido as apellido',
+                                        'emp.Puesto as puesto',
+                                        'sector.nombre as area',
+                                        'ost.fecha as fecha',
+                                        'ost.id_intelex as intelex')
+                                        ->where(['ost.active'=>1])
+                                        ->where(['dir.id'=>$data_direccion->id_dir])
+                                        ->get();
+                                return datatables()->of($list)
+                                ->addColumn('action', function($data)
+                                {
+                                    $button = ''; 
+                                    $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
+                                    $button .= '&nbsp;';
+                                    $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
+                                    return $button;
+                                })
+                                ->rawColumns(['action'])
+                                ->addIndexColumn()
+                                ->make(true);
+                                return view('ssoma_ost');
+                        break;
+                    case 2:
+                        $data_area = DB::table('mmsa_area as area')//Obtengo el ID direccion en el caso que el usuario sea un gerente
+                                        ->select('area.id as id_area')
+                                        ->join('mmsa_sector as sector','sector.id_area','=','area.id')
+                                        ->where(['sector.id'=>$data_user->id_sector])
+                                        ->first();               
+        
+                        $list = DB::table('ssoma_ost as ost')
+                                        ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                                        ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                                        ->join('mmsa_area as area','sector.id_area','=','area.id')
+                                        ->join('mmsa_direccion as dir','area.id_direccion','=','dir.id')
+                                        ->select('ost.id as id',
+                                        'emp.Nombre as nombre',
+                                        'emp.Apellido as apellido',
+                                        'emp.Puesto as puesto',
+                                        'sector.nombre as area',
+                                        'ost.fecha as fecha',
+                                        'ost.id_intelex as intelex')
+                                        ->where(['ost.active'=>1])//1 activo
+                                        ->where(['area.id'=>$data_area->id_area])
+                                        ->get();
+                                return datatables()->of($list)
+                                ->addColumn('action', function($data)
+                                {
+                                    $button = ''; 
+                                    $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
+                                    $button .= '&nbsp;';
+                                    $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
+                                    return $button;
+                                })
+                                ->rawColumns(['action'])
+                                ->addIndexColumn()
+                                ->make(true);
+                                return view('ssoma_ost');
+                        break;
+                    case 3:
+                        $list = DB::table('ssoma_ost as ost')
+                                    ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                                    ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                                    ->join('mmsa_area as area','sector.id_area','=','area.id')
+                                    ->select('ost.id as id',
+                                        'emp.Nombre as nombre',
+                                        'emp.Apellido as apellido',
+                                        'emp.Puesto as puesto',
+                                        'sector.nombre as area',
+                                        'ost.fecha as fecha',
+                                        'ost.id_intelex as intelex')
+                                    ->where(['ost.active'=>1])//1 activo
+                                    ->where(['emp.id_sector'=>$data_user->id_sector])
+                                    ->get();
+                                return datatables()->of($list)
+                                ->addColumn('action', function($data)
+                                {
+                                    $button = ''; 
+                                    $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
+                                    $button .= '&nbsp;';
+                                    $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
+                                    return $button;
+                                })
+                                ->rawColumns(['action'])
+                                ->addIndexColumn()
+                                ->make(true);
+                                return view('ssoma_ost');
+                        
+                        break;
+                    case 4:
+                        $list = DB::table('ssoma_ost as ost')
+                                    ->join('mmsa_empleados as emp','ost.dni','=','emp.DNI')
+                                    ->join('mmsa_sector as sector','emp.id_sector','=','sector.id')
+                                    ->join('mmsa_area as area','sector.id_area','=','area.id')
+                                    ->select('ost.id as id',
+                                        'emp.Nombre as nombre',
+                                        'emp.Apellido as apellido',
+                                        'emp.Puesto as puesto',
+                                        'sector.nombre as area',
+                                        'ost.fecha as fecha',
+                                        'ost.id_intelex as intelex')
+                                    ->where(['ost.active'=>1])//1 activo
+                                    ->where(['emp.DNI'=>$data_user->DNI])
+                                    ->get();
+                                    return datatables()->of($list)
+                                    ->addColumn('action', function($data)
+                                    {
+                                        $button = ''; 
+                                        $button .= '<a href="javascript:void(0)" name="edit" data-id="'.$data->id.'" class="btn-action-table edit" title="Editar registro"><i style="color:#0F62AC;" class="fa fa-edit"></i></a>';  
+                                        $button .= '&nbsp;';
+                                        $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
+                                        return $button;
+                                    })
+                                    ->rawColumns(['action'])
+                                    ->addIndexColumn()
+                                    ->make(true);
+                                    return view('ssoma_ost');
+        
+                        break;
+                }
+            } 
+            return view('ssoma_ost');
+        }
+        
     }
 
     /**

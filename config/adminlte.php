@@ -353,8 +353,13 @@ return [
                     'icon' => 'nav-icon fas fa-comment-alt',
                 ],
                 [
-                    'text' => 'empleados',
+                    'text' => 'Empleados',
                     'url'  => 'empleados',
+                    'icon' => 'nav-icon fas fa-users',
+                ],
+                [
+                    'text' => 'Acceso Modulos',
+                    'url'  => 'acceso_modulo',
                     'icon' => 'nav-icon fas fa-users',
                 ],
             ],

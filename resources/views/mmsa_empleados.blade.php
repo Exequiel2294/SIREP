@@ -350,12 +350,13 @@
                     {data:'apellido', name:'apellido'},
                     {data:'puesto', name:'puesto'},
                     {data:'sector', name:'sector'},
+                    {data:'correo', name:'correo'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
                 order: [[0, 'asc']]            
             });
 
-            // AJAX REQUEST
+            // AJAX REQUEST traer los sectores de la tabla
             $.ajax({
                 url:"{{route('empleados.getsectores')}}",
                 type:'GET',
@@ -371,8 +372,56 @@
                             var id=response['data'][i].id;
                             var nombre=response['data'][i].sector;
                             var area = response['data'][i].area;
-                            var option = "<option value='"+id+"'>"+area+" - "+nombre+"</option>";
-                            $("#sector").append(option);
+                            var optionSector = "<option value='"+id+"'>"+area+" - "+nombre+"</option></div>";
+                            $("#sector").append(optionSector);
+                        }
+                    }
+
+                }
+                
+            })
+
+            // AJAX REQUEST traer los cargos de la tabla
+            $.ajax({
+                url:"{{route('empleados.getcargos')}}",
+                type:'GET',
+                dataType:'json',
+                success:function(response)
+                {
+                    var len = 0;
+                    if(response['result'] != null){
+                        len=response['result'].length;
+                    }
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            var id=response['result'][i].id;
+                            var cargo = response['result'][i].cargo;
+                            var optionCargo = "<option value='"+id+"'>"+cargo+"</option></div>";
+                            $("#cargo").append(optionCargo);
+                        }
+                    }
+
+                }
+                
+            })
+
+            // AJAX REQUEST traer los correos de la tabla
+            $.ajax({
+                url:"{{route('empleados.getcorreos')}}",
+                type:'GET',
+                dataType:'json',
+                success:function(response)
+                {
+                    var len = 0;
+                    if(response['data'] != null){
+                        len=response['data'].length;
+                    }
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            var id=response['data'][i].id;
+                            var email = response['data'][i].email;
+                            var optionCorreo = "<option value='"+id+"'>"+email+"</option></div>";
+                            $("#correo").append(optionCorreo);
                         }
                     }
 
@@ -395,7 +444,6 @@
         /* EDIT BUTTON */
         $(document).on('click', '.edit', function(){ 
             var id=$(this).data('id');
-            
             $.get('empleados/'+id+'/edit', function(data){
                 var select = data.id;
                 $('#form-button').val(0); 
@@ -406,7 +454,9 @@
                 $('#dni').val(data.dni);
                 $('#nombre').val(data.nombre);
                 $('#apellido').val(data.apellido);
+                $('#cargo').val(data.cargo);
                 $('#puesto').val(data.puesto);
+                $('#correo').val(data.correo);
                 $('#sector').val(data.sector);
                 // $('input[name="_token"]').val()                   
             })
@@ -531,7 +581,9 @@
                         dni:$('#dni').val(),
                         nombre:$('#nombre').val(),
                         apellido:$('#apellido').val(),
+                        id_cargo:$('#cargo').val(),
                         puesto:$('#puesto').val(),
+                        id_usuario:$('#correo').val(),
                         id_sector:$('#sector').val(),
                         active:active,
                         _token: $('input[name="_token"]').val()
@@ -602,6 +654,7 @@
                                 <th>Apellido</th>
                                 <th>Puesto</th>
                                 <th>Sector</th>
+                                <th>Correo</th>
                                 <th style="min-width:50px!important;"></th>    
                             </tr>
                         </thead>      
@@ -637,7 +690,7 @@
 
                          {{--DNI--}}
                          <div class="form-group">
-                            <label for="dni" class=" col-form-label">DNI:</label>
+                            <label for="dni" class="col-form-label">DNI:</label>
                             <div class="col-sm">
                                 <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
                             </div>
@@ -646,7 +699,7 @@
 
                         {{--Nombre--}}
                         <div class="form-group">
-                            <label for="nombre" class=" col-form-label">Nombre:</label>
+                            <label for="nombre" class="col-form-label">Nombre:</label>
                             <div class="col-sm">
                               <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" >
                             </div>
@@ -655,32 +708,56 @@
 
                         {{--Apellido--}}
                         <div class="form-group">
-                            <label for="apellido" class=" col-form-label">Apellido:</label>
+                            <label for="apellido" class="col-form-label">Apellido:</label>
                             <div class="col-sm">
                               <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" >
                             </div>
                         </div>
                         {{--Apellido--}}
 
+                         {{--Dropdown cargos--}}
+                         <div class="form-group">
+                            <label for="cargo" class="col-form-label">Cargos:</label>
+                            <div class="col-sm">
+                                <select class='form-control' id='cargo' name='sel_cargo'>
+                                <option value='0'>Seleccione un cargo</option>
+                                </select>
+                            </div>
+                        </div>
+                        {{--Dropdown cargos--}}
+
                         {{--Puesto--}}
                         <div class="form-group">
-                            <label for="puesto" class=" col-form-label">Puesto:</label>
+                            <label for="puesto" class="col-form-label">Puesto:</label>
                             <div class="col-sm">
                               <input type="text" class="form-control" id="puesto" name="puesto" placeholder="Puesto">
                             </div>
                         </div>
                         {{--Puesto--}}
 
+                        {{--Dropdown correos--}}
+                        <div class="form-group">
+                            <label for="correo" class="col-form-label">Correo:</label>
+                            <div class="col-sm">
+                                <select class='form-control' id='correo' name='sel_correo'>
+                                <option value='0'>Seleccione un correo</option>
+                                </select>
+                            </div>
+                        </div>
+                        {{--Dropdown correos--}}
+
                         {{--Dropdown sector--}}
                         <div class="form-group">
-                            <label for="puesto" class=" col-form-label">Sector:</label>
+                            <label for="sector" class="col-form-label">Sector:</label>
                             <div class="col-sm">
                                 <select class='form-control' id='sector' name='sel_sector'>
                                 <option value='0'>Seleccione un sector</option>
+                                </select>
                             </div>
                         </div>
                         {{--Dropdown sector--}}
-                        
+
+                       
                         @csrf
                     </form>
                 </div>

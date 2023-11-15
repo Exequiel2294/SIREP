@@ -210,5 +210,17 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::get('empleados/{id}/edit','MmsaEmpleadosController@edit')->name('empleados.edit');
     Route::get('empleados/getsectores', 'MmsaEmpleadosController@getsectores')->name('empleados.getsectores');
     Route::delete('empleados/{id}','MmsaEmpleadosController@delete')->name('empleados.delete');
-    
+    Route::get('empleados/getcargos', 'MmsaEmpleadosController@getcargos')->name('empleados.getcargos');
+    Route::get('empleados/getcorreos', 'MmsaEmpleadosController@getcorreos')->name('empleados.getcorreos');
+
+     /**
+     * Creacion de la route para el Acceso a Modulos
+     */
+    Route::get('acceso_modulo', 'AccesoModulosController@index')->name('acceso_modulo');
+    Route::post('acceso_modulo/load', 'AccesoModulosController@load')->name('acceso_modulo.load');
+    Route::get('acceso_modulo/getcorreos', 'AccesoModulosController@getcorreos')->name('acceso_modulo.getcorreos');
+    Route::get('acceso_modulo/getmodulos', 'AccesoModulosController@getmodulos')->name('acceso_modulo.getmodulos');
+    //Route::get('acceso_modulo/{id}/edit','AccesoModulosController@edit')->name('acceso_modulo.edit');
+    //Route::get('acceso_modulo/{dni}/GetEmpleado','AccesoModulosController@GetEmpleado')->name('acceso_modulo.GetEmpleado');
+    Route::delete('acceso_modulo/delete','AccesoModulosController@delete')->name('acceso_modulo.delete');
 });

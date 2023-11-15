@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Capacitacion')
+@section('title', 'Acceso Modulo')
 @section('post_title', config('app.name'))
 
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Capacitacion</h1>
+            <h1>Acceso Modulo</h1>
             <a href="javascript:void(0)" class="btn btn-success" id="add">Añadir</a> 
         </div> 
     </div>  
@@ -130,6 +130,9 @@
 
 
         /* DATATABLES */
+        .table thead th{
+            vertical-align: middle !important;
+        }
         .datatables-p {
             display: flex;
             justify-content: center;
@@ -251,34 +254,6 @@
                 }, 
             350);
         });
-        /*PRESS NAV-LINK BUTTON*/
-        
-        /* FECHA PARA EL DATETIMEPICKER */
-        if ( moment().startOf('month').format('YYYY-MM-DD') === moment().format('YYYY-MM-DD') ) {
-            var date_fd = moment().subtract(1, "month").startOf('month').format('YYYY-MM-DD');
-        }
-        else {
-            var date_fd = moment().startOf('month').format('YYYY-MM-DD');
-        }
-        var date_fh = moment().subtract(1, "days");
-        var table;
-        $(function(){
-            /* Calendario Fecha desde*/
-            $('.datetimepicker-input').datetimepicker({
-                format: 'DD/MM/YYYY',
-                defaultDate: date_fd,
-                maxDate: moment().subtract(0, "days"),
-                minDate: moment("2023-01-01").format('YYYY-MM-DD'),
-                useCurrent: false,
-            });
-            $(".fecha-picker").on("change.datetimepicker", function (e) {
-                date_fd = e.date;
-            });
-            $('.timepicker').datetimepicker({
-                format:'HH:mm:ss'
-            });
-        })
-        /*FIN Fecha*/
 
         /* DATATABLES */
         $(document).ready(function(){     
@@ -287,6 +262,7 @@
                          "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
                          "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
+                //Desactivar los botones
                 buttons: [
                     {
                         extend: 'copyHtml5', 
@@ -294,18 +270,18 @@
                     }, 
                     {
                         extend: 'csvHtml5',
-                        title: 'Listado de Capacitaciones '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoCapacitaciones'+moment().local().format('DD/MM/YYYY')
+                        title: 'Listado OST '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoOST'+moment().local().format('DD/MM/YYYY')
                     }, 
                     {
                         extend: 'excelHtml5',
-                        title: 'Listado de Capacitaciones '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoCapacitaciones'+moment().local().format('DD/MM/YYYY')            
+                        title: 'Listado OST '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoOST'+moment().local().format('DD/MM/YYYY')            
                     }, 
                     {
                         extend: 'pdfHtml5',
                         title: moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoCapacitaciones'+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoOST'+moment().local().format('DD/MM/YYYY'),
                         customize: function ( doc ) {
                             doc.styles.title.alignment = 'right';
                             doc.styles.title.fontSize = 12;
@@ -314,7 +290,7 @@
                     {
                         extend: 'print', 
                         text: 'Imprimir',
-                        title: 'Listado Capacitaciones '+moment().local().format('DD/MM/YYYY'),
+                        title: 'Listado OST '+moment().local().format('DD/MM/YYYY'),
                     }
                 ],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -324,7 +300,7 @@
                 responsive: true,
                 scrollX : true,
                 ajax:{                
-                    url: "{{route('capacitacion_performance')}}",
+                    url: "{{route('acceso_modulo')}}",
                     type: 'GET',
                 },
                 "language": {
@@ -343,103 +319,75 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
-
-                    {data:'fecha', name:'fecha'},
-                    {data:'hora', name:'hora'},
-                    {data:'tema', name:'tema'},
-                    {data:'nombre', name:'nombre'},
-                    {data:'apellido', name:'apellido'},
-                    {data:'area', name:'area'},
-                    {data:'lugar_frente', name:'lugar_frente'},
-                    {data:'duracion', name:'duracion'},
-                    {data:'cantidad_asistentes', name:'cantidad_asistentes'},
+                    {data:'correo', name:'correo'},
+                    {data:'modulo', name:'modulo'},
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
-                order: [[0, 'desc']]            
+                order: [[0, 'asc']]            
             });
+            // AJAX REQUEST traer los correos de la tabla
+            $.ajax({
+                url:"{{route('acceso_modulo.getcorreos')}}",
+                type:'GET',
+                dataType:'json',
+                success:function(response)
+                {
+                    var len = 0;
+                    if(response['data'] != null){
+                        len=response['data'].length;
+                    }
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            var id=response['data'][i].id;
+                            var email = response['data'][i].email;
+                            var optionCorreo = "<option value='"+id+"'>"+email+"</option></div>";
+                            $("#correo").append(optionCorreo);
+                        }
+                    }
+
+                }
+                
+            })
+            // AJAX REQUEST traer los Modulos de la tabla
+            $.ajax({
+                url:"{{route('acceso_modulo.getmodulos')}}",
+                type:'GET',
+                dataType:'json',
+                success:function(response)
+                {
+                    var len = 0;
+                    if(response['data'] != null){
+                        len=response['data'].length;
+                    }
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            var id=response['data'][i].id;
+                            var name = response['data'][i].name;
+                            var optionModulo = "<option value='"+id+"'>"+name+"</option></div>";
+                            $("#modulo").append(optionModulo);
+                        }
+                    }
+
+                }
+                
+            })
         });
         /* DATATABLES */
 
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar Capacitaciones'); 
+            $('#modal-title').html('Cargar ost'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
         });
         /* ADD BUTTON*/
 
-         /* SEARCH EMPLOYEE*/
-         $('#get-empleados').click(function(){
-            var dni = $('#dni').val();
-
-            const swalWithBootstrapButtons = Swal.mixin({
-                    customClass:{
-                        confirmButton:'btn btn-succes',
-                        cancelButton:'btn btn-danger'
-                    },
-                    buttonsStyling:true
-                });
-            if (dni === '' || dni === null){
-                swalWithBootstrapButtons.fire({
-                    title:'DNI NO INGRESADO',
-                    text:"Ingrese un DNI para buscar a una persona",
-                    icon:'warning',
-                    showCancelButton:false
-                })
-            }
-            else{
-                $.get('capacitacion_performance/'+dni+'/GetEmpleado',function(data){
-                    if (data['val'] == 1) {
-                        $('#nombre').val(data['generic'].Nombre);
-                        $('#apellido').val(data['generic'].Apellido);
-                        $('#puesto').val(data['generic'].Puesto);
-                        $('#area').val(data['generic'].nombre);
-                    }
-                    else{
-                        $('#nombre').val("");
-                        $('#apellido').val("");
-                        $('#puesto').val("");
-                        $('#area').val("");
-                        Swal.fire({
-                            title: data['msg'],
-                            icon: 'error',
-                        })
-                       
-                    }
-
-            });
-            }
-        })
-        /* SEARCH EMPLOYEE*/
-
-         /* EDIT BUTTON */
-        $(document).on('click', '.edit', function(){ 
-            var id=$(this).data('id');
-            $.get('capacitacion_performance/'+id+'/edit', function(data){
-                $('#form-button').val(0); 
-                $('#modal-title').html('Editar Capacitaciones'); 
-                $('#modal-form').trigger("reset"); 
-                $('#modal').modal('show');
-                $('#id').val(data.id);
-                $('#fecha').val(data.fecha);
-                $('#hora').val(data.hora);
-                $('#tema').val(data.tema);
-                $('#dni').val(data.dni);
-                $('#nombre').val(data.nombre);
-                $('#apellido').val(data.apellido);
-                $('#area').val(data.area);
-                $('#lugar').val(data.lugar_frente);
-                $('#duracion').val(data.duracion);
-                $('#cantidad').val(data.cantidad_asistentes);
-            })
-        });      
-        /* EDIT BUTTON */
-
         /* DELETE BUTTON */  
         $(document).on('click', '.delete', function() {
-            let id = $(this).attr('id');
+            let model_id = $(this).attr('id');
+            let permission_id = $(this).attr('data-id');
             const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
@@ -459,9 +407,13 @@
             }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "capacitacion_performance/" + id,
+                    url: "acceso_modulo.delete",
                     type: 'delete',
-                    data:{_token: $('input[name="_token"]').val()},
+                    data:{
+                        model_id:model_id,
+                        permission_id:permission_id,
+                        _token: $('input[name="_token"]').val()
+                    },
                     success: function (data) { 
                         var oTable = $('#data-table').dataTable();
                         oTable.fnDraw(false); 
@@ -500,36 +452,17 @@
         /* FORM BUTTON */        
         $("#modal-form").validate({
             rules: {
+                intelex:{
+                    required:true,
+                    number:true,
+                    min:1
+                },
                 fecha:{
                     required:true
                 },
-                hora:{
+                dni:{
                     required:true
-                },
-                tema: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 250
-                },
-                dni: {
-                    required: true
-                },
-                lugar: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 250
-                },
-                duracion: {
-                    required: true,
-                    number: true,
-                    min: 1
-                },
-                cantidad: {
-                    required: true,
-                    number: true,
-                    min: 0,
-                    max: 100
-                },
+                }
             },
             messages: {  
          
@@ -568,27 +501,19 @@
         });
 
         $("#form-button").click(function(){
-            let active=1;
+     
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
                 $.ajax({
-                    url:"{{route('capacitacion_performance.load') }}",
+                    url:"{{route('acceso_modulo.load') }}",
                     method:"POST",
                     data:{
-                        id: $("#id").val(),
-                        fecha:$('#fecha').val(),
-                        hora:$('#hora').val(),
-                        tema:$('#tema').val(),
-                        dni:$('#dni').val(),
-                        lugar_frente:$('#lugar').val(),
-                        duracion:$('#duracion').val(),
-                        cantidad_asistentes:$('#cantidad').val(),
-                        active:active,
+                        permissions_id:$('#modulo').val(),
+                        model_id:$('#correo').val(),
                         _token: $('input[name="_token"]').val()
                     },
                     success:function(data)
                     {  
-                        console.log(data);
                         $('#modal').scrollTop(0);
                         if($.isEmptyObject(data.error)){
                             $('#modal').modal('hide');
@@ -598,10 +523,10 @@
                             var oTable = $('#data-table').dataTable();
                             oTable.fnDraw(false);
                             if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Capacitacion cargada con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Se registro con exito', 'MansfieldRep', 'success');
                             }   
                             else{
-                                MansfieldRep.notification('Capacitacion actualizada con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Se registro con exito', 'MansfieldRep', 'success');
                             } 
                         }else{
                             $('#form-button').html('Guardar Cambios');
@@ -642,23 +567,18 @@
     <div class="row" style="justify-content: center; overflow:auto;">
         <div class="generic-card">
             <div class="card">
-                <div class="generic-body">        
+                <div class="generic-body">
+                    {{-- DATATABLE - Acceso a Modulos --}}        
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
-                            <tr>    
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Tema</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Area</th>
-                                <th>Lugar/Frente</th>
-                                <th>Duracion</th>
-                                <th>Cantidad Personas</th>
-                                <th style="min-width:50px!important;"></th>            
+                            <tr>
+                                <th>Correo</th>
+                                <th>Modulo</th>
+                                <th style="min-width:50px!important;"></th>    
                             </tr>
                         </thead>      
                     </table>                
+                    {{-- END - DATATABLE - Acceso a Modulos --}}
                 </div>
             </div>
         </div> 
@@ -677,110 +597,38 @@
                 </div>
                 <div class="alert-error">
                     <div class="print-error-msg">
-                        <h4><i class="icon fa fa-ban"></i>El formulario contiene errores</h4>
+                        <h4><i class="icon fa fa-ban"></i> El formulario contiene errores</h4>
                         <ul></ul>
                     </div>
                     <button type="button" id="close-alert" class="close" aria-hidden="true">×</button>          
                 </div>
                 <div class="modal-bod">
+                    
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id">
 
-                        {{-- FECHA --}}
-                        <div class="form-group">
-                            <label for="fecha" class="col-form-label">Fecha:</label> 
+                         {{--Dropdown correos--}}
+                         <div class="form-group">
+                            <label for="correo" class="col-form-label">Correo:</label>
                             <div class="col-sm">
-                                <div class="input-group-append" data-target="#fecha" data-toggle="datetimepicker">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha" id="fecha" name="fecha"/>
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
+                                <select class='form-control' id='correo' name='sel_correo'>
+                                <option value='0'>Seleccione un correo</option>
+                                </select>
                             </div>
                         </div>
-                        {{-- FECHA --}}
+                        {{--Dropdown correos--}}
 
-                        {{-- HORA --}}
+                        {{--Dropdown modulo--}}
                         <div class="form-group">
-                            <label for="nombre" class="col-form-label">Hora</label>
+                            <label for="modulo" class="col-form-label">Modulo:</label>
                             <div class="col-sm">
-                                <input type="time" class="timepicker form-control" id="hora" name="hora" placeholder="Hora">
+                                <select class='form-control' id='modulo' name='sel_modulo'>
+                                <option value='0'>Seleccione un modulo</option>
+                                </select>
                             </div>
                         </div>
-                        {{-- HORA --}}
+                        {{--Dropdown modulo--}}
 
-                        {{-- TEMA --}}
-                        <div class="form-group">
-                            <label for="tema" class="col-form-label">Tema</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="tema" name="tema" placeholder="Tema">
-                            </div>
-                        </div>  
-                        {{-- TEMA --}}
-
-                        {{--DNI--}}
-                        <div class="form-group">
-                            <label for="dni" class=" col-form-label">DNI:</label>
-                                <div class="col-sm">
-                                    <div class="input-group-append">
-                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI">
-                                        <button type="button" class="btn btn-primary" id="get-empleados"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </div>
-                        </div>
-                        {{--DNI--}}
-
-                          {{--Nombre--}}
-                          <div class="form-group">
-                            <label for="nombre" class=" col-form-label">Nombre:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" disabled>
-                            </div>
-                        </div>
-                        {{--Nombre--}}
-
-                        {{--Apellido--}}
-                        <div class="form-group">
-                            <label for="apellido" class=" col-form-label">Apellido:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" disabled>
-                            </div>
-                        </div>
-                        {{--Apellido--}}
-
-                        {{--Area--}}
-                        <div class="form-group">
-                            <label for="area" class=" col-form-label">Area:</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="area" name="area" placeholder="Area" disabled>
-                            </div>
-                        </div>
-                        {{--Area--}}
-
-                        {{-- LUGAR/FRENTE --}}
-                        <div class="form-group">
-                            <label for="lugar" class="col-form-label">Lugar/Frente</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="lugar" name="lugar" placeholder="Lugar">
-                            </div>
-                        </div>  
-                        {{-- LUGAR/FRENTE --}}
-
-                        {{-- DURACION --}}
-                        <div class="form-group">
-                            <label for="duracion" class="col-form-label">Duracion(min)</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="duracion" name="duracion" placeholder="Duracion">
-                            </div>
-                        </div>
-                        {{-- DURACION --}}
-                       
-                        {{-- CANTIDAD DE PERSONAS --}}
-                        <div class="form-group">
-                            <label for="cantidad" class="col-form-label">Cantidad de Personas</label>
-                            <div class="col-sm">
-                              <input type="text" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad de Personas">
-                            </div>
-                        </div>
-                        {{-- CANTIDAD DE PERSONAS --}}
                         @csrf
                     </form>
                 </div>
