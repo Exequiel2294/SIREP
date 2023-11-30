@@ -11,7 +11,7 @@ use App\Traits\MinaTrait;
 use App\Traits\ProcesosTrait;
 
 
-class SendDailyReportCombinado extends Command
+class SendDailyReportIntranet extends Command
 {
     use MinaTrait, ProcesosTrait;
     /**
@@ -19,14 +19,14 @@ class SendDailyReportCombinado extends Command
      *
      * @var string
      */
-    protected $signature = 'send:dailyreportcombinado';
+    protected $signature = 'send:dailyreportintranet';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Envío DailyReport Combinado';
+    protected $description = 'Envío DailyReport Intranet';
 
     /**
      * Create a new command instance.
@@ -73,39 +73,39 @@ class SendDailyReportCombinado extends Command
             
             $columnsVisibility = [true, true, true, true];
             $focastVisibility = 1;
-            $budgetVisibility = 1;
-            $colspanTFrame = 5;
-            $colspan = 22;
+            $budgetVisibility = 0;
+            $colspanTFrame = 3;
+            $colspan = 14;
 
             $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
             $pdf->set_paper('a3', 'portrait');
             $pdf->render(); 
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "SIOM DailyReport ";
-                $data["email"] = "mmsa.dailyreport@mansfieldmin.com";
+                $data["subject"] = "Daily Report Intranet ";
+                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
             }
             else
             {
-                $data["subject"] = "DEV DailyReport ";
+                $data["subject"] = "Daily Report Intranet ";
                 $data["email"] = "ejensen@mansfieldmin.com";
             }
             Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
                 $message->subject($data["subject"].$this->date);
-                $message->attachData($pdf->output(), 'SIOM_DailyReport'.$this->date.'.pdf'); //attached pdf file
+                $message->attachData($pdf->output(), 'Daily_Report_'.date('dmY',strtotime("-1 days")).'.pdf'); //attached pdf file
             });
         }
         else
         {
             if ( env('APP_ENV') == 'production')
             {
-                $data["subject"] = "SIOM DailyReport ";
+                $data["subject"] = "SIOM DailyReport Intranet ";
                 $data["email"] = "mmsa.soporteit@mansfieldmin.com";
             }
             else
             {
-                $data["subject"] = "DEV DailyReport ";
+                $data["subject"] = "DEV DailyReport Intranet";
                 $data["email"] = "ejensen@mansfieldmin.com";
             }
             Mail::send('mails.dailytablecombinadofail', $data, function ($message) use ($data) {
