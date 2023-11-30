@@ -399,7 +399,7 @@
                 columnsVisibility.push(tabledata.column(i).visible());
             }
             event.preventDefault();
-            console.log(columnsVisibility);
+            console.log(columnsVisibility,focastVisibility, budgetVisibility);
             $.ajax({
                 url: "{{route('dashboard.getpdfcompleto') }}",
                 type: 'POST',
