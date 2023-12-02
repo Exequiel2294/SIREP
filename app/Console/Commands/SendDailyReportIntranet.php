@@ -45,73 +45,84 @@ class SendDailyReportIntranet extends Command
      */
     public function handle()
     {
-        $this->date = date('Y-m-d',strtotime("-1 days"));
-       
-        $request = new Request(array('date' => $this->date, 'type' => 1));
-        $tablaprocesos = $this->TraitProcesosTable($request);
 
-        $request = new Request(array('date' => $this->date, 'type' => 1));
-        $tablamina = $this->TraitMinaTable($request);
-         
-        $registrosmina= $tablamina->getData()->data;        
-        $registrosprocesos= $tablaprocesos->getData()->data;
-        $registros = array_merge($registrosmina, $registrosprocesos);
-        if ($registros <> [] && $registros <> NULL)
-        {
-            $tablacomentarios =
-            DB::select(
-                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
-                INNER JOIN users u
-                ON c.user_id = u.id
-                INNER JOIN comentario_area ca
-                ON c.area_id = ca.id
-                WHERE c.fecha = ?',
-                [$this->date]
-            );
-            //return view('pdf.combinado', compact('registros', 'date', 'tablacomentarios'));
-            $date = $this->date;
-            
-            $columnsVisibility = [true, true, true, true];
-            $focastVisibility = 1;
-            $budgetVisibility = 0;
-            $colspanTFrame = 3;
-            $colspan = 14;
-
-            $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
-            $pdf->set_paper('a3', 'portrait');
-            $pdf->render(); 
-            if ( env('APP_ENV') == 'production')
-            {
-                $data["subject"] = "Daily Report Intranet ";
-                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
-            }
-            else
-            {
-                $data["subject"] = "Daily Report Intranet ";
-                $data["email"] = "ejensen@mansfieldmin.com";
-            }
-            Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
-                $message->to($data['email']);
-                $message->subject($data["subject"].$this->date);
-                $message->attachData($pdf->output(), 'Daily_Report_'.date('dmY',strtotime("-1 days")).'.pdf'); //attached pdf file
-            });
+        if ( (int)date('d',strtotime("-1 days")) == 5) {
+            $j = 10;
         }
-        else
-        {
-            if ( env('APP_ENV') == 'production')
+        else {
+            $j = 1;
+        }
+        for ($i = 1; $i <= $j; $i++) {
+
+            $this->date = date('Y-m-d',strtotime('-'.$i.' days'));
+            $this->i = $i;
+       
+            $request = new Request(array('date' => $this->date, 'type' => 1));
+            $tablaprocesos = $this->TraitProcesosTable($request);
+    
+            $request = new Request(array('date' => $this->date, 'type' => 1));
+            $tablamina = $this->TraitMinaTable($request);
+             
+            $registrosmina= $tablamina->getData()->data;        
+            $registrosprocesos= $tablaprocesos->getData()->data;
+            $registros = array_merge($registrosmina, $registrosprocesos);
+            if ($registros <> [] && $registros <> NULL)
             {
-                $data["subject"] = "SIOM DailyReport Intranet ";
-                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                $tablacomentarios =
+                DB::select(
+                    'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                    INNER JOIN users u
+                    ON c.user_id = u.id
+                    INNER JOIN comentario_area ca
+                    ON c.area_id = ca.id
+                    WHERE c.fecha = ?',
+                    [$this->date]
+                );
+                //return view('pdf.combinado', compact('registros', 'date', 'tablacomentarios'));
+                $date = $this->date;
+                
+                $columnsVisibility = [true, true, true, true];
+                $focastVisibility = 1;
+                $budgetVisibility = 0;
+                $colspanTFrame = 3;
+                $colspan = 14;
+    
+                $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+                $pdf->set_paper('a3', 'portrait');
+                $pdf->render(); 
+                if ( env('APP_ENV') == 'production')
+                {
+                    $data["subject"] = "Daily Report Intranet ";
+                    $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                }
+                else
+                {
+                    $data["subject"] = "Daily Report Intranet ";
+                    $data["email"] = "ejensen@mansfieldmin.com";
+                }
+                Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
+                    $message->to($data['email']);
+                    $message->subject($data["subject"].$this->date);
+                    $message->attachData($pdf->output(), 'Daily_Report_'.date('dmY',strtotime('-'.$this->i.' days')).'.pdf'); //attached pdf file
+                });
             }
             else
             {
-                $data["subject"] = "DEV DailyReport Intranet";
-                $data["email"] = "ejensen@mansfieldmin.com";
+                if ( env('APP_ENV') == 'production')
+                {
+                    $data["subject"] = "Daily Report Intranet ";
+                    $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                }
+                else
+                {
+                    $data["subject"] = "DEV DailyReport Intranet ";
+                    $data["email"] = "ejensen@mansfieldmin.com";
+                }
+                Mail::send('mails.dailytablecombinadofail', $data, function ($message) use ($data) {
+                    $message->to($data['email']);
+                    $message->subject($data["subject"].$this->date);
+                });
             }
-            Mail::send('mails.dailytablecombinadofail', $data, function ($message) use ($data) {
-                $message->to($data['email']);
-                $message->subject($data["subject"].$this->date);
-            });
         }
     }
 }
