@@ -689,7 +689,7 @@
                                         </div>                                                             
                                         <div style="display: flex;flex-direction: row;justify-content: space-evenly;">  
                                             <button type="button" class="btn btn-success" id="select-button">Cargar Valores</button>        
-                                            <button type="button" class="btn btn-primary" id="import-button">Importar</button>                               
+                                            <!-- <button type="button" class="btn btn-primary" id="import-button">Importar</button> -->                          
                                         </div>    
                                     </div>                                            
                                 </div>                                       
