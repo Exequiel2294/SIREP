@@ -46,7 +46,7 @@ class SendDailyReportIntranet extends Command
     public function handle()
     {
 
-        if ( (int)date('d',strtotime("-1 days")) == 5) {
+        if ( (int)date('d',strtotime("-1 days")) == 4) {
             $j = 10;
         }
         else {
