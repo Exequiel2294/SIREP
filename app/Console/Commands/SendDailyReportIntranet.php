@@ -47,7 +47,7 @@ class SendDailyReportIntranet extends Command
     {
 
         if ( (int)date('d',strtotime("-1 days")) == 4) {
-            $j = 10;
+            $j = 9;
         }
         else {
             $j = 1;
