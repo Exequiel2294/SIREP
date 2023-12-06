@@ -269,11 +269,13 @@ return [
                     'text' => 'individual',
                     'url'  => 'forecast_individual',
                     'icon' => 'nav-icon far fa-circle',
+                    'can'  => 'forecast module individual',
                 ],
                 [
                     'text' => 'group',
                     'url'  => 'forecast_group',
-                    'icon' => 'nav-icon far fa-circle'
+                    'icon' => 'nav-icon far fa-circle',
+                    'can'  => 'forecast module grupal',
                 ]
             ]
         ],
