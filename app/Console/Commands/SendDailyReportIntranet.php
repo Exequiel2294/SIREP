@@ -103,7 +103,7 @@ class SendDailyReportIntranet extends Command
                 Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
                     $message->to($data['email']);
                     $message->subject($data["subject"].$this->date);
-                    $message->attachData($pdf->output(), 'Daily_Report_'.date('dmY',strtotime('-'.$this->i.' days')).'.pdf'); //attached pdf file
+                    $message->attachData($pdf->output(), 'Daily_Report_'.date('dmy',strtotime('-'.$this->i.' days')).'.pdf'); //attached pdf file
                 });
             }
             else
