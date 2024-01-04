@@ -2222,7 +2222,10 @@ trait MinaTrait {
                 ->addColumn('dia_budget', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
                     //   
                     switch($data->unidad)
                     {
@@ -2484,7 +2487,10 @@ trait MinaTrait {
                 ->addColumn('dia_forecast', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
                     //   
                     if(isset($data->dia_forecast)) 
                     { 
@@ -2781,8 +2787,11 @@ trait MinaTrait {
                 ->addColumn('mes_budget', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //    
                     $mes_budget = [];
                     switch($data->variable_id)
                     {
@@ -3056,8 +3065,11 @@ trait MinaTrait {
                 ->addColumn('mes_forecast', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //  
                     $mes_forecast = [];
                     switch($data->variable_id)
                     {
@@ -3607,8 +3619,11 @@ trait MinaTrait {
                 ->addColumn('trimestre_budget', function($data)
                 { 
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //  
                     $trimestre_budget = [];
                     switch($data->variable_id)
                     {
@@ -3889,7 +3904,10 @@ trait MinaTrait {
                 ->addColumn('trimestre_forecast', function($data)
                 { 
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
                     //   
                     $trimestre_forecast = [];
                     switch($data->variable_id)
@@ -4447,8 +4465,11 @@ trait MinaTrait {
                 ->addColumn('anio_budget', function($data)
                 {   
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //                       
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //                      
                     $anio_budget = [];
                     switch($data->variable_id)
                     {
@@ -4729,8 +4750,11 @@ trait MinaTrait {
                 ->addColumn('anio_forecast', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //                            
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //                             
                     $anio_forecast = [];
                     switch($data->variable_id)
                     {
@@ -5302,8 +5326,11 @@ trait MinaTrait {
                 ->addColumn('dia_budget', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //  
                     switch($data->unidad)
                     {
                         case 't':
@@ -5564,8 +5591,11 @@ trait MinaTrait {
                 ->addColumn('dia_forecast', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //    
                     if(isset($data->dia_forecast)) 
                     { 
                         $d_forecast = $data->dia_forecast;
@@ -5861,8 +5891,11 @@ trait MinaTrait {
                 ->addColumn('mes_budget', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //  
                     $mes_budget = [];
                     switch($data->variable_id)
                     {
@@ -6136,8 +6169,11 @@ trait MinaTrait {
                 ->addColumn('mes_forecast', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //  
                     $mes_forecast = [];
                     switch($data->variable_id)
                     {
@@ -6687,7 +6723,10 @@ trait MinaTrait {
                 ->addColumn('trimestre_budget', function($data)
                 { 
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
                     //   
                     $trimestre_budget = [];
                     switch($data->variable_id)
@@ -6969,8 +7008,11 @@ trait MinaTrait {
                 ->addColumn('trimestre_forecast', function($data)
                 { 
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //   
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //    
                     $trimestre_forecast = [];
                     switch($data->variable_id)
                     {
@@ -7527,8 +7569,11 @@ trait MinaTrait {
                 ->addColumn('anio_budget', function($data)
                 {   
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //                         
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //                        
                     $anio_budget = [];
                     switch($data->variable_id)
                     {
@@ -7809,8 +7854,11 @@ trait MinaTrait {
                 ->addColumn('anio_forecast', function($data)
                 {
                     // Eliminar Luego de que se hayan definido el budget y el forecast
-                    return '-';
-                    //                            
+                    if ((int)date('Y', strtotime($this->date)) >= 2024)
+                    {
+                        return '-';
+                    }                    
+                    //                          
                     $anio_forecast = [];
                     switch($data->variable_id)
                     {
