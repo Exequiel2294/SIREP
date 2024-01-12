@@ -1487,88 +1487,18 @@ trait ProcesosTrait {
                     'SELECT v.id AS variable_id, f.valor as anio_forecast FROM
                     (SELECT variable_id, SUM(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10005, 10011, 10019, 10022, 10023, 10025, 10028, 10031, 10038, 10039, 
-                    10045, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
+                    WHERE variable_id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id
                     FROM [dbo].[variable] 
-                    WHERE id IN (10005, 10011, 10019, 10022, 10023, 10025, 10028, 10031, 10038, 10039, 
-                    10045, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
+                    WHERE id IN (10002, 10005, 10008, 10011, 10019, 10022, 10023, 10025, 10027, 10028, 10031, 10037, 10038, 10039, 
+                    10045, 10046, 10047, 10048, 10052, 10053, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10068, 10069)) AS v
                     ON f.variable_id = v.id
-                    UNION
-                    SELECT 10002, SUM((A.valor * B.valor)/31.1035) as anio_forecast FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10005) as A
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10004) as B
-                    ON A.fecha = B.fecha
-                    WHERE YEAR(A.fecha) = '.$year.'
-                    AND  DATEPART(y, A.fecha) <= '.$daypart.'
-                    GROUP BY YEAR(A.fecha)
-                    UNION
-                    SELECT 10008, SUM((A.valor * B.valor)/31.1035) as anio_forecast FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10011) as A
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10010) as B
-                    ON A.fecha = B.fecha
-                    WHERE YEAR(A.fecha) = '.$year.'
-                    AND  DATEPART(y, A.fecha) <=  '.$daypart.'
-                    GROUP BY YEAR(A.fecha)
-                    UNION
-                    SELECT 10027, SUM((A.valor * B.valor)/31.1035) as anio_forecast FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10031) as A
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10030) as B
-                    ON A.fecha = B.fecha
-                    WHERE YEAR(A.fecha) = '.$year.'
-                    AND  DATEPART(y, A.fecha) <=  '.$daypart.'
-                    GROUP BY YEAR(A.fecha)
-                    UNION
-                    SELECT 10037, SUM((A.valor * B.valor)/31.1035) as anio_forecast FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10039) as A
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[data]
-                    where variable_id = 10035) as B
-                    ON A.fecha = B.fecha
-                    WHERE YEAR(A.fecha) = '.$year.'
-                    AND  DATEPART(y, A.fecha) <=  '.$daypart.'
-                    GROUP BY YEAR(A.fecha)
-                    UNION
-                    SELECT 10046 as year, SUM((A.valor * (B.valor-C.valor))/31.1035) as anio_real FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10052) as A
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10051) as B
-                    ON A.fecha = B.fecha
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10050) as C
-                    ON A.fecha = C.fecha
-                    WHERE YEAR(A.fecha) = '.$year.'
-                    AND  DATEPART(y, A.fecha) <=  '.$daypart.'
-                    GROUP BY YEAR(A.fecha)
-                    ORDER BY variable_id'
+                    ORDER BY id ASC'
                 );
 
                 $this->avganioforecast =
@@ -1577,7 +1507,7 @@ trait ProcesosTrait {
                     (SELECT variable_id, 
                     AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036)
+                    WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                     AND valor <>0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1585,46 +1515,8 @@ trait ProcesosTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036)) AS v
+                    WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                     ON f.variable_id = v.id
-                    UNION
-                    SELECT 10040, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor)/SUM(B.valor) as sumaproducto FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10043
-                    AND valor <> 0) as A1
-                    INNER JOIN
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10044) as A2
-                    ON A1.fecha = A2.fecha
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10045) as B
-                    ON A2.fecha = B.fecha
-                    WHERE YEAR(A1.fecha) = '.$year.'
-                    AND  DATEPART(y, A1.fecha) <=  '.$daypart.'
-                    GROUP BY YEAR(A1.fecha)
-                    UNION
-                    SELECT 10049, SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor)/SUM(B.valor) as sumaproducto FROM
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10051
-                    AND valor <> 0) as A1
-                    INNER JOIN
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10050) as A2
-                    ON A1.fecha = A2.fecha
-                    INNER JOIN   
-                    (SELECT fecha, variable_id, [valor]
-                    FROM [dbo].[forecast]
-                    where variable_id = 10052) as B
-                    ON A2.fecha = B.fecha
-                    WHERE YEAR(A1.fecha) = '.$year.'
-                    AND  DATEPART(y, A1.fecha) <=  '.$daypart.'
-                    GROUP BY YEAR(A1.fecha)
                     ORDER BY id ASC'
                 );
 

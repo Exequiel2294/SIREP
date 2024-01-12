@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Traits\MinaTrait;
 use App\Traits\ProcesosTrait;
-
+use Illuminate\Foundation\Bootstrap\RegisterProviders;
 
 class ReportesController extends Controller
 {
@@ -24,6 +24,7 @@ class ReportesController extends Controller
 
     public function getpdfcompleto(Request $request)
     {
+        $formato=$request->get('formato');
         $date = $request->get('date');
         $columnsVisibility = $request->get('columnsVisibility');
         $focastVisibility = $request->get('focastVisibility');
@@ -44,15 +45,7 @@ class ReportesController extends Controller
         {
             $colspan = 2;
         }
-        $request = new Request(array('date' => $date, 'type' => 1));
-        $tablaprocesos = $this->TraitProcesosTable($request);
-        
-        $request = new Request(array('date' => $date, 'type' => 1));
-        $tablamina = $this->TraitMinaTable($request);
-         
-        $registrosmina= $tablamina->getData()->data;        
-        $registrosprocesos= $tablaprocesos->getData()->data;
-        $registros = array_merge($registrosmina, $registrosprocesos);
+       
         
         
         $tablacomentarios =
@@ -66,8 +59,70 @@ class ReportesController extends Controller
             AND ca.area_id = 1',
             [$date]
         );
+        if($formato=="mine"){
 
-        $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+            $request = new Request(array('date' => $date, 'type' => 1));
+            $tablamina = $this->TraitMinaTable($request);
+            $registros = $tablamina->getData()->data;
+            $tablacomentarios =
+            DB::select(
+                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                INNER JOIN users u
+                ON c.user_id = u.id
+                INNER JOIN comentario_area ca
+                ON c.area_id = ca.id
+                WHERE c.fecha = ?
+                AND ca.area_id = 2',
+                [$date]
+            );
+
+            $pdf = Pdf::loadView('pdf.minaColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+
+
+        }
+        elseif($formato=="process"){
+            $request = new Request(array('date' => $date, 'type' => 1));
+            $tablaprocesos = $this->TraitProcesosTable($request);
+            $registros = $tablaprocesos->getData()->data;
+            $tablacomentarios =
+            DB::select(
+                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                INNER JOIN users u
+                ON c.user_id = u.id
+                INNER JOIN comentario_area ca
+                ON c.area_id = ca.id
+                WHERE c.fecha = ?
+                AND ca.area_id = 1',
+                [$date]
+            );
+
+            $pdf = Pdf::loadView('pdf.procesosColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+        }
+        else{
+            $request = new Request(array('date' => $date, 'type' => 1));
+            $tablaprocesos = $this->TraitProcesosTable($request);
+            
+            $request = new Request(array('date' => $date, 'type' => 1));
+            $tablamina = $this->TraitMinaTable($request);
+            
+            $registrosmina= $tablamina->getData()->data;        
+            $registrosprocesos= $tablaprocesos->getData()->data;
+            $registros = array_merge($registrosmina, $registrosprocesos);
+            $tablacomentarios =
+            DB::select(
+                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                INNER JOIN users u
+                ON c.user_id = u.id
+                INNER JOIN comentario_area ca
+                ON c.area_id = ca.id
+                WHERE c.fecha = ?',
+                [$date]
+            );
+
+
+            $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+
+        }
         
         
 

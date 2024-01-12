@@ -388,7 +388,7 @@
                             @if ($dia_porF == '-')
                                 <td class="text-center">{{$dia_porF}}</td>
                             @else
-                               @if ($registro->variable_id == 10012)
+                                @if ($registro->variable_id == 10012)
                                     @if ($dia_porF <= 100)
                                         <td class="green_per text-center">{{$dia_porF}}%</td>
                                     @elseif ($dia_porF > 133)
@@ -397,7 +397,7 @@
                                         <td class="yellow_per text-center">{{$dia_porF}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($dia_porF <= 90)
                                             <td class="green_per text-center">{{$dia_porF}}%</td>
                                         @elseif ($dia_porF >= 95)
@@ -406,14 +406,24 @@
                                             <td class="yellow_per text-center">{{$dia_porF}}%</td>
                                         @endif
                                     @else
-                                        @if($dia_porF < 90)
-                                            <td class="red_per text-center">{{$dia_porF}}%</td>
-                                        @elseif ($dia_porF >= 90  && $dia_porF < 95)
-                                            <td class="yellow_per text-center">{{$dia_porF}}%</td>
-                                        @elseif ($dia_porF >= 95)
-                                            <td class="green_per text-center">{{$dia_porF}}%</td>
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($dia_porF < 90 || $dia_porF > 105)
+                                                <td class="red_per text-center">{{$dia_porF}}%</td>
+                                            @elseif ($dia_porF >= 90 && $dia_porF < 95)
+                                                <td class="yellow_per text-center">{{$dia_porF}}%</td>
+                                            @elseif ($dia_porF >= 95 && $dia_porF <= 105)
+                                                <td class="green_per text-center">{{$dia_porF}}%</td>
+                                            @endif
+                                        @else
+                                            @if($dia_porF <= 90)
+                                                <td class="red_per text-center">{{$dia_porF}}%</td>
+                                            @elseif ($dia_porF > 90  && $dia_porF < 95)
+                                                <td class="yellow_per text-center">{{$dia_porF}}%</td>
+                                            @elseif ($dia_porF >= 95)
+                                                <td class="green_per text-center">{{$dia_porF}}%</td>
+                                            @endif
                                         @endif
-                                    @endif
+                                    @endif                                        
                                 @endif
                             @endif
                             <!--FIN-FORECAST-->
@@ -421,7 +431,7 @@
                             @if ($dia_porB == '-')
                                 <td class="text-center">{{$dia_porB}}</td>
                             @else
-                               @if ($registro->variable_id == 10012)
+                                @if ($registro->variable_id == 10012)
                                     @if ($dia_porB <= 100)
                                         <td class="green_per text-center">{{$dia_porB}}%</td>
                                     @elseif ($dia_porB > 133)
@@ -430,7 +440,7 @@
                                         <td class="yellow_per text-center">{{$dia_porB}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($dia_porB <= 90)
                                             <td class="green_per text-center">{{$dia_porB}}%</td>
                                         @elseif ($dia_porB >= 95)
@@ -439,14 +449,24 @@
                                             <td class="yellow_per text-center">{{$dia_porB}}%</td>
                                         @endif
                                     @else
-                                        @if($dia_porB < 90)
-                                            <td class="red_per text-center">{{$dia_porB}}%</td>
-                                        @elseif ($dia_porB >= 90  && $dia_porB < 95)
-                                            <td class="yellow_per text-center">{{$dia_porB}}%</td>
-                                        @elseif ($dia_porB >= 95)
-                                            <td class="green_per text-center">{{$dia_porB}}%</td>
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($dia_porB < 90 || $dia_porB > 105)
+                                                <td class="red_per text-center">{{$dia_porB}}%</td>
+                                            @elseif ($dia_porB >= 90 && $dia_porB < 95)
+                                                <td class="yellow_per text-center">{{$dia_porB}}%</td>
+                                            @elseif ($dia_porB >= 95 && $dia_porB <= 105)
+                                                <td class="green_per text-center">{{$dia_porB}}%</td>
+                                            @endif
+                                        @else
+                                            @if($dia_porB <= 90)
+                                                <td class="red_per text-center">{{$dia_porB}}%</td>
+                                            @elseif ($dia_porB > 90  && $dia_porB < 95)
+                                                <td class="yellow_per text-center">{{$dia_porB}}%</td>
+                                            @elseif ($dia_porB >= 95)
+                                                <td class="green_per text-center">{{$dia_porB}}%</td>
+                                            @endif
                                         @endif
-                                    @endif
+                                    @endif                                        
                                 @endif
                             @endif
                             <!--FIN-BUDGET-->
@@ -462,31 +482,41 @@
                             @else
                                 @if ($registro->variable_id == 10012)
                                     @if ($mes_porF <= 100)
-                                         <td class="green_per text-center">{{$mes_porF}}%</td>
+                                        <td class="green_per text-center">{{$mes_porF}}%</td>
                                     @elseif ($mes_porF > 133)
-                                         <td class="red_per text-center">{{$mes_porF}}%</td>
+                                        <td class="red_per text-center">{{$mes_porF}}%</td>
                                     @else 
-                                         <td class="yellow_per text-center">{{$mes_porF}}%</td>
+                                        <td class="yellow_per text-center">{{$mes_porF}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($mes_porF <= 90)
-                                             <td class="green_per text-center">{{$mes_porF}}%</td>
+                                            <td class="green_per text-center">{{$mes_porF}}%</td>
                                         @elseif ($mes_porF >= 95)
-                                             <td class="red_per text-center">{{$mes_porF}}%</td>
+                                            <td class="red_per text-center">{{$mes_porF}}%</td>
                                         @else 
-                                             <td class="yellow_per text-center">{{$mes_porF}}%</td>
+                                            <td class="yellow_per text-center">{{$mes_porF}}%</td>
                                         @endif
                                     @else
-                                        @if($mes_porF < 90)
-                                             <td class="red_per text-center">{{$mes_porF}}%</td>
-                                        @elseif ($mes_porF >= 90  && $mes_porF < 95)
-                                             <td class="yellow_per text-center">{{$mes_porF}}%</td>
-                                        @elseif ($mes_porF >= 95)
-                                             <td class="green_per text-center">{{$mes_porF}}%</td>
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($mes_porF < 90 || $mes_porF > 105)
+                                                <td class="red_per text-center">{{$mes_porF}}%</td>
+                                            @elseif ($mes_porF >= 90 && $mes_porF < 95)
+                                                <td class="yellow_per text-center">{{$mes_porF}}%</td>
+                                            @elseif ($mes_porF >= 95 && $mes_porF <= 105)
+                                                <td class="green_per text-center">{{$mes_porF}}%</td>
+                                            @endif
+                                        @else
+                                            @if($mes_porF <= 90)
+                                                <td class="red_per text-center">{{$mes_porF}}%</td>
+                                            @elseif ($mes_porF > 90  && $mes_porF < 95)
+                                                <td class="yellow_per text-center">{{$mes_porF}}%</td>
+                                            @elseif ($mes_porF >= 95)
+                                                <td class="green_per text-center">{{$mes_porF}}%</td>
+                                            @endif
                                         @endif
-                                     @endif
-                                 @endif
+                                    @endif                                        
+                                @endif
                             @endif
                             <!--FIN-FORECAST-->
                             <!--BUDGET-->
@@ -495,31 +525,41 @@
                             @else
                                 @if ($registro->variable_id == 10012)
                                     @if ($mes_porB <= 100)
-                                         <td class="green_per text-center">{{$mes_porB}}%</td>
+                                        <td class="green_per text-center">{{$mes_porB}}%</td>
                                     @elseif ($mes_porB > 133)
-                                         <td class="red_per text-center">{{$mes_porB}}%</td>
+                                        <td class="red_per text-center">{{$mes_porB}}%</td>
                                     @else 
-                                         <td class="yellow_per text-center">{{$mes_porB}}%</td>
+                                        <td class="yellow_per text-center">{{$mes_porB}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($mes_porB <= 90)
-                                             <td class="green_per text-center">{{$mes_porB}}%</td>
+                                            <td class="green_per text-center">{{$mes_porB}}%</td>
                                         @elseif ($mes_porB >= 95)
-                                             <td class="red_per text-center">{{$mes_porB}}%</td>
+                                            <td class="red_per text-center">{{$mes_porB}}%</td>
                                         @else 
-                                             <td class="yellow_per text-center">{{$mes_porB}}%</td>
+                                            <td class="yellow_per text-center">{{$mes_porB}}%</td>
                                         @endif
                                     @else
-                                        @if($mes_porB < 90)
-                                             <td class="red_per text-center">{{$mes_porB}}%</td>
-                                        @elseif ($mes_porB >= 90  && $mes_porB < 95)
-                                             <td class="yellow_per text-center">{{$mes_porB}}%</td>
-                                        @elseif ($mes_porB >= 95)
-                                             <td class="green_per text-center">{{$mes_porB}}%</td>
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($mes_porB < 90 || $mes_porB > 105)
+                                                <td class="red_per text-center">{{$mes_porB}}%</td>
+                                            @elseif ($mes_porB >= 90 && $mes_porB < 95)
+                                                <td class="yellow_per text-center">{{$mes_porB}}%</td>
+                                            @elseif ($mes_porB >= 95 && $mes_porB <= 105)
+                                                <td class="green_per text-center">{{$mes_porB}}%</td>
+                                            @endif
+                                        @else
+                                            @if($mes_porB <= 90)
+                                                <td class="red_per text-center">{{$mes_porB}}%</td>
+                                            @elseif ($mes_porB > 90  && $mes_porB < 95)
+                                                <td class="yellow_per text-center">{{$mes_porB}}%</td>
+                                            @elseif ($mes_porB >= 95)
+                                                <td class="green_per text-center">{{$mes_porB}}%</td>
+                                            @endif
                                         @endif
-                                     @endif
-                                 @endif
+                                    @endif                                        
+                                @endif
                             @endif
                             <!--FIN-BUDGET-->
                             <!--FIN-MES-->
@@ -533,30 +573,40 @@
                             @else
                                 @if ($registro->variable_id == 10012)
                                     @if ($trimestre_porF <= 100)
-                                         <td class="green_per text-center">{{$trimestre_porF}}%</td>
+                                        <td class="green_per text-center">{{$trimestre_porF}}%</td>
                                     @elseif ($trimestre_porF > 133)
-                                         <td class="red_per text-center">{{$trimestre_porF}}%</td>
+                                        <td class="red_per text-center">{{$trimestre_porF}}%</td>
                                     @else 
-                                         <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
+                                        <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($trimestre_porF <= 90)
-                                             <td class="green_per text-center">{{$trimestre_porF}}%</td>
+                                            <td class="green_per text-center">{{$trimestre_porF}}%</td>
                                         @elseif ($trimestre_porF >= 95)
-                                             <td class="red_per text-center">{{$trimestre_porF}}%</td>
+                                            <td class="red_per text-center">{{$trimestre_porF}}%</td>
                                         @else 
-                                             <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
+                                            <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
                                         @endif
                                     @else
-                                        @if($trimestre_porF < 90)
-                                             <td class="red_per text-center">{{$trimestre_porF}}%</td>
-                                        @elseif ($trimestre_porF >= 90  && $trimestre_porF < 95)
-                                             <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
-                                        @elseif ($trimestre_porF >= 95)
-                                             <td class="green_per text-center">{{$trimestre_porF}}%</td>
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($trimestre_porF < 90 || $trimestre_porF > 105)
+                                                <td class="red_per text-center">{{$trimestre_porF}}%</td>
+                                            @elseif ($trimestre_porF >= 90 && $trimestre_porF < 95)
+                                                <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
+                                            @elseif ($trimestre_porF >= 95 && $trimestre_porF <= 105)
+                                                <td class="green_per text-center">{{$trimestre_porF}}%</td>
+                                            @endif
+                                        @else
+                                            @if($trimestre_porF <= 90)
+                                                <td class="red_per text-center">{{$trimestre_porF}}%</td>
+                                            @elseif ($trimestre_porF > 90  && $trimestre_porF < 95)
+                                                <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
+                                            @elseif ($trimestre_porF >= 95)
+                                                <td class="green_per text-center">{{$trimestre_porF}}%</td>
+                                            @endif
                                         @endif
-                                    @endif
+                                    @endif                                        
                                 @endif
                             @endif
                             <!--FIN-FORECAST-->
@@ -566,30 +616,40 @@
                             @else
                                 @if ($registro->variable_id == 10012)
                                     @if ($trimestre_porB <= 100)
-                                         <td class="green_per text-center">{{$trimestre_porB}}%</td>
+                                        <td class="green_per text-center">{{$trimestre_porB}}%</td>
                                     @elseif ($trimestre_porB > 133)
-                                         <td class="red_per text-center">{{$trimestre_porB}}%</td>
+                                        <td class="red_per text-center">{{$trimestre_porB}}%</td>
                                     @else 
-                                         <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
+                                        <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($trimestre_porB <= 90)
-                                             <td class="green_per text-center">{{$trimestre_porB}}%</td>
+                                            <td class="green_per text-center">{{$trimestre_porB}}%</td>
                                         @elseif ($trimestre_porB >= 95)
-                                             <td class="red_per text-center">{{$trimestre_porB}}%</td>
+                                            <td class="red_per text-center">{{$trimestre_porB}}%</td>
                                         @else 
-                                             <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
+                                            <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
                                         @endif
                                     @else
-                                        @if($trimestre_porB < 90)
-                                             <td class="red_per text-center">{{$trimestre_porB}}%</td>
-                                        @elseif ($trimestre_porB >= 90  && $trimestre_porB < 95)
-                                             <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
-                                        @elseif ($trimestre_porB >= 95)
-                                             <td class="green_per text-center">{{$trimestre_porB}}%</td>
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($trimestre_porB < 90 || $trimestre_porB > 105)
+                                                <td class="red_per text-center">{{$trimestre_porB}}%</td>
+                                            @elseif ($trimestre_porB >= 90 && $trimestre_porB < 95)
+                                                <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
+                                            @elseif ($trimestre_porB >= 95 && $trimestre_porB <= 105)
+                                                <td class="green_per text-center">{{$trimestre_porB}}%</td>
+                                            @endif
+                                        @else
+                                            @if($trimestre_porB <= 90)
+                                                <td class="red_per text-center">{{$trimestre_porB}}%</td>
+                                            @elseif ($trimestre_porB > 90  && $trimestre_porB < 95)
+                                                <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
+                                            @elseif ($trimestre_porB >= 95)
+                                                <td class="green_per text-center">{{$trimestre_porB}}%</td>
+                                            @endif
                                         @endif
-                                    @endif
+                                    @endif                                        
                                 @endif
                             @endif
                             <!--FIN-BUDGET-->
@@ -604,31 +664,41 @@
                             @else
                                 @if ($registro->variable_id == 10012)
                                     @if ($anio_porF <= 100)
-                                         <td class="green_per text-center">{{$anio_porF}}%</td>
+                                        <td class="green_per text-center">{{$anio_porF}}%</td>
                                     @elseif ($anio_porF > 133)
-                                         <td class="red_per text-center">{{$anio_porF}}%</td>
+                                        <td class="red_per text-center">{{$anio_porF}}%</td>
                                     @else 
-                                         <td class="yellow_per text-center">{{$anio_porF}}%</td>
+                                        <td class="yellow_per text-center">{{$anio_porF}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($anio_porF <= 90)
-                                             <td class="green_per text-center">{{$anio_porF}}%</td>
-                                         @elseif ($anio_porF >= 95)
-                                             <td class="red_per text-center">{{$anio_porF}}%</td>
-                                         @else 
-                                             <td class="yellow_per text-center">{{$anio_porF}}%</td>
+                                            <td class="green_per text-center">{{$anio_porF}}%</td>
+                                        @elseif ($anio_porF >= 95)
+                                            <td class="red_per text-center">{{$anio_porF}}%</td>
+                                        @else 
+                                            <td class="yellow_per text-center">{{$anio_porF}}%</td>
                                         @endif
-                                     @else
-                                         @if($anio_porF < 90)
-                                             <td class="red_per text-center">{{$anio_porF}}%</td>
-                                         @elseif ($anio_porF >= 90  && $anio_porF < 95)
-                                             <td class="yellow_per text-center">{{$anio_porF}}%</td>
-                                         @elseif ($anio_porF >= 95)
-                                             <td class="green_per text-center">{{$anio_porF}}%</td>
-                                         @endif
-                                     @endif
-                                 @endif
+                                    @else
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($anio_porF < 90 || $anio_porF > 105)
+                                                <td class="red_per text-center">{{$anio_porF}}%</td>
+                                            @elseif ($anio_porF >= 90 && $anio_porF < 95)
+                                                <td class="yellow_per text-center">{{$anio_porF}}%</td>
+                                            @elseif ($anio_porF >= 95 && $anio_porF <= 105)
+                                                <td class="green_per text-center">{{$anio_porF}}%</td>
+                                            @endif
+                                        @else
+                                            @if($anio_porF <= 90)
+                                                <td class="red_per text-center">{{$anio_porF}}%</td>
+                                            @elseif ($anio_porF > 90  && $anio_porF < 95)
+                                                <td class="yellow_per text-center">{{$anio_porF}}%</td>
+                                            @elseif ($anio_porF >= 95)
+                                                <td class="green_per text-center">{{$anio_porF}}%</td>
+                                            @endif
+                                        @endif
+                                    @endif                                        
+                                @endif
                             @endif
                             <!--FIN-FORECAST-->
                             <!--BUDGET-->
@@ -637,31 +707,41 @@
                             @else
                                 @if ($registro->variable_id == 10012)
                                     @if ($anio_porB <= 100)
-                                         <td class="green_per text-center">{{$anio_porB}}%</td>
+                                        <td class="green_per text-center">{{$anio_porB}}%</td>
                                     @elseif ($anio_porB > 133)
-                                         <td class="red_per text-center">{{$anio_porB}}%</td>
+                                        <td class="red_per text-center">{{$anio_porB}}%</td>
                                     @else 
-                                         <td class="yellow_per text-center">{{$anio_porB}}%</td>
+                                        <td class="yellow_per text-center">{{$anio_porB}}%</td>
                                     @endif
                                 @else
-                                    @if ($registro->variable_id == 10050 || $registro->variable_id == 10044 || $registro->variable_id == 10043 || $registro->variable_id == 10042)
+                                    @if ($registro->variable_id == 10050)
                                         @if ($anio_porB <= 90)
-                                             <td class="green_per text-center">{{$anio_porB}}%</td>
-                                         @elseif ($anio_porB >= 95)
-                                             <td class="red_per text-center">{{$anio_porB}}%</td>
-                                         @else 
-                                             <td class="yellow_per text-center">{{$anio_porB}}%</td>
+                                            <td class="green_per text-center">{{$anio_porB}}%</td>
+                                        @elseif ($anio_porB >= 95)
+                                            <td class="red_per text-center">{{$anio_porB}}%</td>
+                                        @else 
+                                            <td class="yellow_per text-center">{{$anio_porB}}%</td>
                                         @endif
-                                     @else
-                                         @if($anio_porB < 90)
-                                             <td class="red_per text-center">{{$anio_porB}}%</td>
-                                         @elseif ($anio_porB >= 90  && $anio_porB < 95)
-                                             <td class="yellow_per text-center">{{$anio_porB}}%</td>
-                                         @elseif ($anio_porB >= 95)
-                                             <td class="green_per text-center">{{$anio_porB}}%</td>
-                                         @endif
-                                     @endif
-                                 @endif
+                                    @else
+                                        @if ($registro->variable_id == 10041 || $registro->variable_id == 10042 || $registro->variable_id == 10043 || $registro->variable_id == 10044)
+                                            @if ($anio_porB < 90 || $anio_porB > 105)
+                                                <td class="red_per text-center">{{$anio_porB}}%</td>
+                                            @elseif ($anio_porB >= 90 && $anio_porB < 95)
+                                                <td class="yellow_per text-center">{{$anio_porB}}%</td>
+                                            @elseif ($anio_porB >= 95 && $anio_porB <= 105)
+                                                <td class="green_per text-center">{{$anio_porB}}%</td>
+                                            @endif
+                                        @else
+                                            @if($anio_porB <= 90)
+                                                <td class="red_per text-center">{{$anio_porB}}%</td>
+                                            @elseif ($anio_porB > 90  && $anio_porB < 95)
+                                                <td class="yellow_per text-center">{{$anio_porB}}%</td>
+                                            @elseif ($anio_porB >= 95)
+                                                <td class="green_per text-center">{{$anio_porB}}%</td>
+                                            @endif
+                                        @endif
+                                    @endif                                        
+                                @endif
                             @endif
                             <!--FIN-BUDGET-->
                             <!--FIN-ANIO-->

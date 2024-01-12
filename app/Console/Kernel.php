@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\SendDailyReport',
         'App\Console\Commands\SendDailyReportMina',  
-        'App\Console\Commands\SendDailyReportCombinado',      
+        'App\Console\Commands\SendDailyReportIntranet',     
+        'App\Console\Commands\SendDailyReportCombinado',  
     ];
 
     /**
@@ -29,9 +30,10 @@ class Kernel extends ConsoleKernel
     {
         //HORARIO UTC
         $schedule->command('send:dailyreport')->between('17:55', '18:05');
-        $schedule->command('send:dailyreportmina')->between('11:10', '11:40');
-        /*$schedule->command('send:dailyreport')->between('10:00', '22:00');
-        $schedule->command('send:dailyreportmina')->between('10:00', '22:00');
+        $schedule->command('send:dailyreportmina')->between('11:20', '11:40');
+        $schedule->command('send:dailyreportcombinado')->between('19:55', '20:05');
+        $schedule->command('send:dailyreportintranet')->between('19:55', '20:05');
+        /*$schedule->command('send:dailyreportmina')->between('10:00', '22:00');
         $schedule->command('send:dailyreportcombinado')->between('10:00', '22:00');*/
     }
 

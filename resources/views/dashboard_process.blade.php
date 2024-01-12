@@ -388,21 +388,23 @@
                 }
             });
         })
-        
+
         //Descarga PFD Completo
         $(document).on('click','.expPdf', function(event) {
             columnsVisibility = [];
+            formato = $(this).attr('id');
             tabledata = $("#procesos-table").DataTable();
             for (i=7; i<23; i=i+5)
             {
                 columnsVisibility.push(tabledata.column(i).visible());
             }
             event.preventDefault();
-            console.log(columnsVisibility);
+            console.log(columnsVisibility,focastVisibility, budgetVisibility);
             $.ajax({
                 url: "{{route('dashboard.getpdfcompleto') }}",
                 type: 'POST',
                 data:{
+                    formato:formato,
                     date: moment(date_selected).format('YYYY-MM-DD'),
                     columnsVisibility: columnsVisibility,
                     focastVisibility: focastVisibility,
@@ -420,7 +422,15 @@
 
                 const link = document.createElement('a');
                 link.href = res.ruta;
-                const nom = 'SIOM_DailyReportCompleto_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
+                if(formato == "full")
+                {
+                    nom = 'SIOM_DailyReportCompleto_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
+                }
+                else
+                {
+                    nom = 'SIOM_DailyReportProcesos_' + moment(date_selected).format('YYYY-MM-DD') + '.pdf';
+                }
+                
                 link.setAttribute('download',nom);
                 document.body.appendChild(link);
                 link.click();
@@ -538,16 +548,17 @@
                         buttons:[
                             {
                                 text:'Daily Planta',
-                                action: function ( e, dt, button, config) {
-                                    let date = moment(date_selected).format('YYYY-MM-DD');
-                                    let url = '{{ route("dashboard.getpdfprocesostable", ":date" )}}';
-                                    url = url.replace(':date', date);
-                                    window.location.href = url;
-                                },
+                                className:'expPdf',
+                                attr:{
+                                    id:"process"
+                                }
                             },
                             {
                                 text:'Daily Full Mina y Planta',
                                 className: 'expPdf',
+                                attr:{
+                                    id:"full"
+                                }
                             },
                         ],
                           
@@ -632,75 +643,83 @@
                                 if($d_budget != 0.00 )
                                 {
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
-                                        
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {  
+
                                         switch(true)
                                         {
                                             case $dia_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
                                             case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
                                             case  $dia_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;                                                
+                                        }  
+
+                                    } else if (row['variable'] == 'P80') {
+
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje > 100 && $dia_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case  $dia_porcentaje > 133 :
                                                 return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
                                             default:
                                                 return $dia_porcentaje+'%';
                                             break;
                                                 
-                                        }  
+                                        }   
 
-                                    }else{
+                                    } else if( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada') {
 
-                                        if (row['variable'] == 'P80') {
-
-                                            switch(true)
-                                            {
-                                                case $dia_porcentaje <= 100:
-                                                    //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case $dia_porcentaje > 100 && $dia_porcentaje <= 133 :
-                                                    //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case  $dia_porcentaje > 133 :
-                                                    //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $dia_porcentaje+'%';
-                                                break;
-                                                    
-                                            }   
-
-                                        }else{
-                                            switch(true)
-                                            {
-                                                case $dia_porcentaje <= 90:
-                                                    //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
-                                                    //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case  $dia_porcentaje >= 95 :
-                                                    //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $dia_porcentaje+'%';
-                                                break;
-                                                    
-                                            }    
-                                        }
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje < 90 || $dia_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 90 && $dia_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 95 && $dia_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;                                                
+                                        } 
 
                                     }
+                                    else{
+
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case  $dia_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;   
+                                        }    
+
+                                    }
+
+                                    
                                 }
                                 else
                                 {
@@ -723,75 +742,83 @@
                                 if($d_budget != 0.00 )
                                 {
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
-                                        
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {  
+
                                         switch(true)
                                         {
                                             case $dia_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
                                             case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
                                             case  $dia_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;                                                
+                                        }  
+
+                                    } else if (row['variable'] == 'P80') {
+
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje > 100 && $dia_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case  $dia_porcentaje > 133 :
                                                 return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
                                             break;
                                             default:
                                                 return $dia_porcentaje+'%';
                                             break;
                                                 
-                                        }  
+                                        }   
 
-                                    }else{
+                                    } else if( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada') {
 
-                                        if (row['variable'] == 'P80') {
-
-                                            switch(true)
-                                            {
-                                                case $dia_porcentaje <= 100:
-                                                    //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case $dia_porcentaje > 100 && $dia_porcentaje <= 133 :
-                                                    //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case  $dia_porcentaje > 133 :
-                                                    //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $dia_porcentaje+'%';
-                                                break;
-                                                    
-                                            }   
-
-                                        }else{
-                                            switch(true)
-                                            {
-                                                case $dia_porcentaje <= 90:
-                                                    //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
-                                                    //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                case  $dia_porcentaje >= 95 :
-                                                    //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
-                                                    return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $dia_porcentaje+'%';
-                                                break;
-                                                    
-                                            }    
-                                        }
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje < 90 || $dia_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 90 && $dia_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 95 && $dia_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;                                                
+                                        } 
 
                                     }
+                                    else{
+
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case  $dia_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;   
+                                        }    
+
+                                    }
+
+                                    
                                 }
                                 else
                                 {
@@ -817,73 +844,80 @@
                                 if($m_budget != 0.00)
                                 {
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
+
                                         switch(true)
                                         {
                                             case $mes_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             case  $mes_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             default:
                                                 return $mes_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    } else if ( row['variable'] == 'P80' ) {
+
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
-                                                
+                                            case $mes_porcentaje > 100 && $mes_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case  $mes_porcentaje > 133 :
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                    
+                                        }
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'  ) {
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje < 90 || $mes_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 90 && $mes_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 95 && $mes_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                
                                         } 
-
-                                        }else{
-                                            if (row['variable'] == 'P80') {
-
-                                                switch(true)
-                                                {
-                                                    case $mes_porcentaje <= 100:
-                                                        return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case $mes_porcentaje > 100 && $mes_porcentaje <= 133 :
-                                                        return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case  $mes_porcentaje > 133 :
-                                                        return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    default:
-                                                        return $mes_porcentaje+'%';
-                                                    break;
-                                                        
-                                                }
-
-                                            }else{
-                                                switch(true)
-                                                {
-                                                    case $mes_porcentaje <= 90:
-                                                        return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
-                                                        return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case  $mes_porcentaje >= 95 :
-                                                        return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    default:
-                                                        return $mes_porcentaje+'%';
-                                                    break;
-                                                        
-                                                }    
-                                            }
-
-                                        } 
+                                    }
+                                    else{
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case  $mes_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                        
+                                        }    
+                                    }                                        
                                 }
                                 else
                                 {
                                     return '-';
                                 }
-
                             }
                             else
                             {
@@ -900,73 +934,82 @@
                                 if($m_budget != 0.00)
                                 {
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
+
                                         switch(true)
                                         {
                                             case $mes_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             case  $mes_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             default:
                                                 return $mes_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    } else if ( row['variable'] == 'P80' ) {
+
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
-                                                
+                                            case $mes_porcentaje > 100 && $mes_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case  $mes_porcentaje > 133 :
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                    
+                                        }
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'  ) {
+
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje < 90 || $mes_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 90 && $mes_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 95 && $mes_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                
                                         } 
 
-                                        }else{
-                                            if (row['variable'] == 'P80') {
-
-                                                switch(true)
-                                                {
-                                                    case $mes_porcentaje <= 100:
-                                                        return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case $mes_porcentaje > 100 && $mes_porcentaje <= 133 :
-                                                        return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case  $mes_porcentaje > 133 :
-                                                        return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    default:
-                                                        return $mes_porcentaje+'%';
-                                                    break;
-                                                        
-                                                }
-
-                                            }else{
-                                                switch(true)
-                                                {
-                                                    case $mes_porcentaje <= 90:
-                                                        return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
-                                                        return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    case  $mes_porcentaje >= 95 :
-                                                        return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
-                                                    break;
-                                                    default:
-                                                        return $mes_porcentaje+'%';
-                                                    break;
-                                                        
-                                                }    
-                                            }
-
-                                        } 
+                                    }
+                                    else{
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case  $mes_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                        
+                                        }    
+                                    }                                        
                                 }
                                 else
                                 {
                                     return '-';
                                 }
-
                             }
                             else
                             {
@@ -986,65 +1029,77 @@
                                 if($t_budget != 0.00)
                                 {
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
+
                                         switch(true)
                                         {
                                             case $trimestre_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
                                             case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
                                             case  $trimestre_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    }else if (row['variable'] == 'P80') {
+
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje > 100 && $trimestre_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case  $trimestre_porcentaje > 133 :
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                    
+                                        }
+
+                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje < 90 || $trimestre_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 90 && $trimestre_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 95 && $trimestre_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    } else {
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case  $trimestre_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
                                             default:
                                                 return $trimestre_porcentaje+'%';
                                             break;
                                                 
-                                        } 
-
-                                    }else{
-                                        if (row['variable'] == 'P80') {
-                                            switch(true)
-                                            {
-                                                case $trimestre_porcentaje <= 100:
-                                                    return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case $trimestre_porcentaje > 100 && $trimestre_porcentaje <= 133 :
-                                                    return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case  $trimestre_porcentaje > 133 :
-                                                    return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $trimestre_porcentaje+'%';
-                                                break;
-                                                    
-                                            }
-
-                                        }else{
-                                            switch(true)
-                                            {
-                                                case $trimestre_porcentaje <= 90:
-                                                    return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
-                                                    return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case  $trimestre_porcentaje >= 95 :
-                                                    return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $trimestre_porcentaje+'%';
-                                                break;
-                                                    
-                                            }   
-                                        }
-                                        
+                                        }   
                                     }
                                 }
                                 else
@@ -1068,65 +1123,77 @@
                                 if($t_budget != 0.00)
                                 {
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
+
                                         switch(true)
                                         {
                                             case $trimestre_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
                                             case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
                                             case  $trimestre_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    }else if (row['variable'] == 'P80') {
+
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje > 100 && $trimestre_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case  $trimestre_porcentaje > 133 :
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                    
+                                        }
+
+                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje < 90 || $trimestre_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 90 && $trimestre_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 95 && $trimestre_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    } else {
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case  $trimestre_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
                                             break;
                                             default:
                                                 return $trimestre_porcentaje+'%';
                                             break;
                                                 
-                                        } 
-
-                                    }else{
-                                        if (row['variable'] == 'P80') {
-                                            switch(true)
-                                            {
-                                                case $trimestre_porcentaje <= 100:
-                                                    return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case $trimestre_porcentaje > 100 && $trimestre_porcentaje <= 133 :
-                                                    return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case  $trimestre_porcentaje > 133 :
-                                                    return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $trimestre_porcentaje+'%';
-                                                break;
-                                                    
-                                            }
-
-                                        }else{
-                                            switch(true)
-                                            {
-                                                case $trimestre_porcentaje <= 90:
-                                                    return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
-                                                    return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                case  $trimestre_porcentaje >= 95 :
-                                                    return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $trimestre_porcentaje+'%';
-                                                break;
-                                                    
-                                            }   
-                                        }
-                                        
+                                        }   
                                     }
                                 }
                                 else
@@ -1153,20 +1220,17 @@
                                 if($a_budget != 0.00)
                                 {
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
 
                                         switch(true)
                                         {
                                             case $anio_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
                                             case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
                                             case  $anio_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
                                             default:
@@ -1175,47 +1239,61 @@
                                                 
                                         } 
 
-                                    }else{
-                                        if (row['variable'] == 'P80') {
+                                    }else if (row['variable'] == 'P80') {
 
-                                            switch(true)
-                                            {
-                                                case $anio_porcentaje <= 100:
-                                                    return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case $anio_porcentaje > 100 && $anio_porcentaje <= 133 :
-                                                    return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case  $anio_porcentaje > 133 :
-                                                    return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $anio_porcentaje+'%';
-                                                break;
-                                                    
-                                            }
-
-                                        }else{
-
-                                            switch(true)
-                                            {
-                                                case $anio_porcentaje <= 90:
-                                                    return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
-                                                    return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case  $anio_porcentaje >= 95 :
-                                                    return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $anio_porcentaje+'%';
-                                                break;
-                                                    
-                                            }   
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje > 100 && $anio_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case  $anio_porcentaje > 133 :
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
                                         }
 
-                                    }
+                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje < 90 || $anio_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 90 && $anio_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 95 && $anio_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    } else {
+
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case  $anio_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                    
+                                        }   
+
+                                    }                                   
                                         
                                 }
                                 else
@@ -1239,20 +1317,17 @@
                                 if($a_budget != 0.00)
                                 {
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
-                                    if (row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley de Au BLS' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Cu Alimentada') {
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
 
                                         switch(true)
                                         {
                                             case $anio_porcentaje <= 90:
-                                                //return '<span class="badge bg-danger">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
                                             case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
-                                                //return '<span class="badge bg-warning">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
                                             case  $anio_porcentaje >= 95 :
-                                                //return '<span class="badge bg-success">'+$dia_porcentaje+'%</span>';
                                                 return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
                                             break;
                                             default:
@@ -1261,47 +1336,61 @@
                                                 
                                         } 
 
-                                    }else{
-                                        if (row['variable'] == 'P80') {
+                                    }else if (row['variable'] == 'P80') {
 
-                                            switch(true)
-                                            {
-                                                case $anio_porcentaje <= 100:
-                                                    return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case $anio_porcentaje > 100 && $anio_porcentaje <= 133 :
-                                                    return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case  $anio_porcentaje > 133 :
-                                                    return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $anio_porcentaje+'%';
-                                                break;
-                                                    
-                                            }
-
-                                        }else{
-
-                                            switch(true)
-                                            {
-                                                case $anio_porcentaje <= 90:
-                                                    return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
-                                                    return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                case  $anio_porcentaje >= 95 :
-                                                    return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
-                                                break;
-                                                default:
-                                                    return $anio_porcentaje+'%';
-                                                break;
-                                                    
-                                            }   
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje > 100 && $anio_porcentaje <= 133 :
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case  $anio_porcentaje > 133 :
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
                                         }
 
-                                    }
+                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje < 90 || $anio_porcentaje > 105:
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 90 && $anio_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 95 && $anio_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
+                                        } 
+
+                                    } else {
+
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje <= 90:
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case  $anio_porcentaje >= 95 :
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                    
+                                        }   
+
+                                    }                                   
                                         
                                 }
                                 else

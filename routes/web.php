@@ -140,18 +140,12 @@ Route::group(['middleware' => ['auth', 'permission:budget module']], function() 
 
 });
 
-Route::group(['middleware' => ['auth', 'permission:forecast module']], function() {
+Route::group(['middleware' => ['auth', 'permission:forecast module individual']], function() {
     Route::get('forecast_individual', 'ForecastController@FI_index')->name('forecast_individual');
     Route::post('forecast_individual/getvariables', 'ForecastController@FI_getVariables')->name('forecast_individual.getvariables');
     Route::post('forecast_individual/getvalores', 'ForecastController@FI_getValores')->name('forecast_individual.getvalores');
     Route::get('forecast_individual/{id}/edit','ForecastController@FI_edit')->name('forecast_individual.edit');
     Route::post('forecast_individual/load', 'ForecastController@FI_load')->name('forecast_individual.load');
-
-    Route::get('forecast_group', 'ForecastController@FG_index')->name('forecast_group');
-    Route::post('forecast_group/getvariables', 'ForecastController@FG_getVariables')->name('forecast_group.getvariables');
-    Route::post('forecast_group/getvalores', 'ForecastController@FG_getValores')->name('forecast_group.getvalores');
-    Route::post('forecast_group/getcolumnas','ForecastController@FG_getColumnas')->name('forecast_group.getcolumnas');
-
 
     /**
      * Comento esta area de codigo por que al ingresar al histoial de varibles da un erro 403:Forbidden
@@ -163,6 +157,13 @@ Route::group(['middleware' => ['auth', 'permission:forecast module']], function(
 
 
 
+});
+
+Route::group(['middleware' => ['auth', 'permission:forecast module grupal']], function() {
+    Route::get('forecast_group', 'ForecastController@FG_index')->name('forecast_group');
+    Route::post('forecast_group/getvariables', 'ForecastController@FG_getVariables')->name('forecast_group.getvariables');
+    Route::post('forecast_group/getvalores', 'ForecastController@FG_getValores')->name('forecast_group.getvalores');
+    Route::post('forecast_group/getcolumnas','ForecastController@FG_getColumnas')->name('forecast_group.getcolumnas');
 });
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function() {

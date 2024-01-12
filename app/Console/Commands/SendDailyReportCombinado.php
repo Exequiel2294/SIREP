@@ -26,7 +26,7 @@ class SendDailyReportCombinado extends Command
      *
      * @var string
      */
-    protected $description = 'Enviop DailyReport Combinado';
+    protected $description = 'Envío DailyReport Combinado';
 
     /**
      * Create a new command instance.
@@ -68,9 +68,18 @@ class SendDailyReportCombinado extends Command
                 WHERE c.fecha = ?',
                 [$this->date]
             );
-            $date = $this->date;
             //return view('pdf.combinado', compact('registros', 'date', 'tablacomentarios'));
-            $pdf = Pdf::loadView('pdf.combinado', compact('registros', 'date', 'tablacomentarios')); 
+            $date = $this->date;
+            
+            $columnsVisibility = [true, true, true, true];
+            $focastVisibility = 1;
+            $budgetVisibility = 1;
+            $colspanTFrame = 5;
+            $colspan = 22;
+
+            $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+            $pdf->set_paper('a3', 'portrait');
+            $pdf->render(); 
             if ( env('APP_ENV') == 'production')
             {
                 $data["subject"] = "SIOM DailyReport ";
@@ -79,7 +88,7 @@ class SendDailyReportCombinado extends Command
             else
             {
                 $data["subject"] = "DEV DailyReport ";
-                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                $data["email"] = "ejensen@mansfieldmin.com";
             }
             Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
@@ -92,12 +101,12 @@ class SendDailyReportCombinado extends Command
             if ( env('APP_ENV') == 'production')
             {
                 $data["subject"] = "SIOM DailyReport ";
-                $data["email"] = ["mmsa.soporteit@mansfieldmin.com"];
+                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
             }
             else
             {
                 $data["subject"] = "DEV DailyReport ";
-                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                $data["email"] = "ejensen@mansfieldmin.com";
             }
             Mail::send('mails.dailytablecombinadofail', $data, function ($message) use ($data) {
                 $message->to($data['email']);

@@ -324,9 +324,9 @@
                             <!--DIA-->
                             @if ($dia_porF == '-')
                                 <td class="text-center">{{$dia_porF}}</td>
-                            @elseif ($dia_porF < 90)
+                            @elseif ($dia_porF <= 90)
                                 <td class="red_per text-center">{{$dia_porF}}%</td>
-                            @elseif ($dia_porF >= 90 && $dia_porF < 95)
+                            @elseif ($dia_porF > 90 && $dia_porF < 95)
                                 <td class="yellow_per text-center">{{$dia_porF}}%</td>
                             @elseif ($dia_porF >= 95)
                                 <td class="green_per text-center">{{$dia_porF}}%</td>
@@ -334,9 +334,9 @@
                             
                             @if ($dia_porB == '-')
                                 <td class="text-center">{{$dia_porB}}</td>
-                            @elseif ($dia_porB < 90)
+                            @elseif ($dia_porB <= 90)
                                 <td class="red_per text-center">{{$dia_porB}}%</td>
-                            @elseif ($dia_porB >= 90 && $dia_porB < 95)
+                            @elseif ($dia_porB > 90 && $dia_porB < 95)
                                 <td class="yellow_per text-center">{{$dia_porB}}%</td>
                             @elseif ($dia_porB >= 95)
                                 <td class="green_per text-center">{{$dia_porB}}%</td>
@@ -350,9 +350,9 @@
                             <td class="text-center">{{$registro->mes_forecast}}</td>
                             @if ($mes_porF == '-')
                                 <td class="text-center">{{$mes_porF}}</td>
-                            @elseif ($mes_porF < 90)
+                            @elseif ($mes_porF <= 90)
                                 <td class="red_per text-center">{{$mes_porF}}%</td>
-                            @elseif ($mes_porF >= 90 && $mes_porF < 95)
+                            @elseif ($mes_porF > 90 && $mes_porF < 95)
                                 <td class="yellow_per text-center">{{$mes_porF}}%</td>
                             @elseif ($mes_porF >= 95)
                                 <td class="green_per text-center">{{$mes_porF}}%</td>
@@ -360,9 +360,9 @@
 
                             @if ($mes_porB == '-')
                                 <td class="text-center">{{$mes_porB}}</td>
-                            @elseif ($mes_porB < 90)
+                            @elseif ($mes_porB <= 90)
                                 <td class="red_per text-center">{{$mes_porB}}%</td>
-                            @elseif ($mes_porB >= 90 && $mes_porB < 95)
+                            @elseif ($mes_porB > 90 && $mes_porB < 95)
                                 <td class="yellow_per text-center">{{$mes_porB}}%</td>
                             @elseif ($mes_porB >= 95)
                                 <td class="green_per text-center">{{$mes_porB}}%</td>
@@ -375,9 +375,9 @@
                             <td class="text-center">{{$registro->trimestre_forecast}}</td>
                             @if ($trimestre_porF == '-')
                                 <td class="text-center">{{$trimestre_porF}}</td>
-                            @elseif ($trimestre_porF < 90)
+                            @elseif ($trimestre_porF <= 90)
                                 <td class="red_per text-center">{{$trimestre_porF}}%</td>
-                            @elseif ($trimestre_porF >= 90 && $trimestre_porF < 95)
+                            @elseif ($trimestre_porF > 90 && $trimestre_porF < 95)
                                 <td class="yellow_per text-center">{{$trimestre_porF}}%</td>
                             @elseif ($trimestre_porF >= 95)
                                 <td class="green_per text-center">{{$trimestre_porF}}%</td>
@@ -385,9 +385,9 @@
 
                             @if ($trimestre_porB == '-')
                                 <td class="text-center">{{$trimestre_porB}}</td>
-                            @elseif ($trimestre_porB < 90)
+                            @elseif ($trimestre_porB <= 90)
                                 <td class="red_per text-center">{{$trimestre_porB}}%</td>
-                            @elseif ($trimestre_porB >= 90 && $trimestre_porB < 95)
+                            @elseif ($trimestre_porB > 90 && $trimestre_porB < 95)
                                 <td class="yellow_per text-center">{{$trimestre_porB}}%</td>
                             @elseif ($trimestre_porB >= 95)
                                 <td class="green_per text-center">{{$trimestre_porB}}%</td>
@@ -400,9 +400,9 @@
                             <td class="text-center">{{$registro->anio_forecast}}</td>
                             @if ($anio_porF == '-')
                                 <td class="text-center">{{$anio_porF}}</td>
-                            @elseif ($anio_porF < 90)
+                            @elseif ($anio_porF <= 90)
                                 <td class="red_per text-center">{{$anio_porF}}%</td>
-                            @elseif ($anio_porF >= 90 && $anio_porF < 95)
+                            @elseif ($anio_porF > 90 && $anio_porF < 95)
                                 <td class="yellow_per text-center">{{$anio_porF}}%</td>
                             @elseif ($anio_porF >= 95)
                                 <td class="green_per text-center">{{$anio_porF}}%</td>
@@ -410,9 +410,9 @@
 
                             @if ($anio_porB == '-')
                                 <td class="text-center">{{$anio_porB}}</td>
-                            @elseif ($anio_porB < 90)
+                            @elseif ($anio_porB <= 90)
                                 <td class="red_per text-center">{{$anio_porB}}%</td>
-                            @elseif ($anio_porB >= 90 && $anio_porB < 95)
+                            @elseif ($anio_porB > 90 && $anio_porB < 95)
                                 <td class="yellow_per text-center">{{$anio_porB}}%</td>
                             @elseif ($anio_porB >= 95)
                                 <td class="green_per text-center">{{$anio_porB}}%</td>
