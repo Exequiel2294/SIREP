@@ -82,8 +82,8 @@ class SendDailyReportIntranet extends Command
                 $date = $this->date;
                 
                 $columnsVisibility = [true, true, true, true];
-                $focastVisibility = 1;
-                $budgetVisibility = 0;
+                $focastVisibility = 0;
+                $budgetVisibility = 1;
                 $colspanTFrame = 3;
                 $colspan = 14;
     
