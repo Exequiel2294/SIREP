@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Contracts\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +69,66 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('historialvariables/getvalores', 'HistorialVariablesController@getvalores')->name('historialvariables.getvalores');
     Route::post('historialvariables/getcolumnas','HistorialVariablesController@getcolumnas')->name('historialvariables.getcolumnas');
 
+   
+
+});
+
+/**
+ * Solo los Directores,Jefes y Supervisores de cada area tendran acceso a este modulo
+ * Requerido por SSOMA 
+ */
+Route::group(['middleware' => ['auth', 'permission:ssoma module']], function() {
+
+    // /**
+    //  * QUEDA EN STANDA BY ESTE MODULO PARA UN FUTURO DESARROLO SOBRE CAPACITACION INTELEX
+    //  * Creacion de la route para la capacitacion
+    //  */
+    // Route::get('capacitacion', 'SsomaCapacitacionController@index')->name('capacitacion');
+    // Route::post('capacitacion/aproved','SsomaCapacitacionController@aproved')->name('capacitacion.aproved');//este es un post en donde directamente hace la aprobacion o desaprobacion del empleado
+    // Route::post('capacitacion/empleados', 'SsomaCapacitacionController@empleados')->name('permisos.empleados');
+    // Route::post('capacitacion/capacitacion', 'SsomaCapacitacionController@capacitacion')->name('permisos.capacitacion');
+    // Route::post('capacitacion.getvalores', 'SsomaCapacitacionController@getValores')->name('capacitacion.getvalores');
+    // Route::post('capacitacion/ABEmpleados', 'SsomaCapacitacionController@ABEmpleados')->name('capacitacion.ABEmpleados');
+    // Route::post('capacitaciom/AMCapacitacion','SsomaCapacitacionController@AMCapacitacion')->name('capacitacion.AMCapacitacion');
+    // Route::get('capacitacion/{id}/edit','SsomaCapacitacionController@edit')->name('capacitacion.edit');
+    // Route::delete('capacitacion/{id}','SsomaCapacitacionController@delete')->name('capacitacion.delete');
+
+    /**
+     * Creacion de la route para la CAPACITACION DE PERFORMANCE
+     */
+    Route::get('capacitacion_performance', 'SsomaCapacitacionPerformanceController@index')->name('capacitacion_performance');
+    Route::post('capacitacion_performance/load', 'SsomaCapacitacionPerformanceController@load')->name('capacitacion_performance.load');
+    Route::get('capacitacion_performance/{id}/edit','SsomaCapacitacionPerformanceController@edit')->name('capacitacion_performance.edit');
+    Route::get('capacitacion_performance/{dni}/GetEmpleado','SsomaCapacitacionPerformanceController@GetEmpleado')->name('capacitacion_performance.GetEmpleado');
+    Route::delete('capacitacion_performance/{id}','SsomaCapacitacionPerformanceController@delete')->name('capacitacion_performance.delete');
+
+    /**
+     * Creacion de la route para la OST
+     */
+    Route::get('ost', 'SsomaOstController@index')->name('ost');
+    Route::post('ost/load', 'SsomaOstController@load')->name('ost.load');
+    Route::get('ost/{id}/edit','SsomaOstController@edit')->name('ost.edit');
+    Route::get('ost/{dni}/GetEmpleado','SsomaOstController@GetEmpleado')->name('ost.GetEmpleado');
+    Route::delete('ost/{id}','SsomaOstController@delete')->name('ost.delete');
+
+    /**
+     * Creacion de la route para la ATS
+     */
+    Route::get('ats', 'SsomaAtsController@index')->name('ats');
+    Route::post('ats/load', 'SsomaAtsController@load')->name('ats.load');
+    Route::get('ats/{id}/edit','SsomaAtsController@edit')->name('ats.edit');
+    Route::get('ats/{dni}/GetEmpleado','SsomaAtsController@GetEmpleado')->name('ats.GetEmpleado');
+    Route::delete('ats/{id}','SsomaAtsController@delete')->name('ats.delete');
+
+     /**
+     * Creacion de la route para INSPECCIONES
+     */
+    Route::get('inspeccion', 'SsomaInspeccionesController@index')->name('inspeccion');
+    Route::post('inspeccion/load', 'SsomaInspeccionesController@load')->name('inspeccion.load');
+    Route::get('inspeccion/{id}/edit','SsomaInspeccionesController@edit')->name('inspeccion.edit');
+    Route::get('inspeccion/{dni}/GetEmpleado','SsomaInspeccionesController@GetEmpleado')->name('inspeccion.GetEmpleado');
+    Route::delete('inspeccion/{id}','SsomaInspeccionesController@delete')->name('inspeccion.delete');
+
 });
 
 Route::group(['middleware' => ['auth', 'permission:budget module']], function() {
@@ -86,7 +148,7 @@ Route::group(['middleware' => ['auth', 'permission:forecast module individual']]
     Route::post('forecast_individual/load', 'ForecastController@FI_load')->name('forecast_individual.load');
 
     /**
-     * Comento esta area de codigo por que al ingresar al hosrial de varibles da un erro 403:Forbidden
+     * Comento esta area de codigo por que al ingresar al histoial de varibles da un erro 403:Forbidden
      */
     // Route::get('historialvariables', 'HistorialVariablesController@index')->name('historialvariables');
     // Route::post('historialvariables/getvariables', 'HistorialVariablesController@getvariables')->name('historialvariables.getvariables');
@@ -141,6 +203,25 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::get('comentario_area/{id}/edit','ComentarioAreaController@edit')->name('comentario_area.edit');
     Route::delete('comentario_area/{id}','ComentarioAreaController@delete')->name('comentario_area.delete');
 
-    
-    
+    /**
+     * Creacion de la route para Empleados
+     */
+    Route::get('empleados', 'MmsaEmpleadosController@index')->name('empleados');
+    Route::post('empleados/load', 'MmsaEmpleadosController@load')->name('empleados.load');
+    Route::get('empleados/{id}/edit','MmsaEmpleadosController@edit')->name('empleados.edit');
+    Route::get('empleados/getsectores', 'MmsaEmpleadosController@getsectores')->name('empleados.getsectores');
+    Route::delete('empleados/{id}','MmsaEmpleadosController@delete')->name('empleados.delete');
+    Route::get('empleados/getcargos', 'MmsaEmpleadosController@getcargos')->name('empleados.getcargos');
+    Route::get('empleados/getcorreos', 'MmsaEmpleadosController@getcorreos')->name('empleados.getcorreos');
+
+     /**
+     * Creacion de la route para el Acceso a Modulos
+     */
+    Route::get('acceso_modulo', 'AccesoModulosController@index')->name('acceso_modulo');
+    Route::post('acceso_modulo/load', 'AccesoModulosController@load')->name('acceso_modulo.load');
+    Route::get('acceso_modulo/getcorreos', 'AccesoModulosController@getcorreos')->name('acceso_modulo.getcorreos');
+    Route::get('acceso_modulo/getmodulos', 'AccesoModulosController@getmodulos')->name('acceso_modulo.getmodulos');
+    //Route::get('acceso_modulo/{id}/edit','AccesoModulosController@edit')->name('acceso_modulo.edit');
+    //Route::get('acceso_modulo/{dni}/GetEmpleado','AccesoModulosController@GetEmpleado')->name('acceso_modulo.GetEmpleado');
+    Route::delete('acceso_modulo/delete','AccesoModulosController@delete')->name('acceso_modulo.delete');
 });
