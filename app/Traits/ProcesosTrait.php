@@ -296,7 +296,7 @@ trait ProcesosTrait {
                 );
             //FIN
             //MES FORECAST.
-            $this->summesforecast10039 = 
+                $this->summesforecast10039 = 
                 DB::select(
                     'SELECT MONTH(fecha) as month, SUM(valor) as suma
                     FROM [dbo].[forecast]
@@ -307,18 +307,19 @@ trait ProcesosTrait {
                     GROUP BY MONTH(fecha)', 
                     [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 );
-            $this->summesforecast10031 = 
-            DB::select(
-                'SELECT MONTH(fecha) as month, SUM(valor) as suma
-                FROM [dbo].[forecast]
-                WHERE variable_id = 10031
-                AND  MONTH(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                AND YEAR(fecha) = ?
-                GROUP BY MONTH(fecha)', 
-                [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+
+                $this->summesforecast10031 = 
+                DB::select(
+                    'SELECT MONTH(fecha) as month, SUM(valor) as suma
+                    FROM [dbo].[forecast]
+                    WHERE variable_id = 10031
+                    AND  MONTH(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    AND YEAR(fecha) = ?
+                    GROUP BY MONTH(fecha)', 
+                    [date('m', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 );
-            
+                
                 $this->summesforecast = 
                 DB::select(
                     'SELECT v.id AS variable_id, f.valor as mes_forecast FROM
@@ -1139,6 +1140,7 @@ trait ProcesosTrait {
                     AND DATEPART(QUARTER, A.fecha) = '.$quarter.'
                     AND YEAR(A.fecha) = '.$year.''
                 );
+
                 $this->sumtriforecast10031 = 
                 DB::select(
                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
@@ -1150,6 +1152,7 @@ trait ProcesosTrait {
                     GROUP BY DATEPART(QUARTER, fecha)', 
                     [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                 );
+
                 $this->sumtriforecast10039 = 
                 DB::select(
                     'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as suma
@@ -1527,26 +1530,28 @@ trait ProcesosTrait {
                 );
             //FIN
             //AÑO FORECAST 
-            $this->sumanioforecast10031 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[forecast]
-                WHERE variable_id = 10031
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            ); 
-            $this->sumanioforecast10039 = 
-            DB::select(
-                'SELECT YEAR(fecha) as year, SUM(valor) as suma
-                FROM [dbo].[forecast]
-                WHERE variable_id = 10039
-                AND  YEAR(fecha) = ?
-                AND  DATEPART(y, fecha) <= ?
-                GROUP BY YEAR(fecha)',
-                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
-            );
+                $this->sumanioforecast10031 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[forecast]
+                    WHERE variable_id = 10031
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+
+                $this->sumanioforecast10039 = 
+                DB::select(
+                    'SELECT YEAR(fecha) as year, SUM(valor) as suma
+                    FROM [dbo].[forecast]
+                    WHERE variable_id = 10039
+                    AND  YEAR(fecha) = ?
+                    AND  DATEPART(y, fecha) <= ?
+                    GROUP BY YEAR(fecha)',
+                    [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                );
+
                 $this->sumanioforecast = 
                 DB::select(
                     'SELECT v.id AS variable_id, f.valor as anio_forecast FROM
@@ -6060,11 +6065,11 @@ trait ProcesosTrait {
                                     $sumaproducto10035 = DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
+                                        FROM [dbo].[forecast]
                                         where variable_id = 10035) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
+                                        FROM [dbo].[forecast]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -6079,11 +6084,11 @@ trait ProcesosTrait {
                                     $sumaproducto10036 = DB::select(
                                         'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
+                                        FROM [dbo].[forecast]
                                         where variable_id = 10036) as A
                                         INNER JOIN   
                                         (SELECT fecha, variable_id, [valor]
-                                        FROM [dbo].[data]
+                                        FROM [dbo].[forecast]
                                         where variable_id = 10039) as B
                                         ON A.fecha = B.fecha
                                         WHERE DATEPART(QUARTER, A.fecha) = ?
@@ -8056,7 +8061,73 @@ trait ProcesosTrait {
                             $anio_forecast = $this->sumanioforecast[8];
                         break;
                         case 10028:
-                            $anio_forecast = $this->sumanioforecast[9];
+                            //$anio_forecast = $this->sumanioforecast[9];
+                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                            //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                                             
+                            //10030 Ley Au MMSA_HPGR_Ley Au 
+                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10030 MMSA_HPGR_Ley Au g/t)                         
+                            $sumaproducto10030 = DB::select(
+                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10030) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10031) as B
+                                ON A.fecha = B.fecha
+                                WHERE YEAR(A.fecha) = ?
+                                AND  DATEPART(y, A.fecha) <=  ?
+                                GROUP BY YEAR(A.fecha)',
+                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );  
+
+                            //10033 MMSA_APILAM_STACKER_Recuperación %
+                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
+                            $sumaproducto10033 = DB::select(
+                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10033) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10031) as B
+                                ON A.fecha = B.fecha
+                                WHERE YEAR(A.fecha) = ?
+                                AND  DATEPART(y, A.fecha) <=  ?
+                                GROUP BY YEAR(A.fecha)',
+                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );                                     
+                            $suma10031 = $this->sumanioforecast10031; 
+                            
+                            
+                            
+                            if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                            {
+                                if ($suma10031[0]->suma > 0) {
+                                    //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                    $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
+                                    $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
+                                    $sumMin = $suma10031[0]->suma;
+                                    $anio_forecast =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                    if($anio_forecast > 100)
+                                    {
+                                        return number_format(round($anio_forecast), 0, '.', ',');
+                                    }
+                                    else
+                                    {
+                                        return number_format($anio_forecast, 2, '.', ',');
+                                    }
+                                }
+                                else {
+                                    return '-';
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
                         break;
                         case 10029:
                             $anio_forecast = $this->avganioforecast[10];
@@ -8120,11 +8191,11 @@ trait ProcesosTrait {
                                                 $sumaproducto10035 = DB::select(
                                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                                     (SELECT fecha, variable_id, [valor]
-                                                    FROM [dbo].[forecas]
+                                                    FROM [dbo].[forecast]
                                                     where variable_id = 10035) as A
                                                     INNER JOIN   
                                                     (SELECT fecha, variable_id, [valor]
-                                                    FROM [dbo].[forecas]
+                                                    FROM [dbo].[forecast]
                                                     where variable_id = 10039) as B
                                                     ON A.fecha = B.fecha
                                                     WHERE YEAR(A.fecha) = ?
@@ -8138,11 +8209,11 @@ trait ProcesosTrait {
                                                 $sumaproducto10036 = DB::select(
                                                     'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                                     (SELECT fecha, variable_id, [valor]
-                                                    FROM [dbo].[forecas]
+                                                    FROM [dbo].[forecast]
                                                     where variable_id = 10036) as A
                                                     INNER JOIN   
                                                     (SELECT fecha, variable_id, [valor]
-                                                    FROM [dbo].[forecas]
+                                                    FROM [dbo].[forecast]
                                                     where variable_id = 10039) as B
                                                     ON A.fecha = B.fecha
                                                     WHERE YEAR(A.fecha) = ?
@@ -12604,7 +12675,77 @@ trait ProcesosTrait {
                             $tri_forecast = $this->sumtriforecast[8];
                         break;
                         case 10028:
-                            $tri_forecast = $this->sumtriforecast[9];
+                            //$tri_forecast = $this->sumtriforecast[9];
+                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                                    //SUMATRIMESTRAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                                   
+                                    
+                                                                         
+                                    //10010 Ley Au MMSA_HPGR_Ley Au 
+                                    //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10010 MMSA_HPGR_Ley Au g/t)                         
+                                    $sumaproducto10030 = DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[forecast]
+                                        where variable_id = 10030) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[forecast]
+                                        where variable_id = 10031) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        AND YEAR(A.fecha) = ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    );   
+
+                                    //10033 MMSA_APILAM_STACKER_Recuperación %
+                                    //Promedio Ponderado Trimestral(10011 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
+                                    $sumaproducto10033= DB::select(
+                                        'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM(A.valor * B.valor) as sumaproducto FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[forecast]
+                                        where variable_id = 10033) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[forecast]
+                                        where variable_id = 10031) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE DATEPART(QUARTER, A.fecha) = ?
+                                        AND  DATEPART(y, A.fecha) <=  ?
+                                        AND YEAR(A.fecha) = ?
+                                        GROUP BY DATEPART(QUARTER, A.fecha)', 
+                                        [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                                                    
+                                    $suma10031 = $this->sumtriforecast10031; 
+                                   
+
+                                    if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                                    {
+                                        if ($suma10031[0]->suma > 0) {
+                                            //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                            $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
+                                            $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
+                                            $sumMin = $suma10031[0]->suma;
+                                            $tri_forecast =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                            if($tri_forecast > 100)
+                                            {
+                                                return number_format(round($tri_forecast), 0, '.', ',');
+                                            }
+                                            else
+                                            {
+                                                return number_format($tri_forecast, 2, '.', ',');
+                                            }
+                                        }
+                                        else {
+                                            return '-';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return '-';
+                                    } 
                         break;
                         case 10029:
                             $tri_forecast = $this->avgtriforecast[10];
@@ -14663,7 +14804,73 @@ trait ProcesosTrait {
                             $anio_forecast = $this->sumanioforecast[8];
                         break;
                         case 10028:
-                            $anio_forecast = $this->sumanioforecast[9];
+                            //$anio_forecast = $this->sumanioforecast[9];
+                            //MMSA_APILAM_STACKER_Au Extraible Apilado                  
+                            //SUMAANUAL((((10033 MMSA_APILAM_STACKER_Recuperación %)/ 100) * (10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t) * (10030 MMSA_APILAM_STACKER_Ley Au g/t)) / 31.1035)                                             
+                            //10030 Ley Au MMSA_HPGR_Ley Au 
+                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10030 MMSA_HPGR_Ley Au g/t)                         
+                            $sumaproducto10030 = DB::select(
+                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10030) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10031) as B
+                                ON A.fecha = B.fecha
+                                WHERE YEAR(A.fecha) = ?
+                                AND  DATEPART(y, A.fecha) <=  ?
+                                GROUP BY YEAR(A.fecha)',
+                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );  
+
+                            //10033 MMSA_APILAM_STACKER_Recuperación %
+                            //Promedio Ponderado Anual(10031 MMSA_HPGR_Mineral Triturado t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
+                            $sumaproducto10033 = DB::select(
+                                'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10033) as A
+                                INNER JOIN   
+                                (SELECT fecha, variable_id, [valor]
+                                FROM [dbo].[forecast]
+                                where variable_id = 10031) as B
+                                ON A.fecha = B.fecha
+                                WHERE YEAR(A.fecha) = ?
+                                AND  DATEPART(y, A.fecha) <=  ?
+                                GROUP BY YEAR(A.fecha)',
+                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                            );                                     
+                            $suma10031 = $this->sumanioforecast10031; 
+                            
+                            
+                            
+                            if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
+                            {
+                                if ($suma10031[0]->suma > 0) {
+                                    //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
+                                    $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
+                                    $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
+                                    $sumMin = $suma10031[0]->suma;
+                                    $anio_forecast =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                    if($anio_forecast > 100)
+                                    {
+                                        return number_format(round($anio_forecast), 0, '.', ',');
+                                    }
+                                    else
+                                    {
+                                        return number_format($anio_forecast, 2, '.', ',');
+                                    }
+                                }
+                                else {
+                                    return '-';
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
                         break;
                         case 10029:
                             $anio_forecast = $this->avganioforecast[10];
