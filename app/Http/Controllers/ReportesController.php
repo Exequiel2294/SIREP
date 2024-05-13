@@ -98,7 +98,7 @@ class ReportesController extends Controller
 
             $pdf = Pdf::loadView('pdf.procesosColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
         }
-        else{
+        elseif($formato=='full'){
             $request = new Request(array('date' => $date, 'type' => 1));
             $tablaprocesos = $this->TraitProcesosTable($request);
             
@@ -121,6 +121,31 @@ class ReportesController extends Controller
 
 
             $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+
+        }
+        else{
+            $request = new Request(array('date' => $date, 'type' => 1));
+            $tablaprocesos = $this->TraitProcesosTable($request);
+            
+            $request = new Request(array('date' => $date, 'type' => 1));
+            $tablamina = $this->TraitMinaTable($request);
+            
+            $registrosmina= $tablamina->getData()->data;        
+            $registrosprocesos= $tablaprocesos->getData()->data;
+            $registros = array_merge($registrosmina, $registrosprocesos);
+            $tablacomentarios =
+            DB::select(
+                'SELECT ca.nombre AS area, c.comentario AS comentario, u.name AS usuario FROM comentario c
+                INNER JOIN users u
+                ON c.user_id = u.id
+                INNER JOIN comentario_area ca
+                ON c.area_id = ca.id
+                WHERE c.fecha = ?',
+                [$date]
+            );
+            $colspanTFrame=16;
+            $colspan=16;
+            $pdf = Pdf::loadView('pdf.customizeColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
 
         }
         

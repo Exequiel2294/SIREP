@@ -560,6 +560,15 @@
                                 text:'Daily Full Mina y Planta',
                                 className: 'expPdf',
                             },
+                             //Customize: se agregar una opcion mas para generar un Daily que muestre D,M,T: solo Forecast vs Real
+                            //A: Forecast vs Budget vs Real
+                            {
+                                text:'Daily Full - Anual Fcst+Budget',
+                                className: 'expPdf',
+                                attr:{
+                                    id:"Customize"
+                                }
+                            },
                         ],
                           
                     },

@@ -82,12 +82,12 @@ class SendDailyReportIntranet extends Command
                 $date = $this->date;
                 
                 $columnsVisibility = [true, true, true, true];
-                $focastVisibility = 0;
+                $focastVisibility = 1;
                 $budgetVisibility = 1;
                 $colspanTFrame = 3;
-                $colspan = 14;
+                $colspan = 16;//Tener en cuenta esto cuando se haga un cambio ya que es la fila que subdivide entre las variables
     
-                $pdf = Pdf::loadView('pdf.combinadoColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
+                $pdf = Pdf::loadView('pdf.customizeColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
                 $pdf->set_paper('a3', 'portrait');
                 $pdf->render(); 
                 if ( env('APP_ENV') == 'production')
@@ -98,7 +98,7 @@ class SendDailyReportIntranet extends Command
                 else
                 {
                     $data["subject"] = "Daily Report Intranet ";
-                    $data["email"] = "ejensen@mansfieldmin.com";
+                    $data["email"] = "ecayampi@mansfieldmin.com";
                 }
                 Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
                     $message->to($data['email']);
@@ -116,7 +116,7 @@ class SendDailyReportIntranet extends Command
                 else
                 {
                     $data["subject"] = "DEV DailyReport Intranet ";
-                    $data["email"] = "ejensen@mansfieldmin.com";
+                    $data["email"] = "ecayampi@mansfieldmin.com";
                 }
                 Mail::send('mails.dailytablecombinadofail', $data, function ($message) use ($data) {
                     $message->to($data['email']);
