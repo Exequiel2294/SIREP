@@ -309,6 +309,12 @@ return [
             ]
         ],
         [
+            'text' => 'conciliado',
+            'url'  => 'conciliado',
+            'icon' => 'nav-icon fas fa-sync-alt',
+            'can'  => 'budget module'
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],
@@ -319,11 +325,12 @@ return [
             'can'  => 'Admin',
             'submenu' => 
             [
-                [
-                    'text' => 'conciliado',
-                    'url'  => 'conciliado',
-                    'icon' => 'nav-icon fas fa-sync-alt',
-                ],
+                //Desactivo la opcion de conciliacion para el menu de administrador para que otras personas puedan hacer conciliacion teniendo permisos a travez de los modulos
+                // [
+                //     'text' => 'conciliado',
+                //     'url'  => 'conciliado',
+                //     'icon' => 'nav-icon fas fa-sync-alt',
+                // ],
                 [
                     'text' => 'area',
                     'url'  => 'area',
