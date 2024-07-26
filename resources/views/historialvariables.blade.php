@@ -292,15 +292,16 @@
         }
         
         var date_fh = moment().subtract(1, "days");
+        
         var table;
         $(function () {
             /* Calendario Fecha desde*/
             $('#fechadesde').datetimepicker({
                 format: 'DD/MM/YYYY',
-                defaultDate: date_fd,
+                defaultDate: moment(date_fd).format('DD-MM-YYYY'),
                 maxDate: moment().subtract(2, "days"),
                 minDate: moment("2022-01-01").format('YYYY-MM-DD'),
-                useCurrent: false,
+                useCurrent: true,
             });
             $("#fechadesde").on("change.datetimepicker", function (e) {
                 date_fd = e.date;
@@ -309,7 +310,7 @@
             /* Calendario Fecha hasta*/
             $('#fechahasta').datetimepicker({
                 format: 'DD/MM/YYYY',
-                defaultDate: date_fh,
+                defaultDate: moment(date_fh).format('DD-MM-YYYY'),
                 maxDate: moment().subtract(1, "days"),
                 orientation: "bottom"
             });
