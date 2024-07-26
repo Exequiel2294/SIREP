@@ -312,7 +312,7 @@ return [
             'text' => 'conciliado',
             'url'  => 'conciliado',
             'icon' => 'nav-icon fas fa-sync-alt',
-            'can'  => 'budget module'
+            'can'  => 'conciliate module'
         ],
         [
             'header' => 'Administración',
