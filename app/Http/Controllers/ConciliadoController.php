@@ -1675,10 +1675,11 @@ class ConciliadoController extends Controller
                 $value_real = 0;
             }
             else {
-                $value_real = $request->get('valor_real');
+                $value_real = $request->get('valor_real');//Se guarda el valor real
             }
-            $value_conciliado = $request->get('valor_conciliado'); 
-            if ($value_conciliado - $value_real == 0)
+
+            $value_conciliado = $request->get('valor_conciliado'); //Valor agregado para conciliar
+            if ($value_conciliado - $value_real == 0)//Comparativa que el valor real vs el conciliado es igual
             {
                 return response()->json(['error'=>'El valor actual es igual al conciliado']);
             }
@@ -1687,7 +1688,10 @@ class ConciliadoController extends Controller
                 $variable_id = $request->get('variable_id');
                 $year = $request->get('year');
                 $month = $request->get('month');
-                $dateEndMonth = date('Y-m-t',strtotime($year.'-'.$month.'-01'));
+                //dateEndMonth = lo que hace es setear el ultimo dia con el -01, para hacer las moidificaciones que pide la gente OP
+                //Es cambiar el 
+                $lastDayOfMonth = date('Y-m-t', strtotime($year.'-'.$month.'-01'));//tomar el ultimo dia del mes
+                $dateEndMonth = date('Y-m-d', strtotime($lastDayOfMonth . ' -2 days'));// restar 2 dias para su conciliacion
                 $day = (int)date('d', strtotime($dateEndMonth)); 
                 $days_conciliado = $request->get('dias_conciliacion');
     
