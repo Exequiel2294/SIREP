@@ -1653,8 +1653,6 @@ class ConciliadoController extends Controller
                 $variable_id = $request->get('variable_id');
                 $year = $request->get('year');
                 $month = $request->get('month');
-<<<<<<< Updated upstream
-=======
                 $fechaIni = Periodos::where('anio', $year)
                                 ->where('periodo', $month)
                                 ->value('fecha_ini');
@@ -1664,7 +1662,6 @@ class ConciliadoController extends Controller
                                 ->value('fecha_fin');
                 $this->fecha_ini = date('Y-m-d',strtotime($fechaIni));
                 $this->fecha_fin = date('Y-m-d',strtotime($fechaFin));
->>>>>>> Stashed changes
                 //dateEndMonth = lo que hace es setear el ultimo dia con el -01, para hacer las moidificaciones que pide la gente OP
                 //Es cambiar el 
                 $lastDayOfMonth = date('Y-m-t', strtotime($year.'-'.$month.'-01'));//tomar el ultimo dia del mes
@@ -1795,14 +1792,16 @@ class ConciliadoController extends Controller
                                 $varA = 10106;                                                  
                             break; 
                         } 
+
+                        //TRAIGO TODOS LOS DATOS DE LAS LEYES DESDE INICIO DEL PERIODO
                         $sql="SELECT SUM(valor) AS mineral 
                             FROM [dbo].[data]
                             where variable_id = ?
                             AND fecha BETWEEN ? AND ? 
-                            GROUP BY YEAR(fecha), MONTH(fecha)";                
+                            GROUP BY variable_id";                
                         $data = DB::select($sql,[$varA,date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->fecha_fin))]
                         ); 
-                        
+                    
                         if ($data[0]->mineral != null && $data[0]->mineral > 0)
                         {
                             //$AuReal = ($data[0]->mineral * $value_real)/31.1035;
