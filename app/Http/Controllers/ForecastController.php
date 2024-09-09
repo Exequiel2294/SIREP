@@ -87,7 +87,7 @@ class ForecastController extends Controller
         { 
             $forecast_register = Forecast::findOrFail($id);
 
-            if ( $forecast_register->fecha < date('Y-m-d') ) { 
+            if (false) { 
                 $data['val'] = 0;
                 $data['msg'] =  "No se puede modificar valores de fechas pasadas";
             }
