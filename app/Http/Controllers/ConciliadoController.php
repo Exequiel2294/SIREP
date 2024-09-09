@@ -44,11 +44,11 @@ class ConciliadoController extends Controller
             
             $this->year = $request->get('year');
             //ESTA VARIABLE CREA EL UTLIMO DIA DEL MES
-            $this->date = date('Y-m-t',strtotime($this->year.'-'.$request->get('month').'-01'));
+            $this->dater = date('Y-m-t',strtotime($this->year.'-'.$request->get('month').'-01'));
             //ARMO UN YEAR QUE ES INT
-            $yearInt = (int)date('Y',strtotime($this->date));
+            $yearInt = (int)date('Y',strtotime($this->dater));
             //creo un month que es int
-            $monthInt =(int)date('m',strtotime($this->date));
+            $monthInt =(int)date('m',strtotime($this->dater));
 
             $fechaIni = Periodos::where('anio', $yearInt)
                                 ->where('periodo', $monthInt)
@@ -57,8 +57,9 @@ class ConciliadoController extends Controller
             $fechaFin = Periodos::where('anio', $yearInt)
                                 ->where('periodo', $monthInt)
                                 ->value('fecha_fin');
-            $this->fecha_ini=date('Y-m-d',strtotime($fechaIni));
-            $this->fecha_fin=date('Y-m-d',strtotime($fechaFin));
+            $this->date = date('Y-m-d',strtotime($fechaFin));
+            $this->fecha_ini = date('Y-m-d',strtotime($fechaIni));
+            $this->fecha_fin = date('Y-m-d',strtotime($fechaFin));
             //dd($this->fecha_ini,$this->fecha_fin);
             //ESTO ES PLANTAs
             if ($this->area_id == 1)
@@ -975,6 +976,7 @@ class ConciliadoController extends Controller
                                             );                               
                                         break; 
                                     }
+                                    //dd($data->variable_id,$mes_real,$this->fecha_ini,$this->date);
                                     if(isset($mes_real[0]->mes_real))
                                     {
                                         $m_real = $mes_real[0]->mes_real;
@@ -1703,7 +1705,7 @@ class ConciliadoController extends Controller
                             break;
                         }
                     }
-    
+                    //dd($vars_conciliar,$conciliado);
                     if ($conciliar == 1)
                     {
                         foreach ($vars_conciliar as $var)
