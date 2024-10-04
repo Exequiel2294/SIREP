@@ -19052,8 +19052,7 @@ trait ProcesosTrait {
                                                 'SELECT variable_id as var, AVG(valor) as mes_real
                                                 FROM [dbo].[data]
                                                 WHERE variable_id = ?
-                                                AND  fecha between ? and ?
-                                                AND valor <> 0 
+                                                AND  fecha between ? and ? 
                                                 GROUP BY variable_id', 
                                                 [$data->variable_id, date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
                                                 );  
@@ -21002,7 +21001,6 @@ trait ProcesosTrait {
                                                 FROM [dbo].[data]
                                                 WHERE variable_id = ?
                                                 AND  fecha between ? and ?
-                                                AND valor <> 0
                                                 GROUP BY variable_id', 
                                                 [$data->variable_id, date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                             );
@@ -23121,7 +23119,6 @@ trait ProcesosTrait {
                                                 WHERE variable_id = ?
                                                 AND  YEAR(fecha) = ?
                                                 AND  DATEPART(y, fecha) <= ?
-                                                AND valor <> 0
                                                 GROUP BY YEAR(fecha)', 
                                                 [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                             );
@@ -25695,7 +25692,6 @@ trait ProcesosTrait {
                                                     FROM [dbo].[data]
                                                     WHERE variable_id = ?
                                                     AND fecha between ? and ?
-                                                    AND valor <> 0 
                                                     GROUP BY variable_id', 
                                                     [$data->variable_id, date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
                                                     );  
@@ -27644,7 +27640,6 @@ trait ProcesosTrait {
                                                     FROM [dbo].[data]
                                                     WHERE variable_id = ?
                                                     AND  fecha between ? and ?
-                                                    AND valor <> 0
                                                     GROUP BY variable_id', 
                                                     [$data->variable_id, date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                                 );
@@ -29763,7 +29758,6 @@ trait ProcesosTrait {
                                                     WHERE variable_id = ?
                                                     AND  YEAR(fecha) = ?
                                                     AND  DATEPART(y, fecha) <= ?
-                                                    AND valor <> 0
                                                     GROUP BY YEAR(fecha)', 
                                                     [$data->variable_id, date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
                                                 );
