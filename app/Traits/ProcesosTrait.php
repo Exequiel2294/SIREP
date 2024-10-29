@@ -2859,23 +2859,23 @@ trait ProcesosTrait {
                                                 );
                                             break;  
                                             case 10048:                                    
-                                                $mes_real= DB::select(
-                                                    'SELECT variable_id as var, SUM(valor) as mes_real
-                                                    FROM [dbo].[data]
-                                                    WHERE variable_id = ?
-                                                    AND  fecha between ? and ?
-                                                    GROUP BY variable_id',  
-                                                    [$data->variable_id, date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
-                                                );  
-                                                if(isset($mes_real[0]->mes_real))
-                                                {
-                                                    $m_real = $mes_real[0]->mes_real;
-                                                    return number_format($m_real, 2, '.', ',');                                        
-                                                }
-                                                else
-                                                {
-                                                    return '-';
-                                                }
+                                                    $mes_real= DB::select(
+                                                        'SELECT variable_id as var, SUM(valor) as mes_real
+                                                        FROM [dbo].[data]
+                                                        WHERE variable_id = ?
+                                                        AND  fecha between ? and ?
+                                                        GROUP BY variable_id',  
+                                                        [$data->variable_id, date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                                                    );  
+                                                    if(isset($mes_real[0]->mes_real))
+                                                    {
+                                                        $m_real = $mes_real[0]->mes_real;
+                                                        return number_format($m_real, 2, '.', ',');                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        return '-';
+                                                    }
                                             break;
                                             case 10053:
                                                 //MMSA_LIXI_Au Lixiviado (oz)                  
@@ -2950,87 +2950,82 @@ trait ProcesosTrait {
                                         }
                                         else
                                         {
-                                            if (in_array($data->variable_id, $this->divarray))
+                                        if (in_array($data->variable_id, $this->divarray))
+                                        {
+                                            switch($data->variable_id)
+                                            { 
+                                                case 10006:                                       
+                                                    //10006	MMSA_TP_Productividad t/h                    
+                                                    //sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.mesual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
+                                                    $suma= $this->summesreal10005;                                     
+                                                    $suma2= DB::select(
+                                                        'SELECT variable_id as var, SUM(valor) as suma
+                                                        FROM [dbo].[data]
+                                                        WHERE variable_id = 10062
+                                                        AND  fecha between ? and ?
+                                                        GROUP BY variable_id', 
+                                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                                                    ); 
+                                                break;
+                                                case 10013:                                       
+                                                    //10013 MMSA_HPGR_Productividad t/h                   
+                                                    //sumatoria.mensual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.mesual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
+                                                    $suma= $this->summesreal10011;                                     
+                                                    $suma2= DB::select(
+                                                        'SELECT variable_id as var, SUM(valor) as suma
+                                                        FROM [dbo].[data]
+                                                        WHERE variable_id = 10063
+                                                        AND  fecha between ? and ?
+                                                        GROUP BY variable_id', 
+                                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                                                    );  
+                                                break;
+                                                case 10020:                                       
+                                                    //10020 MMSA_AGLOM_Productividad t/h                  
+                                                    //sumatoria.mensual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.mensual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
+                                                    $suma= $this->summesreal10019;                                     
+                                                    $suma2= DB::select(
+                                                        'SELECT variable_id as var, SUM(valor) as suma
+                                                        FROM [dbo].[data]
+                                                        WHERE variable_id = 10064
+                                                        AND  fecha between ? and ?
+                                                        GROUP BY variable_id', 
+                                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                                                    ); 
+                                                break;
+                                                case 10032:                                       
+                                                    //10032 MMSA_APILAM_STACKER_Productividad t/h                 
+                                                    //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
+                                                    $suma= DB::select(
+                                                        'SELECT variable_id as var, SUM(valor) as suma
+                                                        FROM [dbo].[data]
+                                                        WHERE variable_id = 10031
+                                                        AND  fecha between ? and ?
+                                                        GROUP BY variable_id', 
+                                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                                                    );                                      
+                                                    $suma2= DB::select(
+                                                        'SELECT variable_id as var, SUM(valor) as suma
+                                                        FROM [dbo].[data]
+                                                        WHERE variable_id = 10065
+                                                        AND  fecha between ? and ?
+                                                        GROUP BY variable_id', 
+                                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                                                    );  
+                                                break;
+                                            }                            
+                                            if(isset($suma[0]->suma) && isset($suma2[0]->suma))
                                             {
-                                                switch($data->variable_id)
-                                                { 
-                                                    case 10006:                                       
-                                                        //10006	MMSA_TP_Productividad t/h                    
-                                                        //sumatoria.mensual(10005 MMSA_TP_Mineral Triturado t)/sumatoria.mesual(10062 MMSA_TP_Horas Operativas Trituración Primaria h)                         
-                                                        $suma= $this->summesreal10005;                                     
-                                                        $suma2= DB::select(
-                                                            'SELECT variable_id as var, SUM(valor) as suma
-                                                            FROM [dbo].[data]
-                                                            WHERE variable_id = 10062
-                                                            AND  fecha between ? and ?
-                                                            GROUP BY variable_id', 
-                                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
-                                                        ); 
-                                                    break;
-                                                    case 10013:                                       
-                                                        //10013 MMSA_HPGR_Productividad t/h                   
-                                                        //sumatoria.mensual(10011 MMSA_HPGR_Mineral Triturado t)/ sumatoria.mesual(10063 MMSA_HPGR_Horas Operativas Trituración Terciaria h)                      
-                                                        $suma= $this->summesreal10011;                                     
-                                                        $suma2= DB::select(
-                                                            'SELECT variable_id as var, SUM(valor) as suma
-                                                            FROM [dbo].[data]
-                                                            WHERE variable_id = 10063
-                                                            AND  fecha between ? and ?
-                                                            GROUP BY variable_id', 
-                                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
-                                                        );  
-                                                    break;
-                                                    case 10020:                                       
-                                                        //10020 MMSA_AGLOM_Productividad t/h                  
-                                                        //sumatoria.mensual(10019 MMSA_AGLOM_Mineral Aglomerado t)/ sumatoria.mensual(10064 MMSA_AGLOM_Horas Operativas Aglomeración h)                      
-                                                        $suma= $this->summesreal10019;                                     
-                                                        $suma2= DB::select(
-                                                            'SELECT variable_id as var, SUM(valor) as suma
-                                                            FROM [dbo].[data]
-                                                            WHERE variable_id = 10064
-                                                            AND  fecha between ? and ?
-                                                            GROUP BY variable_id', 
-                                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
-                                                        ); 
-                                                    break;
-                                                    case 10032:                                       
-                                                        //10032 MMSA_APILAM_STACKER_Productividad t/h                 
-                                                        //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
-                                                        $suma= DB::select(
-                                                            'SELECT variable_id as var, SUM(valor) as suma
-                                                            FROM [dbo].[data]
-                                                            WHERE variable_id = 10031
-                                                            AND  fecha between ? and ?
-                                                            GROUP BY variable_id', 
-                                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
-                                                        );                                      
-                                                        $suma2= DB::select(
-                                                            'SELECT variable_id as var, SUM(valor) as suma
-                                                            FROM [dbo].[data]
-                                                            WHERE variable_id = 10065
-                                                            AND  fecha between ? and ?
-                                                            GROUP BY variable_id', 
-                                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
-                                                        );  
-                                                    break;
-                                                }                            
-                                                if(isset($suma[0]->suma) && isset($suma2[0]->suma))
+                                                if ($suma2[0]->suma > 0)
                                                 {
-                                                    if ($suma2[0]->suma > 0)
+                                                    $m_real = $suma[0]->suma/$suma2[0]->suma;
+                                                    if($m_real > 100)
                                                     {
-                                                        $m_real = $suma[0]->suma/$suma2[0]->suma;
-                                                        if($m_real > 100)
-                                                        {
-                                                            return number_format(round($m_real), 0, '.', ',');
-                                                        }
-                                                        else
-                                                        {
-                                                            return number_format($m_real, 2, '.', ',');
-                                                        }
+                                                        return number_format(round($m_real), 0, '.', ',');
                                                     }
                                                     else
                                                     {
-                                                        return '-';
+                                                        return number_format($m_real, 2, '.', ',');
                                                     }
                                                 }
                                                 else
@@ -3040,8 +3035,13 @@ trait ProcesosTrait {
                                             }
                                             else
                                             {
-                                                return $data->variable_id;
+                                                return '-';
                                             }
+                                        }
+                                        else
+                                        {
+                                            return $data->variable_id;
+                                        }
                                         }
                                     }
                                 } 
@@ -4779,7 +4779,7 @@ trait ProcesosTrait {
                                                 //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                                 //SUMATRIMESTRAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
                                                 $trimestre_real= DB::select(
-                                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
+                                                    'SELECT A.variable_id as var, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
                                                     (SELECT fecha, variable_id, [valor]
                                                     FROM [dbo].[data]
                                                     where variable_id = 10052) as A
@@ -4793,23 +4793,19 @@ trait ProcesosTrait {
                                                     FROM [dbo].[data]
                                                     where variable_id = 10050) as C
                                                     ON A.fecha = C.fecha
-                                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                                    AND  DATEPART(y, A.fecha) <=  ?
-                                                    AND YEAR(A.fecha) = ?
-                                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                                    WHERE A.fecha between ? AND ?
+                                                    GROUP BY A.variable_id', 
+                                                    [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                                 );
                                             break; 
                                             case 10048:
                                                 $trimestre_real= DB::select(
-                                                    'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
+                                                    'SELECT variable_id as var, SUM(valor) as trimestre_real
                                                     FROM [dbo].[data]
                                                     WHERE variable_id = ?
-                                                    AND  DATEPART(QUARTER, fecha) = ?
-                                                    AND  DATEPART(y, fecha) <= ?
-                                                    AND YEAR(fecha) = ?
-                                                    GROUP BY DATEPART(QUARTER, fecha)', 
-                                                    [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                                    AND fecha BETWEEN ? AND ?
+                                                    GROUP BY variable_id', 
+                                                    [$data->variable_id,date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                                 );
                                                 if(isset($trimestre_real[0]->trimestre_real))
                                                 {
@@ -4825,7 +4821,7 @@ trait ProcesosTrait {
                                                 //MMSA_LIXI_Au Lixiviado (oz)                  
                                                 //SUMATORIA TRIMESTRAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035)                                 
                                                 $trimestre_real= DB::select(
-                                                    'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                                    'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                                     (SELECT fecha, variable_id, [valor]
                                                     FROM [dbo].[data]
                                                     where variable_id = 10061) as A
@@ -4834,11 +4830,9 @@ trait ProcesosTrait {
                                                     FROM [dbo].[data]
                                                     where variable_id = 10057) as B
                                                     ON A.fecha = B.fecha
-                                                    WHERE DATEPART(QUARTER, A.fecha) = ?
-                                                    AND  DATEPART(y, A.fecha) <=  ?
-                                                    AND YEAR(A.fecha) = ?
-                                                    GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                                    [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                                    WHERE A.fecha between ? AND ?
+                                                    GROUP BY A.variable_id', 
+                                                    [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                                 );
                                             break;
                                             default:
@@ -11415,7 +11409,7 @@ trait ProcesosTrait {
                                             //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                             //SUMATRIMESTRAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)                               
                                             $trimestre_real= DB::select(
-                                                'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
+                                                'SELECT A.variable_id as var, SUM((A.valor * (B.valor-C.valor))/31.1035) as trimestre_real FROM
                                                 (SELECT fecha, variable_id, [valor]
                                                 FROM [dbo].[data]
                                                 where variable_id = 10052) as A
@@ -11429,23 +11423,19 @@ trait ProcesosTrait {
                                                 FROM [dbo].[data]
                                                 where variable_id = 10050) as C
                                                 ON A.fecha = C.fecha
-                                                WHERE DATEPART(QUARTER, A.fecha) = ?
-                                                AND  DATEPART(y, A.fecha) <=  ?
-                                                AND YEAR(A.fecha) = ?
-                                                GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                                WHERE A.fecha between ? AND ?
+                                                GROUP BY A.variable_id', 
+                                                [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                             );
                                         break; 
                                         case 10048:
                                             $trimestre_real= DB::select(
-                                                'SELECT DATEPART(QUARTER, fecha) as quarter, SUM(valor) as trimestre_real
+                                                'SELECT variable_id as var, SUM(valor) as trimestre_real
                                                 FROM [dbo].[data]
                                                 WHERE variable_id = ?
-                                                AND  DATEPART(QUARTER, fecha) = ?
-                                                AND  DATEPART(y, fecha) <= ?
-                                                AND YEAR(fecha) = ?
-                                                GROUP BY DATEPART(QUARTER, fecha)', 
-                                                [$data->variable_id, ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                                AND fecha BETWEEN ? AND ?
+                                                GROUP BY variable_id', 
+                                                [$data->variable_id,date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                             );
                                             if(isset($trimestre_real[0]->trimestre_real))
                                             {
@@ -11461,7 +11451,7 @@ trait ProcesosTrait {
                                             //MMSA_LIXI_Au Lixiviado (oz)                  
                                             //SUMATORIA TRIMESTRAL(((10061 MMSA_LIXI_Solución PLS)*(10057 MMSA_LIXI_Ley Au Solución PLS) / 31.1035)                                 
                                             $trimestre_real= DB::select(
-                                                'SELECT DATEPART(QUARTER, A.fecha) as quarter, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
+                                                'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as trimestre_real FROM
                                                 (SELECT fecha, variable_id, [valor]
                                                 FROM [dbo].[data]
                                                 where variable_id = 10061) as A
@@ -11470,11 +11460,9 @@ trait ProcesosTrait {
                                                 FROM [dbo].[data]
                                                 where variable_id = 10057) as B
                                                 ON A.fecha = B.fecha
-                                                WHERE DATEPART(QUARTER, A.fecha) = ?
-                                                AND  DATEPART(y, A.fecha) <=  ?
-                                                AND YEAR(A.fecha) = ?
-                                                GROUP BY DATEPART(QUARTER, A.fecha)', 
-                                                [ceil(date('m', strtotime($this->date))/3), (int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                                WHERE A.fecha between ? AND ?
+                                                GROUP BY A.variable_id', 
+                                                [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
                                             );
                                         break;
                                         default:
