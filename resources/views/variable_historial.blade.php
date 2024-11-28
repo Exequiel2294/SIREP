@@ -268,7 +268,8 @@
         else {
             var date_fd = moment().startOf('month').format('YYYY-MM-DD');
         }
-        var date_fh = moment().subtract(1, "days");
+        var date_fh = moment().subtract(1, "days").format('YYYY-MM-DD');
+        console.log(date_fh);
         $(function () {
             /* Calendario Fecha desde*/
             $('#fechadesde').datetimepicker({
@@ -285,7 +286,7 @@
             /* Calendario Fecha hasta*/
             $('#fechahasta').datetimepicker({
                 format: 'DD/MM/YYYY',
-                defaultDate: moment(date_fh).format('DD-MM-YYYY'),
+                defaultDate: moment(date_fh.date).format('DD-MM-YYYY'),
                 maxDate: moment().subtract(1, "days"),
             });
             $("#fechahasta").on("change.datetimepicker", function (e) {

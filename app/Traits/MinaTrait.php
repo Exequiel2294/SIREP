@@ -267,13 +267,13 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, AVG(valor) AS mes_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -303,14 +303,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS mes_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND valor <> 0
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -509,14 +509,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND valor <> 0
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -864,13 +864,13 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                     (SELECT variable_id, AVG(valor) AS tri_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -900,14 +900,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS trimestre_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND valor <> 0
                     AND fecha between ? and ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [$requestDayTri,$requestDay]
@@ -1106,14 +1106,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS trimestre_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND valor <> 0
                     AND fecha between ? and ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [$requestDayTri,$requestDay]
@@ -1460,14 +1460,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
                     (SELECT variable_id, AVG(valor) AS anio_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND  YEAR(fecha) = '.$year.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1496,7 +1496,7 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS anio_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND valor <> 0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1504,7 +1504,7 @@ trait MinaTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1702,7 +1702,7 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS anio_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116)
+                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
                     AND valor <> 0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1710,7 +1710,7 @@ trait MinaTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116)) AS v
+                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -2136,7 +2136,7 @@ trait MinaTrait {
                             if(isset($data->dia_real)) 
                             { 
                                 $d_real = $data->dia_real;
-                                if($d_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                                 {
                                     return number_format(round($d_real), 0, '.', ',');
                                 }
@@ -2175,7 +2175,7 @@ trait MinaTrait {
                     if(isset($data->dia_budget)) 
                     { 
                         $d_budget = $data->dia_budget;
-                        if($d_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                        if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                         {
                             return number_format(round($d_budget), 0, '.', ',');
                         }
@@ -2195,7 +2195,7 @@ trait MinaTrait {
                     if(isset($data->dia_forecast)) 
                     { 
                         $d_forecast = $data->dia_forecast;
-                        if($d_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                        if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                         {
                             return number_format(round($d_forecast), 0, '.', ',');
                         }
@@ -2471,7 +2471,7 @@ trait MinaTrait {
                         if(isset($mes_real->mes_real))
                         {
                             $m_real = $mes_real->mes_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -2743,7 +2743,7 @@ trait MinaTrait {
                     if(isset($mes_budget->mes_budget))
                     {
                         $m_budget = $mes_budget->mes_budget;
-                        if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                        if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                         {
                             return number_format(round($m_budget), 0, '.', ',');
                         }
@@ -3017,7 +3017,7 @@ trait MinaTrait {
                     if(isset($mes_forecast->mes_forecast))
                     {
                         $m_forecast = $mes_forecast->mes_forecast;
-                        if($m_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                        if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                         {
                             return number_format(round($m_forecast), 0, '.', ',');
                         }
@@ -3293,7 +3293,7 @@ trait MinaTrait {
                     if(isset($tri_real->tri_real))
                     {
                         $m_real = $tri_real->tri_real;
-                        if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                        if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                         {
                             return number_format(round($m_real), 0, '.', ',');
                         }
@@ -3569,7 +3569,7 @@ trait MinaTrait {
                         if ($trimestre_budget->trimestre_budget > 0)
                         {
                             $m_budget = $trimestre_budget->trimestre_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -3849,7 +3849,7 @@ trait MinaTrait {
                         if ($trimestre_forecast->trimestre_forecast > 0)
                         {
                             $m_forecast = $trimestre_forecast->trimestre_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -4130,7 +4130,7 @@ trait MinaTrait {
                     if(isset($anio_real->anio_real))
                     {
                         $m_real = $anio_real->anio_real;
-                        if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                        if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                         {
                             return number_format(round($m_real), 0, '.', ',');
                         }
@@ -4406,7 +4406,7 @@ trait MinaTrait {
                         if ($anio_budget->anio_budget > 0)
                         {
                             $m_budget = $anio_budget->anio_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -4686,7 +4686,7 @@ trait MinaTrait {
                         if ($anio_forecast->anio_forecast > 0)
                         {
                             $m_forecast = $anio_forecast->anio_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -4968,7 +4968,7 @@ trait MinaTrait {
                                 if(isset($data->dia_real)) 
                                 { 
                                     $d_real = $data->dia_real;
-                                    if($d_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                    if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                                     {
                                         return number_format(round($d_real), 0, '.', ',');
                                     }
@@ -5007,7 +5007,7 @@ trait MinaTrait {
                         if(isset($data->dia_budget)) 
                         { 
                             $d_budget = $data->dia_budget;
-                            if($d_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($d_budget), 0, '.', ',');
                             }
@@ -5027,7 +5027,7 @@ trait MinaTrait {
                         if(isset($data->dia_forecast)) 
                         { 
                             $d_forecast = $data->dia_forecast;
-                            if($d_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($d_forecast), 0, '.', ',');
                             }
@@ -5303,7 +5303,7 @@ trait MinaTrait {
                         if(isset($mes_real->mes_real))
                         {
                             $m_real = $mes_real->mes_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -5575,7 +5575,7 @@ trait MinaTrait {
                         if(isset($mes_budget->mes_budget))
                         {
                             $m_budget = $mes_budget->mes_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -5849,7 +5849,7 @@ trait MinaTrait {
                         if(isset($mes_forecast->mes_forecast))
                         {
                             $m_forecast = $mes_forecast->mes_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -6125,7 +6125,7 @@ trait MinaTrait {
                         if(isset($tri_real->tri_real))
                         {
                             $m_real = $tri_real->tri_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -6401,7 +6401,7 @@ trait MinaTrait {
                             if ($trimestre_budget->trimestre_budget > 0)
                             {
                                 $m_budget = $trimestre_budget->trimestre_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -6681,7 +6681,7 @@ trait MinaTrait {
                             if ($trimestre_forecast->trimestre_forecast > 0)
                             {
                                 $m_forecast = $trimestre_forecast->trimestre_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
@@ -6962,7 +6962,7 @@ trait MinaTrait {
                         if(isset($anio_real->anio_real))
                         {
                             $m_real = $anio_real->anio_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -7238,7 +7238,7 @@ trait MinaTrait {
                             if ($anio_budget->anio_budget > 0)
                             {
                                 $m_budget = $anio_budget->anio_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -7518,7 +7518,7 @@ trait MinaTrait {
                             if ($anio_forecast->anio_forecast > 0)
                             {
                                 $m_forecast = $anio_forecast->anio_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114, 10115, 10116]))
+                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }

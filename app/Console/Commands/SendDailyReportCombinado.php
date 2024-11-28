@@ -88,7 +88,7 @@ class SendDailyReportCombinado extends Command
             else
             {
                 $data["subject"] = "DEV DailyReport ";
-                $data["email"] = "ejensen@mansfieldmin.com";
+                $data["email"] = "ecayampi@mansfieldmin.com";
             }
             Mail::send('mails.dailytablecombinado', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);

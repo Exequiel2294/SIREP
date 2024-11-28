@@ -73,7 +73,7 @@ class SendDailyReportMina extends Command
             else
             {
                 $data["subject"] = "DEV DailyReport Mina ";
-                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                $data["email"] = "ecayampi@mansfieldmin.com";
             }
             Mail::send('mails.dailytablemina', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);

@@ -74,7 +74,7 @@ class SendDailyReport extends Command
             else
             { 
                 $data["subject"] = "DEV DailyReport Procesos ";
-                $data["email"] = "mmsa.soporteit@mansfieldmin.com";
+                $data["email"] = "ecayampi@mansfieldmin.com";
             }
             Mail::send('mails.dailytable', $data, function ($message) use ($data, $pdf) {
                 $message->to($data['email']);
