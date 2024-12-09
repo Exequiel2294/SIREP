@@ -161,11 +161,9 @@
                         @elseif ($registro->subcategoria_id == 10008 && $sub10008 == 1)
                             {{ $sub10008 = 0 }}
                             <tr><td colspan="24"  class="header-categoria">DISPONIBILIDAD MECANICA - FLOTA PERFORACION</td></tr>
-                        @endif
                         @elseif ($registro->subcategoria_id == 10010 && $sub10010 == 1)
                             {{ $sub10010 = 0 }}
                             <tr><td colspan="24"  class="header-categoria">DISPONIBILIDAD MECANICA - FLOTA CARGUIO</td></tr>
-                        @endif
                         @elseif ($registro->subcategoria_id == 10011 && $sub10011 == 1)
                             {{ $sub10011 = 0 }}
                             <tr><td colspan="24"  class="header-categoria">DISPONIBILIDAD MECANICA - FLOTA ACARREO</td></tr>
