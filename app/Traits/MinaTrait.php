@@ -267,17 +267,18 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, AVG(valor) AS mes_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
                 );
+                //dd($this->avgmesrealpor);
             //FIN MES REAL
 
             //INICIO MES BUDGET
@@ -303,14 +304,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS mes_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND valor <> 0
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -509,14 +510,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND valor <> 0
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -864,13 +865,13 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                     (SELECT variable_id, AVG(valor) AS tri_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -900,14 +901,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS trimestre_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND valor <> 0
                     AND fecha between ? and ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [$requestDayTri,$requestDay]
@@ -1106,14 +1107,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS trimestre_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND valor <> 0
                     AND fecha between ? and ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [$requestDayTri,$requestDay]
@@ -1460,14 +1461,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
                     (SELECT variable_id, AVG(valor) AS anio_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND  YEAR(fecha) = '.$year.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1496,7 +1497,7 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS anio_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND valor <> 0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1504,7 +1505,7 @@ trait MinaTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1702,7 +1703,7 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS anio_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116,10119,10120,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
                     AND valor <> 0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1710,7 +1711,7 @@ trait MinaTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10119,10120,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1918,302 +1919,302 @@ trait MinaTrait {
                         )
                     ->orderBy('variable.orden', 'asc')
                     ->get();
-                $tabla = datatables()->of($table)  
-                ->addColumn('dia_real', function($data) 
-                {
-                    switch($data->variable_id)
-                    {                                    
-                        case 10072:
-                            //Au ROM a Trituradora oz                  
-                            //(10070*10071 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10070) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10071) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;
-                        case 10075:
-                            //Au ROM Alta Ley a Stockpile oz                  
-                            //(10073*10074 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10073) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10074) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;
-                        case 10078:
-                            //Au ROM Media Ley a Stockpile oz                  
-                            //(10076*10077 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10076) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10077) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;
-                        case 10081:
-                            //Au ROM Baja Ley a Stockpile oz                  
-                            //(10079*10080 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10079) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10080) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;
-                        case 10084:
-                            //Total Au ROM a Stockpiles oz                  
-                            //(10082*10083 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10082) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10083) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10090:
-                            //Total Au Minado oz                  
-                            //(10088*10089 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10088) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10089) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10095:
-                            //Au Alta Ley Stockpile a Trituradora oz                  
-                            //(10093*10094 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10093) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10094) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10099:
-                            //Au Media Ley Stockpile a Trituradora oz                  
-                            //(10097*10098 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10097) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10098) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10102:
-                            //Au Baja Ley Stockpile a Trituradora oz                  
-                            //(10100*10101 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10100) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10101) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10105:
-                            //Au de Stockpiles a Trituradora oz                  
-                            //(10103*10104 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10103) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10104) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;                            
-                        case 10108:
-                            //Au (ROM+Stockpiles) a Trituradora oz                  
-                            //(10106*10107 / 31.1035                                     
-                            $d_real = 
-                            DB::select(
-                                'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10106) as A
-                                INNER JOIN   
-                                (SELECT fecha, variable_id, [valor]
-                                FROM [dbo].[data]
-                                where variable_id = 10107) as B
-                                ON A.fecha = B.fecha
-                                WHERE  DATEPART(y, A.fecha) = ?
-                                AND YEAR(A.fecha) = ?',
-                                [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                            ); 
-                        break;   
-                        default:
-                            if(isset($data->dia_real)) 
-                            { 
-                                $d_real = $data->dia_real;
-                                if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                                {
-                                    return number_format(round($d_real), 0, '.', ',');
-                                }
+                    $tabla = datatables()->of($table)  
+                    ->addColumn('dia_real', function($data) 
+                    {
+                        switch($data->variable_id)
+                        {                                    
+                            case 10072:
+                                //Au ROM a Trituradora oz                  
+                                //(10070*10071 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10070) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10071) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;
+                            case 10075:
+                                //Au ROM Alta Ley a Stockpile oz                  
+                                //(10073*10074 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10073) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10074) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;
+                            case 10078:
+                                //Au ROM Media Ley a Stockpile oz                  
+                                //(10076*10077 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10076) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10077) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;
+                            case 10081:
+                                //Au ROM Baja Ley a Stockpile oz                  
+                                //(10079*10080 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10079) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10080) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;
+                            case 10084:
+                                //Total Au ROM a Stockpiles oz                  
+                                //(10082*10083 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10082) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10083) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;                            
+                            case 10090:
+                                //Total Au Minado oz                  
+                                //(10088*10089 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10088) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10089) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;                            
+                            case 10095:
+                                //Au Alta Ley Stockpile a Trituradora oz                  
+                                //(10093*10094 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10093) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10094) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;                            
+                            case 10099:
+                                //Au Media Ley Stockpile a Trituradora oz                  
+                                //(10097*10098 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10097) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10098) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;                            
+                            case 10102:
+                                //Au Baja Ley Stockpile a Trituradora oz                  
+                                //(10100*10101 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10100) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10101) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;                            
+                            case 10105:
+                                //Au de Stockpiles a Trituradora oz                  
+                                //(10103*10104 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10103) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10104) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;                            
+                            case 10108:
+                                //Au (ROM+Stockpiles) a Trituradora oz                  
+                                //(10106*10107 / 31.1035                                     
+                                $d_real = 
+                                DB::select(
+                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10106) as A
+                                    INNER JOIN   
+                                    (SELECT fecha, variable_id, [valor]
+                                    FROM [dbo].[data]
+                                    where variable_id = 10107) as B
+                                    ON A.fecha = B.fecha
+                                    WHERE  DATEPART(y, A.fecha) = ?
+                                    AND YEAR(A.fecha) = ?',
+                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                ); 
+                            break;   
+                            default:
+                                if(isset($data->dia_real)) 
+                                { 
+                                    $d_real = $data->dia_real;
+                                    if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                    {
+                                        return number_format(round($d_real), 0, '.', ',');
+                                    }
+                                    else
+                                    {
+                                        return number_format($d_real, 2, '.', ',');
+                                    }
+                                }        
                                 else
                                 {
-                                    return number_format($d_real, 2, '.', ',');
-                                }
-                            }        
+                                    return '-';
+                                }                                       
+                            break; 
+                        } 
+                        if(isset($d_real[0]->dia_real)) 
+                        { 
+                            $d_real = $d_real[0]->dia_real;
+                            if($d_real > 100)
+                            {
+                                return number_format(round($d_real), 0, '.', ',');
+                            }
                             else
                             {
-                                return '-';
-                            }                                       
-                        break; 
-                    } 
-                    if(isset($d_real[0]->dia_real)) 
-                    { 
-                        $d_real = $d_real[0]->dia_real;
-                        if($d_real > 100)
-                        {
-                            return number_format(round($d_real), 0, '.', ',');
-                        }
+                                return number_format($d_real, 2, '.', ',');
+                            }
+                        }        
                         else
                         {
-                            return number_format($d_real, 2, '.', ',');
-                        }
-                    }        
-                    else
-                    {
-                        return '-';
-                    }                                           
+                            return '-';
+                        }                                           
 
-                })
-                //MODIFICADO 14/10/2024
-                ->addColumn('dia_budget', function($data)
-                {
-                    if(isset($data->dia_budget)) 
-                    { 
-                        $d_budget = $data->dia_budget;
-                        if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                        {
-                            return number_format(round($d_budget), 0, '.', ',');
-                        }
+                    })
+                    //MODIFICADO 14/10/2024
+                    ->addColumn('dia_budget', function($data)
+                    {
+                        if(isset($data->dia_budget)) 
+                        { 
+                            $d_budget = $data->dia_budget;
+                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            {
+                                return number_format(round($d_budget), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($d_budget, 2, '.', ',');
+                            }
+                        }        
                         else
                         {
-                            return number_format($d_budget, 2, '.', ',');
-                        }
-                    }        
-                    else
+                            return '-';
+                        }         
+                    }) 
+                    ->addColumn('dia_forecast', function($data)
                     {
-                        return '-';
-                    }         
-                }) 
-                ->addColumn('dia_forecast', function($data)
-                {
-                        
-                    if(isset($data->dia_forecast)) 
-                    { 
-                        $d_forecast = $data->dia_forecast;
-                        if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                        {
-                            return number_format(round($d_forecast), 0, '.', ',');
-                        }
+                            
+                        if(isset($data->dia_forecast)) 
+                        { 
+                            $d_forecast = $data->dia_forecast;
+                            if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            {
+                                return number_format(round($d_forecast), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($d_forecast, 2, '.', ',');
+                            }
+                        }        
                         else
                         {
-                            return number_format($d_forecast, 2, '.', ',');
-                        }
-                    }        
-                    else
+                            return '-';
+                        }         
+                    })
+                    //LISTO 07/09/2024
+                    ->addColumn('mes_real', function($data)
                     {
-                        return '-';
-                    }         
-                })
-                //LISTO 07/09/2024
-                ->addColumn('mes_real', function($data)
-                    { 
-                    $mes_real = [];
-                    switch($data->variable_id)
+                        $mes_real = [];
+                        switch($data->variable_id)
                         {
                             case 10070: 
                                 $mes_real = $this->summesrealton[0];
@@ -2449,6 +2450,15 @@ trait MinaTrait {
                             case 10116:
                                 $mes_real = $this->avgmesrealpor[2];
                             break;
+                            case 10118:
+                                $mes_real = $this->avgmesrealpor[3];
+                            break;
+                            case 10119:
+                                $mes_real = $this->avgmesrealpor[4];
+                            break;
+                            case 10121:
+                                $mes_real = $this->avgmesrealpor[5];
+                            break;
                             case 10117: 
                                 $mes_real = $this->summesrealton[19];
                             break;
@@ -2471,7 +2481,7 @@ trait MinaTrait {
                         if(isset($mes_real->mes_real))
                         {
                             $m_real = $mes_real->mes_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -2484,1092 +2494,275 @@ trait MinaTrait {
                         {
                             return '-';
                         }
-                })
-                ->addColumn('mes_budget', function($data)
-                {
-                    $mes_budget = [];
-                    switch($data->variable_id)
+                    })
+                    ->addColumn('mes_budget', function($data)
                     {
-                        case 10070: 
-                            $mes_budget = $this->summesbudgetton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->summesbudgetonz[0]->mes_budget) && isset($this->summesbudgetton[0]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[0]->mes_budget;
-                                $min = $this->summesbudgetton[0]->mes_budget;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $mes_budget = $this->summesbudgetonz[0];
-                        break;
-                        case 10073: 
-                            $mes_budget = $this->summesbudgetton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->summesbudgetonz[1]->mes_budget) && isset($this->summesbudgetton[1]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[1]->mes_budget;
-                                $min = $this->summesbudgetton[1]->mes_budget;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $mes_budget = $this->summesbudgetonz[1];
-                        break;                            
-                        case 10076: 
-                            $mes_budget = $this->summesbudgetton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->summesbudgetonz[2]->mes_budget) && isset($this->summesbudgetton[2]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[2]->mes_budget;
-                                $min = $this->summesbudgetton[2]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $mes_budget = $this->summesbudgetonz[2];
-                        break;
-                        case 10079: 
-                            $mes_budget = $this->summesbudgetton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->summesbudgetonz[3]->mes_budget) && isset($this->summesbudgetton[3]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[3]->mes_budget;
-                                $min = $this->summesbudgetton[3]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $mes_budget = $this->summesbudgetonz[3];
-                        break;
-                        case 10082: 
-                            $mes_budget = $this->summesbudgetton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->summesbudgetonz[4]->mes_budget) && isset($this->summesbudgetton[4]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[4]->mes_budget;
-                                $min = $this->summesbudgetton[4]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $mes_budget = $this->summesbudgetonz[4];
-                        break;
-                        case 10085: 
-                            $mes_budget = $this->summesbudgetton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->summesbudgetonz[5]->mes_budget) && isset($this->summesbudgetton[5]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[5]->mes_budget;
-                                $min = $this->summesbudgetton[5]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $mes_budget = $this->summesbudgetonz[5];
-                        break;
-                        case 10088: 
-                            $mes_budget = $this->summesbudgetton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->summesbudgetonz[6]->mes_budget) && isset($this->summesbudgetton[6]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[6]->mes_budget;
-                                $min = $this->summesbudgetton[6]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $mes_budget = $this->summesbudgetonz[6];
-                        break;
-                        case 10091: 
-                            $mes_budget = $this->summesbudgetton[7];
-                        break;
-                        case 10092: 
-                            $mes_budget = $this->summesbudgetton[8];
-                        break;
-                        case 10093: 
-                            $mes_budget = $this->summesbudgetton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->summesbudgetonz[7]->mes_budget) && isset($this->summesbudgetton[9]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[7]->mes_budget;
-                                $min = $this->summesbudgetton[9]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $mes_budget = $this->summesbudgetonz[7];
-                        break;
-                        case 10097: 
-                            $mes_budget = $this->summesbudgetton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->summesbudgetonz[8]->mes_budget) && isset($this->summesbudgetton[10]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[8]->mes_budget;
-                                $min = $this->summesbudgetton[10]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $mes_budget = $this->summesbudgetonz[8];
-                        break;
-                        case 10100: 
-                            $mes_budget = $this->summesbudgetton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->summesbudgetonz[9]->mes_budget) && isset($this->summesbudgetton[11]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[9]->mes_budget;
-                                $min = $this->summesbudgetton[11]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $mes_budget = $this->summesbudgetonz[9];
-                        break;
-                        case 10103: 
-                            $mes_budget = $this->summesbudgetton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->summesbudgetonz[10]->mes_budget) && isset($this->summesbudgetton[12]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[10]->mes_budget;
-                                $min = $this->summesbudgetton[12]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $mes_budget = $this->summesbudgetonz[10];
-                        break;
-                        case 10106: 
-                            $mes_budget = $this->summesbudgetton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->summesbudgetonz[11]->mes_budget) && isset($this->summesbudgetton[13]->mes_budget))
-                            {
-                                $au = $this->summesbudgetonz[11]->mes_budget;
-                                $min = $this->summesbudgetton[13]->mes_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $mes_budget = $this->summesbudgetonz[11];
-                        break;
-                        case 10109: 
-                            $mes_budget = $this->summesbudgetton[14];
-                        break;
-                        case 10110: 
-                            $mes_budget = $this->summesbudgetton[15];
-                        break;
-                        case 10111: 
-                            $mes_budget = $this->summesbudgetton[16];
-                        break;
-                        case 10112: 
-                            $mes_budget = $this->summesbudgetton[17];
-                        break;
-                        case 10113: 
-                            $mes_budget = $this->summesbudgetton[18];
-                        break;
-                        case 10114:
-                            $mes_budget = $this->avgmesbudgetpor[0];
-                        break;
-                        case 10115:
-                            $mes_budget = $this->avgmesbudgetpor[1];
-                        break;
-                        case 10116:
-                            $mes_budget = $this->avgmesbudgetpor[2];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
+                        $mes_budget = [];
+                        switch($data->variable_id)
                         {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
+                            case 10070: 
+                                $mes_budget = $this->summesbudgetton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->summesbudgetonz[0]->mes_budget) && isset($this->summesbudgetton[0]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[0]->mes_budget;
+                                    $min = $this->summesbudgetton[0]->mes_budget;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $mes_budget = $this->summesbudgetonz[0];
+                            break;
+                            case 10073: 
+                                $mes_budget = $this->summesbudgetton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->summesbudgetonz[1]->mes_budget) && isset($this->summesbudgetton[1]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[1]->mes_budget;
+                                    $min = $this->summesbudgetton[1]->mes_budget;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $mes_budget = $this->summesbudgetonz[1];
+                            break;                            
+                            case 10076: 
+                                $mes_budget = $this->summesbudgetton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->summesbudgetonz[2]->mes_budget) && isset($this->summesbudgetton[2]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[2]->mes_budget;
+                                    $min = $this->summesbudgetton[2]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $mes_budget = $this->summesbudgetonz[2];
+                            break;
+                            case 10079: 
+                                $mes_budget = $this->summesbudgetton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->summesbudgetonz[3]->mes_budget) && isset($this->summesbudgetton[3]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[3]->mes_budget;
+                                    $min = $this->summesbudgetton[3]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $mes_budget = $this->summesbudgetonz[3];
+                            break;
+                            case 10082: 
+                                $mes_budget = $this->summesbudgetton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->summesbudgetonz[4]->mes_budget) && isset($this->summesbudgetton[4]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[4]->mes_budget;
+                                    $min = $this->summesbudgetton[4]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $mes_budget = $this->summesbudgetonz[4];
+                            break;
+                            case 10085: 
+                                $mes_budget = $this->summesbudgetton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->summesbudgetonz[5]->mes_budget) && isset($this->summesbudgetton[5]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[5]->mes_budget;
+                                    $min = $this->summesbudgetton[5]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $mes_budget = $this->summesbudgetonz[5];
+                            break;
+                            case 10088: 
+                                $mes_budget = $this->summesbudgetton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->summesbudgetonz[6]->mes_budget) && isset($this->summesbudgetton[6]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[6]->mes_budget;
+                                    $min = $this->summesbudgetton[6]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $mes_budget = $this->summesbudgetonz[6];
+                            break;
+                            case 10091: 
+                                $mes_budget = $this->summesbudgetton[7];
+                            break;
+                            case 10092: 
+                                $mes_budget = $this->summesbudgetton[8];
+                            break;
+                            case 10093: 
+                                $mes_budget = $this->summesbudgetton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->summesbudgetonz[7]->mes_budget) && isset($this->summesbudgetton[9]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[7]->mes_budget;
+                                    $min = $this->summesbudgetton[9]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $mes_budget = $this->summesbudgetonz[7];
+                            break;
+                            case 10097: 
+                                $mes_budget = $this->summesbudgetton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->summesbudgetonz[8]->mes_budget) && isset($this->summesbudgetton[10]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[8]->mes_budget;
+                                    $min = $this->summesbudgetton[10]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $mes_budget = $this->summesbudgetonz[8];
+                            break;
+                            case 10100: 
+                                $mes_budget = $this->summesbudgetton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->summesbudgetonz[9]->mes_budget) && isset($this->summesbudgetton[11]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[9]->mes_budget;
+                                    $min = $this->summesbudgetton[11]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $mes_budget = $this->summesbudgetonz[9];
+                            break;
+                            case 10103: 
+                                $mes_budget = $this->summesbudgetton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->summesbudgetonz[10]->mes_budget) && isset($this->summesbudgetton[12]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[10]->mes_budget;
+                                    $min = $this->summesbudgetton[12]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $mes_budget = $this->summesbudgetonz[10];
+                            break;
+                            case 10106: 
+                                $mes_budget = $this->summesbudgetton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->summesbudgetonz[11]->mes_budget) && isset($this->summesbudgetton[13]->mes_budget))
+                                {
+                                    $au = $this->summesbudgetonz[11]->mes_budget;
+                                    $min = $this->summesbudgetton[13]->mes_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $mes_budget = $this->summesbudgetonz[11];
+                            break;
+                            case 10109: 
+                                $mes_budget = $this->summesbudgetton[14];
+                            break;
+                            case 10110: 
+                                $mes_budget = $this->summesbudgetton[15];
+                            break;
+                            case 10111: 
+                                $mes_budget = $this->summesbudgetton[16];
+                            break;
+                            case 10112: 
+                                $mes_budget = $this->summesbudgetton[17];
+                            break;
+                            case 10113: 
+                                $mes_budget = $this->summesbudgetton[18];
+                            break;
+                            case 10114:
+                                $mes_budget = $this->avgmesbudgetpor[0];
+                            break;
+                            case 10115:
+                                $mes_budget = $this->avgmesbudgetpor[1];
+                            break;
+                            case 10116:
+                                $mes_budget = $this->avgmesbudgetpor[2];
+                            break;
+                            case 10118:
+                                $mes_budget = $this->avgmesbudgetpor[3];
+                            break;
+                            case 10119:
+                                $mes_budget = $this->avgmesbudgetpor[4];
+                            break;
+                            case 10121:
+                                $mes_budget = $this->avgmesbudgetpor[5];
+                            break;
+                            default:
+                                return '-';
+                            break;
                         }
-                        else
+                        if (in_array($data->variable_id, $this->ley))
                         {
-                            return '-';
+                            if ($min > 0)
+                            {
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
+                            }
+                            else
+                            {
+                                return '-';
+                            }
                         }
-                    }
-                    if(isset($mes_budget->mes_budget))
-                    {
-                        $m_budget = $mes_budget->mes_budget;
-                        if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                        if(isset($mes_budget->mes_budget))
                         {
-                            return number_format(round($m_budget), 0, '.', ',');
-                        }
-                        else
-                        {
-                            return number_format($m_budget, 2, '.', ',');
-                        }
-                    }
-                    else
-                    {
-                        return '-';
-                    }
-                })
-                //MODIFICAR
-                ->addColumn('mes_forecast', function($data)
-                {
-                    
-                    $mes_forecast = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $mes_forecast = $this->summesforecastton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->summesforecastonz[0]->mes_forecast) && isset($this->summesforecastton[0]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[0]->mes_forecast;
-                                $min = $this->summesforecastton[0]->mes_forecast;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $mes_forecast = $this->summesforecastonz[0];
-                        break;
-                        case 10073: 
-                            $mes_forecast = $this->summesforecastton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->summesforecastonz[1]->mes_forecast) && isset($this->summesforecastton[1]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[1]->mes_forecast;
-                                $min = $this->summesforecastton[1]->mes_forecast;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $mes_forecast = $this->summesforecastonz[1];
-                        break;                            
-                        case 10076: 
-                            $mes_forecast = $this->summesforecastton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->summesforecastonz[2]->mes_forecast) && isset($this->summesforecastton[2]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[2]->mes_forecast;
-                                $min = $this->summesforecastton[2]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $mes_forecast = $this->summesforecastonz[2];
-                        break;
-                        case 10079: 
-                            $mes_forecast = $this->summesforecastton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->summesforecastonz[3]->mes_forecast) && isset($this->summesforecastton[3]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[3]->mes_forecast;
-                                $min = $this->summesforecastton[3]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $mes_forecast = $this->summesforecastonz[3];
-                        break;
-                        case 10082: 
-                            $mes_forecast = $this->summesforecastton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->summesforecastonz[4]->mes_forecast) && isset($this->summesforecastton[4]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[4]->mes_forecast;
-                                $min = $this->summesforecastton[4]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $mes_forecast = $this->summesforecastonz[4];
-                        break;
-                        case 10085: 
-                            $mes_forecast = $this->summesforecastton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->summesforecastonz[5]->mes_forecast) && isset($this->summesforecastton[5]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[5]->mes_forecast;
-                                $min = $this->summesforecastton[5]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $mes_forecast = $this->summesforecastonz[5];
-                        break;
-                        case 10088: 
-                            $mes_forecast = $this->summesforecastton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->summesforecastonz[6]->mes_forecast) && isset($this->summesforecastton[6]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[6]->mes_forecast;
-                                $min = $this->summesforecastton[6]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $mes_forecast = $this->summesforecastonz[6];
-                        break;
-                        case 10091: 
-                            $mes_forecast = $this->summesforecastton[7];
-                        break;
-                        case 10092: 
-                            $mes_forecast = $this->summesforecastton[8];
-                        break;
-                        case 10093: 
-                            $mes_forecast = $this->summesforecastton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->summesforecastonz[7]->mes_forecast) && isset($this->summesforecastton[9]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[7]->mes_forecast;
-                                $min = $this->summesforecastton[9]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $mes_forecast = $this->summesforecastonz[7];
-                        break;
-                        case 10097: 
-                            $mes_forecast = $this->summesforecastton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->summesforecastonz[8]->mes_forecast) && isset($this->summesforecastton[10]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[8]->mes_forecast;
-                                $min = $this->summesforecastton[10]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $mes_forecast = $this->summesforecastonz[8];
-                        break;
-                        case 10100: 
-                            $mes_forecast = $this->summesforecastton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->summesforecastonz[9]->mes_forecast) && isset($this->summesforecastton[11]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[9]->mes_forecast;
-                                $min = $this->summesforecastton[11]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $mes_forecast = $this->summesforecastonz[9];
-                        break;
-                        case 10103: 
-                            $mes_forecast = $this->summesforecastton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->summesforecastonz[10]->mes_forecast) && isset($this->summesforecastton[12]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[10]->mes_forecast;
-                                $min = $this->summesforecastton[12]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $mes_forecast = $this->summesforecastonz[10];
-                        break;
-                        case 10106: 
-                            $mes_forecast = $this->summesforecastton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->summesforecastonz[11]->mes_forecast) && isset($this->summesforecastton[13]->mes_forecast))
-                            {
-                                $au = $this->summesforecastonz[11]->mes_forecast;
-                                $min = $this->summesforecastton[13]->mes_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $mes_forecast = $this->summesforecastonz[11];
-                        break;
-                        case 10109: 
-                            $mes_forecast = $this->summesforecastton[14];
-                        break;
-                        case 10110: 
-                            $mes_forecast = $this->summesforecastton[15];
-                        break;
-                        case 10111: 
-                            $mes_forecast = $this->summesforecastton[16];
-                        break;
-                        case 10112: 
-                            $mes_forecast = $this->summesforecastton[17];
-                        break;
-                        case 10113: 
-                            $mes_forecast = $this->summesforecastton[18];
-                        break;
-                        case 10114:
-                            $mes_forecast = $this->avgmesforecastpor[0];
-                        break;
-                        case 10115:
-                            $mes_forecast = $this->avgmesforecastpor[1];
-                        break;
-                        case 10116:
-                            $mes_forecast = $this->avgmesforecastpor[2];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
-                        {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
-                        }
-                        else
-                        {
-                            return '-';
-                        }
-                    }
-                    if(isset($mes_forecast->mes_forecast))
-                    {
-                        $m_forecast = $mes_forecast->mes_forecast;
-                        if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                        {
-                            return number_format(round($m_forecast), 0, '.', ',');
-                        }
-                        else
-                        {
-                            return number_format($m_forecast, 2, '.', ',');
-                        }
-                    }
-                    else
-                    {
-                        return '-';
-                    }
-                })
-                ->addColumn('trimestre_real', function($data)
-                {
-                    $tri_real = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $tri_real = $this->sumtrirealton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->sumtrirealonz[0]->tri_real) && isset($this->sumtrirealton[0]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[0]->tri_real;
-                                $min = $this->sumtrirealton[0]->tri_real;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $tri_real = $this->sumtrirealonz[0];
-                        break;
-                        case 10073: 
-                            $tri_real = $this->sumtrirealton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->sumtrirealonz[1]->tri_real) && isset($this->sumtrirealton[1]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[1]->tri_real;
-                                $min = $this->sumtrirealton[1]->tri_real;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $tri_real = $this->sumtrirealonz[1];
-                        break;                            
-                        case 10076: 
-                            $tri_real = $this->sumtrirealton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->sumtrirealonz[2]->tri_real) && isset($this->sumtrirealton[2]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[2]->tri_real;
-                                $min = $this->sumtrirealton[2]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $tri_real = $this->sumtrirealonz[2];
-                        break;
-                        case 10079: 
-                            $tri_real = $this->sumtrirealton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->sumtrirealonz[3]->tri_real) && isset($this->sumtrirealton[3]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[3]->tri_real;
-                                $min = $this->sumtrirealton[3]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $tri_real = $this->sumtrirealonz[3];
-                        break;
-                        case 10082: 
-                            $tri_real = $this->sumtrirealton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->sumtrirealonz[4]->tri_real) && isset($this->sumtrirealton[4]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[4]->tri_real;
-                                $min = $this->sumtrirealton[4]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $tri_real = $this->sumtrirealonz[4];
-                        break;
-                        case 10085: 
-                            $tri_real = $this->sumtrirealton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->sumtrirealonz[5]->tri_real) && isset($this->sumtrirealton[5]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[5]->tri_real;
-                                $min = $this->sumtrirealton[5]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $tri_real = $this->sumtrirealonz[5];
-                        break;
-                        case 10088: 
-                            $tri_real = $this->sumtrirealton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->sumtrirealonz[6]->tri_real) && isset($this->sumtrirealton[6]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[6]->tri_real;
-                                $min = $this->sumtrirealton[6]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $tri_real = $this->sumtrirealonz[6];
-                        break;
-                        case 10091: 
-                            $tri_real = $this->sumtrirealton[7];
-                        break;
-                        case 10092: 
-                            $tri_real = $this->sumtrirealton[8];
-                        break;
-                        case 10093: 
-                            $tri_real = $this->sumtrirealton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->sumtrirealonz[7]->tri_real) && isset($this->sumtrirealton[9]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[7]->tri_real;
-                                $min = $this->sumtrirealton[9]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $tri_real = $this->sumtrirealonz[7];
-                        break;
-                        case 10097: 
-                            $tri_real = $this->sumtrirealton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->sumtrirealonz[8]->tri_real) && isset($this->sumtrirealton[10]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[8]->tri_real;
-                                $min = $this->sumtrirealton[10]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $tri_real = $this->sumtrirealonz[8];
-                        break;
-                        case 10100: 
-                            $tri_real = $this->sumtrirealton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->sumtrirealonz[9]->tri_real) && isset($this->sumtrirealton[11]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[9]->tri_real;
-                                $min = $this->sumtrirealton[11]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $tri_real = $this->sumtrirealonz[9];
-                        break;
-                        case 10103: 
-                            $tri_real = $this->sumtrirealton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->sumtrirealonz[10]->tri_real) && isset($this->sumtrirealton[12]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[10]->tri_real;
-                                $min = $this->sumtrirealton[12]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $tri_real = $this->sumtrirealonz[10];
-                        break;
-                        case 10106: 
-                            $tri_real = $this->sumtrirealton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->sumtrirealonz[11]->tri_real) && isset($this->sumtrirealton[13]->tri_real))
-                            {
-                                $au = $this->sumtrirealonz[11]->tri_real;
-                                $min = $this->sumtrirealton[13]->tri_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $tri_real = $this->sumtrirealonz[11];
-                        break;
-                        case 10109: 
-                            $tri_real = $this->sumtrirealton[14];
-                        break;
-                        case 10110: 
-                            $tri_real = $this->sumtrirealton[15];
-                        break;
-                        case 10111: 
-                            $tri_real = $this->sumtrirealton[16];
-                        break;
-                        case 10112: 
-                            $tri_real = $this->sumtrirealton[17];
-                        break;
-                        case 10113: 
-                            $tri_real = $this->sumtrirealton[18];
-                        break;
-                        case 10114:
-                            $tri_real = $this->avgtrirealpor[0];
-                        break;
-                        case 10115:
-                            $tri_real = $this->avgtrirealpor[1];
-                        break;
-                        case 10116:
-                            $tri_real = $this->avgtrirealpor[2];
-                        break;
-                        case 10117: 
-                            $tri_real = $this->sumtrirealton[19];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
-                        {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
-                        }
-                        else
-                        {
-                            return '-';
-                        }
-                    }
-                    if(isset($tri_real->tri_real))
-                    {
-                        $m_real = $tri_real->tri_real;
-                        if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                        {
-                            return number_format(round($m_real), 0, '.', ',');
-                        }
-                        else
-                        {
-                            return number_format($m_real, 2, '.', ',');
-                        }
-                    }
-                    else
-                    {
-                        return '-';
-                    }
-                })
-                //MODIFICADO
-                ->addColumn('trimestre_budget', function($data)
-                {
-                        
-                    $trimestre_budget = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $trimestre_budget = $this->sumtribudgetton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->sumtribudgetonz[0]->trimestre_budget) && isset($this->sumtribudgetton[0]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[0]->trimestre_budget;
-                                $min = $this->sumtribudgetton[0]->trimestre_budget;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $trimestre_budget = $this->sumtribudgetonz[0];
-                        break;
-                        case 10073: 
-                            $trimestre_budget = $this->sumtribudgetton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->sumtribudgetonz[1]->trimestre_budget) && isset($this->sumtribudgetton[1]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[1]->trimestre_budget;
-                                $min = $this->sumtribudgetton[1]->trimestre_budget;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $trimestre_budget = $this->sumtribudgetonz[1];
-                        break;                            
-                        case 10076: 
-                            $trimestre_budget = $this->sumtribudgetton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->sumtribudgetonz[2]->trimestre_budget) && isset($this->sumtribudgetton[2]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[2]->trimestre_budget;
-                                $min = $this->sumtribudgetton[2]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $trimestre_budget = $this->sumtribudgetonz[2];
-                        break;
-                        case 10079: 
-                            $trimestre_budget = $this->sumtribudgetton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->sumtribudgetonz[3]->trimestre_budget) && isset($this->sumtribudgetton[3]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[3]->trimestre_budget;
-                                $min = $this->sumtribudgetton[3]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $trimestre_budget = $this->sumtribudgetonz[3];
-                        break;
-                        case 10082: 
-                            $trimestre_budget = $this->sumtribudgetton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->sumtribudgetonz[4]->trimestre_budget) && isset($this->sumtribudgetton[4]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[4]->trimestre_budget;
-                                $min = $this->sumtribudgetton[4]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $trimestre_budget = $this->sumtribudgetonz[4];
-                        break;
-                        case 10085: 
-                            $trimestre_budget = $this->sumtribudgetton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->sumtribudgetonz[5]->trimestre_budget) && isset($this->sumtribudgetton[5]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[5]->trimestre_budget;
-                                $min = $this->sumtribudgetton[5]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $trimestre_budget = $this->sumtribudgetonz[5];
-                        break;
-                        case 10088: 
-                            $trimestre_budget = $this->sumtribudgetton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->sumtribudgetonz[6]->trimestre_budget) && isset($this->sumtribudgetton[6]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[6]->trimestre_budget;
-                                $min = $this->sumtribudgetton[6]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $trimestre_budget = $this->sumtribudgetonz[6];
-                        break;
-                        case 10091: 
-                            $trimestre_budget = $this->sumtribudgetton[7];
-                        break;
-                        case 10092: 
-                            $trimestre_budget = $this->sumtribudgetton[8];
-                        break;
-                        case 10093: 
-                            $trimestre_budget = $this->sumtribudgetton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->sumtribudgetonz[7]->trimestre_budget) && isset($this->sumtribudgetton[9]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[7]->trimestre_budget;
-                                $min = $this->sumtribudgetton[9]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $trimestre_budget = $this->sumtribudgetonz[7];
-                        break;
-                        case 10097: 
-                            $trimestre_budget = $this->sumtribudgetton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->sumtribudgetonz[8]->trimestre_budget) && isset($this->sumtribudgetton[10]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[8]->trimestre_budget;
-                                $min = $this->sumtribudgetton[10]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $trimestre_budget = $this->sumtribudgetonz[8];
-                        break;
-                        case 10100: 
-                            $trimestre_budget = $this->sumtribudgetton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->sumtribudgetonz[9]->trimestre_budget) && isset($this->sumtribudgetton[11]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[9]->trimestre_budget;
-                                $min = $this->sumtribudgetton[11]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $trimestre_budget = $this->sumtribudgetonz[9];
-                        break;
-                        case 10103: 
-                            $trimestre_budget = $this->sumtribudgetton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->sumtribudgetonz[10]->trimestre_budget) && isset($this->sumtribudgetton[12]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[10]->trimestre_budget;
-                                $min = $this->sumtribudgetton[12]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $trimestre_budget = $this->sumtribudgetonz[10];
-                        break;
-                        case 10106: 
-                            $trimestre_budget = $this->sumtribudgetton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->sumtribudgetonz[11]->trimestre_budget) && isset($this->sumtribudgetton[13]->trimestre_budget))
-                            {
-                                $au = $this->sumtribudgetonz[11]->trimestre_budget;
-                                $min = $this->sumtribudgetton[13]->trimestre_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $trimestre_budget = $this->sumtribudgetonz[11];
-                        break;
-                        case 10109: 
-                            $trimestre_budget = $this->sumtribudgetton[14];
-                        break;
-                        case 10110: 
-                            $trimestre_budget = $this->sumtribudgetton[15];
-                        break;
-                        case 10111: 
-                            $trimestre_budget = $this->sumtribudgetton[16];
-                        break;
-                        case 10112: 
-                            $trimestre_budget = $this->sumtribudgetton[17];
-                        break;
-                        case 10113: 
-                            $trimestre_budget = $this->sumtribudgetton[18];
-                        break;
-                        case 10114:
-                            $trimestre_budget = $this->avgtribudgetpor[0];
-                        break;
-                        case 10115:
-                            $trimestre_budget = $this->avgtribudgetpor[1];
-                        break;
-                        case 10116:
-                            $trimestre_budget = $this->avgtribudgetpor[2];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
-                        {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
-                        }
-                        else
-                        {
-                            return '-';
-                        }
-                    }
-                    if(isset($trimestre_budget->trimestre_budget))
-                    {
-                        if ($trimestre_budget->trimestre_budget > 0)
-                        {
-                            $m_budget = $trimestre_budget->trimestre_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            $m_budget = $mes_budget->mes_budget;
+                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -3582,274 +2775,277 @@ trait MinaTrait {
                         {
                             return '-';
                         }
-                    }
-                    else
+                    })
+                    //MODIFICAR
+                    ->addColumn('mes_forecast', function($data)
                     {
-                        return '-';
-                    }
-                })
-                ->addColumn('trimestre_forecast', function($data)
-                {
                         
-                    $trimestre_forecast = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $trimestre_forecast = $this->sumtriforecastton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->sumtriforecastonz[0]->trimestre_forecast) && isset($this->sumtriforecastton[0]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[0]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[0]->trimestre_forecast;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $trimestre_forecast = $this->sumtriforecastonz[0];
-                        break;
-                        case 10073: 
-                            $trimestre_forecast = $this->sumtriforecastton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->sumtriforecastonz[1]->trimestre_forecast) && isset($this->sumtriforecastton[1]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[1]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[1]->trimestre_forecast;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $trimestre_forecast = $this->sumtriforecastonz[1];
-                        break;                            
-                        case 10076: 
-                            $trimestre_forecast = $this->sumtriforecastton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->sumtriforecastonz[2]->trimestre_forecast) && isset($this->sumtriforecastton[2]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[2]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[2]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $trimestre_forecast = $this->sumtriforecastonz[2];
-                        break;
-                        case 10079: 
-                            $trimestre_forecast = $this->sumtriforecastton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->sumtriforecastonz[3]->trimestre_forecast) && isset($this->sumtriforecastton[3]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[3]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[3]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $trimestre_forecast = $this->sumtriforecastonz[3];
-                        break;
-                        case 10082: 
-                            $trimestre_forecast = $this->sumtriforecastton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->sumtriforecastonz[4]->trimestre_forecast) && isset($this->sumtriforecastton[4]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[4]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[4]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $trimestre_forecast = $this->sumtriforecastonz[4];
-                        break;
-                        case 10085: 
-                            $trimestre_forecast = $this->sumtriforecastton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->sumtriforecastonz[5]->trimestre_forecast) && isset($this->sumtriforecastton[5]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[5]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[5]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $trimestre_forecast = $this->sumtriforecastonz[5];
-                        break;
-                        case 10088: 
-                            $trimestre_forecast = $this->sumtriforecastton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->sumtriforecastonz[6]->trimestre_forecast) && isset($this->sumtriforecastton[6]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[6]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[6]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $trimestre_forecast = $this->sumtriforecastonz[6];
-                        break;
-                        case 10091: 
-                            $trimestre_forecast = $this->sumtriforecastton[7];
-                        break;
-                        case 10092: 
-                            $trimestre_forecast = $this->sumtriforecastton[8];
-                        break;
-                        case 10093: 
-                            $trimestre_forecast = $this->sumtriforecastton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->sumtriforecastonz[7]->trimestre_forecast) && isset($this->sumtriforecastton[9]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[7]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[9]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $trimestre_forecast = $this->sumtriforecastonz[7];
-                        break;
-                        case 10097: 
-                            $trimestre_forecast = $this->sumtriforecastton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->sumtriforecastonz[8]->trimestre_forecast) && isset($this->sumtriforecastton[10]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[8]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[10]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $trimestre_forecast = $this->sumtriforecastonz[8];
-                        break;
-                        case 10100: 
-                            $trimestre_forecast = $this->sumtriforecastton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->sumtriforecastonz[9]->trimestre_forecast) && isset($this->sumtriforecastton[11]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[9]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[11]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $trimestre_forecast = $this->sumtriforecastonz[9];
-                        break;
-                        case 10103: 
-                            $trimestre_forecast = $this->sumtriforecastton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->sumtriforecastonz[10]->trimestre_forecast) && isset($this->sumtriforecastton[12]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[10]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[12]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $trimestre_forecast = $this->sumtriforecastonz[10];
-                        break;
-                        case 10106: 
-                            $trimestre_forecast = $this->sumtriforecastton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->sumtriforecastonz[11]->trimestre_forecast) && isset($this->sumtriforecastton[13]->trimestre_forecast))
-                            {
-                                $au = $this->sumtriforecastonz[11]->trimestre_forecast;
-                                $min = $this->sumtriforecastton[13]->trimestre_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $trimestre_forecast = $this->sumtriforecastonz[11];
-                        break;
-                        case 10109: 
-                            $trimestre_forecast = $this->sumtriforecastton[14];
-                        break;
-                        case 10110: 
-                            $trimestre_forecast = $this->sumtriforecastton[15];
-                        break;
-                        case 10111: 
-                            $trimestre_forecast = $this->sumtriforecastton[16];
-                        break;
-                        case 10112: 
-                            $trimestre_forecast = $this->sumtriforecastton[17];
-                        break;
-                        case 10113: 
-                            $trimestre_forecast = $this->sumtriforecastton[18];
-                        break;
-                        case 10114:
-                            $trimestre_forecast = $this->avgtriforecastpor[0];
-                        break;
-                        case 10115:
-                            $trimestre_forecast = $this->avgtriforecastpor[1];
-                        break;
-                        case 10116:
-                            $trimestre_forecast = $this->avgtriforecastpor[2];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
+                        $mes_forecast = [];
+                        switch($data->variable_id)
                         {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
+                            case 10070: 
+                                $mes_forecast = $this->summesforecastton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->summesforecastonz[0]->mes_forecast) && isset($this->summesforecastton[0]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[0]->mes_forecast;
+                                    $min = $this->summesforecastton[0]->mes_forecast;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $mes_forecast = $this->summesforecastonz[0];
+                            break;
+                            case 10073: 
+                                $mes_forecast = $this->summesforecastton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->summesforecastonz[1]->mes_forecast) && isset($this->summesforecastton[1]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[1]->mes_forecast;
+                                    $min = $this->summesforecastton[1]->mes_forecast;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $mes_forecast = $this->summesforecastonz[1];
+                            break;                            
+                            case 10076: 
+                                $mes_forecast = $this->summesforecastton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->summesforecastonz[2]->mes_forecast) && isset($this->summesforecastton[2]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[2]->mes_forecast;
+                                    $min = $this->summesforecastton[2]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $mes_forecast = $this->summesforecastonz[2];
+                            break;
+                            case 10079: 
+                                $mes_forecast = $this->summesforecastton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->summesforecastonz[3]->mes_forecast) && isset($this->summesforecastton[3]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[3]->mes_forecast;
+                                    $min = $this->summesforecastton[3]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $mes_forecast = $this->summesforecastonz[3];
+                            break;
+                            case 10082: 
+                                $mes_forecast = $this->summesforecastton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->summesforecastonz[4]->mes_forecast) && isset($this->summesforecastton[4]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[4]->mes_forecast;
+                                    $min = $this->summesforecastton[4]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $mes_forecast = $this->summesforecastonz[4];
+                            break;
+                            case 10085: 
+                                $mes_forecast = $this->summesforecastton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->summesforecastonz[5]->mes_forecast) && isset($this->summesforecastton[5]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[5]->mes_forecast;
+                                    $min = $this->summesforecastton[5]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $mes_forecast = $this->summesforecastonz[5];
+                            break;
+                            case 10088: 
+                                $mes_forecast = $this->summesforecastton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->summesforecastonz[6]->mes_forecast) && isset($this->summesforecastton[6]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[6]->mes_forecast;
+                                    $min = $this->summesforecastton[6]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $mes_forecast = $this->summesforecastonz[6];
+                            break;
+                            case 10091: 
+                                $mes_forecast = $this->summesforecastton[7];
+                            break;
+                            case 10092: 
+                                $mes_forecast = $this->summesforecastton[8];
+                            break;
+                            case 10093: 
+                                $mes_forecast = $this->summesforecastton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->summesforecastonz[7]->mes_forecast) && isset($this->summesforecastton[9]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[7]->mes_forecast;
+                                    $min = $this->summesforecastton[9]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $mes_forecast = $this->summesforecastonz[7];
+                            break;
+                            case 10097: 
+                                $mes_forecast = $this->summesforecastton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->summesforecastonz[8]->mes_forecast) && isset($this->summesforecastton[10]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[8]->mes_forecast;
+                                    $min = $this->summesforecastton[10]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $mes_forecast = $this->summesforecastonz[8];
+                            break;
+                            case 10100: 
+                                $mes_forecast = $this->summesforecastton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->summesforecastonz[9]->mes_forecast) && isset($this->summesforecastton[11]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[9]->mes_forecast;
+                                    $min = $this->summesforecastton[11]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $mes_forecast = $this->summesforecastonz[9];
+                            break;
+                            case 10103: 
+                                $mes_forecast = $this->summesforecastton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->summesforecastonz[10]->mes_forecast) && isset($this->summesforecastton[12]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[10]->mes_forecast;
+                                    $min = $this->summesforecastton[12]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $mes_forecast = $this->summesforecastonz[10];
+                            break;
+                            case 10106: 
+                                $mes_forecast = $this->summesforecastton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->summesforecastonz[11]->mes_forecast) && isset($this->summesforecastton[13]->mes_forecast))
+                                {
+                                    $au = $this->summesforecastonz[11]->mes_forecast;
+                                    $min = $this->summesforecastton[13]->mes_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $mes_forecast = $this->summesforecastonz[11];
+                            break;
+                            case 10109: 
+                                $mes_forecast = $this->summesforecastton[14];
+                            break;
+                            case 10110: 
+                                $mes_forecast = $this->summesforecastton[15];
+                            break;
+                            case 10111: 
+                                $mes_forecast = $this->summesforecastton[16];
+                            break;
+                            case 10112: 
+                                $mes_forecast = $this->summesforecastton[17];
+                            break;
+                            case 10113: 
+                                $mes_forecast = $this->summesforecastton[18];
+                            break;
+                            case 10114:
+                                $mes_forecast = $this->avgmesforecastpor[0];
+                            break;
+                            case 10115:
+                                $mes_forecast = $this->avgmesforecastpor[1];
+                            break;
+                            case 10116:
+                                $mes_forecast = $this->avgmesforecastpor[2];
+                            break;
+                            case 10118:
+                                $mes_forecast = $this->avgmesforecastpor[3];
+                            break;
+                            case 10119:
+                                $mes_forecast = $this->avgmesforecastpor[4];
+                            break;
+                            case 10121:
+                                $mes_forecast = $this->avgmesforecastpor[5];
+                            break;
+                            default:
+                                return '-';
+                            break;
                         }
-                        else
+                        if (in_array($data->variable_id, $this->ley))
                         {
-                            return '-';
+                            if ($min > 0)
+                            {
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
+                            }
+                            else
+                            {
+                                return '-';
+                            }
                         }
-                    }
-                    if(isset($trimestre_forecast->trimestre_forecast))
-                    {
-                        if ($trimestre_forecast->trimestre_forecast > 0)
+                        if(isset($mes_forecast->mes_forecast))
                         {
-                            $m_forecast = $trimestre_forecast->trimestre_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            $m_forecast = $mes_forecast->mes_forecast;
+                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -3862,849 +3058,1735 @@ trait MinaTrait {
                         {
                             return '-';
                         }
-                    }
-                    else
+                    })
+                    ->addColumn('trimestre_real', function($data)
                     {
-                        return '-';
-                    }
-                })
-                ->addColumn('anio_real', function($data)
-                {
-                    $anio_real = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $anio_real = $this->sumaniorealton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->sumaniorealonz[0]->anio_real) && isset($this->sumaniorealton[0]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[0]->anio_real;
-                                $min = $this->sumaniorealton[0]->anio_real;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $anio_real = $this->sumaniorealonz[0];
-                        break;
-                        case 10073: 
-                            $anio_real = $this->sumaniorealton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->sumaniorealonz[1]->anio_real) && isset($this->sumaniorealton[1]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[1]->anio_real;
-                                $min = $this->sumaniorealton[1]->anio_real;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $anio_real = $this->sumaniorealonz[1];
-                        break;                            
-                        case 10076: 
-                            $anio_real = $this->sumaniorealton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->sumaniorealonz[2]->anio_real) && isset($this->sumaniorealton[2]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[2]->anio_real;
-                                $min = $this->sumaniorealton[2]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $anio_real = $this->sumaniorealonz[2];
-                        break;
-                        case 10079: 
-                            $anio_real = $this->sumaniorealton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->sumaniorealonz[3]->anio_real) && isset($this->sumaniorealton[3]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[3]->anio_real;
-                                $min = $this->sumaniorealton[3]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $anio_real = $this->sumaniorealonz[3];
-                        break;
-                        case 10082: 
-                            $anio_real = $this->sumaniorealton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->sumaniorealonz[4]->anio_real) && isset($this->sumaniorealton[4]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[4]->anio_real;
-                                $min = $this->sumaniorealton[4]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $anio_real = $this->sumaniorealonz[4];
-                        break;
-                        case 10085: 
-                            $anio_real = $this->sumaniorealton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->sumaniorealonz[5]->anio_real) && isset($this->sumaniorealton[5]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[5]->anio_real;
-                                $min = $this->sumaniorealton[5]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $anio_real = $this->sumaniorealonz[5];
-                        break;
-                        case 10088: 
-                            $anio_real = $this->sumaniorealton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->sumaniorealonz[6]->anio_real) && isset($this->sumaniorealton[6]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[6]->anio_real;
-                                $min = $this->sumaniorealton[6]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $anio_real = $this->sumaniorealonz[6];
-                        break;
-                        case 10091: 
-                            $anio_real = $this->sumaniorealton[7];
-                        break;
-                        case 10092: 
-                            $anio_real = $this->sumaniorealton[8];
-                        break;
-                        case 10093: 
-                            $anio_real = $this->sumaniorealton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->sumaniorealonz[7]->anio_real) && isset($this->sumaniorealton[9]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[7]->anio_real;
-                                $min = $this->sumaniorealton[9]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $anio_real = $this->sumaniorealonz[7];
-                        break;
-                        case 10097: 
-                            $anio_real = $this->sumaniorealton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->sumaniorealonz[8]->anio_real) && isset($this->sumaniorealton[10]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[8]->anio_real;
-                                $min = $this->sumaniorealton[10]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $anio_real = $this->sumaniorealonz[8];
-                        break;
-                        case 10100: 
-                            $anio_real = $this->sumaniorealton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->sumaniorealonz[9]->anio_real) && isset($this->sumaniorealton[11]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[9]->anio_real;
-                                $min = $this->sumaniorealton[11]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $anio_real = $this->sumaniorealonz[9];
-                        break;
-                        case 10103: 
-                            $anio_real = $this->sumaniorealton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->sumaniorealonz[10]->anio_real) && isset($this->sumaniorealton[12]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[10]->anio_real;
-                                $min = $this->sumaniorealton[12]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $anio_real = $this->sumaniorealonz[10];
-                        break;
-                        case 10106: 
-                            $anio_real = $this->sumaniorealton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->sumaniorealonz[11]->anio_real) && isset($this->sumaniorealton[13]->anio_real))
-                            {
-                                $au = $this->sumaniorealonz[11]->anio_real;
-                                $min = $this->sumaniorealton[13]->anio_real;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $anio_real = $this->sumaniorealonz[11];
-                        break;
-                        case 10109: 
-                            $anio_real = $this->sumaniorealton[14];
-                        break;
-                        case 10110: 
-                            $anio_real = $this->sumaniorealton[15];
-                        break;
-                        case 10111: 
-                            $anio_real = $this->sumaniorealton[16];
-                        break;
-                        case 10112: 
-                            $anio_real = $this->sumaniorealton[17];
-                        break;
-                        case 10113: 
-                            $anio_real = $this->sumaniorealton[18];
-                        break;
-                        case 10114:
-                            $anio_real = $this->avganiorealpor[0];
-                        break;
-                        case 10115:
-                            $anio_real = $this->avganiorealpor[1];
-                        break;
-                        case 10116:
-                            $anio_real = $this->avganiorealpor[2];
-                        break;
-                        case 10117: 
-                            $anio_real = $this->sumaniorealton[19];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
+                        $tri_real = [];
+                        switch($data->variable_id)
                         {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
+                            case 10070: 
+                                $tri_real = $this->sumtrirealton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->sumtrirealonz[0]->tri_real) && isset($this->sumtrirealton[0]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[0]->tri_real;
+                                    $min = $this->sumtrirealton[0]->tri_real;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $tri_real = $this->sumtrirealonz[0];
+                            break;
+                            case 10073: 
+                                $tri_real = $this->sumtrirealton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->sumtrirealonz[1]->tri_real) && isset($this->sumtrirealton[1]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[1]->tri_real;
+                                    $min = $this->sumtrirealton[1]->tri_real;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $tri_real = $this->sumtrirealonz[1];
+                            break;                            
+                            case 10076: 
+                                $tri_real = $this->sumtrirealton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->sumtrirealonz[2]->tri_real) && isset($this->sumtrirealton[2]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[2]->tri_real;
+                                    $min = $this->sumtrirealton[2]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $tri_real = $this->sumtrirealonz[2];
+                            break;
+                            case 10079: 
+                                $tri_real = $this->sumtrirealton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->sumtrirealonz[3]->tri_real) && isset($this->sumtrirealton[3]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[3]->tri_real;
+                                    $min = $this->sumtrirealton[3]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $tri_real = $this->sumtrirealonz[3];
+                            break;
+                            case 10082: 
+                                $tri_real = $this->sumtrirealton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->sumtrirealonz[4]->tri_real) && isset($this->sumtrirealton[4]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[4]->tri_real;
+                                    $min = $this->sumtrirealton[4]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $tri_real = $this->sumtrirealonz[4];
+                            break;
+                            case 10085: 
+                                $tri_real = $this->sumtrirealton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->sumtrirealonz[5]->tri_real) && isset($this->sumtrirealton[5]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[5]->tri_real;
+                                    $min = $this->sumtrirealton[5]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $tri_real = $this->sumtrirealonz[5];
+                            break;
+                            case 10088: 
+                                $tri_real = $this->sumtrirealton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->sumtrirealonz[6]->tri_real) && isset($this->sumtrirealton[6]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[6]->tri_real;
+                                    $min = $this->sumtrirealton[6]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $tri_real = $this->sumtrirealonz[6];
+                            break;
+                            case 10091: 
+                                $tri_real = $this->sumtrirealton[7];
+                            break;
+                            case 10092: 
+                                $tri_real = $this->sumtrirealton[8];
+                            break;
+                            case 10093: 
+                                $tri_real = $this->sumtrirealton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->sumtrirealonz[7]->tri_real) && isset($this->sumtrirealton[9]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[7]->tri_real;
+                                    $min = $this->sumtrirealton[9]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $tri_real = $this->sumtrirealonz[7];
+                            break;
+                            case 10097: 
+                                $tri_real = $this->sumtrirealton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->sumtrirealonz[8]->tri_real) && isset($this->sumtrirealton[10]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[8]->tri_real;
+                                    $min = $this->sumtrirealton[10]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $tri_real = $this->sumtrirealonz[8];
+                            break;
+                            case 10100: 
+                                $tri_real = $this->sumtrirealton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->sumtrirealonz[9]->tri_real) && isset($this->sumtrirealton[11]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[9]->tri_real;
+                                    $min = $this->sumtrirealton[11]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $tri_real = $this->sumtrirealonz[9];
+                            break;
+                            case 10103: 
+                                $tri_real = $this->sumtrirealton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->sumtrirealonz[10]->tri_real) && isset($this->sumtrirealton[12]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[10]->tri_real;
+                                    $min = $this->sumtrirealton[12]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $tri_real = $this->sumtrirealonz[10];
+                            break;
+                            case 10106: 
+                                $tri_real = $this->sumtrirealton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->sumtrirealonz[11]->tri_real) && isset($this->sumtrirealton[13]->tri_real))
+                                {
+                                    $au = $this->sumtrirealonz[11]->tri_real;
+                                    $min = $this->sumtrirealton[13]->tri_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $tri_real = $this->sumtrirealonz[11];
+                            break;
+                            case 10109: 
+                                $tri_real = $this->sumtrirealton[14];
+                            break;
+                            case 10110: 
+                                $tri_real = $this->sumtrirealton[15];
+                            break;
+                            case 10111: 
+                                $tri_real = $this->sumtrirealton[16];
+                            break;
+                            case 10112: 
+                                $tri_real = $this->sumtrirealton[17];
+                            break;
+                            case 10113: 
+                                $tri_real = $this->sumtrirealton[18];
+                            break;
+                            case 10114:
+                                $tri_real = $this->avgtrirealpor[0];
+                            break;
+                            case 10115:
+                                $tri_real = $this->avgtrirealpor[1];
+                            break;
+                            case 10116:
+                                $tri_real = $this->avgtrirealpor[2];
+                            break;
+                            case 10118:
+                                $tri_real = $this->avgtrirealpor[3];
+                            break;
+                            case 10119:
+                                $tri_real = $this->avgtrirealpor[4];
+                            break;
+                            case 10121:
+                                $tri_real = $this->avgtrirealpor[5];
+                            break;
+                            case 10117: 
+                                $tri_real = $this->sumtrirealton[19];
+                            break;
+                            default:
+                                return '-';
+                            break;
                         }
-                        else
+                        
+                        if (in_array($data->variable_id, $this->ley))
                         {
-                            return '-';
-                        }
-                    }
-                    if(isset($anio_real->anio_real))
-                    {
-                        $m_real = $anio_real->anio_real;
-                        if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                        {
-                            return number_format(round($m_real), 0, '.', ',');
-                        }
-                        else
-                        {
-                            return number_format($m_real, 2, '.', ',');
-                        }
-                    }
-                    else
-                    {
-                        return '-';
-                    }
-                })
-                //MODIFICADO
-                ->addColumn('anio_budget', function($data)
-                {
-                                            
-                    $anio_budget = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $anio_budget = $this->sumaniobudgetton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->sumaniobudgetonz[0]->anio_budget) && isset($this->sumaniobudgetton[0]->anio_budget))
+                            if ($min > 0)
                             {
-                                $au = $this->sumaniobudgetonz[0]->anio_budget;
-                                $min = $this->sumaniobudgetton[0]->anio_budget;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $anio_budget = $this->sumaniobudgetonz[0];
-                        break;
-                        case 10073: 
-                            $anio_budget = $this->sumaniobudgetton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->sumaniobudgetonz[1]->anio_budget) && isset($this->sumaniobudgetton[1]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[1]->anio_budget;
-                                $min = $this->sumaniobudgetton[1]->anio_budget;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $anio_budget = $this->sumaniobudgetonz[1];
-                        break;                            
-                        case 10076: 
-                            $anio_budget = $this->sumaniobudgetton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->sumaniobudgetonz[2]->anio_budget) && isset($this->sumaniobudgetton[2]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[2]->anio_budget;
-                                $min = $this->sumaniobudgetton[2]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $anio_budget = $this->sumaniobudgetonz[2];
-                        break;
-                        case 10079: 
-                            $anio_budget = $this->sumaniobudgetton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->sumaniobudgetonz[3]->anio_budget) && isset($this->sumaniobudgetton[3]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[3]->anio_budget;
-                                $min = $this->sumaniobudgetton[3]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $anio_budget = $this->sumaniobudgetonz[3];
-                        break;
-                        case 10082: 
-                            $anio_budget = $this->sumaniobudgetton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->sumaniobudgetonz[4]->anio_budget) && isset($this->sumaniobudgetton[4]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[4]->anio_budget;
-                                $min = $this->sumaniobudgetton[4]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $anio_budget = $this->sumaniobudgetonz[4];
-                        break;
-                        case 10085: 
-                            $anio_budget = $this->sumaniobudgetton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->sumaniobudgetonz[5]->anio_budget) && isset($this->sumaniobudgetton[5]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[5]->anio_budget;
-                                $min = $this->sumaniobudgetton[5]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $anio_budget = $this->sumaniobudgetonz[5];
-                        break;
-                        case 10088: 
-                            $anio_budget = $this->sumaniobudgetton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->sumaniobudgetonz[6]->anio_budget) && isset($this->sumaniobudgetton[6]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[6]->anio_budget;
-                                $min = $this->sumaniobudgetton[6]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $anio_budget = $this->sumaniobudgetonz[6];
-                        break;
-                        case 10091: 
-                            $anio_budget = $this->sumaniobudgetton[7];
-                        break;
-                        case 10092: 
-                            $anio_budget = $this->sumaniobudgetton[8];
-                        break;
-                        case 10093: 
-                            $anio_budget = $this->sumaniobudgetton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->sumaniobudgetonz[7]->anio_budget) && isset($this->sumaniobudgetton[9]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[7]->anio_budget;
-                                $min = $this->sumaniobudgetton[9]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $anio_budget = $this->sumaniobudgetonz[7];
-                        break;
-                        case 10097: 
-                            $anio_budget = $this->sumaniobudgetton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->sumaniobudgetonz[8]->anio_budget) && isset($this->sumaniobudgetton[10]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[8]->anio_budget;
-                                $min = $this->sumaniobudgetton[10]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $anio_budget = $this->sumaniobudgetonz[8];
-                        break;
-                        case 10100: 
-                            $anio_budget = $this->sumaniobudgetton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->sumaniobudgetonz[9]->anio_budget) && isset($this->sumaniobudgetton[11]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[9]->anio_budget;
-                                $min = $this->sumaniobudgetton[11]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $anio_budget = $this->sumaniobudgetonz[9];
-                        break;
-                        case 10103: 
-                            $anio_budget = $this->sumaniobudgetton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->sumaniobudgetonz[10]->anio_budget) && isset($this->sumaniobudgetton[12]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[10]->anio_budget;
-                                $min = $this->sumaniobudgetton[12]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $anio_budget = $this->sumaniobudgetonz[10];
-                        break;
-                        case 10106: 
-                            $anio_budget = $this->sumaniobudgetton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->sumaniobudgetonz[11]->anio_budget) && isset($this->sumaniobudgetton[13]->anio_budget))
-                            {
-                                $au = $this->sumaniobudgetonz[11]->anio_budget;
-                                $min = $this->sumaniobudgetton[13]->anio_budget;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $anio_budget = $this->sumaniobudgetonz[11];
-                        break;
-                        case 10109: 
-                            $anio_budget = $this->sumaniobudgetton[14];
-                        break;
-                        case 10110: 
-                            $anio_budget = $this->sumaniobudgetton[15];
-                        break;
-                        case 10111: 
-                            $anio_budget = $this->sumaniobudgetton[16];
-                        break;
-                        case 10112: 
-                            $anio_budget = $this->sumaniobudgetton[17];
-                        break;
-                        case 10113: 
-                            $anio_budget = $this->sumaniobudgetton[18];
-                        break;
-                        case 10114:
-                            $anio_budget = $this->avganiobudgetpor[0];
-                        break;
-                        case 10115:
-                            $anio_budget = $this->avganiobudgetpor[1];
-                        break;
-                        case 10116:
-                            $anio_budget = $this->avganiobudgetpor[2];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
-                        {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
-                        }
-                        else
-                        {
-                            return '-';
-                        }
-                    }
-                    if(isset($anio_budget->anio_budget))
-                    {
-                        if ($anio_budget->anio_budget > 0)
-                        {
-                            $m_budget = $anio_budget->anio_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
-                            {
-                                return number_format(round($m_budget), 0, '.', ',');
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
                             }
                             else
                             {
-                                return number_format($m_budget, 2, '.', ',');
+                                return '-';
+                            }
+                        }
+                        if(isset($tri_real->tri_real))
+                        {
+                            $m_real = $tri_real->tri_real;
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            {
+                                return number_format(round($m_real), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($m_real, 2, '.', ',');
                             }
                         }
                         else
                         {
                             return '-';
                         }
-                    }
-                    else
+                    })
+                    //MODIFICADO
+                    ->addColumn('trimestre_budget', function($data)
                     {
-                        return '-';
-                    }
-                })
-                ->addColumn('anio_forecast', function($data)
-                {
-                                            
-                    $anio_forecast = [];
-                    switch($data->variable_id)
-                    {
-                        case 10070: 
-                            $anio_forecast = $this->sumanioforecastton[0];
-                        break;
-                        case 10071:
-                            if(isset($this->sumanioforecastonz[0]->anio_forecast) && isset($this->sumanioforecastton[0]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[0]->anio_forecast;
-                                $min = $this->sumanioforecastton[0]->anio_forecast;
-                            }   
-                            else
-                            {
-                                $min = 0;
-                            }                             
-                        break;
-                        case 10072:
-                            $anio_forecast = $this->sumanioforecastonz[0];
-                        break;
-                        case 10073: 
-                            $anio_forecast = $this->sumanioforecastton[1];
-                        break;
-                        case 10074:
-                            if(isset($this->sumanioforecastonz[1]->anio_forecast) && isset($this->sumanioforecastton[1]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[1]->anio_forecast;
-                                $min = $this->sumanioforecastton[1]->anio_forecast;
-                            }     
-                            else
-                            {
-                                $min = 0;
-                            }                              
-                        break;
-                        case 10075:
-                            $anio_forecast = $this->sumanioforecastonz[1];
-                        break;                            
-                        case 10076: 
-                            $anio_forecast = $this->sumanioforecastton[2];
-                        break;
-                        case 10077:
-                            if(isset($this->sumanioforecastonz[2]->anio_forecast) && isset($this->sumanioforecastton[2]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[2]->anio_forecast;
-                                $min = $this->sumanioforecastton[2]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10078:
-                            $anio_forecast = $this->sumanioforecastonz[2];
-                        break;
-                        case 10079: 
-                            $anio_forecast = $this->sumanioforecastton[3];
-                        break;
-                        case 10080:
-                            if(isset($this->sumanioforecastonz[3]->anio_forecast) && isset($this->sumanioforecastton[3]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[3]->anio_forecast;
-                                $min = $this->sumanioforecastton[3]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10081:
-                            $anio_forecast = $this->sumanioforecastonz[3];
-                        break;
-                        case 10082: 
-                            $anio_forecast = $this->sumanioforecastton[4];
-                        break;
-                        case 10083:
-                            if(isset($this->sumanioforecastonz[4]->anio_forecast) && isset($this->sumanioforecastton[4]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[4]->anio_forecast;
-                                $min = $this->sumanioforecastton[4]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10084:
-                            $anio_forecast = $this->sumanioforecastonz[4];
-                        break;
-                        case 10085: 
-                            $anio_forecast = $this->sumanioforecastton[5];
-                        break;
-                        case 10086:
-                            if(isset($this->sumanioforecastonz[5]->anio_forecast) && isset($this->sumanioforecastton[5]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[5]->anio_forecast;
-                                $min = $this->sumanioforecastton[5]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10087:
-                            $anio_forecast = $this->sumanioforecastonz[5];
-                        break;
-                        case 10088: 
-                            $anio_forecast = $this->sumanioforecastton[6];
-                        break;
-                        case 10089:
-                            if(isset($this->sumanioforecastonz[6]->anio_forecast) && isset($this->sumanioforecastton[6]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[6]->anio_forecast;
-                                $min = $this->sumanioforecastton[6]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10090:
-                            $anio_forecast = $this->sumanioforecastonz[6];
-                        break;
-                        case 10091: 
-                            $anio_forecast = $this->sumanioforecastton[7];
-                        break;
-                        case 10092: 
-                            $anio_forecast = $this->sumanioforecastton[8];
-                        break;
-                        case 10093: 
-                            $anio_forecast = $this->sumanioforecastton[9];
-                        break;
-                        case 10094:
-                            if(isset($this->sumanioforecastonz[7]->anio_forecast) && isset($this->sumanioforecastton[9]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[7]->anio_forecast;
-                                $min = $this->sumanioforecastton[9]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10095:
-                            $anio_forecast = $this->sumanioforecastonz[7];
-                        break;
-                        case 10097: 
-                            $anio_forecast = $this->sumanioforecastton[10];
-                        break;
-                        case 10098:
-                            if(isset($this->sumanioforecastonz[8]->anio_forecast) && isset($this->sumanioforecastton[10]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[8]->anio_forecast;
-                                $min = $this->sumanioforecastton[10]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10099:
-                            $anio_forecast = $this->sumanioforecastonz[8];
-                        break;
-                        case 10100: 
-                            $anio_forecast = $this->sumanioforecastton[11];
-                        break;
-                        case 10101:
-                            if(isset($this->sumanioforecastonz[9]->anio_forecast) && isset($this->sumanioforecastton[11]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[9]->anio_forecast;
-                                $min = $this->sumanioforecastton[11]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10102:
-                            $anio_forecast = $this->sumanioforecastonz[9];
-                        break;
-                        case 10103: 
-                            $anio_forecast = $this->sumanioforecastton[12];
-                        break;
-                        case 10104:
-                            if(isset($this->sumanioforecastonz[10]->anio_forecast) && isset($this->sumanioforecastton[12]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[10]->anio_forecast;
-                                $min = $this->sumanioforecastton[12]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10105:
-                            $anio_forecast = $this->sumanioforecastonz[10];
-                        break;
-                        case 10106: 
-                            $anio_forecast = $this->sumanioforecastton[13];
-                        break;
-                        case 10107:
-                            if(isset($this->sumanioforecastonz[11]->anio_forecast) && isset($this->sumanioforecastton[13]->anio_forecast))
-                            {
-                                $au = $this->sumanioforecastonz[11]->anio_forecast;
-                                $min = $this->sumanioforecastton[13]->anio_forecast;
-                            }  
-                            else
-                            {
-                                $min = 0;
-                            } 
-                        break;
-                        case 10108:
-                            $anio_forecast = $this->sumanioforecastonz[11];
-                        break;
-                        case 10109: 
-                            $anio_forecast = $this->sumanioforecastton[14];
-                        break;
-                        case 10110: 
-                            $anio_forecast = $this->sumanioforecastton[15];
-                        break;
-                        case 10111: 
-                            $anio_forecast = $this->sumanioforecastton[16];
-                        break;
-                        case 10112: 
-                            $anio_forecast = $this->sumanioforecastton[17];
-                        break;
-                        case 10113: 
-                            $anio_forecast = $this->sumanioforecastton[18];
-                        break;
-                        case 10114:
-                            $anio_forecast = $this->avganioforecastpor[0];
-                        break;
-                        case 10115:
-                            $anio_forecast = $this->avganioforecastpor[1];
-                        break;
-                        case 10116:
-                            $anio_forecast = $this->avganioforecastpor[2];
-                        break;
-                        default:
-                            return '-';
-                        break;
-                    }
-                    if (in_array($data->variable_id, $this->ley))
-                    {
-                        if ($min > 0)
+                            
+                        $trimestre_budget = [];
+                        switch($data->variable_id)
                         {
-                            $ley = ($au*31.1035)/$min;
-                            return number_format($ley, 2, '.', ',');
+                            case 10070: 
+                                $trimestre_budget = $this->sumtribudgetton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->sumtribudgetonz[0]->trimestre_budget) && isset($this->sumtribudgetton[0]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[0]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[0]->trimestre_budget;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $trimestre_budget = $this->sumtribudgetonz[0];
+                            break;
+                            case 10073: 
+                                $trimestre_budget = $this->sumtribudgetton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->sumtribudgetonz[1]->trimestre_budget) && isset($this->sumtribudgetton[1]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[1]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[1]->trimestre_budget;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $trimestre_budget = $this->sumtribudgetonz[1];
+                            break;                            
+                            case 10076: 
+                                $trimestre_budget = $this->sumtribudgetton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->sumtribudgetonz[2]->trimestre_budget) && isset($this->sumtribudgetton[2]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[2]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[2]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $trimestre_budget = $this->sumtribudgetonz[2];
+                            break;
+                            case 10079: 
+                                $trimestre_budget = $this->sumtribudgetton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->sumtribudgetonz[3]->trimestre_budget) && isset($this->sumtribudgetton[3]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[3]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[3]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $trimestre_budget = $this->sumtribudgetonz[3];
+                            break;
+                            case 10082: 
+                                $trimestre_budget = $this->sumtribudgetton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->sumtribudgetonz[4]->trimestre_budget) && isset($this->sumtribudgetton[4]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[4]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[4]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $trimestre_budget = $this->sumtribudgetonz[4];
+                            break;
+                            case 10085: 
+                                $trimestre_budget = $this->sumtribudgetton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->sumtribudgetonz[5]->trimestre_budget) && isset($this->sumtribudgetton[5]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[5]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[5]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $trimestre_budget = $this->sumtribudgetonz[5];
+                            break;
+                            case 10088: 
+                                $trimestre_budget = $this->sumtribudgetton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->sumtribudgetonz[6]->trimestre_budget) && isset($this->sumtribudgetton[6]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[6]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[6]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $trimestre_budget = $this->sumtribudgetonz[6];
+                            break;
+                            case 10091: 
+                                $trimestre_budget = $this->sumtribudgetton[7];
+                            break;
+                            case 10092: 
+                                $trimestre_budget = $this->sumtribudgetton[8];
+                            break;
+                            case 10093: 
+                                $trimestre_budget = $this->sumtribudgetton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->sumtribudgetonz[7]->trimestre_budget) && isset($this->sumtribudgetton[9]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[7]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[9]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $trimestre_budget = $this->sumtribudgetonz[7];
+                            break;
+                            case 10097: 
+                                $trimestre_budget = $this->sumtribudgetton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->sumtribudgetonz[8]->trimestre_budget) && isset($this->sumtribudgetton[10]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[8]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[10]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $trimestre_budget = $this->sumtribudgetonz[8];
+                            break;
+                            case 10100: 
+                                $trimestre_budget = $this->sumtribudgetton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->sumtribudgetonz[9]->trimestre_budget) && isset($this->sumtribudgetton[11]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[9]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[11]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $trimestre_budget = $this->sumtribudgetonz[9];
+                            break;
+                            case 10103: 
+                                $trimestre_budget = $this->sumtribudgetton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->sumtribudgetonz[10]->trimestre_budget) && isset($this->sumtribudgetton[12]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[10]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[12]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $trimestre_budget = $this->sumtribudgetonz[10];
+                            break;
+                            case 10106: 
+                                $trimestre_budget = $this->sumtribudgetton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->sumtribudgetonz[11]->trimestre_budget) && isset($this->sumtribudgetton[13]->trimestre_budget))
+                                {
+                                    $au = $this->sumtribudgetonz[11]->trimestre_budget;
+                                    $min = $this->sumtribudgetton[13]->trimestre_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $trimestre_budget = $this->sumtribudgetonz[11];
+                            break;
+                            case 10109: 
+                                $trimestre_budget = $this->sumtribudgetton[14];
+                            break;
+                            case 10110: 
+                                $trimestre_budget = $this->sumtribudgetton[15];
+                            break;
+                            case 10111: 
+                                $trimestre_budget = $this->sumtribudgetton[16];
+                            break;
+                            case 10112: 
+                                $trimestre_budget = $this->sumtribudgetton[17];
+                            break;
+                            case 10113: 
+                                $trimestre_budget = $this->sumtribudgetton[18];
+                            break;
+                            case 10114:
+                                $trimestre_budget = $this->avgtribudgetpor[0];
+                            break;
+                            case 10115:
+                                $trimestre_budget = $this->avgtribudgetpor[1];
+                            break;
+                            case 10116:
+                                $trimestre_budget = $this->avgtribudgetpor[2];
+                            break;
+                            case 10118:
+                                $trimestre_budget = $this->avgtribudgetpor[3];
+                            break;
+                            case 10119:
+                                $trimestre_budget = $this->avgtribudgetpor[4];
+                            break;
+                            case 10121:
+                                $trimestre_budget = $this->avgtribudgetpor[5];
+                            break;
+                            default:
+                                return '-';
+                            break;
+                        }
+                        if (in_array($data->variable_id, $this->ley))
+                        {
+                            if ($min > 0)
+                            {
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        }
+                        if(isset($trimestre_budget->trimestre_budget))
+                        {
+                            if ($trimestre_budget->trimestre_budget > 0)
+                            {
+                                $m_budget = $trimestre_budget->trimestre_budget;
+                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                {
+                                    return number_format(round($m_budget), 0, '.', ',');
+                                }
+                                else
+                                {
+                                    return number_format($m_budget, 2, '.', ',');
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
                         }
                         else
                         {
                             return '-';
                         }
-                    }
-                    if(isset($anio_forecast->anio_forecast))
+                    })
+                    ->addColumn('trimestre_forecast', function($data)
                     {
-                        if ($anio_forecast->anio_forecast > 0)
+                            
+                        $trimestre_forecast = [];
+                        switch($data->variable_id)
                         {
-                            $m_forecast = $anio_forecast->anio_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            case 10070: 
+                                $trimestre_forecast = $this->sumtriforecastton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->sumtriforecastonz[0]->trimestre_forecast) && isset($this->sumtriforecastton[0]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[0]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[0]->trimestre_forecast;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $trimestre_forecast = $this->sumtriforecastonz[0];
+                            break;
+                            case 10073: 
+                                $trimestre_forecast = $this->sumtriforecastton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->sumtriforecastonz[1]->trimestre_forecast) && isset($this->sumtriforecastton[1]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[1]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[1]->trimestre_forecast;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $trimestre_forecast = $this->sumtriforecastonz[1];
+                            break;                            
+                            case 10076: 
+                                $trimestre_forecast = $this->sumtriforecastton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->sumtriforecastonz[2]->trimestre_forecast) && isset($this->sumtriforecastton[2]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[2]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[2]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $trimestre_forecast = $this->sumtriforecastonz[2];
+                            break;
+                            case 10079: 
+                                $trimestre_forecast = $this->sumtriforecastton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->sumtriforecastonz[3]->trimestre_forecast) && isset($this->sumtriforecastton[3]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[3]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[3]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $trimestre_forecast = $this->sumtriforecastonz[3];
+                            break;
+                            case 10082: 
+                                $trimestre_forecast = $this->sumtriforecastton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->sumtriforecastonz[4]->trimestre_forecast) && isset($this->sumtriforecastton[4]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[4]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[4]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $trimestre_forecast = $this->sumtriforecastonz[4];
+                            break;
+                            case 10085: 
+                                $trimestre_forecast = $this->sumtriforecastton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->sumtriforecastonz[5]->trimestre_forecast) && isset($this->sumtriforecastton[5]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[5]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[5]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $trimestre_forecast = $this->sumtriforecastonz[5];
+                            break;
+                            case 10088: 
+                                $trimestre_forecast = $this->sumtriforecastton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->sumtriforecastonz[6]->trimestre_forecast) && isset($this->sumtriforecastton[6]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[6]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[6]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $trimestre_forecast = $this->sumtriforecastonz[6];
+                            break;
+                            case 10091: 
+                                $trimestre_forecast = $this->sumtriforecastton[7];
+                            break;
+                            case 10092: 
+                                $trimestre_forecast = $this->sumtriforecastton[8];
+                            break;
+                            case 10093: 
+                                $trimestre_forecast = $this->sumtriforecastton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->sumtriforecastonz[7]->trimestre_forecast) && isset($this->sumtriforecastton[9]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[7]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[9]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $trimestre_forecast = $this->sumtriforecastonz[7];
+                            break;
+                            case 10097: 
+                                $trimestre_forecast = $this->sumtriforecastton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->sumtriforecastonz[8]->trimestre_forecast) && isset($this->sumtriforecastton[10]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[8]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[10]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $trimestre_forecast = $this->sumtriforecastonz[8];
+                            break;
+                            case 10100: 
+                                $trimestre_forecast = $this->sumtriforecastton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->sumtriforecastonz[9]->trimestre_forecast) && isset($this->sumtriforecastton[11]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[9]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[11]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $trimestre_forecast = $this->sumtriforecastonz[9];
+                            break;
+                            case 10103: 
+                                $trimestre_forecast = $this->sumtriforecastton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->sumtriforecastonz[10]->trimestre_forecast) && isset($this->sumtriforecastton[12]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[10]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[12]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $trimestre_forecast = $this->sumtriforecastonz[10];
+                            break;
+                            case 10106: 
+                                $trimestre_forecast = $this->sumtriforecastton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->sumtriforecastonz[11]->trimestre_forecast) && isset($this->sumtriforecastton[13]->trimestre_forecast))
+                                {
+                                    $au = $this->sumtriforecastonz[11]->trimestre_forecast;
+                                    $min = $this->sumtriforecastton[13]->trimestre_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $trimestre_forecast = $this->sumtriforecastonz[11];
+                            break;
+                            case 10109: 
+                                $trimestre_forecast = $this->sumtriforecastton[14];
+                            break;
+                            case 10110: 
+                                $trimestre_forecast = $this->sumtriforecastton[15];
+                            break;
+                            case 10111: 
+                                $trimestre_forecast = $this->sumtriforecastton[16];
+                            break;
+                            case 10112: 
+                                $trimestre_forecast = $this->sumtriforecastton[17];
+                            break;
+                            case 10113: 
+                                $trimestre_forecast = $this->sumtriforecastton[18];
+                            break;
+                            case 10114:
+                                $trimestre_forecast = $this->avgtriforecastpor[0];
+                            break;
+                            case 10115:
+                                $trimestre_forecast = $this->avgtriforecastpor[1];
+                            break;
+                            case 10116:
+                                $trimestre_forecast = $this->avgtriforecastpor[2];
+                            break;
+                            case 10118:
+                                $trimestre_forecast = $this->avgtriforecastpor[3];
+                            break;
+                            case 10119:
+                                $trimestre_forecast = $this->avgtriforecastpor[4];
+                            break;
+                            case 10121:
+                                $trimestre_forecast = $this->avgtriforecastpor[5];
+                            break;
+                            default:
+                                return '-';
+                            break;
+                        }
+                        if (in_array($data->variable_id, $this->ley))
+                        {
+                            if ($min > 0)
                             {
-                                return number_format(round($m_forecast), 0, '.', ',');
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
                             }
                             else
                             {
-                                return number_format($m_forecast, 2, '.', ',');
+                                return '-';
+                            }
+                        }
+                        if(isset($trimestre_forecast->trimestre_forecast))
+                        {
+                            if ($trimestre_forecast->trimestre_forecast > 0)
+                            {
+                                $m_forecast = $trimestre_forecast->trimestre_forecast;
+                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                {
+                                    return number_format(round($m_forecast), 0, '.', ',');
+                                }
+                                else
+                                {
+                                    return number_format($m_forecast, 2, '.', ',');
+                                }
+                            }
+                            else
+                            {
+                                return '-';
                             }
                         }
                         else
                         {
                             return '-';
                         }
-                    }
-                    else
+                    })
+                    ->addColumn('anio_real', function($data)
                     {
-                        return '-';
-                    }
-                })
+                        $anio_real = [];
+                        switch($data->variable_id)
+                        {
+                            case 10070: 
+                                $anio_real = $this->sumaniorealton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->sumaniorealonz[0]->anio_real) && isset($this->sumaniorealton[0]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[0]->anio_real;
+                                    $min = $this->sumaniorealton[0]->anio_real;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $anio_real = $this->sumaniorealonz[0];
+                            break;
+                            case 10073: 
+                                $anio_real = $this->sumaniorealton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->sumaniorealonz[1]->anio_real) && isset($this->sumaniorealton[1]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[1]->anio_real;
+                                    $min = $this->sumaniorealton[1]->anio_real;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $anio_real = $this->sumaniorealonz[1];
+                            break;                            
+                            case 10076: 
+                                $anio_real = $this->sumaniorealton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->sumaniorealonz[2]->anio_real) && isset($this->sumaniorealton[2]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[2]->anio_real;
+                                    $min = $this->sumaniorealton[2]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $anio_real = $this->sumaniorealonz[2];
+                            break;
+                            case 10079: 
+                                $anio_real = $this->sumaniorealton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->sumaniorealonz[3]->anio_real) && isset($this->sumaniorealton[3]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[3]->anio_real;
+                                    $min = $this->sumaniorealton[3]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $anio_real = $this->sumaniorealonz[3];
+                            break;
+                            case 10082: 
+                                $anio_real = $this->sumaniorealton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->sumaniorealonz[4]->anio_real) && isset($this->sumaniorealton[4]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[4]->anio_real;
+                                    $min = $this->sumaniorealton[4]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $anio_real = $this->sumaniorealonz[4];
+                            break;
+                            case 10085: 
+                                $anio_real = $this->sumaniorealton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->sumaniorealonz[5]->anio_real) && isset($this->sumaniorealton[5]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[5]->anio_real;
+                                    $min = $this->sumaniorealton[5]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $anio_real = $this->sumaniorealonz[5];
+                            break;
+                            case 10088: 
+                                $anio_real = $this->sumaniorealton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->sumaniorealonz[6]->anio_real) && isset($this->sumaniorealton[6]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[6]->anio_real;
+                                    $min = $this->sumaniorealton[6]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $anio_real = $this->sumaniorealonz[6];
+                            break;
+                            case 10091: 
+                                $anio_real = $this->sumaniorealton[7];
+                            break;
+                            case 10092: 
+                                $anio_real = $this->sumaniorealton[8];
+                            break;
+                            case 10093: 
+                                $anio_real = $this->sumaniorealton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->sumaniorealonz[7]->anio_real) && isset($this->sumaniorealton[9]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[7]->anio_real;
+                                    $min = $this->sumaniorealton[9]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $anio_real = $this->sumaniorealonz[7];
+                            break;
+                            case 10097: 
+                                $anio_real = $this->sumaniorealton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->sumaniorealonz[8]->anio_real) && isset($this->sumaniorealton[10]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[8]->anio_real;
+                                    $min = $this->sumaniorealton[10]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $anio_real = $this->sumaniorealonz[8];
+                            break;
+                            case 10100: 
+                                $anio_real = $this->sumaniorealton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->sumaniorealonz[9]->anio_real) && isset($this->sumaniorealton[11]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[9]->anio_real;
+                                    $min = $this->sumaniorealton[11]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $anio_real = $this->sumaniorealonz[9];
+                            break;
+                            case 10103: 
+                                $anio_real = $this->sumaniorealton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->sumaniorealonz[10]->anio_real) && isset($this->sumaniorealton[12]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[10]->anio_real;
+                                    $min = $this->sumaniorealton[12]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $anio_real = $this->sumaniorealonz[10];
+                            break;
+                            case 10106: 
+                                $anio_real = $this->sumaniorealton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->sumaniorealonz[11]->anio_real) && isset($this->sumaniorealton[13]->anio_real))
+                                {
+                                    $au = $this->sumaniorealonz[11]->anio_real;
+                                    $min = $this->sumaniorealton[13]->anio_real;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $anio_real = $this->sumaniorealonz[11];
+                            break;
+                            case 10109: 
+                                $anio_real = $this->sumaniorealton[14];
+                            break;
+                            case 10110: 
+                                $anio_real = $this->sumaniorealton[15];
+                            break;
+                            case 10111: 
+                                $anio_real = $this->sumaniorealton[16];
+                            break;
+                            case 10112: 
+                                $anio_real = $this->sumaniorealton[17];
+                            break;
+                            case 10113: 
+                                $anio_real = $this->sumaniorealton[18];
+                            break;
+                            case 10114:
+                                $anio_real = $this->avganiorealpor[0];
+                            break;
+                            case 10115:
+                                $anio_real = $this->avganiorealpor[1];
+                            break;
+                            case 10116:
+                                $anio_real = $this->avganiorealpor[2];
+                            break;
+                            case 10118:
+                                $anio_real = $this->avganiorealpor[3];
+                            break;
+                            case 10119:
+                                $anio_real = $this->avganiorealpor[4];
+                            break;
+                            case 10121:
+                                $anio_real = $this->avganiorealpor[5];
+                            break;
+                            case 10117: 
+                                $anio_real = $this->sumaniorealton[19];
+                            break;
+                            default:
+                                return '-';
+                            break;
+                        }
+                        
+                        if (in_array($data->variable_id, $this->ley))
+                        {
+                            if ($min > 0)
+                            {
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        }
+                        if(isset($anio_real->anio_real))
+                        {
+                            $m_real = $anio_real->anio_real;
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            {
+                                return number_format(round($m_real), 0, '.', ',');
+                            }
+                            else
+                            {
+                                return number_format($m_real, 2, '.', ',');
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    })
+                    //MODIFICADO
+                    ->addColumn('anio_budget', function($data)
+                    {
+                                                
+                        $anio_budget = [];
+                        switch($data->variable_id)
+                        {
+                            case 10070: 
+                                $anio_budget = $this->sumaniobudgetton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->sumaniobudgetonz[0]->anio_budget) && isset($this->sumaniobudgetton[0]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[0]->anio_budget;
+                                    $min = $this->sumaniobudgetton[0]->anio_budget;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $anio_budget = $this->sumaniobudgetonz[0];
+                            break;
+                            case 10073: 
+                                $anio_budget = $this->sumaniobudgetton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->sumaniobudgetonz[1]->anio_budget) && isset($this->sumaniobudgetton[1]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[1]->anio_budget;
+                                    $min = $this->sumaniobudgetton[1]->anio_budget;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $anio_budget = $this->sumaniobudgetonz[1];
+                            break;                            
+                            case 10076: 
+                                $anio_budget = $this->sumaniobudgetton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->sumaniobudgetonz[2]->anio_budget) && isset($this->sumaniobudgetton[2]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[2]->anio_budget;
+                                    $min = $this->sumaniobudgetton[2]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $anio_budget = $this->sumaniobudgetonz[2];
+                            break;
+                            case 10079: 
+                                $anio_budget = $this->sumaniobudgetton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->sumaniobudgetonz[3]->anio_budget) && isset($this->sumaniobudgetton[3]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[3]->anio_budget;
+                                    $min = $this->sumaniobudgetton[3]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $anio_budget = $this->sumaniobudgetonz[3];
+                            break;
+                            case 10082: 
+                                $anio_budget = $this->sumaniobudgetton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->sumaniobudgetonz[4]->anio_budget) && isset($this->sumaniobudgetton[4]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[4]->anio_budget;
+                                    $min = $this->sumaniobudgetton[4]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $anio_budget = $this->sumaniobudgetonz[4];
+                            break;
+                            case 10085: 
+                                $anio_budget = $this->sumaniobudgetton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->sumaniobudgetonz[5]->anio_budget) && isset($this->sumaniobudgetton[5]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[5]->anio_budget;
+                                    $min = $this->sumaniobudgetton[5]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $anio_budget = $this->sumaniobudgetonz[5];
+                            break;
+                            case 10088: 
+                                $anio_budget = $this->sumaniobudgetton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->sumaniobudgetonz[6]->anio_budget) && isset($this->sumaniobudgetton[6]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[6]->anio_budget;
+                                    $min = $this->sumaniobudgetton[6]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $anio_budget = $this->sumaniobudgetonz[6];
+                            break;
+                            case 10091: 
+                                $anio_budget = $this->sumaniobudgetton[7];
+                            break;
+                            case 10092: 
+                                $anio_budget = $this->sumaniobudgetton[8];
+                            break;
+                            case 10093: 
+                                $anio_budget = $this->sumaniobudgetton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->sumaniobudgetonz[7]->anio_budget) && isset($this->sumaniobudgetton[9]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[7]->anio_budget;
+                                    $min = $this->sumaniobudgetton[9]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $anio_budget = $this->sumaniobudgetonz[7];
+                            break;
+                            case 10097: 
+                                $anio_budget = $this->sumaniobudgetton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->sumaniobudgetonz[8]->anio_budget) && isset($this->sumaniobudgetton[10]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[8]->anio_budget;
+                                    $min = $this->sumaniobudgetton[10]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $anio_budget = $this->sumaniobudgetonz[8];
+                            break;
+                            case 10100: 
+                                $anio_budget = $this->sumaniobudgetton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->sumaniobudgetonz[9]->anio_budget) && isset($this->sumaniobudgetton[11]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[9]->anio_budget;
+                                    $min = $this->sumaniobudgetton[11]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $anio_budget = $this->sumaniobudgetonz[9];
+                            break;
+                            case 10103: 
+                                $anio_budget = $this->sumaniobudgetton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->sumaniobudgetonz[10]->anio_budget) && isset($this->sumaniobudgetton[12]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[10]->anio_budget;
+                                    $min = $this->sumaniobudgetton[12]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $anio_budget = $this->sumaniobudgetonz[10];
+                            break;
+                            case 10106: 
+                                $anio_budget = $this->sumaniobudgetton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->sumaniobudgetonz[11]->anio_budget) && isset($this->sumaniobudgetton[13]->anio_budget))
+                                {
+                                    $au = $this->sumaniobudgetonz[11]->anio_budget;
+                                    $min = $this->sumaniobudgetton[13]->anio_budget;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $anio_budget = $this->sumaniobudgetonz[11];
+                            break;
+                            case 10109: 
+                                $anio_budget = $this->sumaniobudgetton[14];
+                            break;
+                            case 10110: 
+                                $anio_budget = $this->sumaniobudgetton[15];
+                            break;
+                            case 10111: 
+                                $anio_budget = $this->sumaniobudgetton[16];
+                            break;
+                            case 10112: 
+                                $anio_budget = $this->sumaniobudgetton[17];
+                            break;
+                            case 10113: 
+                                $anio_budget = $this->sumaniobudgetton[18];
+                            break;
+                            case 10114:
+                                $anio_budget = $this->avganiobudgetpor[0];
+                            break;
+                            case 10115:
+                                $anio_budget = $this->avganiobudgetpor[1];
+                            break;
+                            case 10116:
+                                $anio_budget = $this->avganiobudgetpor[2];
+                            break;
+                            case 10118:
+                                $anio_budget = $this->avganiobudgetpor[3];
+                            break;
+                            case 10119:
+                                $anio_budget = $this->avganiobudgetpor[4];
+                            break;
+                            case 10121:
+                                $anio_budget = $this->avganiobudgetpor[5];
+                            break;
+                            default:
+                                return '-';
+                            break;
+                        }
+                        if (in_array($data->variable_id, $this->ley))
+                        {
+                            if ($min > 0)
+                            {
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        }
+                        if(isset($anio_budget->anio_budget))
+                        {
+                            if ($anio_budget->anio_budget > 0)
+                            {
+                                $m_budget = $anio_budget->anio_budget;
+                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                {
+                                    return number_format(round($m_budget), 0, '.', ',');
+                                }
+                                else
+                                {
+                                    return number_format($m_budget, 2, '.', ',');
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    })
+                    ->addColumn('anio_forecast', function($data)
+                    {
+                                                
+                        $anio_forecast = [];
+                        switch($data->variable_id)
+                        {
+                            case 10070: 
+                                $anio_forecast = $this->sumanioforecastton[0];
+                            break;
+                            case 10071:
+                                if(isset($this->sumanioforecastonz[0]->anio_forecast) && isset($this->sumanioforecastton[0]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[0]->anio_forecast;
+                                    $min = $this->sumanioforecastton[0]->anio_forecast;
+                                }   
+                                else
+                                {
+                                    $min = 0;
+                                }                             
+                            break;
+                            case 10072:
+                                $anio_forecast = $this->sumanioforecastonz[0];
+                            break;
+                            case 10073: 
+                                $anio_forecast = $this->sumanioforecastton[1];
+                            break;
+                            case 10074:
+                                if(isset($this->sumanioforecastonz[1]->anio_forecast) && isset($this->sumanioforecastton[1]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[1]->anio_forecast;
+                                    $min = $this->sumanioforecastton[1]->anio_forecast;
+                                }     
+                                else
+                                {
+                                    $min = 0;
+                                }                              
+                            break;
+                            case 10075:
+                                $anio_forecast = $this->sumanioforecastonz[1];
+                            break;                            
+                            case 10076: 
+                                $anio_forecast = $this->sumanioforecastton[2];
+                            break;
+                            case 10077:
+                                if(isset($this->sumanioforecastonz[2]->anio_forecast) && isset($this->sumanioforecastton[2]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[2]->anio_forecast;
+                                    $min = $this->sumanioforecastton[2]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10078:
+                                $anio_forecast = $this->sumanioforecastonz[2];
+                            break;
+                            case 10079: 
+                                $anio_forecast = $this->sumanioforecastton[3];
+                            break;
+                            case 10080:
+                                if(isset($this->sumanioforecastonz[3]->anio_forecast) && isset($this->sumanioforecastton[3]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[3]->anio_forecast;
+                                    $min = $this->sumanioforecastton[3]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10081:
+                                $anio_forecast = $this->sumanioforecastonz[3];
+                            break;
+                            case 10082: 
+                                $anio_forecast = $this->sumanioforecastton[4];
+                            break;
+                            case 10083:
+                                if(isset($this->sumanioforecastonz[4]->anio_forecast) && isset($this->sumanioforecastton[4]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[4]->anio_forecast;
+                                    $min = $this->sumanioforecastton[4]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10084:
+                                $anio_forecast = $this->sumanioforecastonz[4];
+                            break;
+                            case 10085: 
+                                $anio_forecast = $this->sumanioforecastton[5];
+                            break;
+                            case 10086:
+                                if(isset($this->sumanioforecastonz[5]->anio_forecast) && isset($this->sumanioforecastton[5]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[5]->anio_forecast;
+                                    $min = $this->sumanioforecastton[5]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10087:
+                                $anio_forecast = $this->sumanioforecastonz[5];
+                            break;
+                            case 10088: 
+                                $anio_forecast = $this->sumanioforecastton[6];
+                            break;
+                            case 10089:
+                                if(isset($this->sumanioforecastonz[6]->anio_forecast) && isset($this->sumanioforecastton[6]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[6]->anio_forecast;
+                                    $min = $this->sumanioforecastton[6]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10090:
+                                $anio_forecast = $this->sumanioforecastonz[6];
+                            break;
+                            case 10091: 
+                                $anio_forecast = $this->sumanioforecastton[7];
+                            break;
+                            case 10092: 
+                                $anio_forecast = $this->sumanioforecastton[8];
+                            break;
+                            case 10093: 
+                                $anio_forecast = $this->sumanioforecastton[9];
+                            break;
+                            case 10094:
+                                if(isset($this->sumanioforecastonz[7]->anio_forecast) && isset($this->sumanioforecastton[9]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[7]->anio_forecast;
+                                    $min = $this->sumanioforecastton[9]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10095:
+                                $anio_forecast = $this->sumanioforecastonz[7];
+                            break;
+                            case 10097: 
+                                $anio_forecast = $this->sumanioforecastton[10];
+                            break;
+                            case 10098:
+                                if(isset($this->sumanioforecastonz[8]->anio_forecast) && isset($this->sumanioforecastton[10]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[8]->anio_forecast;
+                                    $min = $this->sumanioforecastton[10]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10099:
+                                $anio_forecast = $this->sumanioforecastonz[8];
+                            break;
+                            case 10100: 
+                                $anio_forecast = $this->sumanioforecastton[11];
+                            break;
+                            case 10101:
+                                if(isset($this->sumanioforecastonz[9]->anio_forecast) && isset($this->sumanioforecastton[11]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[9]->anio_forecast;
+                                    $min = $this->sumanioforecastton[11]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10102:
+                                $anio_forecast = $this->sumanioforecastonz[9];
+                            break;
+                            case 10103: 
+                                $anio_forecast = $this->sumanioforecastton[12];
+                            break;
+                            case 10104:
+                                if(isset($this->sumanioforecastonz[10]->anio_forecast) && isset($this->sumanioforecastton[12]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[10]->anio_forecast;
+                                    $min = $this->sumanioforecastton[12]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10105:
+                                $anio_forecast = $this->sumanioforecastonz[10];
+                            break;
+                            case 10106: 
+                                $anio_forecast = $this->sumanioforecastton[13];
+                            break;
+                            case 10107:
+                                if(isset($this->sumanioforecastonz[11]->anio_forecast) && isset($this->sumanioforecastton[13]->anio_forecast))
+                                {
+                                    $au = $this->sumanioforecastonz[11]->anio_forecast;
+                                    $min = $this->sumanioforecastton[13]->anio_forecast;
+                                }  
+                                else
+                                {
+                                    $min = 0;
+                                } 
+                            break;
+                            case 10108:
+                                $anio_forecast = $this->sumanioforecastonz[11];
+                            break;
+                            case 10109: 
+                                $anio_forecast = $this->sumanioforecastton[14];
+                            break;
+                            case 10110: 
+                                $anio_forecast = $this->sumanioforecastton[15];
+                            break;
+                            case 10111: 
+                                $anio_forecast = $this->sumanioforecastton[16];
+                            break;
+                            case 10112: 
+                                $anio_forecast = $this->sumanioforecastton[17];
+                            break;
+                            case 10113: 
+                                $anio_forecast = $this->sumanioforecastton[18];
+                            break;
+                            case 10114:
+                                $anio_forecast = $this->avganioforecastpor[0];
+                            break;
+                            case 10115:
+                                $anio_forecast = $this->avganioforecastpor[1];
+                            break;
+                            case 10116:
+                                $anio_forecast = $this->avganioforecastpor[2];
+                            break;
+                            case 10118:
+                                $anio_forecast = $this->avganioforecastpor[3];
+                            break;
+                            case 10119:
+                                $anio_forecast = $this->avganioforecastpor[4];
+                            break;
+                            case 10121:
+                                $anio_forecast = $this->avganioforecastpor[5];
+                            break;
+                            default:
+                                return '-';
+                            break;
+                        }
+                        if (in_array($data->variable_id, $this->ley))
+                        {
+                            if ($min > 0)
+                            {
+                                $ley = ($au*31.1035)/$min;
+                                return number_format($ley, 2, '.', ',');
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        }
+                        if(isset($anio_forecast->anio_forecast))
+                        {
+                            if ($anio_forecast->anio_forecast > 0)
+                            {
+                                $m_forecast = $anio_forecast->anio_forecast;
+                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                {
+                                    return number_format(round($m_forecast), 0, '.', ',');
+                                }
+                                else
+                                {
+                                    return number_format($m_forecast, 2, '.', ',');
+                                }
+                            }
+                            else
+                            {
+                                return '-';
+                            }
+                        }
+                        else
+                        {
+                            return '-';
+                        }
+                    })
                     ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_forecast','mes_real','mes_budget','mes_forecast','trimestre_real','trimestre_budget','trimestre_forecast','anio_real','anio_budget','anio_forecast'])
                     ->make(true);  
             }
@@ -4968,7 +5050,7 @@ trait MinaTrait {
                                 if(isset($data->dia_real)) 
                                 { 
                                     $d_real = $data->dia_real;
-                                    if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                                    if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                                     {
                                         return number_format(round($d_real), 0, '.', ',');
                                     }
@@ -5007,7 +5089,7 @@ trait MinaTrait {
                         if(isset($data->dia_budget)) 
                         { 
                             $d_budget = $data->dia_budget;
-                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($d_budget), 0, '.', ',');
                             }
@@ -5027,7 +5109,7 @@ trait MinaTrait {
                         if(isset($data->dia_forecast)) 
                         { 
                             $d_forecast = $data->dia_forecast;
-                            if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($d_forecast), 0, '.', ',');
                             }
@@ -5281,6 +5363,15 @@ trait MinaTrait {
                             case 10116:
                                 $mes_real = $this->avgmesrealpor[2];
                             break;
+                            case 10118:
+                                $mes_real = $this->avgmesrealpor[3];
+                            break;
+                            case 10119:
+                                $mes_real = $this->avgmesrealpor[4];
+                            break;
+                            case 10121:
+                                $mes_real = $this->avgmesrealpor[5];
+                            break;
                             case 10117: 
                                 $mes_real = $this->summesrealton[19];
                             break;
@@ -5303,7 +5394,7 @@ trait MinaTrait {
                         if(isset($mes_real->mes_real))
                         {
                             $m_real = $mes_real->mes_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -5556,6 +5647,15 @@ trait MinaTrait {
                             case 10116:
                                 $mes_budget = $this->avgmesbudgetpor[2];
                             break;
+                            case 10118:
+                                $mes_budget = $this->avgmesbudgetpor[3];
+                            break;
+                            case 10119:
+                                $mes_budget = $this->avgmesbudgetpor[4];
+                            break;
+                            case 10121:
+                                $mes_budget = $this->avgmesbudgetpor[5];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -5575,7 +5675,7 @@ trait MinaTrait {
                         if(isset($mes_budget->mes_budget))
                         {
                             $m_budget = $mes_budget->mes_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -5830,6 +5930,15 @@ trait MinaTrait {
                             case 10116:
                                 $mes_forecast = $this->avgmesforecastpor[2];
                             break;
+                            case 10118:
+                                $mes_forecast = $this->avgmesforecastpor[3];
+                            break;
+                            case 10119:
+                                $mes_forecast = $this->avgmesforecastpor[4];
+                            break;
+                            case 10121:
+                                $mes_forecast = $this->avgmesforecastpor[5];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -5849,7 +5958,7 @@ trait MinaTrait {
                         if(isset($mes_forecast->mes_forecast))
                         {
                             $m_forecast = $mes_forecast->mes_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -6102,6 +6211,15 @@ trait MinaTrait {
                             case 10116:
                                 $tri_real = $this->avgtrirealpor[2];
                             break;
+                            case 10118:
+                                $tri_real = $this->avgtrirealpor[3];
+                            break;
+                            case 10119:
+                                $tri_real = $this->avgtrirealpor[4];
+                            break;
+                            case 10121:
+                                $tri_real = $this->avgtrirealpor[5];
+                            break;
                             case 10117: 
                                 $tri_real = $this->sumtrirealton[19];
                             break;
@@ -6125,7 +6243,7 @@ trait MinaTrait {
                         if(isset($tri_real->tri_real))
                         {
                             $m_real = $tri_real->tri_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -6380,6 +6498,15 @@ trait MinaTrait {
                             case 10116:
                                 $trimestre_budget = $this->avgtribudgetpor[2];
                             break;
+                            case 10118:
+                                $trimestre_budget = $this->avgtribudgetpor[3];
+                            break;
+                            case 10119:
+                                $trimestre_budget = $this->avgtribudgetpor[4];
+                            break;
+                            case 10121:
+                                $trimestre_budget = $this->avgtribudgetpor[5];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -6401,7 +6528,7 @@ trait MinaTrait {
                             if ($trimestre_budget->trimestre_budget > 0)
                             {
                                 $m_budget = $trimestre_budget->trimestre_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -6660,6 +6787,15 @@ trait MinaTrait {
                             case 10116:
                                 $trimestre_forecast = $this->avgtriforecastpor[2];
                             break;
+                            case 10118:
+                                $trimestre_forecast = $this->avgtriforecastpor[3];
+                            break;
+                            case 10119:
+                                $trimestre_forecast = $this->avgtriforecastpor[4];
+                            break;
+                            case 10121:
+                                $trimestre_forecast = $this->avgtriforecastpor[5];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -6681,7 +6817,7 @@ trait MinaTrait {
                             if ($trimestre_forecast->trimestre_forecast > 0)
                             {
                                 $m_forecast = $trimestre_forecast->trimestre_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
@@ -6939,6 +7075,15 @@ trait MinaTrait {
                             case 10116:
                                 $anio_real = $this->avganiorealpor[2];
                             break;
+                            case 10118:
+                                $anio_real = $this->avganiorealpor[3];
+                            break;
+                            case 10119:
+                                $anio_real = $this->avganiorealpor[4];
+                            break;
+                            case 10121:
+                                $anio_real = $this->avganiorealpor[5];
+                            break;
                             case 10117: 
                                 $anio_real = $this->sumaniorealton[19];
                             break;
@@ -6962,7 +7107,7 @@ trait MinaTrait {
                         if(isset($anio_real->anio_real))
                         {
                             $m_real = $anio_real->anio_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -7217,6 +7362,15 @@ trait MinaTrait {
                             case 10116:
                                 $anio_budget = $this->avganiobudgetpor[2];
                             break;
+                            case 10118:
+                                $anio_budget = $this->avganiobudgetpor[3];
+                            break;
+                            case 10119:
+                                $anio_budget = $this->avganiobudgetpor[4];
+                            break;
+                            case 10121:
+                                $anio_budget = $this->avganiobudgetpor[5];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -7238,7 +7392,7 @@ trait MinaTrait {
                             if ($anio_budget->anio_budget > 0)
                             {
                                 $m_budget = $anio_budget->anio_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -7497,6 +7651,15 @@ trait MinaTrait {
                             case 10116:
                                 $anio_forecast = $this->avganioforecastpor[2];
                             break;
+                            case 10118:
+                                $anio_forecast = $this->avganioforecastpor[3];
+                            break;
+                            case 10119:
+                                $anio_forecast = $this->avganioforecastpor[4];
+                            break;
+                            case 10121:
+                                $anio_forecast = $this->avganioforecastpor[5];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -7518,7 +7681,7 @@ trait MinaTrait {
                             if ($anio_forecast->anio_forecast > 0)
                             {
                                 $m_forecast = $anio_forecast->anio_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10119,10120,10121]))
+                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
