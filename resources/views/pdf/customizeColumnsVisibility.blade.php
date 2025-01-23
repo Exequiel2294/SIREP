@@ -126,7 +126,9 @@
                             <th colspan="3">TRIMESTRE</th>
                         @endif
                         @if ($columnsVisibility[3] == 'true')
-                            <th colspan="5">AÑO</th>   
+                        <!--21/01/2025 modificacion para mostrar solo lo que es budget-->
+                        <!--Para volverlo a la normalidad hay que agregar en "colspan=5"-->
+                            <th colspan="3">AÑO</th>   
                         @endif
                     </tr>
                     <tr>

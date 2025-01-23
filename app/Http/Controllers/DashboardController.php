@@ -927,14 +927,15 @@ class DashboardController extends Controller
                 $newvalue = $request->get('valor');
                 switch($data->variable_id)
                 {
-                    case 10011:
-                    case 10019:
-                    case 10031: 
-                        DB::table('data')
-                            ->whereIn('variable_id',[10011,10019,10031])
-                            ->where('fecha', $data->fecha)
-                            ->update(['valor' =>$newvalue]);                    
-                    break;  
+                    //CULAQUIERA DE LAS VARIABLES QUE ESTABAN EN ESTE CASE MODIFICABA EL RESTO DE LAS QUE ESTABA SETEADAS 
+                    // case 10011://Mineral Triturado - HPGR
+                    // case 10019://Mineral Aglomerado - Aglomeracion
+                    // case 10031://Mineral Apilado - Stacker
+                    //     DB::table('data')
+                    //         ->whereIn('variable_id',[10011,10019,10031])
+                    //         ->where('fecha', $data->fecha)
+                    //         ->update(['valor' =>$newvalue]);                    
+                    // break;  
                     case 10064: 
                     case 10065:
                         DB::table('data')

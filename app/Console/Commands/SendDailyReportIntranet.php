@@ -82,7 +82,7 @@ class SendDailyReportIntranet extends Command
                 $date = $this->date;
                 
                 $columnsVisibility = [true, true, true, true];
-                $focastVisibility = 1;
+                $focastVisibility = 0;//Para volver a la normalidad hay que cambiar el valor a 1
                 $budgetVisibility = 1;
                 $colspanTFrame = 3;
                 $colspan = 16;//Tener en cuenta esto cuando se haga un cambio ya que es la fila que subdivide entre las variables
