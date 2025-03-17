@@ -267,13 +267,13 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.mes_real AS mes_real FROM
                     (SELECT variable_id, AVG(valor) AS mes_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -304,14 +304,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS mes_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND valor <> 0
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -510,14 +510,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND valor <> 0
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -865,13 +865,13 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.tri_real AS tri_real FROM
                     (SELECT variable_id, AVG(valor) AS tri_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND fecha BETWEEN ? AND ?
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -901,14 +901,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS trimestre_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND valor <> 0
                     AND fecha between ? and ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [$requestDayTri,$requestDay]
@@ -1107,14 +1107,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS trimestre_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND valor <> 0
                     AND fecha between ? and ?
                     GROUP BY variable_id) AS f
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC',
                     [$requestDayTri,$requestDay]
@@ -1461,14 +1461,14 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, d.anio_real AS anio_real FROM
                     (SELECT variable_id, AVG(valor) AS anio_real
                     FROM [dbo].[data]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND  YEAR(fecha) = '.$year.'
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     GROUP BY variable_id) AS d
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON d.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1497,7 +1497,7 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS anio_budget FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[budget]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND valor <> 0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1505,7 +1505,7 @@ trait MinaTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1703,7 +1703,7 @@ trait MinaTrait {
                     'SELECT v.id AS variable_id, f.valor AS anio_forecast FROM
                     (SELECT variable_id, AVG(valor) AS valor
                     FROM [dbo].[forecast]
-                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121)
+                    WHERE variable_id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)
                     AND valor <> 0
                     AND  DATEPART(y, fecha) <= '.$daypart.'
                     AND YEAR(fecha) = '.$year.'
@@ -1711,7 +1711,7 @@ trait MinaTrait {
                     RIGHT JOIN
                     (SELECT id 
                     FROM [dbo].[variable] 
-                    WHERE id IN (10114,10115,10116,10118,10119,10121)) AS v
+                    WHERE id IN (10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130)) AS v
                     ON f.variable_id = v.id
                     ORDER BY id ASC'
                 );
@@ -1942,215 +1942,215 @@ trait MinaTrait {
                                     AND YEAR(A.fecha) = ?',
                                     [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
                                 ); 
-                            break;
-                            case 10075:
-                                //Au ROM Alta Ley a Stockpile oz                  
-                                //(10073*10074 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10073) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10074) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;
-                            case 10078:
-                                //Au ROM Media Ley a Stockpile oz                  
-                                //(10076*10077 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10076) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10077) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;
-                            case 10081:
-                                //Au ROM Baja Ley a Stockpile oz                  
-                                //(10079*10080 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10079) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10080) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;
-                            case 10084:
-                                //Total Au ROM a Stockpiles oz                  
-                                //(10082*10083 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10082) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10083) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;                            
-                            case 10090:
-                                //Total Au Minado oz                  
-                                //(10088*10089 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10088) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10089) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;                            
-                            case 10095:
-                                //Au Alta Ley Stockpile a Trituradora oz                  
-                                //(10093*10094 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10093) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10094) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;                            
-                            case 10099:
-                                //Au Media Ley Stockpile a Trituradora oz                  
-                                //(10097*10098 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10097) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10098) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;                            
-                            case 10102:
-                                //Au Baja Ley Stockpile a Trituradora oz                  
-                                //(10100*10101 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10100) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10101) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;                            
-                            case 10105:
-                                //Au de Stockpiles a Trituradora oz                  
-                                //(10103*10104 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10103) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10104) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;                            
-                            case 10108:
-                                //Au (ROM+Stockpiles) a Trituradora oz                  
-                                //(10106*10107 / 31.1035                                     
-                                $d_real = 
-                                DB::select(
-                                    'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10106) as A
-                                    INNER JOIN   
-                                    (SELECT fecha, variable_id, [valor]
-                                    FROM [dbo].[data]
-                                    where variable_id = 10107) as B
-                                    ON A.fecha = B.fecha
-                                    WHERE  DATEPART(y, A.fecha) = ?
-                                    AND YEAR(A.fecha) = ?',
-                                    [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
-                                ); 
-                            break;   
-                            default:
-                                if(isset($data->dia_real)) 
-                                { 
-                                    $d_real = $data->dia_real;
-                                    if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
-                                    {
-                                        return number_format(round($d_real), 0, '.', ',');
-                                    }
+                                break;
+                                case 10075:
+                                    //Au ROM Alta Ley a Stockpile oz                  
+                                    //(10073*10074 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10073) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10074) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;
+                                case 10078:
+                                    //Au ROM Media Ley a Stockpile oz                  
+                                    //(10076*10077 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10076) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10077) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;
+                                case 10081:
+                                    //Au ROM Baja Ley a Stockpile oz                  
+                                    //(10079*10080 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10079) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10080) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;
+                                case 10084:
+                                    //Total Au ROM a Stockpiles oz                  
+                                    //(10082*10083 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10082) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10083) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;                            
+                                case 10090:
+                                    //Total Au Minado oz                  
+                                    //(10088*10089 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10088) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10089) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;                            
+                                case 10095:
+                                    //Au Alta Ley Stockpile a Trituradora oz                  
+                                    //(10093*10094 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10093) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10094) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;                            
+                                case 10099:
+                                    //Au Media Ley Stockpile a Trituradora oz                  
+                                    //(10097*10098 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10097) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10098) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;                            
+                                case 10102:
+                                    //Au Baja Ley Stockpile a Trituradora oz                  
+                                    //(10100*10101 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10100) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10101) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;                            
+                                case 10105:
+                                    //Au de Stockpiles a Trituradora oz                  
+                                    //(10103*10104 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10103) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10104) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;                            
+                                case 10108:
+                                    //Au (ROM+Stockpiles) a Trituradora oz                  
+                                    //(10106*10107 / 31.1035                                     
+                                    $d_real = 
+                                    DB::select(
+                                        'SELECT (A.valor * B.valor)/31.1035 as dia_real FROM
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10106) as A
+                                        INNER JOIN   
+                                        (SELECT fecha, variable_id, [valor]
+                                        FROM [dbo].[data]
+                                        where variable_id = 10107) as B
+                                        ON A.fecha = B.fecha
+                                        WHERE  DATEPART(y, A.fecha) = ?
+                                        AND YEAR(A.fecha) = ?',
+                                        [(int)date('z', strtotime($this->date)) + 1, date('Y', strtotime($this->date))]
+                                    ); 
+                                break;   
+                                default:
+                                    if(isset($data->dia_real)) 
+                                    { 
+                                        $d_real = $data->dia_real;
+                                        if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
+                                        {
+                                            return number_format(round($d_real), 0, '.', ',');
+                                        }
+                                        else
+                                        {
+                                            return number_format($d_real, 2, '.', ',');
+                                        }
+                                    }        
                                     else
                                     {
-                                        return number_format($d_real, 2, '.', ',');
-                                    }
-                                }        
-                                else
-                                {
-                                    return '-';
-                                }                                       
-                            break; 
+                                        return '-';
+                                    }                                       
+                                break; 
                         } 
                         if(isset($d_real[0]->dia_real)) 
                         { 
@@ -2176,7 +2176,7 @@ trait MinaTrait {
                         if(isset($data->dia_budget)) 
                         { 
                             $d_budget = $data->dia_budget;
-                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($d_budget), 0, '.', ',');
                             }
@@ -2196,7 +2196,7 @@ trait MinaTrait {
                         if(isset($data->dia_forecast)) 
                         { 
                             $d_forecast = $data->dia_forecast;
-                            if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($d_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($d_forecast), 0, '.', ',');
                             }
@@ -2459,6 +2459,24 @@ trait MinaTrait {
                             case 10121:
                                 $mes_real = $this->avgmesrealpor[5];
                             break;
+                            case 10124:
+                                $mes_real = $this->avgmesrealpor[6];
+                            break;
+                            case 10125:
+                                $mes_real = $this->avgmesrealpor[7];
+                            break;
+                            case 10127:
+                                $mes_real = $this->avgmesrealpor[8];
+                            break;
+                            case 10128:
+                                $mes_real = $this->avgmesrealpor[9];
+                            break;
+                            case 10129:
+                                $mes_real = $this->avgmesrealpor[10];
+                            break;
+                            case 10130:
+                                $mes_real = $this->avgmesrealpor[11];
+                            break;                            
                             case 10117: 
                                 $mes_real = $this->summesrealton[19];
                             break;
@@ -2481,7 +2499,7 @@ trait MinaTrait {
                         if(isset($mes_real->mes_real))
                         {
                             $m_real = $mes_real->mes_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -2743,6 +2761,25 @@ trait MinaTrait {
                             case 10121:
                                 $mes_budget = $this->avgmesbudgetpor[5];
                             break;
+                            case 10124:
+                                $mes_budget = $this->avgmesbudgetpor[6];
+                            break;
+                            case 10125:
+                                $mes_budget = $this->avgmesbudgetpor[7];
+                            break;
+                            case 10127:
+                                $mes_budget = $this->avgmesbudgetpor[8];
+                            break;
+                            case 10128:
+                                $mes_budget = $this->avgmesbudgetpor[9];
+                            break;
+                            case 10129:
+                                $mes_budget = $this->avgmesbudgetpor[10];
+                            break;
+                            case 10130:
+                                $mes_budget = $this->avgmesbudgetpor[11];
+                            break;
+                            case 10117: 
                             default:
                                 return '-';
                             break;
@@ -2762,7 +2799,7 @@ trait MinaTrait {
                         if(isset($mes_budget->mes_budget))
                         {
                             $m_budget = $mes_budget->mes_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -3026,6 +3063,24 @@ trait MinaTrait {
                             case 10121:
                                 $mes_forecast = $this->avgmesforecastpor[5];
                             break;
+                            case 10124:
+                                $mes_forecast = $this->avgmesforecastpor[6];
+                            break;
+                            case 10125:
+                                $mes_forecast = $this->avgmesforecastpor[7];
+                            break;
+                            case 10127:
+                                $mes_forecast = $this->avgmesforecastpor[8];
+                            break;
+                            case 10128:
+                                $mes_forecast = $this->avgmesforecastpor[9];
+                            break;
+                            case 10129:
+                                $mes_forecast = $this->avgmesforecastpor[10];
+                            break;
+                            case 10130:
+                                $mes_forecast = $this->avgmesforecastpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -3045,7 +3100,7 @@ trait MinaTrait {
                         if(isset($mes_forecast->mes_forecast))
                         {
                             $m_forecast = $mes_forecast->mes_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -3307,6 +3362,24 @@ trait MinaTrait {
                             case 10121:
                                 $tri_real = $this->avgtrirealpor[5];
                             break;
+                            case 10124:
+                                $tri_real = $this->avgtrirealpor[6];
+                            break;
+                            case 10125:
+                                $tri_real = $this->avgtrirealpor[7];
+                            break;
+                            case 10127:
+                                $tri_real = $this->avgtrirealpor[8];
+                            break;
+                            case 10128:
+                                $tri_real = $this->avgtrirealpor[9];
+                            break;
+                            case 10129:
+                                $tri_real = $this->avgtrirealpor[10];
+                            break;
+                            case 10130:
+                                $tri_real = $this->avgtrirealpor[11];
+                            break;
                             case 10117: 
                                 $tri_real = $this->sumtrirealton[19];
                             break;
@@ -3330,7 +3403,7 @@ trait MinaTrait {
                         if(isset($tri_real->tri_real))
                         {
                             $m_real = $tri_real->tri_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -3594,6 +3667,24 @@ trait MinaTrait {
                             case 10121:
                                 $trimestre_budget = $this->avgtribudgetpor[5];
                             break;
+                            case 10124:
+                                $trimestre_budget = $this->avgtribudgetpor[6];
+                            break;
+                            case 10125:
+                                $trimestre_budget = $this->avgtribudgetpor[7];
+                            break;
+                            case 10127:
+                                $trimestre_budget = $this->avgtribudgetpor[8];
+                            break;
+                            case 10128:
+                                $trimestre_budget = $this->avgtribudgetpor[9];
+                            break;
+                            case 10129:
+                                $trimestre_budget = $this->avgtribudgetpor[10];
+                            break;
+                            case 10130:
+                                $trimestre_budget = $this->avgtribudgetpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -3615,7 +3706,7 @@ trait MinaTrait {
                             if ($trimestre_budget->trimestre_budget > 0)
                             {
                                 $m_budget = $trimestre_budget->trimestre_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -3883,6 +3974,24 @@ trait MinaTrait {
                             case 10121:
                                 $trimestre_forecast = $this->avgtriforecastpor[5];
                             break;
+                            case 10124:
+                                $trimestre_forecast = $this->avgtriforecastpor[6];
+                            break;
+                            case 10125:
+                                $trimestre_forecast = $this->avgtriforecastpor[7];
+                            break;
+                            case 10127:
+                                $trimestre_forecast = $this->avgtriforecastpor[8];
+                            break;
+                            case 10128:
+                                $trimestre_forecast = $this->avgtriforecastpor[9];
+                            break;
+                            case 10129:
+                                $trimestre_forecast = $this->avgtriforecastpor[10];
+                            break;
+                            case 10130:
+                                $trimestre_forecast = $this->avgtriforecastpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -3904,7 +4013,7 @@ trait MinaTrait {
                             if ($trimestre_forecast->trimestre_forecast > 0)
                             {
                                 $m_forecast = $trimestre_forecast->trimestre_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
@@ -4171,6 +4280,24 @@ trait MinaTrait {
                             case 10121:
                                 $anio_real = $this->avganiorealpor[5];
                             break;
+                            case 10124:
+                                $anio_real = $this->avganiorealpor[6];
+                            break;
+                            case 10125:
+                                $anio_real = $this->avganiorealpor[7];
+                            break;
+                            case 10127:
+                                $anio_real = $this->avganiorealpor[8];
+                            break;
+                            case 10128:
+                                $anio_real = $this->avganiorealpor[9];
+                            break;
+                            case 10129:
+                                $anio_real = $this->avganiorealpor[10];
+                            break;
+                            case 10130:
+                                $anio_real = $this->avganiorealpor[11];
+                            break;
                             case 10117: 
                                 $anio_real = $this->sumaniorealton[19];
                             break;
@@ -4194,7 +4321,7 @@ trait MinaTrait {
                         if(isset($anio_real->anio_real))
                         {
                             $m_real = $anio_real->anio_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -4458,6 +4585,24 @@ trait MinaTrait {
                             case 10121:
                                 $anio_budget = $this->avganiobudgetpor[5];
                             break;
+                            case 10124:
+                                $anio_budget = $this->avganiobudgetpor[6];
+                            break;
+                            case 10125:
+                                $anio_budget = $this->avganiobudgetpor[7];
+                            break;
+                            case 10127:
+                                $anio_budget = $this->avganiobudgetpor[8];
+                            break;
+                            case 10128:
+                                $anio_budget = $this->avganiobudgetpor[9];
+                            break;
+                            case 10129:
+                                $anio_budget = $this->avganiobudgetpor[10];
+                            break;
+                            case 10130:
+                                $anio_budget = $this->avganiobudgetpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -4479,7 +4624,7 @@ trait MinaTrait {
                             if ($anio_budget->anio_budget > 0)
                             {
                                 $m_budget = $anio_budget->anio_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -4747,6 +4892,24 @@ trait MinaTrait {
                             case 10121:
                                 $anio_forecast = $this->avganioforecastpor[5];
                             break;
+                            case 10124:
+                                $anio_forecast = $this->avganioforecastpor[6];
+                            break;
+                            case 10125:
+                                $anio_forecast = $this->avganioforecastpor[7];
+                            break;
+                            case 10127:
+                                $anio_forecast = $this->avganioforecastpor[8];
+                            break;
+                            case 10128:
+                                $anio_forecast = $this->avganioforecastpor[9];
+                            break;
+                            case 10129:
+                                $anio_forecast = $this->avganioforecastpor[10];
+                            break;
+                            case 10130:
+                                $anio_forecast = $this->avganioforecastpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -4768,7 +4931,7 @@ trait MinaTrait {
                             if ($anio_forecast->anio_forecast > 0)
                             {
                                 $m_forecast = $anio_forecast->anio_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
@@ -4825,6 +4988,7 @@ trait MinaTrait {
                         )
                     ->get();
                 $tabla = datatables()->of($table)  
+                //dd($data);
                     ->addColumn('categoria', function($data)
                     {         
                         return '<span style="visibility: hidden">'.$data->cat_orden.'</span>'.$data->cat;
@@ -5050,7 +5214,7 @@ trait MinaTrait {
                                 if(isset($data->dia_real)) 
                                 { 
                                     $d_real = $data->dia_real;
-                                    if($d_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                    if($d_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                     {
                                         return number_format(round($d_real), 0, '.', ',');
                                     }
@@ -5089,7 +5253,7 @@ trait MinaTrait {
                         if(isset($data->dia_budget)) 
                         { 
                             $d_budget = $data->dia_budget;
-                            if($d_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($d_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($d_budget), 0, '.', ',');
                             }
@@ -5109,7 +5273,7 @@ trait MinaTrait {
                         if(isset($data->dia_forecast)) 
                         { 
                             $d_forecast = $data->dia_forecast;
-                            if($d_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($d_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($d_forecast), 0, '.', ',');
                             }
@@ -5372,6 +5536,24 @@ trait MinaTrait {
                             case 10121:
                                 $mes_real = $this->avgmesrealpor[5];
                             break;
+                            case 10124:
+                                $mes_real = $this->avgmesrealpor[6];
+                            break;
+                            case 10125:
+                                $mes_real = $this->avgmesrealpor[7];
+                            break;
+                            case 10127:
+                                $mes_real = $this->avgmesrealpor[8];
+                            break;
+                            case 10128:
+                                $mes_real = $this->avgmesrealpor[9];
+                            break;
+                            case 10129:
+                                $mes_real = $this->avgmesrealpor[10];
+                            break;
+                            case 10130:
+                                $mes_real = $this->avgmesrealpor[11];
+                            break;
                             case 10117: 
                                 $mes_real = $this->summesrealton[19];
                             break;
@@ -5394,7 +5576,7 @@ trait MinaTrait {
                         if(isset($mes_real->mes_real))
                         {
                             $m_real = $mes_real->mes_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -5656,6 +5838,24 @@ trait MinaTrait {
                             case 10121:
                                 $mes_budget = $this->avgmesbudgetpor[5];
                             break;
+                            case 10124:
+                                $mes_budget = $this->avgmesbudgetpor[6];
+                            break;
+                            case 10125:
+                                $mes_budget = $this->avgmesbudgetpor[7];
+                            break;
+                            case 10127:
+                                $mes_budget = $this->avgmesbudgetpor[8];
+                            break;
+                            case 10128:
+                                $mes_budget = $this->avgmesbudgetpor[9];
+                            break;
+                            case 10129:
+                                $mes_budget = $this->avgmesbudgetpor[10];
+                            break;
+                            case 10130:
+                                $mes_budget = $this->avgmesbudgetpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -5675,7 +5875,7 @@ trait MinaTrait {
                         if(isset($mes_budget->mes_budget))
                         {
                             $m_budget = $mes_budget->mes_budget;
-                            if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_budget), 0, '.', ',');
                             }
@@ -5939,6 +6139,24 @@ trait MinaTrait {
                             case 10121:
                                 $mes_forecast = $this->avgmesforecastpor[5];
                             break;
+                            case 10124:
+                                $mes_forecast = $this->avgmesforecastpor[6];
+                            break;
+                            case 10125:
+                                $mes_forecast = $this->avgmesforecastpor[7];
+                            break;
+                            case 10127:
+                                $mes_forecast = $this->avgmesforecastpor[8];
+                            break;
+                            case 10128:
+                                $mes_forecast = $this->avgmesforecastpor[9];
+                            break;
+                            case 10129:
+                                $mes_forecast = $this->avgmesforecastpor[10];
+                            break;
+                            case 10130:
+                                $mes_forecast = $this->avgmesforecastpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -5958,7 +6176,7 @@ trait MinaTrait {
                         if(isset($mes_forecast->mes_forecast))
                         {
                             $m_forecast = $mes_forecast->mes_forecast;
-                            if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_forecast), 0, '.', ',');
                             }
@@ -6220,6 +6438,24 @@ trait MinaTrait {
                             case 10121:
                                 $tri_real = $this->avgtrirealpor[5];
                             break;
+                            case 10124:
+                                $tri_real = $this->avgtrirealpor[6];
+                            break;
+                            case 10125:
+                                $tri_real = $this->avgtrirealpor[7];
+                            break;
+                            case 10127:
+                                $tri_real = $this->avgtrirealpor[8];
+                            break;
+                            case 10128:
+                                $tri_real = $this->avgtrirealpor[9];
+                            break;
+                            case 10129:
+                                $tri_real = $this->avgtrirealpor[10];
+                            break;
+                            case 10130:
+                                $tri_real = $this->avgtrirealpor[11];
+                            break;
                             case 10117: 
                                 $tri_real = $this->sumtrirealton[19];
                             break;
@@ -6243,7 +6479,7 @@ trait MinaTrait {
                         if(isset($tri_real->tri_real))
                         {
                             $m_real = $tri_real->tri_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -6507,6 +6743,24 @@ trait MinaTrait {
                             case 10121:
                                 $trimestre_budget = $this->avgtribudgetpor[5];
                             break;
+                            case 10124:
+                                $trimestre_budget = $this->avgtribudgetpor[6];
+                            break;
+                            case 10125:
+                                $trimestre_budget = $this->avgtribudgetpor[7];
+                            break;
+                            case 10127:
+                                $trimestre_budget = $this->avgtribudgetpor[8];
+                            break;
+                            case 10128:
+                                $trimestre_budget = $this->avgtribudgetpor[9];
+                            break;
+                            case 10129:
+                                $trimestre_budget = $this->avgtribudgetpor[10];
+                            break;
+                            case 10130:
+                                $trimestre_budget = $this->avgtribudgetpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -6528,7 +6782,7 @@ trait MinaTrait {
                             if ($trimestre_budget->trimestre_budget > 0)
                             {
                                 $m_budget = $trimestre_budget->trimestre_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -6796,6 +7050,24 @@ trait MinaTrait {
                             case 10121:
                                 $trimestre_forecast = $this->avgtriforecastpor[5];
                             break;
+                            case 10124:
+                                $trimestre_forecast = $this->avgtriforecastpor[6];
+                            break;
+                            case 10125:
+                                $trimestre_forecast = $this->avgtriforecastpor[7];
+                            break;
+                            case 10127:
+                                $trimestre_forecast = $this->avgtriforecastpor[8];
+                            break;
+                            case 10128:
+                                $trimestre_forecast = $this->avgtriforecastpor[9];
+                            break;
+                            case 10129:
+                                $trimestre_forecast = $this->avgtriforecastpor[10];
+                            break;
+                            case 10130:
+                                $trimestre_forecast = $this->avgtriforecastpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -6817,7 +7089,7 @@ trait MinaTrait {
                             if ($trimestre_forecast->trimestre_forecast > 0)
                             {
                                 $m_forecast = $trimestre_forecast->trimestre_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
@@ -7084,6 +7356,24 @@ trait MinaTrait {
                             case 10121:
                                 $anio_real = $this->avganiorealpor[5];
                             break;
+                            case 10124:
+                                $anio_real = $this->avganiorealpor[6];
+                            break;
+                            case 10125:
+                                $anio_real = $this->avganiorealpor[7];
+                            break;
+                            case 10127:
+                                $anio_real = $this->avganiorealpor[8];
+                            break;
+                            case 10128:
+                                $anio_real = $this->avganiorealpor[9];
+                            break;
+                            case 10129:
+                                $anio_real = $this->avganiorealpor[10];
+                            break;
+                            case 10130:
+                                $anio_real = $this->avganiorealpor[11];
+                            break;
                             case 10117: 
                                 $anio_real = $this->sumaniorealton[19];
                             break;
@@ -7107,7 +7397,7 @@ trait MinaTrait {
                         if(isset($anio_real->anio_real))
                         {
                             $m_real = $anio_real->anio_real;
-                            if($m_real > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                            if($m_real > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                             {
                                 return number_format(round($m_real), 0, '.', ',');
                             }
@@ -7371,6 +7661,24 @@ trait MinaTrait {
                             case 10121:
                                 $anio_budget = $this->avganiobudgetpor[5];
                             break;
+                            case 10124:
+                                $anio_budget = $this->avganiobudgetpor[6];
+                            break;
+                            case 10125:
+                                $anio_budget = $this->avganiobudgetpor[7];
+                            break;
+                            case 10127:
+                                $anio_budget = $this->avganiobudgetpor[8];
+                            break;
+                            case 10128:
+                                $anio_budget = $this->avganiobudgetpor[9];
+                            break;
+                            case 10129:
+                                $anio_budget = $this->avganiobudgetpor[10];
+                            break;
+                            case 10130:
+                                $anio_budget = $this->avganiobudgetpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -7392,7 +7700,7 @@ trait MinaTrait {
                             if ($anio_budget->anio_budget > 0)
                             {
                                 $m_budget = $anio_budget->anio_budget;
-                                if($m_budget > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_budget > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_budget), 0, '.', ',');
                                 }
@@ -7660,6 +7968,24 @@ trait MinaTrait {
                             case 10121:
                                 $anio_forecast = $this->avganioforecastpor[5];
                             break;
+                            case 10124:
+                                $anio_forecast = $this->avganioforecastpor[6];
+                            break;
+                            case 10125:
+                                $anio_forecast = $this->avganioforecastpor[7];
+                            break;
+                            case 10127:
+                                $anio_forecast = $this->avganioforecastpor[8];
+                            break;
+                            case 10128:
+                                $anio_forecast = $this->avganioforecastpor[9];
+                            break;
+                            case 10129:
+                                $anio_forecast = $this->avganioforecastpor[10];
+                            break;
+                            case 10130:
+                                $anio_forecast = $this->avganioforecastpor[11];
+                            break;
                             default:
                                 return '-';
                             break;
@@ -7681,7 +8007,7 @@ trait MinaTrait {
                             if ($anio_forecast->anio_forecast > 0)
                             {
                                 $m_forecast = $anio_forecast->anio_forecast;
-                                if($m_forecast > 100 || in_array($data->variable_id, [10114,10115,10116,10118,10119,10121]))
+                                if($m_forecast > 100 || in_array($data->variable_id,  [10114,10115,10116,10118,10119,10121,10124,10125,10127,10128,10129,10130]))
                                 {
                                     return number_format(round($m_forecast), 0, '.', ',');
                                 }
@@ -7723,7 +8049,8 @@ trait MinaTrait {
                     ->rawColumns(['categoria','subcategoria','dia_real','dia_budget','dia_forecast','mes_real','mes_budget', 'mes_forecast', 'trimestre_real', 'trimestre_budget', 'trimestre_forecast' ,'anio_real','anio_budget','anio_forecast','action'])
                     ->addIndexColumn()
                     ->make(true);
-            }           
+            }     
+            //dd($tabla);      
             return $tabla;
         }   
     }

@@ -244,6 +244,9 @@
                         $sub10008 = 1;
                         $sub10010 = 1;
                         $sub10011 = 1;
+                        $sub10014 = 1;
+                        $sub10015 = 1;
+                        $sub10019 = 1;
                     @endphp
                     @foreach($registros as $registro)
                         @if ($registro->subcategoria_id == 1 && $sub1 == 1)
@@ -413,6 +416,15 @@
                         @elseif ($registro->subcategoria_id == 10011 && $sub10011 == 1)
                             {{ $sub10011 = 0 }}
                             <tr><td colspan="<?php echo $colspan;?>"  class="header-categoria">DISPONIBILIDAD MECANICA - FLOTA ACARREO</td></tr>
+                        @elseif ($registro->subcategoria_id == 10014 && $sub10014 == 1)
+                            {{ $sub10014 = 0 }}
+                            <tr><td colspan="<?php echo $colspan;?>"  class="header-categoria">UTILIZACIÓN - FLOTA PERFORACION</td></tr>
+                        @elseif ($registro->subcategoria_id == 10015 && $sub10015 == 1)
+                            {{ $sub10015 = 0 }}
+                            <tr><td colspan="<?php echo $colspan;?>"  class="header-categoria">UTILIZACIÓN - FLOTA CARGUIO</td></tr>
+                        @elseif ($registro->subcategoria_id == 10019 && $sub10019 == 1)
+                            {{ $sub10019 = 0 }}
+                            <tr><td colspan="<?php echo $colspan;?>"  class="header-categoria">UTILIZACIÓN - FLOTA ACARREO</td></tr>
                         @endif
 
                         <tr>
