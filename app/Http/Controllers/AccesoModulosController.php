@@ -17,7 +17,7 @@ class AccesoModulosController extends Controller
     {
         if (request()->ajax()) {
             $list = DB::table('model_has_permissions as A')
-                        ->select('A.permission_id as permission_id','A.model_id as model_id','C.email as correo','B.name as modulo')
+                        ->select('A.id','A.permission_id as permission_id','A.model_id as model_id','C.email as correo','B.name as modulo')
                         ->join('permissions as B','A.permission_id','=','B.id')
                         ->join('users as C','A.model_id','=','C.id')
                         ->get();
@@ -26,8 +26,7 @@ class AccesoModulosController extends Controller
                     ->addColumn('action', function($data)
                     {
                         $button = ''; 
-
-                        $button .= '<a href="javascript:void(0)" name="delete" data-id="'.$data->permission_id.'" id="'.$data->model_id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
+                        $button .= '<a href="javascript:void(0)" name="delete" id="'.$data->id.'" class="btn-action-table delete" title="Eliminar registro"><i class="fa fa-times-circle text-danger"></i></a>';
                         return $button;
                     })
                     ->rawColumns(['action'])
@@ -80,13 +79,10 @@ class AccesoModulosController extends Controller
             return;                
         }
     }
-    public function delete(Request $request)
+    public function delete($id)
     {
-        $model_id = $request->get('model_id');
-        $permission_id = $request->get('permissions_id');
-        $generic = DB::delete('delete from model_has_permissions where permission_id ="'.$permission_id.'" and model_id="'.$model_id.'"');
+        $deleted = DB::table('model_has_permissions')->where('id', (int)$id)->delete();
         return;
-        
     }
 
 }

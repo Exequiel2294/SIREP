@@ -669,6 +669,22 @@
                                                 return $dia_porcentaje+'%';
                                             break;                                                
                                         }  
+                                    
+                                    } else if (row['variable'] == 'Cemento' || row['variable']=='Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case  $dia_porcentaje > 100:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;
+                                                
+                                        }   
 
                                     } else if (row['variable'] == 'P80') {
 
@@ -727,8 +743,6 @@
                                         }    
 
                                     }
-
-                                    
                                 }
                                 else
                                 {
@@ -738,8 +752,7 @@
                             else
                             {
                                 return '-';
-                            }
-                                         
+                            }              
                         }
                     },
                     {data: null, name:'per_budget', orderable: false,searchable: false,
@@ -769,6 +782,22 @@
                                             break;                                                
                                         }  
 
+                                    } else if (row['variable'] == 'Cemento' || row['variable']=='Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case  $dia_porcentaje > 100:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;
+                                                
+                                        }   
+
                                     } else if (row['variable'] == 'P80') {
 
                                         switch(true)
@@ -825,9 +854,7 @@
                                             break;   
                                         }    
 
-                                    }
-
-                                    
+                                    }   
                                 }
                                 else
                                 {
@@ -837,8 +864,7 @@
                             else
                             {
                                 return '-';
-                            }
-                                         
+                            }               
                         }
                     },
                     {data:'mes_real', name:'mes_real', orderable: false,searchable: false},
@@ -870,6 +896,21 @@
                                                 return $mes_porcentaje+'%';
                                             break;                                                
                                         } 
+
+                                    } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case  $mes_porcentaje > 100 :
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                    
+                                        }
 
                                     } else if ( row['variable'] == 'P80' ) {
 
@@ -960,6 +1001,21 @@
                                                 return $mes_porcentaje+'%';
                                             break;                                                
                                         } 
+
+                                    } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case  $mes_porcentaje > 100 :
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                    
+                                        }
 
                                     } else if ( row['variable'] == 'P80' ) {
 
@@ -1056,7 +1112,22 @@
                                             break;                                                
                                         } 
 
-                                    }else if (row['variable'] == 'P80') {
+                                    } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case  $trimestre_porcentaje > 100 :
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                    
+                                        }
+
+                                    } else if (row['variable'] == 'P80') {
 
                                         switch(true)
                                         {
@@ -1074,7 +1145,7 @@
                                             break;                                                    
                                         }
 
-                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
 
                                         switch(true)
                                         {
@@ -1150,7 +1221,22 @@
                                             break;                                                
                                         } 
 
-                                    }else if (row['variable'] == 'P80') {
+                                    } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case  $trimestre_porcentaje > 100 :
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                    
+                                        }
+
+                                    } else if (row['variable'] == 'P80') {
 
                                         switch(true)
                                         {
@@ -1168,7 +1254,7 @@
                                             break;                                                    
                                         }
 
-                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
 
                                         switch(true)
                                         {
@@ -1248,7 +1334,22 @@
                                                 
                                         } 
 
-                                    }else if (row['variable'] == 'P80') {
+                                    } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case  $anio_porcentaje > 100 :
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
+                                        }
+
+                                    } else if (row['variable'] == 'P80') {
 
                                         switch(true)
                                         {
@@ -1266,7 +1367,7 @@
                                             break;                                                
                                         }
 
-                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
 
                                         switch(true)
                                         {
@@ -1345,7 +1446,22 @@
                                                 
                                         } 
 
-                                    }else if (row['variable'] == 'P80') {
+                                    } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
+
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje <= 100:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case  $anio_porcentaje > 100 :
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
+                                        }
+
+                                    } else if (row['variable'] == 'P80') {
 
                                         switch(true)
                                         {
@@ -1363,7 +1479,7 @@
                                             break;                                                
                                         }
 
-                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
 
                                         switch(true)
                                         {

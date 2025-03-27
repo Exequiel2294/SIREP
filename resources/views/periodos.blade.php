@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Acceso Modulo')
+@section('title', 'Periodos')
 @section('post_title', config('app.name'))
 
 @section('content_header')
     <div class="section-header">
         <div>
-            <h1>Acceso Modulo</h1>
+            <h1>Periodos Mensuales</h1>
             <a href="javascript:void(0)" class="btn btn-success" id="add">Añadir</a> 
         </div> 
     </div>  
@@ -130,9 +130,6 @@
 
 
         /* DATATABLES */
-        .table thead th{
-            vertical-align: middle !important;
-        }
         .datatables-p {
             display: flex;
             justify-content: center;
@@ -254,7 +251,29 @@
                 }, 
             350);
         });
+        /*PRESS NAV-LINK BUTTON*/
 
+        /*Fechas*/
+        if ( moment().startOf('month').format('YYYY-MM-DD') === moment().format('YYYY-MM-DD') ) {
+            var date_fd = moment().subtract(1, "month").startOf('month').format('YYYY-MM-DD');
+        }
+        else {
+            var date_fd = moment().startOf('month').format('YYYY-MM-DD');
+        }
+        var date_fh = moment().subtract(1, "days");
+        var table;
+        $(function(){
+            /* Calendario Fecha desde*/
+            $('.datetimepicker-input').datetimepicker({
+                format: 'YYYY-MM-DD',
+                defaultDate: date_fd,
+                useCurrent: false,
+            });
+            $(".fecha-picker").on("change.datetimepicker", function (e) {
+                date_fd = e.date;
+            });
+        })
+        /*Fin de fechas*/
         /* DATATABLES */
         $(document).ready(function(){     
             $("#data-table").DataTable({
@@ -262,7 +281,6 @@
                          "<'datatables-s'<'datatables-length'l><'datatables-filter'f>>" +
                          "<'datatables-t'<'datatables-table'tr>>" + 
                          "<'datatables-c'<'datatables-information'i><'datatables-processing'p>>",
-                //Desactivar los botones
                 buttons: [
                     {
                         extend: 'copyHtml5', 
@@ -270,18 +288,18 @@
                     }, 
                     {
                         extend: 'csvHtml5',
-                        title: 'Listado OST '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoOST'+moment().local().format('DD/MM/YYYY')
+                        title: 'Listado Area '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoArea'+moment().local().format('DD/MM/YYYY')
                     }, 
                     {
                         extend: 'excelHtml5',
-                        title: 'Listado OST '+moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoOST'+moment().local().format('DD/MM/YYYY')            
+                        title: 'Listado Area '+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoArea'+moment().local().format('DD/MM/YYYY')            
                     }, 
                     {
                         extend: 'pdfHtml5',
                         title: moment().local().format('DD/MM/YYYY'),
-                        filename: 'ListadoOST'+moment().local().format('DD/MM/YYYY'),
+                        filename: 'ListadoArea'+moment().local().format('DD/MM/YYYY'),
                         customize: function ( doc ) {
                             doc.styles.title.alignment = 'right';
                             doc.styles.title.fontSize = 12;
@@ -290,7 +308,7 @@
                     {
                         extend: 'print', 
                         text: 'Imprimir',
-                        title: 'Listado OST '+moment().local().format('DD/MM/YYYY'),
+                        title: 'Listado Area '+moment().local().format('DD/MM/YYYY'),
                     }
                 ],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -300,7 +318,7 @@
                 responsive: true,
                 scrollX : true,
                 ajax:{                
-                    url: "{{route('acceso_modulo')}}",
+                    url: "{{route('periodo_mensual')}}",
                     type: 'GET',
                 },
                 "language": {
@@ -319,75 +337,51 @@
                     "sProcessing":"Procesando...",
                 },
                 columns: [
-                    {data:'id', name:'id'},
-                    {data:'correo', name:'correo'},
-                    {data:'modulo', name:'modulo'},
+                    {data:'anio', name:'anio'},
+                    {data:'periodo', name:'periodo'},
+                    {data:'fecha_ini', name:'fecha_ini'},
+                    {data:'fecha_fin', name:'fecha_fin'},
+                    {data:'descripcion', name:'descripcion'},
+                    
                     {data:'action', name:'action', orderable: false,searchable: false, width:'50px'}
                 ],
-                order: [[0, 'asc']]            
+                order: [[0, 'desc']]            
             });
-            // AJAX REQUEST traer los correos de la tabla
-            $.ajax({
-                url:"{{route('acceso_modulo.getcorreos')}}",
-                type:'GET',
-                dataType:'json',
-                success:function(response)
-                {
-                    var len = 0;
-                    if(response['data'] != null){
-                        len=response['data'].length;
-                    }
-                    if (len > 0) {
-                        for (var i = 0; i < len; i++) {
-                            var id=response['data'][i].id;
-                            var email = response['data'][i].email;
-                            var optionCorreo = "<option value='"+id+"'>"+email+"</option></div>";
-                            $("#correo").append(optionCorreo);
-                        }
-                    }
-
-                }
-                
-            })
-            // AJAX REQUEST traer los Modulos de la tabla
-            $.ajax({
-                url:"{{route('acceso_modulo.getmodulos')}}",
-                type:'GET',
-                dataType:'json',
-                success:function(response)
-                {
-                    var len = 0;
-                    if(response['data'] != null){
-                        len=response['data'].length;
-                    }
-                    if (len > 0) {
-                        for (var i = 0; i < len; i++) {
-                            var id=response['data'][i].id;
-                            var name = response['data'][i].name;
-                            var optionModulo = "<option value='"+id+"'>"+name+"</option></div>";
-                            $("#modulo").append(optionModulo);
-                        }
-                    }
-
-                }
-                
-            })
         });
         /* DATATABLES */
 
         /* ADD BUTTON*/
         $('#add').click(function () { 
             $('#form-button').val(1);     
-            $('#modal-title').html('Cargar ost'); 
+            $('#modal-title').html('Cargar un periodo mensual'); 
             $('#modal-form').trigger("reset"); 
             $('#modal').modal('show');  
             $('#id').val('');   
         });
         /* ADD BUTTON*/
 
+         /* EDIT BUTTON */
+        $(document).on('click', '.edit', function(){ 
+            var id=$(this).data('id');
+            $.get('periodo_mensual/'+id+'/edit', function(data){
+                $('#form-button').val(0); 
+                $('#modal-title').html('Editar un periodo mensual'); 
+                $('#modal-form').trigger("reset"); 
+                $('#modal').modal('show');
+                $('#id').val(data.id); 
+                $('#anio').val(data.anio);                          
+                $('#periodo').val(data.periodo).attr("selected", "selected");                   
+                $('#descripcion').val(data.descripcion);
+                $('#fecha_ini').val(data.fecha_ini);
+                $('#fecha_fin').val(data.fecha_fin);
+            })
+        });    
+        /* EDIT BUTTON */
+
         /* DELETE BUTTON */  
         $(document).on('click', '.delete', function() {
             let id = $(this).attr('id');
+            console.log(id);
             const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
@@ -407,7 +401,7 @@
             }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "acceso_modulo/" + id,
+                    url: "periodo_mensual/" + id,
                     type: 'delete',
                     data:{_token: $('input[name="_token"]').val()},
                     success: function (data) { 
@@ -445,23 +439,53 @@
         /* DELETE BUTTON */
         
 
-        /* FORM BUTTON */        
+        /* FORM BUTTON */ 
+        // Definir el método personalizado antes de la validación
+        $.validator.addMethod("year", function(value, element) {
+            return this.optional(element) || /^(19|20)\d{2}$/.test(value);
+        }, "Ingrese un año válido entre 1900 y 2099.");
+
+        $.validator.addMethod("validDate", function(value, element) {
+            return this.optional(element) || /^\d{4}-\d{2}-\d{2}$/.test(value);
+        }, "Ingrese una fecha válida en formato YYYY-MM-DD.");       
+
         $("#modal-form").validate({
             rules: {
-                intelex:{
-                    required:true,
-                    number:true,
-                    min:1
+                anio: {
+                    required: true,
+                    digits: true,
+                    year: true
                 },
-                fecha:{
-                    required:true
+                fecha_ini: {
+                    required: true,
+                    validDate:true
                 },
-                dni:{
-                    required:true
+                fecha_fin: {
+                    required: true,
+                    validDate:true
+                },
+                periodo: {
+                    required: true
                 }
             },
             messages: {  
-         
+                anio: {
+                    required: "El año es obligatorio.",
+                    digits: "Ingrese solo números.",
+                    year: "Ingrese un año válido entre 1900 y 2099."
+                },
+                fecha_ini: {
+                    required: "La fecha es obligatoria.",
+                    validDate: "Ingrese una fecha válida en formato YYYY-MM-DD."
+                },
+                fecha_fin: {
+                    required: "La fecha es obligatoria.",
+                    validDate: "Ingrese una fecha válida en formato YYYY-MM-DD."
+                },
+                periodo: {
+                    required: "Seleccione un periodo valido"
+                }
+                
             },
             errorElement: 'span', 
             errorClass: 'help-block help-block-error', 
@@ -497,19 +521,23 @@
         });
 
         $("#form-button").click(function(){
-     
             if($("#modal-form").valid()){
                 $('#form-button').html('Guardando..');
                 $.ajax({
-                    url:"{{route('acceso_modulo.load') }}",
+                    url:"{{route('periodo_mensual.load') }}",
                     method:"POST",
                     data:{
-                        permissions_id:$('#modulo').val(),
-                        model_id:$('#correo').val(),
+                        id: $("#id").val(),
+                        anio:$('#anio').val(),
+                        periodo:$('#periodo').val(),
+                        descripcion:$('#descripcion').val(),
+                        fecha_ini:$('#fecha_ini').val(),
+                        fecha_fin:$('#fecha_fin').val(),
                         _token: $('input[name="_token"]').val()
                     },
                     success:function(data)
                     {  
+                        console.log(data);
                         $('#modal').scrollTop(0);
                         if($.isEmptyObject(data.error)){
                             $('#modal').modal('hide');
@@ -519,10 +547,10 @@
                             var oTable = $('#data-table').dataTable();
                             oTable.fnDraw(false);
                             if($('#form-button').val() == 1){
-                                MansfieldRep.notification('Se registro con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Area cargada con exito', 'MansfieldRep', 'success');
                             }   
                             else{
-                                MansfieldRep.notification('Se registro con exito', 'MansfieldRep', 'success');
+                                MansfieldRep.notification('Area actualizada con exito', 'MansfieldRep', 'success');
                             } 
                         }else{
                             $('#form-button').html('Guardar Cambios');
@@ -563,19 +591,19 @@
     <div class="row" style="justify-content: center; overflow:auto;">
         <div class="generic-card">
             <div class="card">
-                <div class="generic-body">
-                    {{-- DATATABLE - Acceso a Modulos --}}        
+                <div class="generic-body">        
                     <table style="width:100%" class="table table-striped table-bordered table-hover datatable" id="data-table">
                         <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>Correo</th>
-                                <th>Modulo</th>
-                                <th style="min-width:50px!important;"></th>    
+                            <tr>    
+                                <th>Año</th>
+                                <th>Periodo</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Descripcion</th>
+                                <th style="min-width:50px!important;"></th>            
                             </tr>
                         </thead>      
                     </table>                
-                    {{-- END - DATATABLE - Acceso a Modulos --}}
                 </div>
             </div>
         </div> 
@@ -602,29 +630,55 @@
                 <div class="modal-bod">
                     <form action="post" id="modal-form" name="modal-form" autocomplete="off">
                         <input type="hidden" name="id" id="id">
-
-                         {{--Dropdown correos--}}
-                         <div class="form-group">
-                            <label for="correo" class="col-form-label">Correo:</label>
-                            <div class="col-sm">
-                                <select class='form-control' id='correo' name='sel_correo'>
-                                <option value='0'>Seleccione un correo</option>
-                                </select>
+                        <div class="form-group row">
+                            <label for="anio" class="col-sm-2 col-form-label">Año</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="anio" name="anio" placeholder="Año">
                             </div>
                         </div>
-                        {{--Dropdown correos--}}
-
-                        {{--Dropdown modulo--}}
-                        <div class="form-group">
-                            <label for="modulo" class="col-form-label">Modulo:</label>
-                            <div class="col-sm">
-                                <select class='form-control' id='modulo' name='sel_modulo'>
-                                <option value='0'>Seleccione un modulo</option>
-                                </select>
+                        <div class="form-group row">
+                            <label for="periodo" class="col-sm-2 col-form-label">Periodo:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control company" name="periodo" id="periodo">
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                    <option value=3>3</option>
+                                    <option value=4>4</option>
+                                    <option value=5>5</option>
+                                    <option value=6>6</option>
+                                    <option value=7>7</option>
+                                    <option value=8>8</option>
+                                    <option value=9>9</option>
+                                    <option value=10>10</option>
+                                    <option value=11>11</option>
+                                    <option value=12>12</option>
+                                </select> 
+                            </div>
+                        </div> 
+                        <div class="form-group row">
+                            <label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción">
                             </div>
                         </div>
-                        {{--Dropdown modulo--}}
-
+                        <div class="form-group row">
+                            <label for="periodo" class="col-sm-2 col-form-label">Fecha Inicio</label> 
+                            <div class="col-sm-10">
+                                <div class="input-group-append" data-target="#fecha_ini" data-toggle="datetimepicker">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_ini" id="fecha_ini" name="fecha_ini"/>
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="periodo" class="col-sm-2 col-form-label">Fecha Fin</label> 
+                            <div class="col-sm-10">
+                                <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin"/>
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>         
                         @csrf
                     </form>
                 </div>

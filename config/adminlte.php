@@ -315,6 +315,27 @@ return [
             'can'  => 'conciliate module'
         ],
         [
+            'text' => 'Periodos',
+            'url'  => '#',
+            'icon' => 'nav-icon fas fa-calendar',
+            'can'  => 'periodos module',
+            'submenu' => 
+            [
+                [
+                    'text' => 'Mensual',
+                    'url'  => 'periodo_mensual',
+                    'icon' => 'nav-icon far fa-calendar-alt',
+                    'can'  => 'periodo module mensual',
+                ],
+                [
+                    'text' => 'Trimestral',
+                    'url'  => 'periodo_tri',
+                    'icon' => 'nav-icon far fa-calendar-alt',
+                    'can'  => 'periodo module trimestral',
+                ]
+            ]
+        ],
+        [
             'header' => 'Administración',
             'can'   => 'Admin'
         ],

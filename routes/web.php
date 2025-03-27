@@ -225,7 +225,24 @@ Route::group(['middleware' => ['auth', 'role:Admin']], function() {
     Route::post('acceso_modulo/load', 'AccesoModulosController@load')->name('acceso_modulo.load');
     Route::get('acceso_modulo/getcorreos', 'AccesoModulosController@getcorreos')->name('acceso_modulo.getcorreos');
     Route::get('acceso_modulo/getmodulos', 'AccesoModulosController@getmodulos')->name('acceso_modulo.getmodulos');
-    //Route::get('acceso_modulo/{id}/edit','AccesoModulosController@edit')->name('acceso_modulo.edit');
-    //Route::get('acceso_modulo/{dni}/GetEmpleado','AccesoModulosController@GetEmpleado')->name('acceso_modulo.GetEmpleado');
-    Route::delete('acceso_modulo/delete','AccesoModulosController@delete')->name('acceso_modulo.delete');
+    Route::delete('acceso_modulo/{id}','AccesoModulosController@delete')->name('acceso_modulo.delete');
+});
+/**
+ * Creacion de la route para Periodos Mensuales y Trimestrales
+ */
+Route::group(['middleware' => ['auth', 'permission:periods module']], function() {
+    /**
+     * Periodo Mensuales
+     */
+    Route::get('periodo_mensual', 'PeriodosController@index')->name('periodo_mensual'); 
+    Route::post('periodo_mensual/load', 'PeriodosController@load')->name('periodo_mensual.load');
+    Route::get('periodo_mensual/{id}/edit','PeriodosController@edit')->name('periodo_mensual.edit');
+    Route::delete('periodo_mensual/{id}','PeriodosController@delete')->name('periodo_mensual.delete');
+    /**
+     * Periodo Trimestral
+     */
+    Route::get('periodo_tri', 'PeriodosTriController@index')->name('periodo_tri'); 
+    Route::post('periodo_tri/load', 'PeriodosTriController@load')->name('periodo_tri.load');
+    Route::get('periodo_tri/{id}/edit','PeriodosTriController@edit')->name('periodo_tri.edit');
+    Route::delete('periodo_tri/{id}','PeriodosTriController@delete')->name('periodo_tri.delete');
 });

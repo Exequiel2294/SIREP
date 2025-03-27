@@ -108,10 +108,10 @@ trait ProcesosTrait {
         
         //INICIO CALCULOS REUTILIZABLES
             //TOMAMOS LA FECHA DEL REQUEST
-            $requestDay = date('Y-m-d',strtotime($this->date));
-            $year = (int)date('Y', strtotime($this->date));
-            $daypart = (int)date('z', strtotime($this->date)) + 1;
-            $month = (int)date('m', strtotime($this->date));//veremos
+                $requestDay = date('Y-m-d',strtotime($this->date));
+                $year = (int)date('Y', strtotime($this->date));
+                $daypart = (int)date('z', strtotime($this->date)) + 1;
+                $month = (int)date('m', strtotime($this->date));//veremos
             //TAMBIEN HACER MODIFICACION AQUI PARA QUE
                 //MES REAL
                     $this->summesreal10005 =
