@@ -82,10 +82,10 @@ class SendDailyReportIntranet extends Command
                 $date = $this->date;
                 
                 $columnsVisibility = [true, true, true, true];
-                $focastVisibility = 0;//Para volver a la normalidad hay que cambiar el valor a 1
+                $focastVisibility = 1;//Para volver a la normalidad hay que cambiar el valor a 1
                 $budgetVisibility = 1;
-                $colspanTFrame = 3;
-                $colspan = 16;//Tener en cuenta esto cuando se haga un cambio ya que es la fila que subdivide entre las variables
+                $colspanTFrame = 6;
+                $colspan = 22;//Tener en cuenta esto cuando se haga un cambio ya que es la fila que subdivide entre las variables
     
                 $pdf = Pdf::loadView('pdf.customizeColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
                 $pdf->set_paper('a3', 'portrait');

@@ -128,25 +128,23 @@
                         @if ($columnsVisibility[3] == 'true')
                         <!--21/01/2025 modificacion para mostrar solo lo que es budget-->
                         <!--Para volverlo a la normalidad hay que agregar en "colspan=5"-->
-                            <th colspan="3">AÑO</th>   
+                            <th colspan="5">AÑO</th>   
                         @endif
                     </tr>
                     <tr>
 
                         @if ($columnsVisibility[0] == 'true')
-                            <!--El budgetvisibility=1 y focastvisivility=1-->
-                            <!--Modificacion del condicional para que muestre solo Real vs Forecast-->
+                            <!--Modificacion del codigo en donde se mostrara bdgt vs fcs para d,m,tri-->
                             @if( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Forecast</th>
                                 <th>Budget</th>
                                 <th>% F</th>
                                 <th>% B</th>
-                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Budget</th>
                                 <th>% B</th>
-                            <!--Siempres se va a cumplir esta condicion-->
                             @elseif( $budgetVisibility == 1 && $focastVisibility == 1 )
                                 <th>Real</th>
                                 <th>Forecast</th>
@@ -158,18 +156,17 @@
                         @endif
 
                         @if ($columnsVisibility[1] == 'true')
-                            <!--El budgetvisibility=1 y focastvisivility=1-->
+                            <!--Modificacion del codigo en donde se mostrara bdgt vs fcs para d,m,tri-->
                             @if( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Forecast</th>
                                 <th>Budget</th>
                                 <th>% F</th>
                                 <th>% B</th>
-                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Budget</th>
                                 <th>% B</th>
-                            <!--Siempres se va a cumplir esta condicion-->
                             @elseif( $budgetVisibility == 1 && $focastVisibility == 1 )
                                 <th>Real</th>
                                 <th>Forecast</th>
@@ -181,18 +178,17 @@
                         @endif
 
                         @if ($columnsVisibility[2] == 'true')
-                             <!--El budgetvisibility=1 y focastvisivility=1-->
+                             <!--Modificacion del codigo en donde se mostrara bdgt vs fcs para d,m,tri-->
                             @if( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Forecast</th>
                                 <th>Budget</th>
                                 <th>% F</th>
                                 <th>% B</th>
-                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Budget</th>
                                 <th>% B</th>
-                             <!--Siempres se va a cumplir esta condicion-->
                             @elseif( $budgetVisibility == 1 && $focastVisibility == 1 )
                                 <th>Real</th>
                                 <th>Forecast</th>
@@ -205,18 +201,18 @@
 
                         @if ($columnsVisibility[3] == 'true')
                             <!--El budgetvisibility=1 y focastvisivility=1-->
-                            <!--Esta es la condicion correcta-->
                             @if( $budgetVisibility == 1 && $focastVisibility == 1 )
                                 <th>Real</th>
                                 <th>Forecast</th>
                                 <th>Budget</th>
                                 <th>% F</th>
                                 <th>% B</th>
-                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                            <!--Esta condicion es la correcta para que se ejecuta bdgt vs real-->
+                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Budget</th>
                                 <th>% B</th>
-                            @elseif( $budgetVisibility == 0 && $focastVisibility == 1 )
+                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                 <th>Real</th>
                                 <th>Forecast</th>
                                 <th>% F</th>
@@ -270,9 +266,7 @@
                                             <th colspan="3">TRIMESTRE</th>
                                         @endif
                                         @if ($columnsVisibility[3] == 'true')
-                                        <!--24/01/2025 modificacion para mostrar solo lo que es budget-->
-                                        <!--Para volverlo a la normalidad hay que agregar en "colspan=5"-->
-                                            <th colspan="3">AÑO</th>   
+                                            <th colspan="5">AÑO</th>   
                                         @endif
 
                                     </tr>
@@ -286,7 +280,7 @@
                                                 <th>Budget</th>
                                                 <th>% F</th>
                                                 <th>% B</th>
-                                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                                 <th>Real</th>
                                                 <th>Budget</th>
                                                 <th>% B</th>
@@ -309,7 +303,7 @@
                                                 <th>Budget</th>
                                                 <th>% F</th>
                                                 <th>% B</th>
-                                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                                 <th>Real</th>
                                                 <th>Budget</th>
                                                 <th>% B</th>
@@ -332,7 +326,7 @@
                                                 <th>Budget</th>
                                                 <th>% F</th>
                                                 <th>% B</th>
-                                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                                 <th>Real</th>
                                                 <th>Budget</th>
                                                 <th>% B</th>
@@ -355,11 +349,11 @@
                                                 <th>Budget</th>
                                                 <th>% F</th>
                                                 <th>% B</th>
-                                            @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                                 <th>Real</th>
                                                 <th>Budget</th>
                                                 <th>% B</th>
-                                            @elseif( $budgetVisibility == 0 && $focastVisibility == 1 )
+                                            @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
                                                 <th>Real</th>
                                                 <th>Forecast</th>
                                                 <th>% F</th>
@@ -689,7 +683,7 @@
                                         @endif
                                     @endif
 
-                                @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
 
                                     <td class="text-center">{{$registro->dia_real}}</td>
                                     <td class="text-center">{{$registro->dia_budget}}</td>                                    
@@ -883,7 +877,7 @@
                                         @endif
                                     @endif
 
-                                @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
 
                                     <td class="text-center">{{$registro->mes_real}}</td>
                                     <td class="text-center">{{$registro->mes_budget}}</td>
@@ -1078,7 +1072,7 @@
                                     @endif
 
 
-                                @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
 
                                     <td class="text-center">{{$registro->trimestre_real}}</td>
                                     <td class="text-center">{{$registro->trimestre_budget}}</td>
@@ -1272,7 +1266,7 @@
                                         @endif
                                     @endif
 
-                                @elseif( $budgetVisibility == 1 && $focastVisibility == 0 )
+                                @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
 
                                     <td class="text-center">{{$registro->anio_real}}</td>
                                     <td class="text-center">{{$registro->anio_budget}}</td>
@@ -1319,7 +1313,7 @@
                                         @endif
                                     @endif
 
-                                @elseif( $budgetVisibility == 0 && $focastVisibility == 1 )
+                                @elseif( $budgetVisibility == 0 && $focastVisibility == 0 )
    
                                     <td class="text-center">{{$registro->anio_real}}</td>
                                     <td class="text-center">{{$registro->anio_forecast}}</td>
