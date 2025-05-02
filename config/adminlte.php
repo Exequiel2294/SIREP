@@ -318,7 +318,7 @@ return [
             'text' => 'Periodos',
             'url'  => '#',
             'icon' => 'nav-icon fas fa-calendar',
-            'can'  => 'periodos module',
+            'can'  => 'periods module',
             'submenu' => 
             [
                 [
