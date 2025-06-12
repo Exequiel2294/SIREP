@@ -639,8 +639,7 @@
                                 return '<span class="complete_value" data-id="'+row['id']+'">'+data+'</span>';
                             }
                             return data;
-                        }
-                    },
+                        }},
                     {data:'dia_forecast', name:'dia_forecast', orderable: false,searchable: false},
                     {data:'dia_budget', name:'dia_budget', orderable: false,searchable: false},
                     {data: null, name:'per_forecast', orderable: false,searchable: false,
@@ -653,20 +652,20 @@
                                 {
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {  
-
+                                        $dia_AuBLS_porcentaje = Math.round(((1)-(($d_real-$d_budget)/$d_budget))*100)
                                         switch(true)
                                         {
-                                            case $dia_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            case $dia_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$dia_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            case $dia_AuBLS_porcentaje < 95 && $dia_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$dia_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $dia_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            case  $dia_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$dia_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $dia_porcentaje+'%';
+                                                return $dia_AuBLS_porcentaje+'%';
                                             break;                                                
                                         }  
                                     
@@ -765,22 +764,22 @@
                                 {
                                     $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {  
-
+                                        $dia_AuBLS_porcentaje = Math.round(((1)-(($d_real-$d_budget)/$d_budget))*100)
                                         switch(true)
                                         {
-                                            case $dia_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            case $dia_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$dia_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $dia_porcentaje > 90 && $dia_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            case $dia_AuBLS_porcentaje < 95 && $dia_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$dia_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $dia_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            case  $dia_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$dia_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $dia_porcentaje+'%';
+                                                return $dia_AuBLS_porcentaje+'%';
                                             break;                                                
-                                        }  
+                                        }
 
                                     } else if (row['variable'] == 'Cemento' || row['variable']=='Adición de Cemento') {
 
@@ -880,22 +879,22 @@
                                 {
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-
+                                        $mes_AuBLS_porcentaje = Math.round(((1)-(($m_real-$m_budget)/$m_budget))*100)
                                         switch(true)
                                         {
-                                            case $mes_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            case $mes_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            case $mes_AuBLS_porcentaje < 95 && $mes_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $mes_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            case  $mes_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $mes_porcentaje+'%';
+                                                return $mes_AuBLS_porcentaje+'%';
                                             break;                                                
-                                        } 
+                                        }
 
                                     } else if (row['variable'] == 'Cemento' || row['variable']== 'Adición de Cemento') {
 
@@ -984,21 +983,22 @@
                                 if($m_budget != 0.00)
                                 {
                                     $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
-                                    if ( row['variable'] == 'Ley de Au BLS' ) {
 
+                                    if ( row['variable'] == 'Ley de Au BLS' ) {
+                                        $mes_AuBLS_porcentaje = Math.round(((1)-(($m_real-$m_budget)/$m_budget))*100)
                                         switch(true)
                                         {
-                                            case $mes_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            case $mes_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $mes_porcentaje > 90 && $mes_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            case $mes_AuBLS_porcentaje < 95 && $mes_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $mes_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            case  $mes_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $mes_porcentaje+'%';
+                                                return $mes_AuBLS_porcentaje+'%';
                                             break;                                                
                                         } 
 
@@ -1095,20 +1095,20 @@
                                 {
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-
+                                        $trimestre_AuBLS_porcentaje = Math.round(((1)-(($t_real-$t_budget)/$t_budget))*100)
                                         switch(true)
                                         {
-                                            case $trimestre_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            case $trimestre_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$trimestre_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            case $trimestre_AuBLS_porcentaje < 95 && $trimestre_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $trimestre_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            case  $trimestre_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$trimestre_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $trimestre_porcentaje+'%';
+                                                return $trimestre_AuBLS_porcentaje+'%';
                                             break;                                                
                                         } 
 
@@ -1205,19 +1205,20 @@
                                     $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
 
+                                        $trimestre_AuBLS_porcentaje = Math.round(((1)-(($t_real-$t_budget)/$t_budget))*100)
                                         switch(true)
                                         {
-                                            case $trimestre_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            case $trimestre_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$trimestre_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $trimestre_porcentaje > 90 && $trimestre_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            case $trimestre_AuBLS_porcentaje < 95 && $trimestre_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $trimestre_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            case  $trimestre_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$trimestre_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $trimestre_porcentaje+'%';
+                                                return $trimestre_AuBLS_porcentaje+'%';
                                             break;                                                
                                         } 
 
@@ -1316,20 +1317,20 @@
                                 {
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-
+                                        $anio_AuBLS_porcentaje = Math.round(((1)-(($a_real-$a_budget)/$a_budget))*100)
                                         switch(true)
                                         {
-                                            case $anio_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            case $anio_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$anio_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            case $anio_AuBLS_porcentaje < 95 && $anio_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $anio_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            case  $anio_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$anio_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $anio_porcentaje+'%';
+                                                return $anio_AuBLS_porcentaje+'%';
                                             break;
                                                 
                                         } 
@@ -1428,20 +1429,20 @@
                                 {
                                     $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-
+                                        $anio_AuBLS_porcentaje = Math.round(((1)-(($a_real-$a_budget)/$a_budget))*100)
                                         switch(true)
                                         {
-                                            case $anio_porcentaje <= 90:
-                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            case $anio_AuBLS_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$anio_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case $anio_porcentaje > 90 && $anio_porcentaje < 95 :
-                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            case $anio_AuBLS_porcentaje < 95 && $anio_AuBLS_porcentaje >= 90 :
+                                                return '<div class="yellow_percentage">'+$mes_AuBLS_porcentaje+'%</div>';
                                             break;
-                                            case  $anio_porcentaje >= 95 :
-                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            case  $anio_AuBLS_porcentaje < 90 :
+                                                return '<div class="red_percentage">'+$anio_AuBLS_porcentaje+'%</div>';
                                             break;
                                             default:
-                                                return $anio_porcentaje+'%';
+                                                return $anio_AuBLS_porcentaje+'%';
                                             break;
                                                 
                                         } 

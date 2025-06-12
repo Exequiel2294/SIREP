@@ -119,23 +119,23 @@
                         <th>Real</th>
                         <th>Budget</th>
                         <th>Forecast</th>
-                        <th>% F</th>
                         <th>% B</th>
+                        <th>% F</th>
                         <th>Real</th>
                         <th>Budget</th>
                         <th>Forecast</th>
-                        <th>% F</th>
                         <th>% B</th>
+                        <th>% F</th>
                         <th>Real</th>
                         <th>Budget</th>
                         <th>Forecast</th>
-                        <th>% F</th>
                         <th>% B</th>
+                        <th>% F</th>
                         <th>Real</th>
                         <th>Budget</th>
                         <th>Forecast</th>
-                        <th>% F</th>
                         <th>% B</th>
+                        <th>% F</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,6 +146,9 @@
                         $sub10008 = 1;
                         $sub10010 = 1;
                         $sub10011 = 1;
+                        $sub10014 = 1;
+                        $sub10015 = 1;
+                        $sub10019 = 1;
                     @endphp
                     @foreach($registros as $registro)    
                         @if ($registro->subcategoria_id == 10005 && $sub10005 == 1)
@@ -167,15 +170,15 @@
                         @elseif ($registro->subcategoria_id == 10011 && $sub10011 == 1)
                             {{ $sub10011 = 0 }}
                             <tr><td colspan="24"  class="header-categoria">DISPONIBILIDAD MECANICA - FLOTA ACARREO</td></tr>
-                        @elseif ($registro->subcategoria_id == 10014 && $sub10011 == 1)
-                            {{ $sub10011 = 0 }}
-                            <tr><td colspan="24"  class="header-categoria">Utilización - FLOTA PERFORACION</td></tr>
-                        @elseif ($registro->subcategoria_id == 10015 && $sub10011 == 1)
-                            {{ $sub10011 = 0 }}
-                            <tr><td colspan="24"  class="header-categoria">Utilización - FLOTA CARGUIO</td></tr>
-                        @elseif ($registro->subcategoria_id == 10019 && $sub10011 == 1)
-                            {{ $sub10011 = 0 }}
-                            <tr><td colspan="24"  class="header-categoria">Utilización - FLOTA ACARREO</td></tr>
+                        @elseif ($registro->subcategoria_id == 10014 && $sub10014 == 1)
+                            {{ $sub10014 = 0 }}
+                            <tr><td colspan="24"  class="header-categoria">UTILIZACIÓN - FLOTA PERFORACION</td></tr>
+                        @elseif ($registro->subcategoria_id == 10015 && $sub10015 == 1)
+                            {{ $sub10015 = 0 }}
+                            <tr><td colspan="24"  class="header-categoria">UTILIZACIÓN - FLOTA CARGUIO</td></tr>
+                        @elseif ($registro->subcategoria_id == 10019 && $sub10019 == 1)
+                            {{ $sub10019 = 0 }}
+                            <tr><td colspan="24"  class="header-categoria">UTILIZACIÓN - FLOTA ACARREO</td></tr>
                         @endif   
                         <tr>
                             @php
