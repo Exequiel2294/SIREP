@@ -325,13 +325,13 @@ return [
                     'text' => 'Mensual',
                     'url'  => 'periodo_mensual',
                     'icon' => 'nav-icon far fa-calendar-alt',
-                    'can'  => 'periodo module mensual',
+                    #'can'  => 'periodo module mensual',
                 ],
                 [
                     'text' => 'Trimestral',
                     'url'  => 'periodo_tri',
                     'icon' => 'nav-icon far fa-calendar-alt',
-                    'can'  => 'periodo module trimestral',
+                    #'can'  => 'periodo module trimestral',
                 ]
             ]
         ],
