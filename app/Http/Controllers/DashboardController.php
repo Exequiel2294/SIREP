@@ -59,7 +59,8 @@ class DashboardController extends Controller
                 $NumPeriodo = Periodos::where('fecha_ini','<=',$requestDay)
                                     ->where('fecha_fin','>=',$requestDay)
                                     ->value('periodo');
-
+            //PARA LOS DATOS DEL MENSUAL LO QUE HACES ES CON EL REQUEST QUE TRAE UNA FECHA SE FIJA EN QUE PERIODO SE ENCUENTRA
+            //Y EN LA TABALA HAY UN INICIO DE PERIODO Y UN FIN DE PERIODO Y ESTO TRAER EN FECHAINI Y FECHAFIN
                 $fechaIni = Periodos::where('anio', $yearInt)
                                     ->where('periodo', $NumPeriodo)
                                     ->value('fecha_ini');
@@ -70,14 +71,18 @@ class DashboardController extends Controller
             //HASTA AQUI
 
             //TRAE DATOS PARA EL TRIMESTRE
+            //PARA LOS DATOS DEL TRIMESTRAL LO QUE HACE ES QUE CON EL QUARTER CON EL REQUEST QUE TRAE 
                 $fechaIni_Tri = Periodos_tri::where('anio', $yearInt)
-                ->where('periodo', $quarter)
-                ->value('fecha_ini');
+                                            ->where('periodo', $quarter)
+                                            ->value('fecha_ini');
                 $fechaFin_Tri = Periodos_tri::where('anio', $yearInt)
-                ->where('periodo', $quarter)
-                ->value('fecha_fin');
+                                            ->where('periodo', $quarter)
+                                            ->value('fecha_fin');
+
                 $finTri = date('Y-m-d',strtotime($fechaFin_Tri));
                 $iniTri = date('Y-m-d',strtotime($fechaIni_Tri));
+
+                //ACA VERIFICA QUE SI LA FECHA DEL REQUEST ESTA DENTRO DE UN QUARTER U OTRO YA QUE EL TRIMESTRE TIENE FECHA DESFASADA 
                 if( $finTri < $requestDay || $iniTri > $requestDay)
                 {
                     $quarter +=1;

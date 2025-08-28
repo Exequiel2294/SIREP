@@ -115,152 +115,6 @@ trait MinaTrait {
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
                 );
-                //ARMO QUERY DE CONSULTA PARA ONZAS
-                    $query="SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
-                        (SELECT fecha, variable_id, [valor]
-                        FROM [dbo].[data]
-                        where variable_id = 10070) as A
-                        INNER JOIN   
-                        (SELECT fecha, variable_id, [valor]
-                        FROM [dbo].[data]
-                        where variable_id = 10071) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10073) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10074) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10076) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10077) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10079) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10080) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10082) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10083) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10085) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10086) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10088) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10089) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10093) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10094) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10097) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10098) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10100) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10101) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10103) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10104) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ?
-                        UNION 
-                        SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10106) as A
-                        INNER JOIN   
-                        (SELECT fecha, valor
-                        FROM [dbo].[data]
-                        where variable_id = 10107) as B
-                        ON A.fecha = B.fecha
-                        WHERE A.fecha BETWEEN ? AND ? ";
-                //FIN
-                $this->summesrealonz =
-                DB::select($query,[$requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay,
-                                    $requestDayini,$requestDay]);
 
                 $this->avgmesrealpor =
                 DB::select(
@@ -278,7 +132,153 @@ trait MinaTrait {
                     ORDER BY id ASC',
                     [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
                 );
-                //dd($this->avgmesrealpor);
+                //ARMO QUERY DE CONSULTA PARA ONZAS
+                $query="SELECT 10072 as variable_id, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10070) as A
+                    INNER JOIN   
+                    (SELECT fecha, variable_id, [valor]
+                    FROM [dbo].[data]
+                    where variable_id = 10071) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10075, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10073) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10074) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10078, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10076) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10077) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10081, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10079) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10080) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10084, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10082) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10083) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10087, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10085) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10086) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10090, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10088) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10089) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10095, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10093) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10094) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10099, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10097) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10098) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10102, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10100) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10101) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10105, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10103) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10104) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ?
+                    UNION 
+                    SELECT 10108, SUM((A.valor * B.valor)/31.1035) FROM
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10106) as A
+                    INNER JOIN   
+                    (SELECT fecha, valor
+                    FROM [dbo].[data]
+                    where variable_id = 10107) as B
+                    ON A.fecha = B.fecha
+                    WHERE A.fecha BETWEEN ? AND ? ";
+
+                $this->summesrealonz =
+                DB::select($query,[$requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay,
+                                    $requestDayini,$requestDay]);
+                //FIN
             //FIN MES REAL
 
             //INICIO MES BUDGET

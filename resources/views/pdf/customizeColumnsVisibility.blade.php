@@ -257,7 +257,7 @@
                                         <th rowspan="2">NOMBRE</th>
                                         <th rowspan="2">U.</th>
                                         @if ($columnsVisibility[0] == 'true')
-                                            <th colspan="5">DIA</th>
+                                            <th colspan="3">DIA</th>
                                         @endif
                                         @if ($columnsVisibility[1] == 'true')
                                             <th colspan="5">MES</th>
