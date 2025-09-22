@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Area;
 use App\Models\Forecast;
 use App\Models\ForecastHistorial;
+use Dotenv\Result\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class ForecastController extends Controller
 {
@@ -240,10 +242,27 @@ class ForecastController extends Controller
         }
     //FIN
 
-    public function import() {
-        $array  = Excel::toArray(new ForecastImport, 'forecast.xlsx');
-        return redirect('/')->with('success', 'All good!');
-    }
+        public function import(Request $request) {
+            //Funciona correcatmente aunque sea un CSV
+            try{
+                $file=$request->file('excel_file');
+                Excel::import(new ForecastImport, $file);
+
+            return response()->json([
+                'succces' => true,
+                'message'=> 'Importacion realizada correctamente'
+            ]);
+            }catch(\Exception $e){
+                return response()-> json([
+                    'succes'=>false,
+                    'message'=>'Error en la importacion: '. $e->getMessage()],500
+                );
+            }
+            
+            // $array  = Excel::toArray(new ForecastImport, 'forecast.xlsx');
+            // return redirect('/')->with('success', 'All good!');
+            //return redirect()->back()->with('succes','Forecast Imporatdo correctamente');
+        }
 
 
 }

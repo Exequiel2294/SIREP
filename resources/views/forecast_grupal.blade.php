@@ -689,7 +689,7 @@
                                         </div>                                                             
                                         <div style="display: flex;flex-direction: row;justify-content: space-evenly;">  
                                             <button type="button" class="btn btn-success" id="select-button">Cargar Valores</button>        
-                                            <!-- <button type="button" class="btn btn-primary" id="import-button">Importar</button> -->                          
+                                            <button type="button" class="btn btn-primary" id="import-button">Importar</button>                        
                                         </div>    
                                     </div>                                            
                                 </div>                                       
@@ -721,26 +721,24 @@
                     <button type="button" id="close-alert" class="close" aria-hidden="true">×</button>          
                 </div>
                 <div class="modal-bod">
-                    <form action="post" id="modal-form-import" name="modal-form-import" autocomplete="off">
-                         
-                        {{-- <div class="form-group">
-                            <label for="separadordecimal" class="col-sm-12 col-form-label">Pegue Columna o Fila de Datos</label>
-                            <div class="col-sm-12">
-                                <textarea type="text" class="form-control" id="import" name="import" rows="10"></textarea>
-                            </div>
-                        </div> ---}}   
+                    <form id="modal-form-import" name="modal-form-import" autocomplete="off" action="{{ route('forecast.import') }}" method="POST" enctype="multipart/form-data"> 
+                        @csrf
                         <div class="mb-3 form-group">
                             <label for="formFile" class="form-label">Seleccione Excel a Cargar</label>
-                            <input class="form-control" type="file" id="formFile">
+                            <input class="form-control"  type="file" name="excel_file" required id="formFile">
                         </div>          
-                        @csrf
                     </form>
                 </div>
                 <div class="modal-foot">
-                    <button type="button" class="btn btn-primary" id="form-button-import">Cargar Datos</button>
+                    <button type="submit" class="btn btn-primary" id="form-button-import">Cargar Datos</button>
                 </div>
             </div>
         </div>
     </div>
     {{-- MODAL --}}
+    {{-- <form action="{{ route('forecast.import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="excel_file" required>
+    <button type="submit">Importar</button> --}}
+</form>
 @stop

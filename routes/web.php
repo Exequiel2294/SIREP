@@ -69,7 +69,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('historialvariables/getvalores', 'HistorialVariablesController@getvalores')->name('historialvariables.getvalores');
     Route::post('historialvariables/getcolumnas','HistorialVariablesController@getcolumnas')->name('historialvariables.getcolumnas');
 
-   
+    Route::post('forecast/import', 'ForecastController@import')->name('forecast.import');
+
 
 });
 Route::group(['middleware' => ['auth', 'permission:conciliate module']], function() {

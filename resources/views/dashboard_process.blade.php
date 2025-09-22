@@ -646,13 +646,13 @@
                         render: function (data,type,row){
                             if(row['dia_forecast'] != '-' && row['dia_real'] != '-')
                             {
-                                $d_budget = parseFloat(row['dia_forecast'].replaceAll(',',''));
+                                $d_forecast = parseFloat(row['dia_forecast'].replaceAll(',',''));
                                 $d_real = parseFloat(row['dia_real'].replaceAll(',',''));
-                                if($d_budget != 0.00 )
+                                if($d_forecast != 0.00 )
                                 {
-                                    $dia_porcentaje = Math.round(($d_real / $d_budget)*100);
+                                    $dia_porcentaje = Math.round(($d_real / $d_forecast)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {  
-                                        $dia_AuBLS_porcentaje = Math.round(((1)-(($d_real-$d_budget)/$d_budget))*100)
+                                        $dia_AuBLS_porcentaje = Math.round(((1)-(($d_real-$d_forecast)/$d_forecast))*100)
                                         switch(true)
                                         {
                                             case $dia_AuBLS_porcentaje >= 95:
@@ -704,7 +704,7 @@
                                                 
                                         }   
 
-                                    } else if( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada') {
+                                    } else if( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada') {
 
                                         switch(true)
                                         {
@@ -722,8 +722,26 @@
                                             break;                                                
                                         } 
 
+                                    }else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada')
+                                    {
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 90 && $dia_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     }
-                                    else{
+                                    else
+                                    {
 
                                         switch(true)
                                         {
@@ -816,7 +834,7 @@
                                                 
                                         }   
 
-                                    } else if( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada') {
+                                    } else if( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada') {
 
                                         switch(true)
                                         {
@@ -834,6 +852,23 @@
                                             break;                                                
                                         } 
 
+                                    }else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada')
+                                    {
+                                        switch(true)
+                                        {
+                                            case $dia_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 90 && $dia_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            case $dia_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$dia_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $dia_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     }
                                     else{
 
@@ -873,13 +908,13 @@
                         render: function (data,type,row){
                             if(row['mes_forecast'] != '-' && row['mes_real'] != '-')
                             {
-                                $m_budget = parseFloat(row['mes_forecast'].replaceAll(',',''));
+                                $m_forecast = parseFloat(row['mes_forecast'].replaceAll(',',''));
                                 $m_real = parseFloat(row['mes_real'].replaceAll(',',''));
-                                if($m_budget != 0.00)
+                                if($m_forecast != 0.00)
                                 {
-                                    $mes_porcentaje = Math.round(($m_real / $m_budget)*100);
+                                    $mes_porcentaje = Math.round(($m_real / $m_forecast)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-                                        $mes_AuBLS_porcentaje = Math.round(((1)-(($m_real-$m_budget)/$m_budget))*100)
+                                        $mes_AuBLS_porcentaje = Math.round(((1)-(($m_real-$m_forecast)/$m_forecast))*100)
                                         switch(true)
                                         {
                                             case $mes_AuBLS_porcentaje >= 95:
@@ -928,7 +963,7 @@
                                                 return $mes_porcentaje+'%';
                                             break;                                                    
                                         }
-                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'  ) {
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada') {
                                         switch(true)
                                         {
                                             case $mes_porcentaje < 90 || $mes_porcentaje > 105:
@@ -938,6 +973,22 @@
                                                 return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             case $mes_porcentaje >= 95 && $mes_porcentaje <= 105:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                
+                                        } 
+                                    }else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'  ){
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 90 && $mes_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 95:
                                                 return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
                                             break;
                                             default:
@@ -1034,8 +1085,7 @@
                                                 return $mes_porcentaje+'%';
                                             break;                                                    
                                         }
-                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'  ) {
-
+                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada') {
                                         switch(true)
                                         {
                                             case $mes_porcentaje < 90 || $mes_porcentaje > 105:
@@ -1051,7 +1101,22 @@
                                                 return $mes_porcentaje+'%';
                                             break;                                                
                                         } 
-
+                                    }else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'  ){
+                                        switch(true)
+                                        {
+                                            case $mes_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 90 && $mes_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            case $mes_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$mes_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $mes_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     }
                                     else{
                                         switch(true)
@@ -1089,13 +1154,13 @@
                         render: function (data,type,row){
                             if(row['trimestre_forecast'] != '-' && row['trimestre_real'] != '-')
                             {                                
-                                $t_budget = parseFloat(row['trimestre_forecast'].replaceAll(',',''));
+                                $t_forecast = parseFloat(row['trimestre_forecast'].replaceAll(',',''));
                                 $t_real = parseFloat(row['trimestre_real'].replaceAll(',',''));
-                                if($t_budget != 0.00)
+                                if($t_forecast != 0.00)
                                 {
-                                    $trimestre_porcentaje = Math.round(($t_real/ $t_budget)*100);
+                                    $trimestre_porcentaje = Math.round(($t_real/ $t_forecast)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-                                        $trimestre_AuBLS_porcentaje = Math.round(((1)-(($t_real-$t_budget)/$t_budget))*100)
+                                        $trimestre_AuBLS_porcentaje = Math.round(((1)-(($t_real-$t_forecast)/$t_forecast))*100)
                                         switch(true)
                                         {
                                             case $trimestre_AuBLS_porcentaje >= 95:
@@ -1145,7 +1210,7 @@
                                             break;                                                    
                                         }
 
-                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada'){
 
                                         switch(true)
                                         {
@@ -1163,6 +1228,22 @@
                                             break;                                                
                                         } 
 
+                                    } else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'){
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 90 && $trimestre_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     } else {
                                         switch(true)
                                         {
@@ -1255,7 +1336,7 @@
                                             break;                                                    
                                         }
 
-                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    }  else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada'){
 
                                         switch(true)
                                         {
@@ -1273,6 +1354,22 @@
                                             break;                                                
                                         } 
 
+                                    } else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'){
+                                        switch(true)
+                                        {
+                                            case $trimestre_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 90 && $trimestre_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            case $trimestre_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$trimestre_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $trimestre_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     } else {
                                         switch(true)
                                         {
@@ -1311,13 +1408,13 @@
                         render: function (data,type,row){
                             if(row['anio_forecast'] != '-' && row['anio_real'] != '-')
                             {                               
-                                $a_budget = parseFloat(row['anio_forecast'].replaceAll(',',''));
+                                $a_forecast = parseFloat(row['anio_forecast'].replaceAll(',',''));
                                 $a_real = parseFloat(row['anio_real'].replaceAll(',',''));
-                                if($a_budget != 0.00)
+                                if($a_forecast != 0.00)
                                 {
-                                    $anio_porcentaje=Math.round(($a_real / $a_budget)*100);
+                                    $anio_porcentaje=Math.round(($a_real / $a_forecast)*100);
                                     if ( row['variable'] == 'Ley de Au BLS' ) {
-                                        $anio_AuBLS_porcentaje = Math.round(((1)-(($a_real-$a_budget)/$a_budget))*100)
+                                        $anio_AuBLS_porcentaje = Math.round(((1)-(($a_real-$a_forecast)/$a_forecast))*100)
                                         switch(true)
                                         {
                                             case $anio_AuBLS_porcentaje >= 95:
@@ -1368,7 +1465,7 @@
                                             break;                                                
                                         }
 
-                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada'){
 
                                         switch(true)
                                         {
@@ -1386,6 +1483,22 @@
                                             break;                                                
                                         } 
 
+                                    } else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'){
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 90 && $anio_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     } else {
 
                                         switch(true)
@@ -1480,7 +1593,7 @@
                                             break;                                                
                                         }
 
-                                    } else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada' || row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada' ){
+                                    }else if ( row['variable'] == 'Ley Cu Salida' || row['variable'] == 'Ley Cu Alimentada'){
 
                                         switch(true)
                                         {
@@ -1498,6 +1611,22 @@
                                             break;                                                
                                         } 
 
+                                    } else if(row['variable'] == 'Ley Au Salida' || row['variable'] == 'Ley Au Alimentada'){
+                                        switch(true)
+                                        {
+                                            case $anio_porcentaje < 90:
+                                                return '<div class="red_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 90 && $anio_porcentaje < 95:
+                                                return '<div class="yellow_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            case $anio_porcentaje >= 95:
+                                                return '<div class="green_percentage">'+$anio_porcentaje+'%</div>';
+                                            break;
+                                            default:
+                                                return $anio_porcentaje+'%';
+                                            break;                                                
+                                        } 
                                     } else {
 
                                         switch(true)

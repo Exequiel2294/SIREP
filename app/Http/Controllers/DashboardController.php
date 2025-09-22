@@ -21,6 +21,7 @@ use App\Mail\SendEmail;
 use App\Traits\MinaTrait;
 use App\Traits\ProcesosTrait;
 
+use function GuzzleHttp\Promise\all;
 
 class DashboardController extends Controller
 {
@@ -54,67 +55,89 @@ class DashboardController extends Controller
             $quarter = (int)ceil($monthInt/3);
             //que no excede el numero del quarter
             $quarter = min($quarter, 4);
+                        
+            /* =============================
+            DATOS PARA EL MENSUAL
+            ============================= */
+            $NumPeriodo = Periodos::where('fecha_ini', '<=', $requestDay)
+                ->where('fecha_fin', '>=', $requestDay)
+                ->value('periodo');
+
+            $periodoMensual = Periodos::where('anio', $yearInt)
+                ->where('periodo', $NumPeriodo)
+                ->first(['fecha_ini', 'fecha_fin']);
+
+            $fechaIni = $periodoMensual->fecha_ini;
+            $fechaFin = $periodoMensual->fecha_fin;
+
+            /* =============================
+            DATOS PARA EL TRIMESTRAL
+            ============================= */
+            $periodoTri = Periodos_tri::where('anio', $yearInt)
+                ->where('periodo', $quarter)
+                ->first(['fecha_ini', 'fecha_fin']);
+
+            $iniTri = date('Y-m-d', strtotime($periodoTri->fecha_ini));
+            $finTri = date('Y-m-d', strtotime($periodoTri->fecha_fin));
+
+            // Si la fecha cae fuera de ese trimestre, buscar el siguiente
+            if ($finTri < $requestDay || $iniTri > $requestDay) {
+                $quarter++;
+                $periodoTri = Periodos_tri::where('anio', $yearInt)
+                    ->where('periodo', $quarter)
+                    ->first(['fecha_ini', 'fecha_fin']);
+            }
+
+            $fechaIniTri = $periodoTri->fecha_ini;
+            $fechaFinTri = $periodoTri->fecha_fin;
+
+            // 1. Detectar trimestre actual
+            $trimestre = DB::table('periodos_tri')
+                ->where('fecha_ini', '<=', $requestDay)
+                ->where('fecha_fin', '>=', $requestDay)
+                ->first();
+
+            if ($trimestre) {
+                // 2. Traer todos los meses del trimestre
+                $meses = DB::table('periodos')
+                    ->where('anio', $trimestre->anio)
+                    ->whereBetween('fecha_ini', [$trimestre->fecha_ini, $trimestre->fecha_fin])
+                    ->whereBetween('fecha_fin', [$trimestre->fecha_ini, $trimestre->fecha_fin])
+                    ->orderBy('fecha_ini')
+                    ->get();
+
+                //dd($meses->all());
+
+                // 3. Separar meses anteriores y mes actual
+                $mesAnterior = $meses->filter(fn($m) => $m->fecha_fin < $requestDay);
+                $mesActual = $meses->first(fn($m) => $m->fecha_ini <= $requestDay && $m->fecha_fin >= $requestDay);
+                //dd($mesAnterior,$mesActual);
+                // Ajustar fecha_fin del mes actual a hoy
+                if ($mesActual) {
+                    $mesActual->fecha_fin = $requestDay;
+                }
+
+                // 4. Guardar en variables
+                $mesesAnteriores = $mesAnterior->values(); // colección con meses anteriores
+                $mesParcial = $mesActual; // objeto con fecha_fin ajustada
+
+                // 5. Merge que es optativo
+                $mensual = $mesAnterior->merge([$mesActual]);
+                //dd($mensual->all());
+
+            }
             
-            //TRAER DATOS PARA EL MENSUAL
-                $NumPeriodo = Periodos::where('fecha_ini','<=',$requestDay)
-                                    ->where('fecha_fin','>=',$requestDay)
-                                    ->value('periodo');
-            //PARA LOS DATOS DEL MENSUAL LO QUE HACES ES CON EL REQUEST QUE TRAE UNA FECHA SE FIJA EN QUE PERIODO SE ENCUENTRA
-            //Y EN LA TABALA HAY UN INICIO DE PERIODO Y UN FIN DE PERIODO Y ESTO TRAER EN FECHAINI Y FECHAFIN
-                $fechaIni = Periodos::where('anio', $yearInt)
-                                    ->where('periodo', $NumPeriodo)
-                                    ->value('fecha_ini');
-
-                $fechaFin = Periodos::where('anio', $yearInt)
-                                    ->where('periodo', $NumPeriodo)
-                                    ->value('fecha_fin');
-            //HASTA AQUI
-
-            //TRAE DATOS PARA EL TRIMESTRE
-            //PARA LOS DATOS DEL TRIMESTRAL LO QUE HACE ES QUE CON EL QUARTER CON EL REQUEST QUE TRAE 
-                $fechaIni_Tri = Periodos_tri::where('anio', $yearInt)
-                                            ->where('periodo', $quarter)
-                                            ->value('fecha_ini');
-                $fechaFin_Tri = Periodos_tri::where('anio', $yearInt)
-                                            ->where('periodo', $quarter)
-                                            ->value('fecha_fin');
-
-                $finTri = date('Y-m-d',strtotime($fechaFin_Tri));
-                $iniTri = date('Y-m-d',strtotime($fechaIni_Tri));
-
-                //ACA VERIFICA QUE SI LA FECHA DEL REQUEST ESTA DENTRO DE UN QUARTER U OTRO YA QUE EL TRIMESTRE TIENE FECHA DESFASADA 
-                if( $finTri < $requestDay || $iniTri > $requestDay)
-                {
-                    $quarter +=1;
-                    $fechaIniTri = Periodos_tri::where('anio', $yearInt)
-                                        ->where('periodo', $quarter)
-                                        ->value('fecha_ini');
-
-                    $fechaFinTri = Periodos_tri::where('anio', $yearInt)
-                                            ->where('periodo', $quarter)
-                                            ->value('fecha_fin');
-                }
-                else
-                {
-                    $fechaIniTri = Periodos_tri::where('anio', $yearInt)
-                                        ->where('periodo', $quarter)
-                                        ->value('fecha_ini');
-
-                    $fechaFinTri = Periodos_tri::where('anio', $yearInt)
-                                            ->where('periodo', $quarter)
-                                            ->value('fecha_fin');
-                }
-            //HASTA AQUI
-
             $request = new Request([
                 'date' => $this->date,
                 'type' => 0,
                 'fecha_ini'=>$fechaIni,
                 'fecha_fin'=>$fechaFin,
                 'fecha_iniTri'=>$fechaIniTri,
-                'fecha_finTri'=>$fechaFinTri
+                'fecha_finTri'=>$fechaFinTri,
+                'mensual'=>$meses
             ]);
-            
+
+            //dd($request->all());        
 
             $tabla = $this->TraitProcesosTable($request);
             
@@ -214,16 +237,36 @@ class DashboardController extends Controller
                                                 ->value('fecha_fin');
                     }
                 //HASTA AQUI
+                //Agregar lo mensual en esta parte codigo
+            
+            //Se inserta nuevo codigo para la solicitado    
+            $meses = [];
+            //FOR PARA RECORRER TODOS LOS MESES
+            for ($mes =1; $mes <=12 ; $mes++){
+                $fechaIniMes = Periodos::where('anio',$yearInt)
+                                        ->where('periodo',$mes)
+                                        ->value('fecha_ini');
 
+                $fechaFinMes = Periodos::where('anio',$yearInt)
+                                        ->where('periodo',$mes)
+                                        ->value('fecha_fin');
+                //guardado en el array multidemensional
+                $meses[]=[
+                    'mes'=>$mes,
+                    'fecha_ini'=>$fechaIniMes,
+                    'fecha_fin'=>$fechaFinMes,
+                ];
+            }
             $request = new Request([
                 'date' => $this->date,
                 'type' => 0,
                 'fecha_ini'=>$fechaIni,
                 'fecha_fin'=>$fechaFin,
                 'fecha_iniTri'=>$fechaIniTri,
-                'fecha_finTri'=>$fechaFinTri
+                'fecha_finTri'=>$fechaFinTri,
+                'mensual'=>$meses
             ]);
-                        
+            //dd($request->all());        
             $tabla = $this->TraitMinaTable($request);
 
             return $tabla;
@@ -892,7 +935,8 @@ class DashboardController extends Controller
     }
 
     public function load(Request $request)
-    {       
+    { 
+        dd($request->all());      
         $id = $request->get('id');
         if($id == '' || $id == null)
         {

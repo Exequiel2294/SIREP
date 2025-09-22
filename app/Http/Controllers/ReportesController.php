@@ -30,7 +30,8 @@ class ReportesController extends Controller
         $focastVisibility = $request->get('focastVisibility');
         $budgetVisibility = $request->get('budgetVisibility');
         $arrayCount = array_count_values($columnsVisibility);
-        if (isset($arrayCount['true']))
+
+        if (isset($arrayCount['true']))//4
         {
             $colspanTFrame = 1;
             if ($focastVisibility) {
@@ -99,12 +100,15 @@ class ReportesController extends Controller
             $pdf = Pdf::loadView('pdf.procesosColumnsVisibility', compact('registros', 'tablacomentarios','date', 'columnsVisibility', 'colspan', 'budgetVisibility', 'focastVisibility', 'colspanTFrame'));
         }
         elseif($formato=='full'){
+            //Realiza un request en donde lo busca en el trait de procesos
             $request = new Request(array('date' => $date, 'type' => 1));
             $tablaprocesos = $this->TraitProcesosTable($request);
-            
+
+            //Realiza un request en donde lo busca en el trait de procesos
             $request = new Request(array('date' => $date, 'type' => 1));
             $tablamina = $this->TraitMinaTable($request);
             
+
             $registrosmina= $tablamina->getData()->data;        
             $registrosprocesos= $tablaprocesos->getData()->data;
             $registros = array_merge($registrosmina, $registrosprocesos);
