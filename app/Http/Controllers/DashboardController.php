@@ -936,7 +936,7 @@ class DashboardController extends Controller
 
     public function load(Request $request)
     { 
-        dd($request->all());      
+        //dd($request->all());      
         $id = $request->get('id');
         if($id == '' || $id == null)
         {
