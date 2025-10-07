@@ -2419,7 +2419,51 @@ trait ProcesosTrait {
                                         $mes_real = $this->summesreal[8];
                                     break;
                                     case 10028:
+                                        //Stacker - Mineral Apilado - 10031
+                                        $sumMinReal =
+                                        DB::select(
+                                        'SELECT SUM(valor) as MinReal
+                                        FROM [dbo].[MMSA_SIREP_DATA]
+                                        WHERE variable_id = 10031
+                                        AND fecha BETWEEN ? AND ?',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                        
+                                        //Stacker - Ley Au - 10030 
+                                        //Promedio ponderado : (Au * 31.1035) / Min
+                                        $LeyAuMes = 
+                                        DB::select(
+                                        'SELECT (A.total * 31.1035) / NULLIF(B.total,0) AS resultado
+                                        FROM 
+                                        (SELECT SUM(valor) AS total
+                                        FROM MMSA_SIREP_DATA
+                                        WHERE variable_id = 10027
+                                            AND fecha BETWEEN ? AND ?) AS A,
+                                        (SELECT SUM(valor) AS total
+                                        FROM MMSA_SIREP_DATA
+                                        WHERE variable_id = 10031
+                                            AND fecha BETWEEN ? AND ?) AS B',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
+                                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                        
+                                         //Stacker - Recuperacion - 10033
+                                        $RecuMes = DB::select(
+                                            'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
+                                            WHERE variable_id = 10033
+                                            and fecha between ? and ?', 
+                                            [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
+                                        );
+    
+                                        $leyau=$LeyAuMes[0]->resultado;
+                                        $sumMin=$sumMinReal[0]->MinReal;
+                                        $recu=$RecuMes[0]->recupracion;
+    
+                                        //Promedio Ponderado : ((Recuperacion/100) * Mineral * LeyAu) / 31.1035
+                                        $m_real = (($recu / 100) * $sumMin * $leyau) / 31.1035;
+    
+                                        $this->summesreal[9]->mes_real = $m_real;
                                         $mes_real = $this->summesreal[9];
+                                        //dd($mes_real);
+                                       
                                     break;
                                     case 10029:
                                         $mes_real = $this->avgmesreal[10];
@@ -2473,7 +2517,52 @@ trait ProcesosTrait {
                                         $mes_real = $this->summesreal[11];
                                     break;
                                     case 10038:
+                                        //Stacker - Mineral Apilado - 10031
+                                        $sumMinReal =
+                                        DB::select(
+                                        'SELECT SUM(valor) as MinReal
+                                        FROM [dbo].[MMSA_SIREP_DATA]
+                                        WHERE variable_id = 10039
+                                        AND fecha BETWEEN ? AND ?',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                        
+                                        //Stacker - Ley Au - 10030 
+                                        //Promedio ponderado : (Au * 31.1035) / Min
+                                        $LeyAuMes = 
+                                        DB::select(
+                                        'SELECT (A.total * 31.1035) / NULLIF(B.total,0) AS resultado
+                                        FROM 
+                                        (SELECT SUM(valor) AS total
+                                        FROM MMSA_SIREP_DATA
+                                        WHERE variable_id = 10037
+                                            AND fecha BETWEEN ? AND ?) AS A,
+                                        (SELECT SUM(valor) AS total
+                                        FROM MMSA_SIREP_DATA
+                                        WHERE variable_id = 10039
+                                            AND fecha BETWEEN ? AND ?) AS B',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
+                                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                        
+                                         //Stacker - Recuperacion - 10033
+                                        $RecuMes = DB::select(
+                                            'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
+                                            WHERE variable_id = 10036
+                                            and fecha between ? and ?', 
+                                            [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
+                                        );
+    
+                                        $leyau=$LeyAuMes[0]->resultado;
+                                        $sumMin=$sumMinReal[0]->MinReal;
+                                        $recu=$RecuMes[0]->recupracion;
+                                        // dd($leyau,
+                                        // $sumMin,
+                                        // $recu);
+                                        //Promedio Ponderado : ((Recuperacion/100) * Mineral * LeyAu) / 31.1035
+                                        $m_real = (($recu / 100) * $sumMin * $leyau) / 31.1035;
+    
+                                        $this->summesreal[12]->mes_real = $m_real;
                                         $mes_real = $this->summesreal[12];
+                                        
                                     break;
                                     case 10039:
                                         $mes_real = $this->summesreal[13];
@@ -7997,9 +8086,54 @@ trait ProcesosTrait {
                                 break;
                                 case 10027:
                                     $mes_real = $this->summesreal[8];
+                                    //dd($mes_real);
                                 break;
                                 case 10028:
+                                    //Stacker - Mineral Apilado - 10031
+                                    $sumMinReal =
+                                    DB::select(
+                                    'SELECT SUM(valor) as MinReal
+                                    FROM [dbo].[MMSA_SIREP_DATA]
+                                    WHERE variable_id = 10031
+                                    AND fecha BETWEEN ? AND ?',
+                                    [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                    
+                                    //Stacker - Ley Au - 10030 
+                                    //Promedio ponderado : (Au * 31.1035) / Min
+                                    $LeyAuMes = 
+                                    DB::select(
+                                    'SELECT (A.total * 31.1035) / NULLIF(B.total,0) AS resultado
+                                    FROM 
+                                    (SELECT SUM(valor) AS total
+                                    FROM MMSA_SIREP_DATA
+                                    WHERE variable_id = 10027
+                                        AND fecha BETWEEN ? AND ?) AS A,
+                                    (SELECT SUM(valor) AS total
+                                    FROM MMSA_SIREP_DATA
+                                    WHERE variable_id = 10031
+                                        AND fecha BETWEEN ? AND ?) AS B',
+                                    [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
+                                     date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                    
+                                     //Stacker - Recuperacion - 10033
+                                    $RecuMes = DB::select(
+                                        'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
+                                        WHERE variable_id = 10033
+                                        and fecha between ? and ?', 
+                                        [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
+                                    );
+
+                                    $leyau=$LeyAuMes[0]->resultado;
+                                    $sumMin=$sumMinReal[0]->MinReal;
+                                    $recu=$RecuMes[0]->recupracion;
+
+                                    //Promedio Ponderado : ((Recuperacion/100) * Mineral * LeyAu) / 31.1035
+                                    $m_real = (($recu / 100) * $sumMin * $leyau) / 31.1035;
+
+                                    $this->summesreal[9]->mes_real = $m_real;
                                     $mes_real = $this->summesreal[9];
+                                    //dd($mes_real);
+                                   
                                 break;
                                 case 10029:
                                     $mes_real = $this->avgmesreal[10];
@@ -8053,7 +8187,52 @@ trait ProcesosTrait {
                                     $mes_real = $this->summesreal[11];
                                 break;
                                 case 10038:
+                                    //Stacker - Mineral Apilado - 10031
+                                    $sumMinReal =
+                                    DB::select(
+                                    'SELECT SUM(valor) as MinReal
+                                    FROM [dbo].[MMSA_SIREP_DATA]
+                                    WHERE variable_id = 10039
+                                    AND fecha BETWEEN ? AND ?',
+                                    [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                    
+                                    //Stacker - Ley Au - 10030 
+                                    //Promedio ponderado : (Au * 31.1035) / Min
+                                    $LeyAuMes = 
+                                    DB::select(
+                                    'SELECT (A.total * 31.1035) / NULLIF(B.total,0) AS resultado
+                                    FROM 
+                                    (SELECT SUM(valor) AS total
+                                    FROM MMSA_SIREP_DATA
+                                    WHERE variable_id = 10037
+                                        AND fecha BETWEEN ? AND ?) AS A,
+                                    (SELECT SUM(valor) AS total
+                                    FROM MMSA_SIREP_DATA
+                                    WHERE variable_id = 10039
+                                        AND fecha BETWEEN ? AND ?) AS B',
+                                    [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
+                                     date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                    
+                                     //Stacker - Recuperacion - 10033
+                                    $RecuMes = DB::select(
+                                        'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
+                                        WHERE variable_id = 10036
+                                        and fecha between ? and ?', 
+                                        [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
+                                    );
+
+                                    $leyau=$LeyAuMes[0]->resultado;
+                                    $sumMin=$sumMinReal[0]->MinReal;
+                                    $recu=$RecuMes[0]->recupracion;
+                                    // dd($leyau,
+                                    // $sumMin,
+                                    // $recu);
+                                    //Promedio Ponderado : ((Recuperacion/100) * Mineral * LeyAu) / 31.1035
+                                    $m_real = (($recu / 100) * $sumMin * $leyau) / 31.1035;
+
+                                    $this->summesreal[12]->mes_real = $m_real;
                                     $mes_real = $this->summesreal[12];
+                                    
                                 break;
                                 case 10039:
                                     $mes_real = $this->summesreal[13];
@@ -8280,6 +8459,7 @@ trait ProcesosTrait {
                             }
                             if(isset($mes_real->mes_real))
                             {
+                                
                                 $m_real = $mes_real->mes_real;
                                 if($m_real > 100 || in_array($data->variable_id, $this->percentage))
                                 {

@@ -81,17 +81,18 @@ class ConciliadoController extends Controller
                 //INICIO CALCULOS REUTILIZABLES
                     //MES REAL
                     $sql="SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10005
                         AND fecha between ? and ?
                         GROUP BY variable_id";
+
                     $this->summesreal10005 = 
                     DB::select($sql,[date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->fecha_fin))]);
                     
                     $this->summesreal10011 = 
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10011
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -101,7 +102,7 @@ class ConciliadoController extends Controller
                     $this->summesreal10019 = 
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10019
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -111,7 +112,7 @@ class ConciliadoController extends Controller
                     $this->summesreal10031 = 
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10031
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -121,7 +122,7 @@ class ConciliadoController extends Controller
                     $this->summesreal10039 = 
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10039
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -131,7 +132,7 @@ class ConciliadoController extends Controller
                     $this->summesreal10045 =
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10045
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -141,7 +142,7 @@ class ConciliadoController extends Controller
                     $this->summesreal10052 =
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10052
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -151,7 +152,7 @@ class ConciliadoController extends Controller
                     $this->summesreal10061 =
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
-                        FROM [dbo].[data]
+                        FROM [dbo].[MMSA_SIREP_DATA]
                         WHERE variable_id = 10061
                         AND fecha between ? and ?
                         GROUP BY variable_id',
@@ -201,11 +202,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10004) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10005) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -220,11 +221,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10010) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10011) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -239,11 +240,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10012) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10011) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -257,7 +258,7 @@ class ConciliadoController extends Controller
                                         //(sumatoria.mensual(10067 MMSA_AGLOM_Cemento) * 1000)/ sumatoria.mesual(10019 MMSA_AGLOM_Mineral Aglomerado t)                      
                                         $sumaproducto = DB::select(
                                             'SELECT variable_id as var, SUM(valor) * 1000 as sumaproducto
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             WHERE variable_id = 10067
                                             WHERE A.fecha between ? and ?
                                             GROUP BY A.variable_id',
@@ -271,11 +272,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10018) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10019) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -290,11 +291,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10024) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10025) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -303,7 +304,7 @@ class ConciliadoController extends Controller
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT variable_id as var, SUM(valor) as suma
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             WHERE variable_id = 10025
                                             WHERE A.fecha between ? and ?
                                             GROUP BY A.variable_id',
@@ -316,11 +317,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10030) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10031) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -335,11 +336,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10033) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10011) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -354,11 +355,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10035) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10039) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -373,11 +374,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10036) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10039) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -394,17 +395,17 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A1.variable_id as var,SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10043
                                             AND valor <> 0 ) as A1
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10044) as A2
                                             ON A1.fecha = A2.fecha
                                             INNER JOIN
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10045) as B
                                             ON A2.fecha = B.fecha
                                             WHERE A1.fecha between ? and ?
@@ -419,11 +420,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10041) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -438,11 +439,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10042) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -457,11 +458,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10043) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -476,11 +477,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                         'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10044) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10045) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -497,17 +498,17 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A1.variable_id as var,SUM((((A1.valor-A2.valor)*100)/A1.valor) * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10051
                                             AND valor <> 0 ) as A1
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10050) as A2
                                             ON A1.fecha = A2.fecha
                                             INNER JOIN
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10052) as B
                                             ON A2.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -522,11 +523,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10050) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10052) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -541,11 +542,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10051) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10052) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -560,7 +561,7 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10054) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
@@ -579,11 +580,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10055) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10059) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -592,7 +593,7 @@ class ConciliadoController extends Controller
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT variable_id as var, SUM(valor) as suma
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             WHERE variable_id = 10059
                                             WHERE A.fecha between ? and ?
                                             GROUP BY A.variable_id',
@@ -605,11 +606,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10056) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10060) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -618,7 +619,7 @@ class ConciliadoController extends Controller
                                         );                                     
                                         $suma= DB::select(
                                             'SELECT variable_id as var, SUM(valor) as suma
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             WHERE variable_id = 10060
                                             WHERE A.fecha between ? and ?
                                             GROUP BY A.variable_id',
@@ -631,11 +632,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10057) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10061) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -650,11 +651,11 @@ class ConciliadoController extends Controller
                                         $sumaproducto= DB::select(
                                             'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10058) as A
                                             INNER JOIN   
                                             (SELECT fecha, variable_id, [valor]
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             where variable_id = 10061) as B
                                             ON A.fecha = B.fecha
                                             WHERE A.fecha between ? and ?
@@ -695,11 +696,11 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10005) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10004) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -714,11 +715,11 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10011) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10010) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -733,16 +734,16 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM(((A.valor/100) * B.valor * C.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10026) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10025) as B
                                                 ON A.fecha = B.fecha
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10024) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE A.fecha between ? and ?
@@ -757,11 +758,11 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10025) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10024) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -776,11 +777,11 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10031) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10030) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -799,11 +800,11 @@ class ConciliadoController extends Controller
                                             $sumaproducto10030 = DB::select(
                                                 'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10030) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10031) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -812,31 +813,41 @@ class ConciliadoController extends Controller
                                             ); 
 
                                             //10033 MMSA_APILAM_STACKER_Recuperación %
-                                            //Promedio Ponderado Mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t, 10033 MMSA_APILAM_STACKER_Recuperación %)                      
-                                            $sumaproducto10033 = DB::select(
-                                                'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10033) as A
-                                                INNER JOIN   
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10031) as B
-                                                ON A.fecha = B.fecha
-                                                WHERE A.fecha between ? and ?
-                                                GROUP BY A.variable_id', 
+                                            //Promedio Ponderado Mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t, 10033 MMSA_APILAM_STACKER_Recuperación %)
+                                            //ESTA RECUPERACION DABA MAL LOS VALORES                      
+                                            // $sumaproducto10033 = DB::select(
+                                            //     'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[MMSA_SIREP_DATA]
+                                            //     where variable_id = 10033) as A
+                                            //     INNER JOIN   
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[MMSA_SIREP_DATA]
+                                            //     where variable_id = 10031) as B
+                                            //     ON A.fecha = B.fecha
+                                            //     WHERE A.fecha between ? and ?
+                                            //     GROUP BY A.variable_id', 
+                                            //     [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
+                                            // );
+                                            $promrecuperacion = DB::select(
+                                                'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
+                                                WHERE variable_id = 10033
+                                                and fecha between ? and ?', 
                                                 [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
-                                            );                                     
+                                            );
+                                           
                                             $suma10031 = $this->summesreal10031; 
 
                                             if(isset($sumaproducto10030[0]->sumaproducto) && isset($sumaproducto10033[0]->sumaproducto) && isset($suma10031[0]->suma))
                                             {
                                                 if ($suma10031[0]->suma > 0) {
                                                     //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
-                                                    $recup =  $sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
+                                                    $recup =  $promrecuperacion[0]->recupracion;//$sumaproducto10033[0]->sumaproducto/$suma10031[0]->suma;
                                                     $leyAu = $sumaproducto10030[0]->sumaproducto/$suma10031[0]->suma;
                                                     $sumMin = $suma10031[0]->suma;
                                                     $m_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
+                                                    //$m_real_V2 = (($recup/100)*$sumMin*$leyAu)/31.1035;
+                                                    //dd($recup,$leyAu,$sumMin,$m_real,$m_real_V2);
                                                     return $m_real;
                                                 }
                                                 else {
@@ -856,11 +867,11 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10039) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10035) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -875,30 +886,36 @@ class ConciliadoController extends Controller
                                             $sumaproducto10035= DB::select(
                                                 'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10035) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10039) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
                                                 GROUP BY A.variable_id', 
                                                 [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
                                             );                                  
-                                            //10036 TA_Recuperación
-                                            $sumaproducto10036= DB::select(
-                                                'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10036) as A
-                                                INNER JOIN   
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10039) as B
-                                                ON A.fecha = B.fecha
-                                                WHERE A.fecha between ? and ?
-                                                GROUP BY A.variable_id', 
+                                            // //10036 TA_Recuperación
+                                            // $sumaproducto10036= DB::select(
+                                            //     'SELECT A.variable_id as var,SUM(A.valor * B.valor) as sumaproducto FROM
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[MMSA_SIREP_DATA]
+                                            //     where variable_id = 10036) as A
+                                            //     INNER JOIN   
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[MMSA_SIREP_DATA]
+                                            //     where variable_id = 10039) as B
+                                            //     ON A.fecha = B.fecha
+                                            //     WHERE A.fecha between ? and ?
+                                            //     GROUP BY A.variable_id', 
+                                            //     [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
+                                            // );
+                                            $promrecuperacion = DB::select(
+                                                'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
+                                                WHERE variable_id = 10036
+                                                and fecha between ? and ?', 
                                                 [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
                                             );                                 
                                             //10039 
@@ -907,7 +924,7 @@ class ConciliadoController extends Controller
                                             {
                                                 if ($suma10039[0]->suma > 0) {
                                                     //76.1538043622208379843997 0.704806345958821606296926 537286.19157985
-                                                    $recup =  $sumaproducto10036[0]->sumaproducto/$suma10039[0]->suma;
+                                                    $recup =  $promrecuperacion[0]->recupracion;//$sumaproducto10036[0]->sumaproducto/$suma10039[0]->suma;
                                                     $leyAu = $sumaproducto10035[0]->sumaproducto/$suma10039[0]->suma;
                                                     $sumMin = $suma10039[0]->suma;
                                                     $m_real =  ($recup *  $leyAu  * $sumMin * 0.0100000) / 31.1035;
@@ -929,16 +946,16 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * (B.valor-C.valor))/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10052) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10051) as B
                                                 ON A.fecha = B.fecha
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10050) as C
                                                 ON A.fecha = C.fecha
                                                 WHERE A.fecha between ? and ?
@@ -953,11 +970,11 @@ class ConciliadoController extends Controller
                                             DB::select(
                                                 'SELECT A.variable_id as var, SUM((A.valor * B.valor)/31.1035) as mes_real FROM
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10061) as A
                                                 INNER JOIN   
                                                 (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 where variable_id = 10057) as B
                                                 ON A.fecha = B.fecha
                                                 WHERE A.fecha between ? and ?
@@ -968,7 +985,7 @@ class ConciliadoController extends Controller
                                         default:
                                             $mes_real= DB::select(
                                                 'SELECT variable_id as var, SUM(valor) as mes_real
-                                                FROM [dbo].[data]
+                                                FROM [dbo].[MMSA_SIREP_DATA]
                                                 WHERE variable_id = ?
                                                 AND fecha between ? and ?
                                                 GROUP BY variable_id', 
@@ -994,7 +1011,7 @@ class ConciliadoController extends Controller
                                         //Promedio valores <>0
                                         $mes_real= DB::select(
                                             'SELECT variable_id as var, AVG(valor) as mes_real
-                                            FROM [dbo].[data]
+                                            FROM [dbo].[MMSA_SIREP_DATA]
                                             WHERE variable_id = ?
                                             AND fecha between ? and ?
                                             AND valor <> 0 
@@ -1024,7 +1041,7 @@ class ConciliadoController extends Controller
                                                     $suma= $this->summesreal10005;                                     
                                                     $suma2= DB::select(
                                                         'SELECT variable_id as var, SUM(valor) as suma
-                                                        FROM [dbo].[data]
+                                                        FROM [dbo].[MMSA_SIREP_DATA]
                                                         WHERE variable_id = 10062
                                                         AND  fecha between ? and ?
                                                         GROUP BY variable_id',
@@ -1037,7 +1054,7 @@ class ConciliadoController extends Controller
                                                     $suma= $this->summesreal10011;                                     
                                                     $suma2= DB::select(
                                                         'SELECT variable_id as var, SUM(valor) as suma
-                                                        FROM [dbo].[data]
+                                                        FROM [dbo].[MMSA_SIREP_DATA]
                                                         WHERE variable_id = 10063
                                                         AND  fecha between ? and ?
                                                         GROUP BY variable_id', 
@@ -1050,7 +1067,7 @@ class ConciliadoController extends Controller
                                                     $suma= $this->summesreal10019;                                     
                                                     $suma2= DB::select(
                                                         'SELECT variable_id as var, SUM(valor) as suma
-                                                        FROM [dbo].[data]
+                                                        FROM [dbo].[MMSA_SIREP_DATA]
                                                         WHERE variable_id = 10064
                                                         AND  fecha between ? and ?
                                                         GROUP BY variable_id', 
@@ -1062,7 +1079,7 @@ class ConciliadoController extends Controller
                                                     //sumatoria.mensual(10031 MMSA_APILAM_STACKER_Mineral Apilado Stacker t)/ sumatoria.mensual(10065 MMSA_APILAM_STACKER_Tiempo Operativo h)                      
                                                     $suma= DB::select(
                                                         'SELECT variable_id as var, SUM(valor) as suma
-                                                        FROM [dbo].[data]
+                                                        FROM [dbo].[MMSA_SIREP_DATA]
                                                         WHERE variable_id = 10031
                                                         AND  fecha between ? and ?
                                                         GROUP BY variable_id', 
@@ -1070,7 +1087,7 @@ class ConciliadoController extends Controller
                                                     );                                     
                                                     $suma2= DB::select(
                                                         'SELECT variable_id as var, SUM(valor) as suma
-                                                        FROM [dbo].[data]
+                                                        FROM [dbo].[MMSA_SIREP_DATA]
                                                         WHERE variable_id = 10065
                                                         AND  fecha between ? and ?
                                                         GROUP BY variable_id', 
