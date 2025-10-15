@@ -130,14 +130,14 @@ trait ProcesosTrait {
                             'SELECT v.id AS variable_id, f.valor AS mes_real FROM
                             (SELECT variable_id, AVG(valor) AS valor
                             FROM [dbo].[MMSA_SIREP_DATA]
-                            WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                            WHERE variable_id IN (10003,10007,10009,10012,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                             AND valor <> 0
                             AND  fecha between ? and ?
                             GROUP BY variable_id) AS f
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                            WHERE id IN (10003,10007,10009,10012,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                             ON f.variable_id = v.id
                             ORDER BY id ASC',
                             [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -323,14 +323,14 @@ trait ProcesosTrait {
                             'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
                             (SELECT variable_id, AVG(valor) AS valor
                             FROM [dbo].[forecast]
-                            WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                            WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                             AND valor <> 0
                             AND  fecha between ? and ?
                             GROUP BY variable_id) AS f
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                            WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                             ON f.variable_id = v.id
                             ORDER BY id ASC',
                             [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -492,14 +492,14 @@ trait ProcesosTrait {
                             'SELECT v.id AS variable_id, f.valor AS mes_budget FROM
                             (SELECT variable_id, AVG(valor) AS valor
                             FROM [dbo].[budget]
-                            WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                            WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                             AND valor <> 0
                             AND  fecha between ? and ?
                             GROUP BY variable_id) AS f
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                            WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                             ON f.variable_id = v.id
                             ORDER BY id ASC',
                             [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -668,14 +668,14 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[MMSA_SIREP_DATA]
-                        WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  fecha between ? and ?
                         GROUP BY variable_id) AS f
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC',
                         [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -888,14 +888,14 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[forecast]
-                        WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  fecha between ? and ?
                         GROUP BY variable_id) AS f
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC',
                         [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -1127,14 +1127,14 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[budget]
-                        WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  fecha between ? and ?
                         GROUP BY variable_id) AS f
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC',
                         [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -1450,7 +1450,7 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[budget]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10012,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
@@ -1458,7 +1458,7 @@ trait ProcesosTrait {
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10012,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC'
                     );
@@ -1679,7 +1679,7 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[forecast]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10012,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  DATEPART(y, fecha) <= '.$daypart.'
                         AND YEAR(fecha) = '.$year.'
@@ -1687,7 +1687,7 @@ trait ProcesosTrait {
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10012,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC'
                     );
