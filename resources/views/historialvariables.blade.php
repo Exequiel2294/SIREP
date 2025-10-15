@@ -448,7 +448,7 @@
                                 }
                             ],
                             pageLength: 10,
-                            lengthMenu: [[10, 20, 25], [10, 20, 25]],
+                            lengthMenu: [[10, 20, 25,50], [10, 20, 25,50]],
                             processing: true,
                             serverSide: false,
                             bInfo: true,

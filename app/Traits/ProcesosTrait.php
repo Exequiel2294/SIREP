@@ -130,14 +130,14 @@ trait ProcesosTrait {
                             'SELECT v.id AS variable_id, f.valor AS mes_real FROM
                             (SELECT variable_id, AVG(valor) AS valor
                             FROM [dbo].[MMSA_SIREP_DATA]
-                            WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                            WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                             AND valor <> 0
                             AND  fecha between ? and ?
                             GROUP BY variable_id) AS f
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                            WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                             ON f.variable_id = v.id
                             ORDER BY id ASC',
                             [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -266,6 +266,19 @@ trait ProcesosTrait {
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),]
                     );
+                    // prp -> Promedio Ponderado
+                    $this->prpmesreal =
+                    DB::select(
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS mes_real
+                            FROM [dbo].[MMSA_SIREP_DATA] A
+                            INNER JOIN [dbo].[MMSA_SIREP_DATA] B
+                            ON A.fecha = B.fecha
+                            AND A.variable_id = 10012
+                            AND B.variable_id = 10011
+                            AND A.fecha BETWEEN ? and ?',
+                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                    );
+
                     //dd($this->summesreal,$this->avgmesreal,$this->leymesreal);
                 //FIN
                 //MES FORECAST.
@@ -310,14 +323,14 @@ trait ProcesosTrait {
                             'SELECT v.id AS variable_id, f.valor AS mes_forecast FROM
                             (SELECT variable_id, AVG(valor) AS valor
                             FROM [dbo].[forecast]
-                            WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                            WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                             AND valor <> 0
                             AND  fecha between ? and ?
                             GROUP BY variable_id) AS f
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                            WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                             ON f.variable_id = v.id
                             ORDER BY id ASC',
                             [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -445,6 +458,17 @@ trait ProcesosTrait {
                             date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
                             date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),]
                         );
+                    $this->prpmesforecast =
+                    DB::select(
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS mes_forecast
+                            FROM [dbo].[forecast] A
+                            INNER JOIN [dbo].[forecast] B
+                            ON A.fecha = B.fecha
+                            AND A.variable_id = 10012
+                            AND B.variable_id = 10011
+                            AND A.fecha BETWEEN ? and ?',
+                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                    );
                 //FIN
                 //MES BUDGET
                     $this->summesbudget = 
@@ -468,14 +492,14 @@ trait ProcesosTrait {
                             'SELECT v.id AS variable_id, f.valor AS mes_budget FROM
                             (SELECT variable_id, AVG(valor) AS valor
                             FROM [dbo].[budget]
-                            WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                            WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                             AND valor <> 0
                             AND  fecha between ? and ?
                             GROUP BY variable_id) AS f
                             RIGHT JOIN
                             (SELECT id 
                             FROM [dbo].[variable] 
-                            WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                            WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                             ON f.variable_id = v.id
                             ORDER BY id ASC',
                             [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
@@ -605,7 +629,18 @@ trait ProcesosTrait {
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),]
                     );
-                
+
+                    $this->prpmesbudget =
+                    DB::select(
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS mes_budget
+                            FROM [dbo].[budget] A
+                            INNER JOIN [dbo].[budget] B
+                            ON A.fecha = B.fecha
+                            AND A.variable_id = 10012
+                            AND B.variable_id = 10011
+                            AND A.fecha BETWEEN ? and ?',
+                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]
+                    );
                 //FIN
                 //TRIMESTRE REAL
                     $this->sumtrireal = 
@@ -633,14 +668,14 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[MMSA_SIREP_DATA]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  fecha between ? and ?
                         GROUP BY variable_id) AS f
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC',
                         [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -813,6 +848,18 @@ trait ProcesosTrait {
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),]
                     );
+
+                    $this->prptrireal =
+                    DB::select(
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS tri_real
+                            FROM [dbo].[MMSA_SIREP_DATA] A
+                            INNER JOIN [dbo].[MMSA_SIREP_DATA] B
+                            ON A.fecha = B.fecha
+                            AND A.variable_id = 10012
+                            AND B.variable_id = 10011
+                            AND A.fecha BETWEEN ? and ?',
+                            [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
+                    );
                 //FIN
 
                 //TRIMESTRE FORECAST 
@@ -841,14 +888,14 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[forecast]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  fecha between ? and ?
                         GROUP BY variable_id) AS f
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC',
                         [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -1022,6 +1069,18 @@ trait ProcesosTrait {
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),]
                     );
 
+                    $this->prptriforecast =
+                    DB::select(
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS tri_forecast
+                            FROM [dbo].[forecast] A
+                            INNER JOIN [dbo].[forecast] B
+                            ON A.fecha = B.fecha
+                            AND A.variable_id = 10012
+                            AND B.variable_id = 10011
+                            AND A.fecha BETWEEN ? and ?',
+                            [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
+                    );
+
                     $this->sumtriforecast10031 = 
                     DB::select(
                         'SELECT variable_id as var, SUM(valor) as suma
@@ -1068,14 +1127,14 @@ trait ProcesosTrait {
                         (SELECT variable_id, 
                         AVG(valor) AS valor
                         FROM [dbo].[budget]
-                        WHERE variable_id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
+                        WHERE variable_id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)
                         AND valor <>0
                         AND  fecha between ? and ?
                         GROUP BY variable_id) AS f
                         RIGHT JOIN
                         (SELECT id 
                         FROM [dbo].[variable] 
-                        WHERE id IN (10003,10007,10009,10012,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
+                        WHERE id IN (10003,10007,10009,10014,10015,10017,10018,10021,10026,10029,10033,10034,10036,10040,10049)) AS v
                         ON f.variable_id = v.id
                         ORDER BY id ASC',
                         [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
@@ -1249,25 +1308,17 @@ trait ProcesosTrait {
                         date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date)),]
                     );
 
-                    // $this->sumtribudget10031 = 
-                    // DB::select(
-                    //     'SELECT variable_id as var, SUM(valor) as suma
-                    //     FROM [dbo].[budget]
-                    //     WHERE variable_id = 10031
-                    //     AND  fecha between ? and ?
-                    //     GROUP BY variable_id', 
-                    //     [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
-                    // );
-
-                    // $this->sumtribudget10039 = 
-                    // DB::select(
-                    //     'SELECT variable_id as var, SUM(valor) as suma
-                    //     FROM [dbo].[budget]
-                    //     WHERE variable_id = 10039
-                    //     AND  fecha between ? and ?
-                    //     GROUP BY variable_id', 
-                    //     [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
-                    // );
+                    $this->prptribudget =
+                    DB::select(
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS tri_budget
+                            FROM [dbo].[budget] A
+                            INNER JOIN [dbo].[budget] B
+                            ON A.fecha = B.fecha
+                            AND A.variable_id = 10012
+                            AND B.variable_id = 10011
+                            AND A.fecha BETWEEN ? and ?',
+                            [date('Y-m-d',strtotime($this->fecha_iniTri)),date('Y-m-d',strtotime($this->date))]
+                    );
                 //FIN
                 //AÑO REAL
                     $this->sumanioreal10005 = 
@@ -2347,7 +2398,7 @@ trait ProcesosTrait {
                                         $mes_real = $this->summesreal[3];
                                     break;
                                     case 10012:
-                                        $mes_real = $this->avgmesreal[3];
+                                        $mes_real = $this->prpmesreal[0];
                                     break;
                                     case 10013:
                                         if(isset($this->summesreal[3]->mes_real) && (isset($this->summesreal[24]->mes_real) && $this->summesreal[24]->mes_real != 0))
@@ -2864,7 +2915,7 @@ trait ProcesosTrait {
                                         $mes_budget = $this->summesbudget[3];
                                     break;
                                     case 10012:
-                                        $mes_budget = $this->avgmesbudget[3];
+                                        $mes_budget = $this->prpmesbudget[0];
                                     break;
                                     case 10013:
                                         if(isset($this->summesbudget[3]->mes_budget) && (isset($this->summesbudget[24]->mes_budget) && $this->summesbudget[24]->mes_budget != 0))
@@ -3292,7 +3343,7 @@ trait ProcesosTrait {
                                         $mes_forecast = $this->summesforecast[3];
                                     break;
                                     case 10012:
-                                        $mes_forecast = $this->avgmesforecast[3];
+                                        $mes_forecast = $this->prpmesforecast[0];
                                     break;
                                     case 10013:
                                         if(isset($this->summesforecast[3]->mes_forecast) && (isset($this->summesforecast[24]->mes_forecast) && $this->summesforecast[24]->mes_forecast != 0))
@@ -3851,7 +3902,7 @@ trait ProcesosTrait {
                                         $tri_real = $this->sumtrireal[3];
                                     break;
                                     case 10012:
-                                        $tri_real = $this->avgtrireal[3];
+                                        $tri_real = $this->prptrireal[0];
                                     break;
                                     case 10013:
                                         if(isset($this->sumtrireal[3]->tri_real) && (isset($this->sumtrireal[24]->tri_real) && $this->sumtrireal[24]->tri_real != 0))
@@ -4281,7 +4332,7 @@ trait ProcesosTrait {
                                         $tri_budget = $this->sumtribudget[3];
                                     break;
                                     case 10012:
-                                        $tri_budget = $this->avgtribudget[3];
+                                        $tri_budget = $this->prptribudget[0];
                                     break;
                                     case 10013:
                                         if(isset($this->sumtribudget[3]->tri_budget) && (isset($this->sumtribudget[24]->tri_budget) && $this->sumtribudget[24]->tri_budget != 0))
@@ -4652,7 +4703,7 @@ trait ProcesosTrait {
                             })
                             //TERMINADO 06/09/2024
                             ->addColumn('trimestre_forecast', function($data)
-                            {                            
+                            {
                                 switch($data->variable_id)
                                 {
                                     case 10002:
@@ -4710,7 +4761,7 @@ trait ProcesosTrait {
                                         $tri_forecast = $this->sumtriforecast[3];
                                     break;
                                     case 10012:
-                                        $tri_forecast = $this->avgtriforecast[3];
+                                        $tri_forecast = $this->prptriforecast[0];
                                     break;
                                     case 10013:
                                         if(isset($this->sumtriforecast[3]->tri_forecast) && (isset($this->sumtriforecast[24]->tri_forecast) && $this->sumtriforecast[24]->tri_forecast != 0))
@@ -8016,7 +8067,7 @@ trait ProcesosTrait {
                                     $mes_real = $this->summesreal[3];
                                 break;
                                 case 10012:
-                                    $mes_real = $this->avgmesreal[3];
+                                    $mes_real = $this->prpmesreal[0];
                                 break;
                                 case 10013:
                                     if(isset($this->summesreal[3]->mes_real) && (isset($this->summesreal[24]->mes_real) && $this->summesreal[24]->mes_real != 0))
@@ -8535,7 +8586,7 @@ trait ProcesosTrait {
                                     $mes_budget = $this->summesbudget[3];
                                 break;
                                 case 10012:
-                                    $mes_budget = $this->avgmesbudget[3];
+                                    $mes_budget = $this->prpmesbudget[0];
                                 break;
                                 case 10013:
                                     if(isset($this->summesbudget[3]->mes_budget) && (isset($this->summesbudget[24]->mes_budget) && $this->summesbudget[24]->mes_budget != 0))
@@ -8963,7 +9014,7 @@ trait ProcesosTrait {
                                     $mes_forecast = $this->summesforecast[3];
                                 break;
                                 case 10012:
-                                    $mes_forecast = $this->avgmesforecast[3];
+                                    $mes_forecast = $this->prpmesforecast[0];
                                 break;
                                 case 10013:
                                     if(isset($this->summesforecast[3]->mes_forecast) && (isset($this->summesforecast[24]->mes_forecast) && $this->summesforecast[24]->mes_forecast != 0))
@@ -9522,7 +9573,7 @@ trait ProcesosTrait {
                                     $tri_real = $this->sumtrireal[3];
                                 break;
                                 case 10012:
-                                    $tri_real = $this->avgtrireal[3];
+                                    $tri_real = $this->prptrireal[0];
                                 break;
                                 case 10013:
                                     if(isset($this->sumtrireal[3]->tri_real) && (isset($this->sumtrireal[24]->tri_real) && $this->sumtrireal[24]->tri_real != 0))
@@ -9952,7 +10003,7 @@ trait ProcesosTrait {
                                     $tri_budget = $this->sumtribudget[3];
                                 break;
                                 case 10012:
-                                    $tri_budget = $this->avgtribudget[3];
+                                    $tri_budget = $this->prptribudget[0];
                                 break;
                                 case 10013:
                                     if(isset($this->sumtribudget[3]->tri_budget) && (isset($this->sumtribudget[24]->tri_budget) && $this->sumtribudget[24]->tri_budget != 0))
@@ -10382,7 +10433,7 @@ trait ProcesosTrait {
                                     $tri_forecast = $this->sumtriforecast[3];
                                 break;
                                 case 10012:
-                                    $tri_forecast = $this->avgtriforecast[3];
+                                    $tri_forecast = $this->prptriforecast[0];
                                 break;
                                 case 10013:
                                     if(isset($this->sumtriforecast[3]->tri_forecast) && (isset($this->sumtriforecast[24]->tri_forecast) && $this->sumtriforecast[24]->tri_forecast != 0))
