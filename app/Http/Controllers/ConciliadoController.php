@@ -1683,11 +1683,11 @@ class ConciliadoController extends Controller
                 $this->fecha_fin = date('Y-m-d',strtotime($fechaFin));
                 //dateEndMonth = lo que hace es setear el ultimo dia con el -01, para hacer las moidificaciones que pide la gente OP
                 //Es cambiar el 
-                $lastDayOfMonth = date('Y-m-t', strtotime($year.'-'.$month.'-01'));//tomar el ultimo dia del mes
-                $dateEndMonth = date('Y-m-d', strtotime($lastDayOfMonth . ' -2 days'));// restar 2 dias para su conciliacion
+                //$lastDayOfMonth = date('Y-m-t', strtotime($year.'-'.$month.'-01'));//tomar el ultimo dia del mes
+                $dateEndMonth = date('Y-m-d', strtotime($fechaFin));// restar 2 dias para su conciliacion
                 $day = (int)date('d', strtotime($dateEndMonth)); 
                 $days_conciliado = $request->get('dias_conciliacion');//CANTIDAD DE DIAS CONCILIADOS
-    
+                //dd($dateEndMonth,$day,$days_conciliado);
                 $arraysum = [10005, 10011, 10019, 10025, 10031, 10039, 10045, 10047, 10048, 10052, 10059, 10060, 10061, 10062, 10063, 10064, 10065, 10067, 10070, 10073, 10076, 10079, 10082, 10085, 10088, 10091, 10092, 10093, 10097, 10100, 10103, 10106, 10109, 10110, 10111, 10112, 10113, 10117];
                 $arraypercentage = [10003, 10007, 10009, 10014, 10016, 10017, 10021, 10026, 10029, 10034, 10114, 10115, 10116];
                 $arrayley = [10004, 10010, 10012, 10018, 10030, 10033, 10035, 10036, 10041, 10042, 10043, 10044, 10050, 10051, 10054, 10055, 10056, 10057, 10058, 10071, 10074, 10077, 10080, 10083, 10086, 10089, 10094, 10098, 10101, 10104, 10107];
@@ -1704,25 +1704,27 @@ class ConciliadoController extends Controller
                     }   
                        
                     $j=$days_conciliado-1;
+                    $daybefore = date('Y-m-d', strtotime($dateEndMonth. ' - '. $j.' days'));
                     $conciliar = 0;
                     for ($i=$days_conciliado; $i>0; $i--)
                     {
                         $vars_conciliar = 
                         DB::select(
-                            'SELECT id, ISNULL(valor, 0) AS valor
+                            'SELECT id, ISNULL(valor, 0) AS valor,fecha
                             FROM data
                             WHERE variable_id = ?
-                            AND (ISNULL(valor, 0) + CONVERT( numeric(20,8), CAST(? AS FLOAT))) >= 0
+                            AND (ISNULL(valor, 0) + CONVERT( numeric(20,8),?)) > 0
                             AND fecha BETWEEN ? AND ?',
-                            [$variable_id, $conciliado/$i, date('Y-m-d', strtotime($dateEndMonth. ' - '. $j.' days')), $dateEndMonth]
+                            [$variable_id, $conciliado/$i, $daybefore, $dateEndMonth]
                         ); 
-                        if (sizeof($vars_conciliar) == $i)
+                        if (count($vars_conciliar) == $i)
                         {
                             $conciliar = 1;
                             break;
                         }
+                        dd($vars_conciliar,$conciliado,$conciliar,$daybefore);
                     }
-                    //dd($vars_conciliar,$conciliado);
+                    
                     if ($conciliar == 1)
                     {
                         foreach ($vars_conciliar as $var)
