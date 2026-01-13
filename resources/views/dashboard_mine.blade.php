@@ -374,12 +374,14 @@
         });
         /*PRESS NAV-LINK BUTTON*/
 
-        var date_selected = moment().subtract(1, "days");
+        var date_selected = moment().subtract(1, 'year').endOf('year');
         $(function () {
+            var finDeAnio = moment().subtract(1, 'year').endOf('year');
             $('#datetimepicker4').datetimepicker({
                 format: 'DD/MM/YYYY',
-                maxDate: moment().subtract(1, "days"),
-                defaultDate: date_selected
+                minDate: moment('01/01/2022', 'DD/MM/YYYY'),  // Fecha mínima: 01/01/2022
+                maxDate: finDeAnio,
+                defaultDate: finDeAnio
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 idx = -1;

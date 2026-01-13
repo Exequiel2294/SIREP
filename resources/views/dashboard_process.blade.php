@@ -363,14 +363,14 @@
         });
         /*PRESS NAV-LINK BUTTON*/
 
-        
-
-        var date_selected = moment().subtract(1, "days");
+        var date_selected = moment().subtract(1, 'year').endOf('year');
         $(function () {
+            var finDeAnio = moment().subtract(1, 'year').endOf('year');
             $('#datetimepicker4').datetimepicker({
                 format: 'DD/MM/YYYY',
-                maxDate: moment().subtract(1, "days"),
-                defaultDate: date_selected
+                minDate: moment('01/01/2022', 'DD/MM/YYYY'),  // Fecha mínima: 01/01/2022
+                maxDate: finDeAnio,
+                defaultDate: finDeAnio
             });
             $("#datetimepicker4").on("change.datetimepicker", function (e) {
                 idx = -1;
@@ -601,12 +601,14 @@
                         $('div.dataTables_scrollBody').scrollTop(pageScrollPos); 
                     }
                 },
+                /*Ver esta parte ya que aca es donde envia el dato del datetimepicker*/
                 ajax:{                
                     url: "{{route('dashboard.procesostable')}}",
                     type: 'GET',
                     data: function(d){
                         d.fecha = moment(date_selected).format('YYYY-MM-DD');
                         d._token = $('input[name="_token"]').val();
+                    //console.log("Enviando parámetros a DataTable:", { fecha: d.fecha, token: d._token });
                     }
                 },
                 "language": {
