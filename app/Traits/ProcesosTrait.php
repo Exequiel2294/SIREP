@@ -460,7 +460,7 @@ trait ProcesosTrait {
                         );
                     $this->prpmesforecast =
                     DB::select(
-                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS mes_forecast
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / NULLIF(sum(B.valor),0) AS mes_forecast
                             FROM [dbo].[forecast] A
                             INNER JOIN [dbo].[forecast] B
                             ON A.fecha = B.fecha
@@ -632,7 +632,7 @@ trait ProcesosTrait {
 
                     $this->prpmesbudget =
                     DB::select(
-                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS mes_budget
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / NULLIF(sum(B.valor),0) AS mes_budget
                             FROM [dbo].[budget] A
                             INNER JOIN [dbo].[budget] B
                             ON A.fecha = B.fecha
@@ -1071,7 +1071,7 @@ trait ProcesosTrait {
 
                     $this->prptriforecast =
                     DB::select(
-                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS tri_forecast
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / NULLIF(sum(B.valor),0) AS tri_forecast
                             FROM [dbo].[forecast] A
                             INNER JOIN [dbo].[forecast] B
                             ON A.fecha = B.fecha
@@ -1310,7 +1310,7 @@ trait ProcesosTrait {
 
                     $this->prptribudget =
                     DB::select(
-                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / sum(B.valor) AS tri_budget
+                        ' SELECT 10012 AS variable_id,sum(A.valor * B.valor) / NULLIF(sum(B.valor),0) AS tri_budget
                             FROM [dbo].[budget] A
                             INNER JOIN [dbo].[budget] B
                             ON A.fecha = B.fecha

@@ -1722,7 +1722,7 @@ class ConciliadoController extends Controller
                             $conciliar = 1;
                             break;
                         }
-                        dd($vars_conciliar,$conciliado,$conciliar,$daybefore);
+                        //dd($vars_conciliar,$conciliado,$conciliar,$daybefore);
                     }
                     
                     if ($conciliar == 1)
