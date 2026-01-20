@@ -2668,7 +2668,7 @@ trait ProcesosTrait {
                                     case 10045:
                                         $mes_real = $this->summesreal[14];
                                     break;
-                                    case 10046:
+                                    case 10046://
                                         $mes_real = $this->summesreal[15];
                                     break;
                                     case 10047:
@@ -8268,6 +8268,7 @@ trait ProcesosTrait {
                                     $RecuMes = DB::select(
                                         'SELECT AVG(valor) as recupracion FROM [dbo].[MMSA_SIREP_DATA]
                                         WHERE variable_id = 10036
+                                        and valor <> 0
                                         and fecha between ? and ?', 
                                         [date(('Y-m-d'),strtotime($this->fecha_ini)),$this->fecha_fin]
                                     );
@@ -11721,50 +11722,119 @@ trait ProcesosTrait {
                                                 }
                                                 else {
                                                     if (strtotime($this->date) >= strtotime('2023-05-29')) {
-                                                        $resultado = DB::select('SELECT 
-                                                            SUM(CASE 
-                                                                WHEN V10039 > 0 THEN ((V10036/V10039) * (V10035/V10039) * V10039 * 0.01)/31.1035
-                                                                ELSE 0
-                                                            END) AS AU FROM
-                                                            (SELECT MONTH(fecha) AS MES, SUM(valor) AS V10039
-                                                            FROM [dbo].[data]
+
+                                                        // dd("ingreso aqui");
+                                                        // $resultado = DB::select('SELECT 
+                                                        //     SUM(CASE 
+                                                        //         WHEN V10039 > 0 THEN ((V10036/V10039) * (V10035/V10039) * V10039 * 0.01)/31.1035
+                                                        //         ELSE 0
+                                                        //     END) AS AU FROM
+                                                        //     (SELECT MONTH(fecha) AS MES, SUM(valor) AS V10039
+                                                        //     FROM [dbo].[data]
+                                                        //     WHERE variable_id = 10039
+                                                        //     AND  DATEPART(y, fecha) <= DATEPART(y, ?)
+                                                        //     AND YEAR(fecha) = YEAR(?)
+                                                        //     GROUP BY MONTH(fecha)) AS GC
+                                                        //     LEFT JOIN
+                                                        //     (SELECT MONTH(A.fecha) AS MES, SUM(A.valor * B.valor) AS V10035 FROM
+                                                        //     (SELECT fecha, variable_id, [valor]
+                                                        //     FROM [dbo].[data]
+                                                        //     where variable_id = 10035) as A
+                                                        //     INNER JOIN   
+                                                        //     (SELECT fecha, variable_id, [valor]
+                                                        //     FROM [dbo].[data]
+                                                        //     where variable_id = 10039) as B
+                                                        //     ON A.fecha = B.fecha
+                                                        //     AND  DATEPART(y, A.fecha) <=  DATEPART(y, ?)
+                                                        //     AND YEAR(A.fecha) = YEAR(?)
+                                                        //     GROUP BY MONTH(A.fecha)) AS GA
+                                                        //     ON GC.MES = GA.MES                                                 
+                                                        //     LEFT JOIN
+                                                        //     (SELECT MONTH(A.fecha) AS MES, SUM(A.valor * B.valor) AS V10036 FROM
+                                                        //     (SELECT fecha, variable_id, [valor]
+                                                        //     FROM [dbo].[data]
+                                                        //     where variable_id = 10036) as A
+                                                        //     INNER JOIN   
+                                                        //     (SELECT fecha, variable_id, [valor]
+                                                        //     FROM [dbo].[data]
+                                                        //     where variable_id = 10039) as B
+                                                        //     ON A.fecha = B.fecha
+                                                        //     AND  DATEPART(y, A.fecha) <=  DATEPART(y, ?)
+                                                        //     AND YEAR(A.fecha) = YEAR(?)
+                                                        //     GROUP BY MONTH(A.fecha)) AS GB
+                                                        //     ON GC.MES = GB.MES',
+                                                        //     [$this->date, $this->date, $this->date, $this->date, $this->date, $this->date]);
+
+                                                        $sumMinReal = DB::select(
+                                                            '
+                                                            SELECT SUM(valor) AS MinReal
+                                                            FROM dbo.MMSA_SIREP_DATA
                                                             WHERE variable_id = 10039
-                                                            AND  DATEPART(y, fecha) <= DATEPART(y, ?)
-                                                            AND YEAR(fecha) = YEAR(?)
-                                                            GROUP BY MONTH(fecha)) AS GC
-                                                            LEFT JOIN
-                                                            (SELECT MONTH(A.fecha) AS MES, SUM(A.valor * B.valor) AS V10035 FROM
-                                                            (SELECT fecha, variable_id, [valor]
-                                                            FROM [dbo].[data]
-                                                            where variable_id = 10035) as A
-                                                            INNER JOIN   
-                                                            (SELECT fecha, variable_id, [valor]
-                                                            FROM [dbo].[data]
-                                                            where variable_id = 10039) as B
-                                                            ON A.fecha = B.fecha
-                                                            AND  DATEPART(y, A.fecha) <=  DATEPART(y, ?)
-                                                            AND YEAR(A.fecha) = YEAR(?)
-                                                            GROUP BY MONTH(A.fecha)) AS GA
-                                                            ON GC.MES = GA.MES                                                 
-                                                            LEFT JOIN
-                                                            (SELECT MONTH(A.fecha) AS MES, SUM(A.valor * B.valor) AS V10036 FROM
-                                                            (SELECT fecha, variable_id, [valor]
-                                                            FROM [dbo].[data]
-                                                            where variable_id = 10036) as A
-                                                            INNER JOIN   
-                                                            (SELECT fecha, variable_id, [valor]
-                                                            FROM [dbo].[data]
-                                                            where variable_id = 10039) as B
-                                                            ON A.fecha = B.fecha
-                                                            AND  DATEPART(y, A.fecha) <=  DATEPART(y, ?)
-                                                            AND YEAR(A.fecha) = YEAR(?)
-                                                            GROUP BY MONTH(A.fecha)) AS GB
-                                                            ON GC.MES = GB.MES',
-                                                            [$this->date, $this->date, $this->date, $this->date, $this->date, $this->date]);
-                                                        if(isset($resultado[0]->AU))
+                                                              AND YEAR(fecha) = YEAR(?)
+                                                              AND DATEPART(dayofyear, fecha) <= DATEPART(dayofyear, ?)
+                                                            ',
+                                                            [$this->date, $this->date]
+                                                        );
+                                                        
+                                                        $LeyAuMes = DB::select(
+                                                            '
+                                                            SELECT 
+                                                                (A.total * 31.1035) / NULLIF(B.total, 0) AS resultado
+                                                            FROM 
+                                                            (
+                                                                SELECT SUM(valor) AS total
+                                                                FROM dbo.MMSA_SIREP_DATA
+                                                                WHERE variable_id = 10037
+                                                                  AND YEAR(fecha) = YEAR(?)
+                                                                  AND DATEPART(dayofyear, fecha) <= DATEPART(dayofyear, ?)
+                                                            ) A
+                                                            CROSS JOIN
+                                                            (
+                                                                SELECT SUM(valor) AS total
+                                                                FROM dbo.MMSA_SIREP_DATA
+                                                                WHERE variable_id = 10039
+                                                                  AND YEAR(fecha) = YEAR(?)
+                                                                  AND DATEPART(dayofyear, fecha) <= DATEPART(dayofyear, ?)
+                                                            ) B
+                                                            ',
+                                                            [$this->date, $this->date, $this->date, $this->date]
+                                                        );
+
+                                                        $RecuMes = DB::select(
+                                                            '
+                                                            SELECT
+                                                            SUM(au_placed * recovery) / SUM(au_placed) AS recuperacion
+                                                        FROM (
+                                                            SELECT
+                                                                YEAR(fecha) AS anio,
+                                                                MONTH(fecha) AS mes,
+                                                                SUM(CASE WHEN variable_id = 10037 THEN valor END) AS au_placed,
+                                                                AVG(CASE 
+                                                                        WHEN variable_id = 10036 
+                                                                         AND valor > 0 
+                                                                        THEN valor 
+                                                                    END) AS recovery
+                                                            FROM MMSA_SIREP_DATA
+                                                            WHERE variable_id IN (10037, 10036)
+                                                              AND YEAR(fecha) = YEAR(?)
+                                                            GROUP BY YEAR(fecha), MONTH(fecha)
+                                                        ) t;',
+                                                            [$this->date]
+                                                        );
+                                                        
+                                                        $leyau  = $LeyAuMes[0]->resultado ?? 0;
+                                                        $sumMin = $sumMinReal[0]->MinReal ?? 0;
+                                                        $recu   = $RecuMes[0]->recuperacion ?? 0;
+                                                        //dd($leyau,$sumMin,$recu);
+                                                        // Promedio Ponderado
+                                                        $resultado = (($recu / 100) * $sumMin * $leyau) / 31.1035;
+                                                        //dd($resultado);
+                                                        //$this->summesreal[12]->mes_real = $m_real;
+                                                        
+                                                        if(isset($resultado))
                                                         {
-                                                            if ($resultado[0]->AU > 0) {
-                                                                return number_format(round($resultado[0]->AU), 0, '.', ',');                                                
+                                                            if ($resultado > 0) {
+                                                                return number_format(round($resultado), 0, '.', ',');                                                
                                                             }
                                                             else {
                                                                 return '-';
@@ -11804,7 +11874,7 @@ trait ProcesosTrait {
                                                             'SELECT YEAR(A.fecha) as year, SUM(A.valor * B.valor) as sumaproducto FROM
                                                             (SELECT fecha, variable_id, [valor]
                                                             FROM [dbo].[data]
-                                                            where variable_id = 10036) as A
+                                                            where variable_id = 10036 AND) as A
                                                             INNER JOIN   
                                                             (SELECT fecha, variable_id, [valor]
                                                             FROM [dbo].[data]
@@ -11847,7 +11917,7 @@ trait ProcesosTrait {
                                                 }                                        
                                             }
                                         break;                 
-                                        case 10046:
+                                        case 10046://hacer los cambios en esta linea de codigo
                                             //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                             //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
                                             $anio_real= DB::select(
