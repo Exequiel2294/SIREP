@@ -8340,6 +8340,7 @@ trait ProcesosTrait {
                                     $mes_real = $this->summesreal[14];
                                 break;
                                 case 10046:
+<<<<<<< Updated upstream
                                     $PlsCarbones=
                                     DB::select(
                                         'SELECT SUM(valor) as Carbones
@@ -8375,6 +8376,49 @@ trait ProcesosTrait {
                                     $PLS = $LeyAuPLS_ILS[0]->LeyAuPls;
                                     $BLS = $LeyAuBLS[0]->LeyAuBls;
                                     //$mes_real = $this->summesreal[15];
+=======
+                                        $PlsCarbones=
+                                        DB::select(
+                                            'SELECT SUM(valor) as Carbones
+                                            FROM [dbo].[MMSA_SIREP_DATA]
+                                            WHERE variable_id = 10052
+                                            AND fecha BETWEEN ? AND ?',
+                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                            
+                                        $LeyAuPLS_ILS=
+                                        DB::select(
+                                            'SELECT SUM(A.valor * B.valor) / SUM(A.valor) as LeyAuPls
+                                            FROM [dbo].[MMSA_SIREP_DATA] A
+                                            INNER JOIN [dbo].[MMSA_SIREP_DATA] B
+                                            ON A.fecha = B.fecha
+                                            WHERE A.variable_id = 10052
+                                            AND B.variable_id = 10051
+                                            AND A.fecha BETWEEN ? AND ?',
+                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+    
+                                        $LeyAuBLS=
+                                        DB::select(
+                                            'SELECT SUM(A.valor * B.valor) / SUM(A.valor) as LeyAuBls
+                                            FROM [dbo].[MMSA_SIREP_DATA] A
+                                            INNER JOIN [dbo].[MMSA_SIREP_DATA] B
+                                            ON A.fecha = B.fecha
+                                            WHERE A.variable_id = 10052
+                                            AND B.variable_id = 10050
+                                            AND A.fecha BETWEEN ? AND ?',
+                                            [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+    
+                                        
+                                        $Carbon = $PlsCarbones[0]->Carbones;
+                                        $PLS = $LeyAuPLS_ILS[0]->LeyAuPls;
+                                        $BLS = $LeyAuBLS[0]->LeyAuBls;
+
+                                        $m_real= ($Carbon*($PLS-$BLS))/31.1035;
+
+                                        $this->summesreal[15]->mes_real = $m_real;
+
+                                        $mes_real = $this->summesreal[15];
+                                        //dd($Carbon,$PLS,$BLS,$m_real);
+>>>>>>> Stashed changes
                                 break;
                                 case 10047:
                                     $mes_real = $this->summesreal[16];
@@ -11951,29 +11995,73 @@ trait ProcesosTrait {
                                                 }                                        
                                             }
                                         break;                 
-                                        case 10046://hacer los cambios en esta linea de codigo
+                                        case 10046:
+                                            //hacer los cambios en esta linea de codigo
                                             //Au Adsorbido - MMSA_ADR_Au Adsorbido (oz)                  
                                             //SUMAANUAL(((10052 MMSA_ADR_PLS a Carbones) * ((10051 MMSA_ADR_Ley de Au PLS)-(10050 MMSA_ADR_Ley de Au BLS))) / 31.1035)     
-                                            $anio_real= DB::select(
-                                                'SELECT YEAR(A.fecha) as year, SUM((A.valor * (B.valor-C.valor))/31.1035) as anio_real FROM
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10052) as A
-                                                INNER JOIN   
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10051) as B
-                                                ON A.fecha = B.fecha
-                                                INNER JOIN   
-                                                (SELECT fecha, variable_id, [valor]
-                                                FROM [dbo].[data]
-                                                where variable_id = 10050) as C
-                                                ON A.fecha = C.fecha
-                                                WHERE YEAR(A.fecha) = ?
-                                                AND  DATEPART(y, A.fecha) <=  ?
-                                                GROUP BY YEAR(A.fecha)',
-                                                [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            // $anio_real= DB::select(
+                                            //     'SELECT YEAR(A.fecha) as year, SUM((A.valor * (B.valor-C.valor))/31.1035) as anio_real FROM
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[data]
+                                            //     where variable_id = 10052) as A
+                                            //     INNER JOIN   
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[data]
+                                            //     where variable_id = 10051) as B
+                                            //     ON A.fecha = B.fecha
+                                            //     INNER JOIN   
+                                            //     (SELECT fecha, variable_id, [valor]
+                                            //     FROM [dbo].[data]
+                                            //     where variable_id = 10050) as C
+                                            //     ON A.fecha = C.fecha
+                                            //     WHERE YEAR(A.fecha) = ?
+                                            //     AND  DATEPART(y, A.fecha) <=  ?
+                                            //     GROUP BY YEAR(A.fecha)',
+                                            //     [date('Y', strtotime($this->date)), (int)date('z', strtotime($this->date)) + 1]
+                                            // );
+                                            //$fecha = '2025-12-31';
+
+                                            $anio_real = DB::select(
+                                                'SELECT 
+                                                    (C.total_m3 * (B.TOTAL_pls - A.TOTAL_bls)) / 31.1035 AS anio_real
+                                                FROM (
+                                                    SELECT 
+                                                        SUM(A.valor * B.valor) / SUM(A.valor) AS TOTAL_bls
+                                                    FROM MMSA_SIREP_DATA A
+                                                    INNER JOIN MMSA_SIREP_DATA B
+                                                        ON A.fecha = B.fecha
+                                                    WHERE A.variable_id = 10052
+                                                    AND B.variable_id = 10050
+                                                    AND YEAR(A.fecha) = YEAR(?)
+                                                    AND DATEPART(DAYOFYEAR, A.fecha) <= DATEPART(DAYOFYEAR, ?)
+                                                ) A
+                                                CROSS JOIN (
+                                                    SELECT 
+                                                        SUM(A.valor * B.valor) / SUM(A.valor) AS TOTAL_pls
+                                                    FROM MMSA_SIREP_DATA A
+                                                    INNER JOIN MMSA_SIREP_DATA B
+                                                        ON A.fecha = B.fecha
+                                                    WHERE A.variable_id = 10052
+                                                    AND B.variable_id = 10051
+                                                    AND YEAR(A.fecha) = YEAR(?)
+                                                    AND DATEPART(DAYOFYEAR, A.fecha) <= DATEPART(DAYOFYEAR, ?)
+                                                ) B
+                                                CROSS JOIN (
+                                                    SELECT 
+                                                        SUM(valor) AS total_m3
+                                                    FROM MMSA_SIREP_DATA
+                                                    WHERE variable_id = 10052
+                                                    AND YEAR(fecha) = YEAR(?)
+                                                    AND DATEPART(DAYOFYEAR, fecha) <= DATEPART(DAYOFYEAR, ?)
+                                                ) C',
+                                                [
+                                                    $this->date, $this->date,
+                                                    $this->date, $this->date,
+                                                    $this->date, $this->date
+                                                ]
                                             );
+                                            
+
                                         break; 
                                         case 10048:
                                             $anio_real= DB::select(
