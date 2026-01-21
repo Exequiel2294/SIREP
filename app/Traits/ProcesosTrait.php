@@ -8340,7 +8340,41 @@ trait ProcesosTrait {
                                     $mes_real = $this->summesreal[14];
                                 break;
                                 case 10046:
-                                    $mes_real = $this->summesreal[15];
+                                    $PlsCarbones=
+                                    DB::select(
+                                        'SELECT SUM(valor) as Carbones
+                                        FROM [dbo].[MMSA_SIREP_DATA]
+                                        WHERE variable_id = 10046
+                                        AND fecha BETWEEN ? AND ?',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+                                        
+                                    $LeyAuPLS_ILS=
+                                    DB::select(
+                                        'SELECT SUM(A.valor * B.valor) / SUM(.valor) as LeyAuPls
+                                        FROM [dbo].[MMSA_SIREP_DATA] A
+                                        INNER JOIN [dbo].[MMSA_SIREP_DATA] B
+                                        ON A.fecha = B.fecha
+                                        WHERE A.variable_id = 10052
+                                        AND B.variable_id = 10051
+                                        AND A.fecha BETWEEN ? AND ?',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+
+                                    $LeyAuBLS=
+                                    DB::select(
+                                        'SELECT SUM(A.valor * B.valor) / SUM(A.valor) as LeyAuBls
+                                        FROM [dbo].[MMSA_SIREP_DATA] A
+                                        INNER JOIN [dbo].[MMSA_SIREP_DATA] B
+                                        ON A.fecha = B.fecha
+                                        WHERE A.variable_id = 10052
+                                        AND B.variable_id = 10050
+                                        AND A.fecha BETWEEN ? AND ?',
+                                        [date('Y-m-d',strtotime($this->fecha_ini)),date('Y-m-d',strtotime($this->date))]);
+
+                                    
+                                    $Carbon = $PlsCarbones[0]->Carbones;
+                                    $PLS = $LeyAuPLS_ILS[0]->LeyAuPls;
+                                    $BLS = $LeyAuBLS[0]->LeyAuBls;
+                                    //$mes_real = $this->summesreal[15];
                                 break;
                                 case 10047:
                                     $mes_real = $this->summesreal[16];
